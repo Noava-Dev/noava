@@ -1,0 +1,6 @@
+@noava_HostAddress = http://localhost:5030
+
+GET {{noava_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

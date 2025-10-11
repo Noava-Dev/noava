@@ -1,0 +1,65 @@
+## Visual Studio ##
+.vs/
+.vscode/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## Build Folders ##
+bin/
+obj/
+out/
+
+## Rider ##
+.idea/
+
+## ASP.NET / .NET Core ##
+project.lock.json
+project.fragment.lock.json
+artifacts/
+*.dotCover
+*.ncrunch*
+*.ReSharper*
+*.DotSettings.user
+TestResults/
+*.log
+
+## NuGet ##
+*.nupkg
+*.snupkg
+packages/
+.nuget/packages/
+
+## Entity Framework / Migrations ##
+*.db
+*.db-journal
+*.sqlite
+Migrations/
+
+## PostgreSQL ##
+*.pgpass
+*.pgsql
+*.sql
+
+## User Secrets ##
+secrets.json
+
+## Publish Output ##
+publish/
+wwwroot/
+
+## Others ##
+*.DS_Store
+*.swp
+*.bak
+*.tmp
+
+## Env files ##
+.env
+.env.local
+
+## Temporary / IDE files ##
+*.tmp
+*.log
+.vscode/*  # exclude personal VSCode settings, keep project files separately
