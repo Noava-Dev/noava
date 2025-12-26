@@ -35,7 +35,6 @@ packages/
 *.db
 *.db-journal
 *.sqlite
-Migrations/
 
 ## PostgreSQL ##
 *.pgpass
@@ -47,7 +46,6 @@ secrets.json
 
 ## Publish Output ##
 publish/
-wwwroot/
 
 ## Others ##
 *.DS_Store
