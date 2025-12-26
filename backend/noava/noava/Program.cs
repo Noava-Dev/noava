@@ -8,8 +8,28 @@ namespace noava
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("Frontend",
+                    policy => policy
+                    .WithOrigins("http://localhost:5173")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                );
+            });
 
             builder.Services.AddControllers();
+
+            builder.WebHost.ConfigureKestrel(options =>
+            {
+                options.ListenLocalhost(5000);
+
+                options.ListenLocalhost(5001, listenOptions =>
+                {
+                    listenOptions.UseHttps();
+                });
+            });
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -27,6 +47,7 @@ namespace noava
 
             app.UseAuthorization();
 
+            app.UseCors("Frontend");
 
             app.MapControllers();
 
