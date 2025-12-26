@@ -1,3 +1,34 @@
+# Node
+node_modules/
+
+# Build outputs
+/dist/
+/build/
+/out/
+
+# Vite cache
+/.vite/
+.vite/
+
+# Vite preview / static output
+/.output/
+
+# SWC cache (if used)
+/.swc/
+
+# TypeScript
+*.tsbuildinfo
+
+# Testing
+/coverage/
+.nyc_output/
+
+# Environment variables
+# Local env files should not be committed
+.env
+.env.local
+.env.*.local
+
 # Logs
 logs
 *.log
@@ -7,18 +38,54 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
+# OS generated files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDEs and editors
+.vscode/
+!.vscode/extensions.json
+.idea/
+
+# JetBrains
+*.iml
+
+# Misc
 *.local
 
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
-.DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+# Cache
+.cache/
+
+# Dependency directories managed by package managers
+/.pnp
+.pnp.js
+
+# Yarn v2+ (if used)
+.yarn/cache/
+.yarn/unplugged/
+.yarn/build-state.yml
+.yarn/install-state.gz
+.yarn/*/build-info
+
+# Lockfiles: keep them (do not ignore) unless you intentionally want them ignored
+
+# Coverage and reports
+coverage/
+reports/
+
+# Storybook
+storybook-static/
+
+# ESLint cache
+.eslintcache
+
+# Parcel cache
+.parcel-cache/
+
+# Optional npm cache
+.npm/
+
+# Temporary
+tmp/
+temp/
