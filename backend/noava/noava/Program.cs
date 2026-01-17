@@ -1,4 +1,7 @@
 
+using Microsoft.EntityFrameworkCore;
+using noava.Data;
+
 namespace noava
 {
     public class Program
@@ -6,6 +9,10 @@ namespace noava
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            // Add DbContext
+            builder.Services.AddDbContext<NoavaDbContext>(options =>
+                options.UseNpgsql(builder.Configuration.GetConnectionString("NoavaDatabaseLocal")));
 
             // Add services to the container.
             builder.Services.AddCors(options =>
