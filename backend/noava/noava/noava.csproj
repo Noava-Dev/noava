@@ -4,7 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>e6014df5-f80c-4f0e-8354-01aeedc50277</UserSecretsId>
+    <UserSecretsId>noava-dev</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
