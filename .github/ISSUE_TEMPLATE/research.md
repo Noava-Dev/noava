@@ -3,8 +3,10 @@ name: Research
 about: Research or investigation task
 title: '[Research] '
 labels: ['Research']
+type: Task
+iteration: 'Current'
 projects:
-  - 'Noava Project'
+  - 'Noava'
 ---
 
 ## Research Question / Topic

@@ -3,8 +3,10 @@ name: Bug
 about: Report a bug
 title: '[Bug] '
 labels: ['Bug']
+type: Bug
+iteration: 'Current'
 projects:
-  - 'Noava Project'
+  - 'Noava'
 ---
 
 ## Steps to Reproduce

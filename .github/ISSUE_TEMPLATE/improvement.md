@@ -3,8 +3,9 @@ name: Improvement
 about: Propose an improvement to an existing feature or UI/UX
 title: '[Improvement] '
 labels: ['Improvement']
+type: Feature
 projects:
-  - 'Noava Project'
+  - 'Noava'
 ---
 
 ## Description

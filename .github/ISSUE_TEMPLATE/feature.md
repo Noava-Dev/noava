@@ -3,9 +3,10 @@ name: Feature
 about: Create a new feature request
 title: '[Feature] '
 labels: ['Feature']
-assignees: []
+type: Feature
+iteration: 'Current'
 projects:
-  - 'Noava Project'
+  - 'Noava'
 ---
 
 ## Description
