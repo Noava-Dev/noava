@@ -1,6 +1,8 @@
 
 using Microsoft.EntityFrameworkCore;
 using noava.Data;
+using Noava.Repositories;
+using noava.Services;
 
 namespace noava
 {
@@ -13,6 +15,11 @@ namespace noava
             // Add DbContext
             builder.Services.AddDbContext<NoavaDbContext>(options =>
                 options.UseNpgsql(builder.Configuration.GetConnectionString("NoavaDatabaseLocal")));
+
+            // FAQ
+            builder.Services.AddScoped<FaqRepository>();
+            builder.Services.AddScoped<FaqService>();
+            
 
             // Add services to the container.
             builder.Services.AddCors(options =>

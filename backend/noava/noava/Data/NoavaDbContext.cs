@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using noava.Data.Configurations;
 using noava.Models;
 
 namespace noava.Data
@@ -11,6 +12,8 @@ namespace noava.Data
         }
 
         public DbSet<Deck> Decks { get; set; }
+
+        public DbSet<FAQ> FAQs { get; set;  }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
