@@ -6,15 +6,16 @@ type ToastType = 'success' | 'error' | 'warning' | 'info';
 
 interface ToastData {
   type: ToastType;
+  title: string;
   message: string;
 }
 
 interface ToastContextType {
-  showSuccess: (message: string) => void;
-  showError: (message: string) => void;
-  showWarning: (message: string) => void;
-  showInfo: (message: string) => void;
-  showToast: (type: ToastType, message: string) => void;
+  showSuccess: (message: string, title: string) => void;
+  showError: (message: string, title: string) => void;
+  showWarning: (message: string, title: string) => void;
+  showInfo: (message: string, title: string) => void;
+  showToast: (type: ToastType, message: string, title: string) => void;
 }
 
 const ToastContext = createContext<ToastContextType | undefined>(undefined);
@@ -22,15 +23,15 @@ const ToastContext = createContext<ToastContextType | undefined>(undefined);
 export function ToastProvider({ children }: { children: ReactNode }) {
   const [toast, setToast] = useState<ToastData | null>(null);
 
-  const showToast = (type: ToastType, message: string) => {
-    setToast({ type, message });
+  const showToast = (type: ToastType, message: string, title: string) => {
+    setToast({ type, message, title });
     setTimeout(() => setToast(null), 4000); // Auto-hide after 4 seconds
   };
 
-  const showSuccess = (message: string) => showToast('success', message);
-  const showError = (message: string) => showToast('error', message);
-  const showWarning = (message: string) => showToast('warning', message);
-  const showInfo = (message: string) => showToast('info', message);
+  const showSuccess = (message: string, title: string) => showToast('success', message, title);
+  const showError = (message: string, title: string) => showToast('error', message, title);
+  const showWarning = (message: string, title: string) => showToast('warning', message, title);
+  const showInfo = (message: string, title: string) => showToast('info', message, title);
 
   return (
     <ToastContext.Provider value={{ showSuccess, showError, showWarning, showInfo, showToast }}>
@@ -38,6 +39,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
       {toast && (
         <CustomToast
           type={toast.type}
+          title={toast.title}
           message={toast.message}
           onClose={() => setToast(null)}
         />

@@ -1,14 +1,14 @@
-
 import { Toast, ToastToggle } from "flowbite-react";
 import { HiCheck, HiExclamation, HiX, HiInformationCircle } from "react-icons/hi";
 
 interface CustomToastProps {
   type: 'success' | 'error' | 'warning' | 'info';
+  title: string;
   message: string;
   onClose: () => void;
 }
 
-function CustomToast({ type, message, onClose }: CustomToastProps) {
+function CustomToast({ type, title, message, onClose }: CustomToastProps) {
   const config = {
     success: {
       icon: <HiCheck className="h-5 w-5" />,
@@ -35,7 +35,12 @@ function CustomToast({ type, message, onClose }: CustomToastProps) {
       <div className={`inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${className}`}>
         {icon}
       </div>
-      <div className="ml-3 text-sm font-normal">{message}</div>
+      <div className="ml-3 text-sm">
+        {title && (
+          <div className="font-semibold mb-1">{title}</div>
+        )}
+        <div className={title ? "font-normal" : "font-normal"}>{message}</div>
+      </div>
       <ToastToggle onDismiss={onClose} />
     </Toast>
   );
