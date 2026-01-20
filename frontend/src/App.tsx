@@ -1,8 +1,16 @@
 import { useEffect } from 'react';
+
 import './App.css';
-import Home from './pages/Home/Home';
+/* import {
+  SignedIn,
+  SignedOut,
+  UserButton,
+  SignInButton,
+} from '@clerk/clerk-react'; */
+import AppRoutes from './AppRoutes';
 
 function App() {
+
   console.log(import.meta.env.VITE_API_BASE_URL);
 
   useEffect(() => {
@@ -13,8 +21,20 @@ function App() {
   }, []);
 
   return (
+    
     <>
-      <Home />
+    <div className="app-container">
+    <AppRoutes />
+      {/* <header>
+        
+        <SignedOut>
+          <SignInButton />
+        </SignedOut>
+        <SignedIn>
+          <UserButton />
+        </SignedIn>
+      </header> */}
+    </div>
     </>
   );
 }
