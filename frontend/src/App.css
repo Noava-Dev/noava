@@ -21,6 +21,4 @@ body {
 /* Default page width */
 .app-container {
   width: 100%;
-  max-width: 1280px;
-  padding: 1rem;
 }
