@@ -1,10 +1,9 @@
 import { Accordion, AccordionContent, AccordionPanel, AccordionTitle } from "flowbite-react";
 import { useState, useEffect } from "react";
-import Searchbar from "../../shared/components/Searchbar";
 import type { FAQ } from "../../models/FAQ";
 import { faqService } from "../../services/FAQService";
 import Header from "../Home/components/Header";
-
+import PageHeader from "../../shared/components/PageHeader";
 
 function FAQPage() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -41,6 +40,10 @@ function FAQPage() {
     return (
       <>
         <Header />
+        <PageHeader
+          title="Frequently Asked Questions"
+          subtitle="Find answers to common questions about Noava"
+        />
         <div className="container mx-auto px-4 py-8">
           <div className="text-center py-12">
             <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-4 border-primary-500 mb-4"></div>
@@ -56,6 +59,10 @@ function FAQPage() {
     return (
       <>
         <Header />
+        <PageHeader
+          title="Frequently Asked Questions"
+          subtitle="Find answers to common questions about Noava"
+        />
         <div className="container mx-auto px-4 py-8">
           <div className="text-center py-12">
             <p className="text-red-500 text-lg mb-4">{error}</p>
@@ -68,31 +75,27 @@ function FAQPage() {
   return (
     <>
       <Header />
-      <section className="container mx-auto px-4 py-16 max-w-4xl">
-        {/* Hero */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-text-title-light dark:text-text-title-dark mb-4">
-            Frequently asked questions
-          </h1>
-          <p className="text-lg text-text-body-light dark:text-text-body-dark">
-            Find answers to common questions about Noava
-          </p>
-        </div>
-
-        {/* Searchbar */}
-        <div className="mb-8">
-          <Searchbar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-        </div>
-
-        {/* Results count */}
+      
+      {/* PageHeader */}
+      <PageHeader
+        title="Frequently Asked Questions"
+        subtitle="Find answers to common questions about Noava"
+        showSearch
+        searchPlaceholder="Search FAQs..."
+        searchValue={searchTerm}
+        onSearchChange={setSearchTerm}
+      >
+        {/* Results count als children */}
         {searchTerm && (
-          <div className="mb-6 text-center">
-            <p className="text-sm text-text-muted-light dark:text-text-muted-dark bg-primary-100 dark:bg-primary-900 inline-block px-4 py-2 rounded-full">
-              Showing <span className="font-semibold">{filteredFaqs.length}</span> of <span className="font-semibold">{allFaqs.length}</span> results
-            </p>
-          </div>
+          <p className="text-sm text-text-muted-light dark:text-text-muted-dark bg-primary-100 dark:bg-primary-900 inline-block px-4 py-2 rounded-full">
+            Showing <span className="font-semibold">{filteredFaqs.length}</span> of <span className="font-semibold">{allFaqs.length}</span> results
+          </p>
         )}
+      </PageHeader>
 
+      {/* Content Section */}
+      <section className="container mx-auto px-4 py-8 max-w-4xl">
+        
         {/* FAQ Accordion */}
         <div className="space-y-3">
           {filteredFaqs.length > 0 ? (
@@ -146,7 +149,7 @@ function FAQPage() {
           )}
         </div>
 
-        {/* Footer CTA */}
+        {/* Footer CTA */}{/* 
         {filteredFaqs.length > 0 && (
           <div className="mt-16 text-center bg-primary-50 dark:bg-primary-900/20 rounded-2xl p-8 border border-border dark:border-border-dark">
             <h3 className="text-2xl font-bold text-text-title-light dark:text-text-title-dark mb-2">
@@ -159,7 +162,7 @@ function FAQPage() {
               Contact Support
             </button>
           </div>
-        )}
+        )} */}
       </section>
     </>
   );
