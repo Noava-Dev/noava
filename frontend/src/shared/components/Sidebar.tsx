@@ -1,5 +1,5 @@
 import { mainItems, bottomItems} from "../components/SidebarItems";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Sidebar,
   SidebarItem,
@@ -7,11 +7,8 @@ import {
   SidebarItems,
   SidebarLogo,
 } from "flowbite-react";
-import { LuChevronsLeft, LuChevronsRight } from "react-icons/lu";
+import { LuChevronsLeft as Left, LuChevronsRight as Right } from "react-icons/lu";
 import { useLocation } from "react-router-dom";
-
-
-// styling but this should be moved to a central file later on
 import type { CustomFlowbiteTheme } from "flowbite-react/types";
 
 // TODO: add the correct colors to match the rest of the project
@@ -42,10 +39,15 @@ const sidebarTheme: CustomFlowbiteTheme["sidebar"] = {
 
 
 export function SidebarNav() {
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
+  const location = useLocation();
 
+  useEffect(() => {
+    setCollapsed(true);
+  }, [location.pathname]);
 
   return (
+    <div className="relative h-screen flex-none sticky top-0 z-40">
     <Sidebar
       theme={sidebarTheme}
       collapsed={collapsed}
@@ -92,22 +94,21 @@ export function SidebarNav() {
           ))}
         </SidebarItemGroup>
       </SidebarItems>
+    </Sidebar>
 
-      {/* Collapse button */}
+      {/* Collapse button  */}
       <button
         onClick={() => setCollapsed(!collapsed)}
-        className="absolute -right-3 top-1/2 flex size-6 -translate-y-1/2 items-center justify-center rounded-full border border-sidebar-border bg-background text-muted-foreground shadow-sm hover:bg-sidebar-accent"
+        className="absolute -right-3 top-1/2 flex size-6 -translate-y-1/2 items-center justify-center rounded-full border border-sidebar-border bg-background text-muted-foreground shadow-sm hover:bg-sidebar-accent z-50"
         aria-label="Toggle sidebar"
       >
         {collapsed ? (
-          <LuChevronsRight className="text-lg" />
+          <div><Right className="size-4"/></div>
         ) : (
-          <LuChevronsLeft className="text-lg" />
+          <div><Left className="size-4" /></div>
         )}
       </button>
-
-      {/* TODO: add logic so that the sidebar collapses when moving to a different page*/}
       {/* TODO: add logic so that the sidebar collapses when clicking outside the sidebar*/}
-    </Sidebar>
+</div>
   );
 }
