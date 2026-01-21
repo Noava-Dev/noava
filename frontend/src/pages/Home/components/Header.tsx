@@ -6,7 +6,7 @@ function Header() {
     return(
         <>
             <Navbar fluid rounded>
-                <NavbarBrand href="/home" className="mr-8">
+                <NavbarBrand href="/" className="mr-8">
                     <img src={Logo} className="mr-3 w-12 h-auto object-cover" alt="Noava Logo" />
                     <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">Noava</span>
                 </NavbarBrand>
