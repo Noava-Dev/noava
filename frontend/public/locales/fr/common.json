@@ -12,6 +12,7 @@
     "home": "Accueil",
     "faq": "FAQ",
     "login": "Connexion",
+    "register": "Inscription",
     "logout": "Déconnexion",
     "dashboard": "Tableau de bord"
   },

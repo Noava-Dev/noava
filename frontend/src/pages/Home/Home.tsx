@@ -3,6 +3,7 @@ import { Button, Card } from "flowbite-react";
 import NoavaFooter from "../../shared/components/NoavaFooter";
 import { HiCube, HiUserGroup, HiViewGrid, HiChartBar,HiDesktopComputer,  HiOutlineDeviceMobile } from "react-icons/hi";
 import { useTranslation } from 'react-i18next';
+import { SignUpButton } from "@clerk/clerk-react";
 
 function Home() {
     const { t } = useTranslation('home');
@@ -21,8 +22,10 @@ function Home() {
                 </p>
 
                 <div className="flex justify-center">
-                     <Button size="lg">{t('hero.cta')}</Button>
-                 </div>
+                    <SignUpButton>
+                        <Button>{t('hero.cta')}</Button>
+                    </SignUpButton>
+                </div>
             </section>
 
             {/* Everything you need Section */}
