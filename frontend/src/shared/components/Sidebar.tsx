@@ -128,13 +128,14 @@ export function SidebarNav() {
               ))}
 
               {/* wrapped the logout button in Clerk's SignOutButton component 
-              should handle the logic automatically via clerk.*/}
-              <SignOutButton>
+              should handle the logic automatically via clerk. The redirectUrl also redirects
+               the user to the root after logging out*/}
+              <SignOutButton redirectUrl="">
                 <span className= "w-full">
                   <SidebarItem icon={LogOut}>Logout</SidebarItem>
                 </span>
               </SignOutButton>
-              
+
             </SidebarItemGroup>
               <SidebarItemGroup>
                 <div>
