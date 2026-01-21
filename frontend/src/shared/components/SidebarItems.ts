@@ -11,15 +11,15 @@ import {
 
 // top items in the sidebar
 export const mainItems = [
-  { label: "Dashboard", href: "/", icon: Dashboard, active: true },
-  { label: "Decks", href: "/", icon: Layers },
-  { label: "Klassen", href: "/", icon: Users },
-  { label: "Geschiedenis", href: "/", icon: History },
+  { label: "Dashboard", href: "/", icon: Dashboard },
+  { label: "Decks", href: "/decks", icon: Layers },
+  { label: "Klassen", href: "/klassen", icon: Users },
+  { label: "Geschiedenis", href: "/geschiedenis", icon: History },
 ];
 
 export const bottomItems = [
     // TODO: logic for notifications in badge count
-  { label: "Meldingen", href: "/", icon: Bell, badge: "2" },
-  { label: "Settings", href: "/", icon: Settings },
-  { label: "Logout", href: "/", icon: LogOut },
+  { label: "Meldingen", href: "/meldingen", icon: Bell, badge: "2" },
+  { label: "Settings", href: "/settings", icon: Settings },
+  { label: "Logout", href: "/logout", icon: LogOut },
 ];

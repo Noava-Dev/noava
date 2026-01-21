@@ -8,6 +8,7 @@ import {
   SidebarLogo,
 } from "flowbite-react";
 import { LuChevronsLeft, LuChevronsRight } from "react-icons/lu";
+import { useLocation } from "react-router-dom";
 
 
 // styling but this should be moved to a central file later on
@@ -63,7 +64,7 @@ export function SidebarNav() {
               key={item.label}
               href={item.href}
               icon={item.icon}
-              active={item.active}
+              active={location.pathname == item.href}
             >
               {item.label}
             </SidebarItem>
@@ -75,7 +76,9 @@ export function SidebarNav() {
           {bottomItems.map((item) => (
             <SidebarItem
               key={item.label}
+              href={item.href}
               icon={item.icon}
+              active={location.pathname == item.href}
             >
               <span className="flex items-center justify-between w-full">
                 {item.label}
