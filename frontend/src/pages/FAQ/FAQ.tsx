@@ -3,14 +3,16 @@ import { useState, useEffect } from "react";
 import Searchbar from "../../shared/components/Searchbar";
 import type { FAQ } from "../../models/FAQ";
 import { faqService } from "../../services/FAQService";
+import { useTranslation } from 'react-i18next';
 
 function FAQPage() {
+  const { t } = useTranslation('faq');
   const [searchTerm, setSearchTerm] = useState('');
   const [allFaqs, setAllFaqs] = useState<FAQ[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Haal FAQs op van de backend
+  // Get FAQs from backend
   useEffect(() => {
     const fetchFaqs = async () => {
       try {
@@ -19,7 +21,7 @@ function FAQPage() {
         setAllFaqs(data);
         setError(null);
       } catch (err) {
-        setError('Failed to load FAQs. Please try again later.');
+        setError(t('error.loadFailed'));
         console.error('Error fetching FAQs:', err);
       } finally {
         setLoading(false);
@@ -39,7 +41,7 @@ function FAQPage() {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="text-center py-12">
-          <p className="text-gray-500 text-lg">Loading FAQs...</p>
+          <p className="text-gray-500 text-lg">{t('loading')}</p>
         </div>
       </div>
     );
@@ -55,7 +57,7 @@ function FAQPage() {
             onClick={() => window.location.reload()}
             className="mt-4 text-cyan-600 hover:underline"
           >
-            Retry
+            {t('error.retry')}
           </button>
         </div>
       </div>
@@ -64,7 +66,7 @@ function FAQPage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-8">Frequently Asked Questions</h1>
+      <h1 className="text-3xl font-bold mb-8">{t('title')}</h1>
       
       <Searchbar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
       
@@ -83,13 +85,13 @@ function FAQPage() {
         ) : (
           <div className="text-center py-12">
             <p className="text-gray-500 text-lg dark:text-gray-400">
-              No results found for "<span className="font-semibold">{searchTerm}</span>"
+              {t('search.noResults', { searchTerm })}
             </p>
             <button 
               onClick={() => setSearchTerm('')}
               className="mt-4 text-cyan-600 hover:text-cyan-700 dark:text-cyan-500 underline"
             >
-              Clear search
+              {t('search.clearSearch')}
             </button>
           </div>
         )}

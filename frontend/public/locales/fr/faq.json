@@ -1,0 +1,18 @@
+{
+  "title": "Questions Fréquemment Posées",
+  "subtitle": "Trouvez rapidement des réponses à vos questions",
+  "search": {
+    "placeholder": "Rechercher dans les questions fréquentes...",
+    "noResults": "Aucun résultat trouvé pour \"{{searchTerm}}\"",
+    "clearSearch": "Effacer la recherche"
+  },
+  "loading": "Chargement des questions fréquentes...",
+  "error": {
+    "loadFailed": "Impossible de charger les questions. Veuillez réessayer plus tard.",
+    "retry": "Réessayer"
+  },
+  "empty": {
+    "title": "Aucune question disponible",
+    "message": "Il n'y a actuellement aucune question fréquemment posée disponible."
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "title": "Frequently Asked Questions",
+  "subtitle": "Find quick answers to your questions",
+  "search": {
+    "placeholder": "Search frequently asked questions...",
+    "noResults": "No results found for \"{{searchTerm}}\"",
+    "clearSearch": "Clear search"
+  },
+  "loading": "Loading FAQs...",
+  "error": {
+    "loadFailed": "Failed to load FAQs. Please try again later.",
+    "retry": "Retry"
+  },
+  "empty": {
+    "title": "No questions available",
+    "message": "There are currently no frequently asked questions available."
+  }
+}

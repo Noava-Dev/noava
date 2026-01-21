@@ -1,0 +1,18 @@
+{
+  "title": "Veelgestelde Vragen",
+  "subtitle": "Vind snel antwoorden op uw vragen",
+  "search": {
+    "placeholder": "Zoek in veelgestelde vragen...",
+    "noResults": "Geen resultaten gevonden voor \"{{searchTerm}}\"",
+    "clearSearch": "Zoekopdracht wissen"
+  },
+  "loading": "Veelgestelde vragen worden geladen...",
+  "error": {
+    "loadFailed": "Kan veelgestelde vragen niet laden. Probeer het later opnieuw.",
+    "retry": "Opnieuw proberen"
+  },
+  "empty": {
+    "title": "Geen vragen beschikbaar",
+    "message": "Er zijn momenteel geen veelgestelde vragen beschikbaar."
+  }
+}
