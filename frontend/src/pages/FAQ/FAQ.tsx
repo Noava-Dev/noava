@@ -59,12 +59,6 @@ function FAQPage() {
         <div className="container mx-auto px-4 py-8">
           <div className="text-center py-12">
             <p className="text-red-500 text-lg mb-4">{error}</p>
-            <button 
-              onClick={() => window.location.reload()}
-              className="bg-primary-500 text-white px-6 py-3 rounded-lg hover:bg-primary-600 transition-colors shadow-md hover:shadow-lg"
-            >
-              Retry
-            </button>
           </div>
         </div>
       </>
