@@ -8,7 +8,6 @@ import './App.css';
   SignInButton,
 } from '@clerk/clerk-react'; */
 import AppRoutes from './AppRoutes';
-import { SidebarNav } from './shared/components/Sidebar';
 
 function App() {
 
@@ -21,17 +20,23 @@ function App() {
       .catch(console.error);
   }, []);
 
-  // removed the previous layout so the sidebar is always visible and fixed
-  // rest of the previous code were placeholders for authentication
   return (
-  <div className="flex h-screen">
-    <SidebarNav />
-    <main className="flex-1 overflow-auto">
-      <AppRoutes />
-    </main>
-  </div>
-);
-
+    
+    <>
+    <div className="app-container">
+    <AppRoutes />
+      {/* <header>
+        
+        <SignedOut>
+          <SignInButton />
+        </SignedOut>
+        <SignedIn>
+          <UserButton />
+        </SignedIn>
+      </header> */}
+    </div>
+    </>
+  );
 }
 
 export default App;
