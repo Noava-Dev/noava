@@ -10,10 +10,11 @@ import {
 import {
   LuChevronsLeft as Left,
   LuChevronsRight as Right,
+  LuLogOut as LogOut,
 } from "react-icons/lu";
 import { useLocation } from "react-router-dom";
 import type { CustomFlowbiteTheme } from "flowbite-react/types";
-import { PiKeyReturnThin } from "react-icons/pi";
+import { useUser, SignOutButton } from "@clerk/clerk-react";
 
 // TODO: add the correct colors to match the rest of the project
 // current custom theme but can be expanded later or moved to a central file
@@ -38,25 +39,24 @@ const sidebarTheme: CustomFlowbiteTheme["sidebar"] = {
     },
   },
 };
-const user = {
-  name: "Michael Smith",
-  email: "michael.smith@noava.io",
-};
 
 export function SidebarNav() {
   const [collapsed, setCollapsed] = useState(true);
   const location = useLocation();
-  const initials = user.name
-    .split(" ")
-    .map((n) => n[0])
-    .join("")
-    .toUpperCase();
   const sidebarRef = useRef<HTMLDivElement>(null);
+  const { user, isLoaded } = useUser();
+  const initials =
+    isLoaded && user?.firstName && user?.lastName
+      ? `${user.firstName[0]}${
+          user.lastName ? user.lastName[0] : ""
+        }`.toUpperCase()
+      : "N";
 
   useEffect(() => {
     setCollapsed(true);
   }, [location.pathname]);
 
+  // logic to collapse sidebar when clicking outside of it.
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
@@ -126,32 +126,39 @@ export function SidebarNav() {
                   </span>
                 </SidebarItem>
               ))}
+
+              {/* wrapped the logout button in Clerk's SignOutButton component 
+              should handle the logic automatically via clerk.*/}
+              <SignOutButton>
+                <span className= "w-full">
+                  <SidebarItem icon={LogOut}>Logout</SidebarItem>
+                </span>
+              </SignOutButton>
+              
             </SidebarItemGroup>
-
-            <SidebarItemGroup>
-              <div>
-                <div
-                  className={`flex items-center gap-3 rounded-lg px-3 py-2 ${
-                    collapsed ? "justify-center" : ""
-                  } hover:bg-sidebar-accent transition-colors`}
-                >
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-sidebar-active text-sm font-semibold text-background">
-                    {initials}
-                  </div>
-
-                  {!collapsed && (
-                    <div className="">
-                      <p className="truncate text-sm font-medium text-sidebar-foreground">
-                        {user.name}
-                      </p>
-                      <p className="truncate text-xs text-muted-foreground">
-                        {user.email}
-                      </p>
+              <SidebarItemGroup>
+                <div>
+                  <div
+                    className={`flex items-center gap-3 rounded-lg px-3 py-2 ${
+                      collapsed ? "justify-center" : ""
+                    } hover:bg-sidebar-accent transition-colors`}
+                  >
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-sidebar-active text-sm font-semibold text-background">
+                      {initials}
                     </div>
-                  )}
+                    {!collapsed && (
+                      <div className="">
+                        <p className="truncate text-sm font-medium text-sidebar-foreground">
+                          {user?.fullName || "User"}
+                        </p>
+                        <p className="truncate text-xs text-muted-foreground">
+                          {user?.primaryEmailAddress?.emailAddress || ""}
+                        </p>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-            </SidebarItemGroup>
+              </SidebarItemGroup>
           </div>
         </SidebarItems>
       </Sidebar>
@@ -172,7 +179,6 @@ export function SidebarNav() {
           </div>
         )}
       </button>
-      {/* TODO: add logic so that the sidebar collapses when clicking outside the sidebar*/}
     </div>
   );
 }

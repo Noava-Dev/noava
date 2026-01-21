@@ -14,7 +14,6 @@ export default function AppRoutes() {
             <Route path="/geschiedenis" element={<Placeholder title="Geschiedenis" />} />
             <Route path="/meldingen" element={<Placeholder title="Meldingen" />} />
             <Route path="/settings" element={<Placeholder title="Settings" />} />
-            <Route path="/logout" element={<Placeholder title="logout" />} />
             <Route path="/faq" element={<FAQ/>}/>
         </Routes>
     );

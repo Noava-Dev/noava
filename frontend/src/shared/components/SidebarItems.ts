@@ -22,5 +22,4 @@ export const bottomItems = [
     // TODO: add logout logic functionality
   { label: "Meldingen", href: "/meldingen", icon: Bell, badge: "2" },
   { label: "Settings", href: "/settings", icon: Settings },
-  { label: "Logout", href: "/", icon: LogOut },
 ];
