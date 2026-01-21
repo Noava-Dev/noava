@@ -19,7 +19,8 @@ export const mainItems = [
 
 export const bottomItems = [
     // TODO: logic for notifications in badge count
+    // TODO: add logout logic functionality
   { label: "Meldingen", href: "/meldingen", icon: Bell, badge: "2" },
   { label: "Settings", href: "/settings", icon: Settings },
-  { label: "Logout", href: "/logout", icon: LogOut },
+  { label: "Logout", href: "/", icon: LogOut },
 ];

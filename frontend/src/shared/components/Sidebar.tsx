@@ -1,5 +1,5 @@
-import { mainItems, bottomItems} from "../components/SidebarItems";
-import { useState, useEffect } from "react";
+import { mainItems, bottomItems } from "../components/SidebarItems";
+import { useState, useEffect, useRef } from "react";
 import {
   Sidebar,
   SidebarItem,
@@ -7,9 +7,13 @@ import {
   SidebarItems,
   SidebarLogo,
 } from "flowbite-react";
-import { LuChevronsLeft as Left, LuChevronsRight as Right } from "react-icons/lu";
+import {
+  LuChevronsLeft as Left,
+  LuChevronsRight as Right,
+} from "react-icons/lu";
 import { useLocation } from "react-router-dom";
 import type { CustomFlowbiteTheme } from "flowbite-react/types";
+import { PiKeyReturnThin } from "react-icons/pi";
 
 // TODO: add the correct colors to match the rest of the project
 // current custom theme but can be expanded later or moved to a central file
@@ -26,78 +30,131 @@ const sidebarTheme: CustomFlowbiteTheme["sidebar"] = {
     base: "py-6 text-xl font-bold text-sidebar-foreground",
   },
   item: {
-    base:
-      "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
-    active:
-      "bg-background text-sidebar-active shadow-sm",
+    base: "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
+    active: "bg-background text-sidebar-active shadow-sm",
     icon: {
       base: "size-5 text-muted-foreground",
       active: "text-sidebar-active",
     },
   },
 };
-
+const user = {
+  name: "Michael Smith",
+  email: "michael.smith@noava.io",
+};
 
 export function SidebarNav() {
   const [collapsed, setCollapsed] = useState(true);
   const location = useLocation();
+  const initials = user.name
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase();
+  const sidebarRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setCollapsed(true);
   }, [location.pathname]);
 
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        sidebarRef.current &&
+        !sidebarRef.current.contains(event.target as Node)
+      ) {
+        setCollapsed(true);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
-    <div className="relative h-screen flex-none sticky top-0 z-40">
-    <Sidebar
-      theme={sidebarTheme}
-      collapsed={collapsed}
-      aria-label="Main sidebar"
-      className = "sticky top-0 h-screen flex-none"
+    <div
+      ref={sidebarRef}
+      className="relative h-screen flex-none sticky top-0 z-40"
     >
-      <SidebarLogo 
-        href="/" 
-        img="\src\assets\noava-logo-blue-nobg.png"
-        className="flex items-center gap-2">
-        {!collapsed ? "Noava" : "N"}
-      </SidebarLogo>
+      <Sidebar
+        theme={sidebarTheme}
+        collapsed={collapsed}
+        aria-label="Main sidebar"
+        className="sticky top-0 h-screen flex-none"
+      >
+        <SidebarLogo
+          href="/"
+          img="\src\assets\noava-logo-blue-nobg.png"
+          className="flex items-center gap-2"
+        >
+          {!collapsed ? "Noava" : "N"}
+        </SidebarLogo>
 
-      <SidebarItems className="flex flex-col flex-1 justify-between">
-        {/* Main navigation */}
-        <SidebarItemGroup>
-          {mainItems.map((item) => (
-            <SidebarItem
-              key={item.label}
-              href={item.href}
-              icon={item.icon}
-              active={location.pathname == item.href}
-            >
-              {item.label}
-            </SidebarItem>
-          ))}
-        </SidebarItemGroup>
-
-        {/* Navigation on the bottom of the bar */}
-        <SidebarItemGroup>
-          {bottomItems.map((item) => (
-            <SidebarItem
-              key={item.label}
-              href={item.href}
-              icon={item.icon}
-              active={location.pathname == item.href}
-            >
-              <span className="flex items-center justify-between w-full">
+        <SidebarItems className="flex flex-col flex-1 justify-between">
+          {/* Main navigation */}
+          <SidebarItemGroup>
+            {mainItems.map((item) => (
+              <SidebarItem
+                key={item.label}
+                href={item.href}
+                icon={item.icon}
+                active={location.pathname == item.href}
+              >
                 {item.label}
-                {item.badge && !collapsed && (
-                  <span className="ml-2 rounded-full bg-destructive px-2 text-xs text-background">
-                    {item.badge}
+              </SidebarItem>
+            ))}
+          </SidebarItemGroup>
+
+          <div>
+            {/* Navigation on the bottom of the bar */}
+            <SidebarItemGroup>
+              {bottomItems.map((item) => (
+                <SidebarItem
+                  key={item.label}
+                  href={item.href}
+                  icon={item.icon}
+                  active={location.pathname == item.href}
+                >
+                  <span className="flex items-center justify-between w-full">
+                    {item.label}
+                    {item.badge && !collapsed && (
+                      <span className="ml-2 rounded-full bg-destructive px-2 text-xs text-background">
+                        {item.badge}
+                      </span>
+                    )}
                   </span>
-                )}
-              </span>
-            </SidebarItem>
-          ))}
-        </SidebarItemGroup>
-      </SidebarItems>
-    </Sidebar>
+                </SidebarItem>
+              ))}
+            </SidebarItemGroup>
+
+            <SidebarItemGroup>
+              <div>
+                <div
+                  className={`flex items-center gap-3 rounded-lg px-3 py-2 ${
+                    collapsed ? "justify-center" : ""
+                  } hover:bg-sidebar-accent transition-colors`}
+                >
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-sidebar-active text-sm font-semibold text-background">
+                    {initials}
+                  </div>
+
+                  {!collapsed && (
+                    <div className="">
+                      <p className="truncate text-sm font-medium text-sidebar-foreground">
+                        {user.name}
+                      </p>
+                      <p className="truncate text-xs text-muted-foreground">
+                        {user.email}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </SidebarItemGroup>
+          </div>
+        </SidebarItems>
+      </Sidebar>
 
       {/* Collapse button  */}
       <button
@@ -106,12 +163,16 @@ export function SidebarNav() {
         aria-label="Toggle sidebar"
       >
         {collapsed ? (
-          <div><Right className="size-4"/></div>
+          <div>
+            <Right className="size-4" />
+          </div>
         ) : (
-          <div><Left className="size-4" /></div>
+          <div>
+            <Left className="size-4" />
+          </div>
         )}
       </button>
       {/* TODO: add logic so that the sidebar collapses when clicking outside the sidebar*/}
-</div>
+    </div>
   );
 }
