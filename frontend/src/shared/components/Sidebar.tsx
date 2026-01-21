@@ -23,7 +23,7 @@ const sidebarTheme: CustomFlowbiteTheme["sidebar"] = {
     inner: "h-full flex flex-col bg-sidebar-bg overflow-hidden",
   },
   logo: {
-    base: "px-5 py-6 text-xl font-bold text-sidebar-foreground",
+    base: "py-6 text-xl font-bold text-sidebar-foreground",
   },
   item: {
     base:
@@ -54,7 +54,10 @@ export function SidebarNav() {
       aria-label="Main sidebar"
       className = "sticky top-0 h-screen flex-none"
     >
-      <SidebarLogo href="/" img="/icon.svg">
+      <SidebarLogo 
+        href="/" 
+        img="\src\assets\noava-logo-blue-nobg.png"
+        className="flex items-center gap-2">
         {!collapsed ? "Noava" : "N"}
       </SidebarLogo>
 
