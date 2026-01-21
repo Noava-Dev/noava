@@ -4,7 +4,7 @@ import Searchbar from "../../shared/components/Searchbar";
 import type { FAQ } from "../../models/FAQ";
 import { faqService } from "../../services/FAQService";
 import Header from "../Home/components/Header";
-
+import PageHeader from "../../shared/components/PageHeader";
 
 function FAQPage() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -41,6 +41,16 @@ function FAQPage() {
     return (
       <>
         <Header />
+        <PageHeader>
+          <div className="text-center">
+            <h1 className="text-4xl md:text-5xl font-bold text-text-title-light dark:text-text-title-dark mb-4">
+              Frequently Asked Questions
+            </h1>
+            <p className="text-lg text-text-body-light dark:text-text-body-dark">
+              Find answers to common questions about Noava
+            </p>
+          </div>
+        </PageHeader>
         <div className="container mx-auto px-4 py-8">
           <div className="text-center py-12">
             <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-4 border-primary-500 mb-4"></div>
@@ -56,6 +66,16 @@ function FAQPage() {
     return (
       <>
         <Header />
+        <PageHeader>
+          <div className="text-center">
+            <h1 className="text-4xl md:text-5xl font-bold text-text-title-light dark:text-text-title-dark mb-4">
+              Frequently Asked Questions
+            </h1>
+            <p className="text-lg text-text-body-light dark:text-text-body-dark">
+              Find answers to common questions about Noava
+            </p>
+          </div>
+        </PageHeader>
         <div className="container mx-auto px-4 py-8">
           <div className="text-center py-12">
             <p className="text-red-500 text-lg mb-4">{error}</p>
@@ -68,11 +88,12 @@ function FAQPage() {
   return (
     <>
       <Header />
-      <section className="container mx-auto px-4 py-16 max-w-4xl">
-        {/* Hero */}
-        <div className="text-center mb-12">
+      
+      {/* PageHeader met alle custom content */}
+      <PageHeader>
+        <div className="text-center mb-8">
           <h1 className="text-4xl md:text-5xl font-bold text-text-title-light dark:text-text-title-dark mb-4">
-            Frequently asked questions
+            Frequently Asked Questions
           </h1>
           <p className="text-lg text-text-body-light dark:text-text-body-dark">
             Find answers to common questions about Noava
@@ -80,19 +101,23 @@ function FAQPage() {
         </div>
 
         {/* Searchbar */}
-        <div className="mb-8">
+        <div className="max-w-2xl mx-auto mb-6">
           <Searchbar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         </div>
 
         {/* Results count */}
         {searchTerm && (
-          <div className="mb-6 text-center">
+          <div className="text-center">
             <p className="text-sm text-text-muted-light dark:text-text-muted-dark bg-primary-100 dark:bg-primary-900 inline-block px-4 py-2 rounded-full">
               Showing <span className="font-semibold">{filteredFaqs.length}</span> of <span className="font-semibold">{allFaqs.length}</span> results
             </p>
           </div>
         )}
+      </PageHeader>
 
+      {/* Content Section */}
+      <section className="container mx-auto px-4 py-8 max-w-4xl">
+        
         {/* FAQ Accordion */}
         <div className="space-y-3">
           {filteredFaqs.length > 0 ? (
