@@ -7,6 +7,7 @@ import 'flowbite';
 import { BrowserRouter } from 'react-router-dom';
 import { ToastProvider } from './contexts/ToastContext.tsx';
 import './i18n';
+import { ThemeProvider } from './contexts/ThemeContext.tsx';
 
 // import Clerk publishable key
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
@@ -20,9 +21,11 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
       <BrowserRouter>  
+      <ThemeProvider>
           <ToastProvider>
             <App />
           </ToastProvider>
+      </ThemeProvider>
       </BrowserRouter>
     </ClerkProvider>
   </StrictMode>
