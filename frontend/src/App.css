@@ -1,20 +1,24 @@
-/* Reset */
-html, body, #root {
+html,
+body,
+#root {
   height: 100%;
-  margin: 0;
 }
-
 
 body {
-  display: block;
-}
-#root {
+  margin: 0;
   display: flex;
-  width: 100%;
+  justify-content: center;
+  
 }
 
+/* App content container */
+#root {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+/* Default page width */
 .app-container {
   width: 100%;
-  padding: 0;
-  max-width: none;
 }
