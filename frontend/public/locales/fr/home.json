@@ -1,0 +1,33 @@
+{
+  "hero": {
+    "title": "Cartes mémoire conçues pour l'école et les salles de classe",
+    "description": "Le moyen simple et puissant pour les enseignants de créer du matériel d'étude et pour les élèves d'apprendre. Conçu spécifiquement pour les environnements éducatifs.",
+    "cta": "Commencer"
+  },
+  "features": {
+    "title": "Tout ce dont vous avez besoin",
+    "description": "Des outils simples qui font vraiment la différence en classe",
+    "decks": {
+      "title": "Paquets",
+      "description": "Organisez les cartes mémoire en paquets spécifiques à chaque matière. Créez, partagez et réutilisez dans toutes les classes."
+    },
+    "classrooms": {
+      "title": "Salles de classe",
+      "description": "Invitez des élèves, attribuez des paquets et suivez les progrès. Le tout dans un espace collaboratif."
+    },
+    "dashboards": {
+      "title": "Tableaux de bord",
+      "description": "Les enseignants ont une vue d'ensemble de l'activité de la classe, des taux d'achèvement et de l'engagement des élèves."
+    },
+    "analytics": {
+      "title": "Analytique",
+      "description": "Aperçus détaillés des performances individuelles et de classe. Identifiez qui a besoin d'aide supplémentaire."
+    }
+  },
+  "platforms": {
+    "title": "Disponible partout",
+    "description": "Étudiez à l'école, à la maison ou dans le bus. Vos cartes mémoire se synchronisent sur tous vos appareils.",
+    "mobile": "Mobile",
+    "desktop": "Bureau"
+  }
+}

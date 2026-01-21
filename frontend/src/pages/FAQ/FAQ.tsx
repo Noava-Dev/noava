@@ -5,8 +5,10 @@ import type { FAQ } from "../../models/FAQ";
 import { faqService } from "../../services/FAQService";
 import Header from "../Home/components/Header";
 import PageHeader from "../../shared/components/PageHeader";
+import { useTranslation } from 'react-i18next';
 
 function FAQPage() {
+  const { t } = useTranslation('faq');
   const [searchTerm, setSearchTerm] = useState('');
   const [allFaqs, setAllFaqs] = useState<FAQ[]>([]);
   const [loading, setLoading] = useState(true);
@@ -21,7 +23,7 @@ function FAQPage() {
         setAllFaqs(data);
         setError(null);
       } catch (err) {
-        setError('Failed to load FAQs. Please try again later.');
+        setError(t('error'));
         console.error('Error fetching FAQs:', err);
       } finally {
         setLoading(false);
@@ -44,17 +46,17 @@ function FAQPage() {
         <PageHeader>
           <div className="text-center">
             <h1 className="text-4xl md:text-5xl font-bold text-text-title-light dark:text-text-title-dark mb-4">
-              Frequently Asked Questions
+              {t('title')}
             </h1>
             <p className="text-lg text-text-body-light dark:text-text-body-dark">
-              Find answers to common questions about Noava
+              {t('description')}
             </p>
           </div>
         </PageHeader>
         <div className="container mx-auto px-4 py-8">
           <div className="text-center py-12">
             <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-4 border-primary-500 mb-4"></div>
-            <p className="text-text-body-light dark:text-text-body-dark text-lg">Loading FAQs...</p>
+            <p className="text-text-body-light dark:text-text-body-dark text-lg">{t('loading')}</p>
           </div>
         </div>
       </>
@@ -93,10 +95,10 @@ function FAQPage() {
       <PageHeader>
         <div className="text-center mb-8">
           <h1 className="text-4xl md:text-5xl font-bold text-text-title-light dark:text-text-title-dark mb-4">
-            Frequently Asked Questions
+            {t('title')}
           </h1>
           <p className="text-lg text-text-body-light dark:text-text-body-dark">
-            Find answers to common questions about Noava
+            {t('description')}
           </p>
         </div>
 
@@ -109,7 +111,7 @@ function FAQPage() {
         {searchTerm && (
           <div className="text-center">
             <p className="text-sm text-text-muted-light dark:text-text-muted-dark bg-primary-100 dark:bg-primary-900 inline-block px-4 py-2 rounded-full">
-              Showing <span className="font-semibold">{filteredFaqs.length}</span> of <span className="font-semibold">{allFaqs.length}</span> results
+              {t('results.showing')} <span className="font-semibold">{filteredFaqs.length}</span> {t('results.of')} <span className="font-semibold">{allFaqs.length}</span> {t('results.results')}
             </p>
           </div>
         )}
@@ -156,16 +158,16 @@ function FAQPage() {
                 </svg>
               </div>
               <p className="text-text-title-light dark:text-text-title-dark text-xl font-semibold mb-2">
-                No results found
+                {t('empty.title')}
               </p>
               <p className="text-text-muted-light dark:text-text-muted-dark mb-6">
-                We couldn't find any FAQs matching "<span className="font-semibold">{searchTerm}</span>"
+                {t('empty.message')} "<span className="font-semibold">{searchTerm}</span>"
               </p>
               <button 
                 onClick={() => setSearchTerm('')}
                 className="bg-primary-500 text-white px-6 py-3 rounded-lg hover:bg-primary-600 transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
               >
-                Clear search
+                {t('empty.cta')}
               </button>
             </div>
           )}
@@ -175,13 +177,13 @@ function FAQPage() {
         {filteredFaqs.length > 0 && (
           <div className="mt-16 text-center bg-primary-50 dark:bg-primary-900/20 rounded-2xl p-8 border border-border dark:border-border-dark">
             <h3 className="text-2xl font-bold text-text-title-light dark:text-text-title-dark mb-2">
-              Still have questions?
+              {t('contact.title')}
             </h3>
             <p className="text-text-body-light dark:text-text-body-dark mb-6">
-              Can't find the answer you're looking for? Our team is here to help.
+              {t('contact.description')}
             </p>
             <button className="bg-primary-500 text-white px-8 py-3 rounded-lg hover:bg-primary-600 transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
-              Contact Support
+              {t('contact.cta')}
             </button>
           </div>
         )}
