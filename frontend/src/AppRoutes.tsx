@@ -1,5 +1,6 @@
 import {Route, Routes} from "react-router-dom";
 import FAQ from "./pages/FAQ/FAQ";
+import Home from "./pages/Home/Home"
 
 function Placeholder({ title }: { title: string }) {
   return <h1 className="p-6 text-2xl font-bold">{title}</h1>;

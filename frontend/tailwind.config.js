@@ -9,7 +9,60 @@ export default {
     ".flowbite-react\\class-list.json"
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        primary: {
+          100: "#E6EEF7",
+          200: "#C7D9EE",
+          300: "#9DBFE0",
+          400: "#6F9CCF",
+          500: "#2C5282",
+          600: "#24476F",
+          700: "#1E3A5A",
+          800: "#172E47",
+          900: "#0F1F30",
+        },
+
+        // Text colors
+        text: {
+          title: {
+            light: "#111827",
+            dark: "#F3F4F6",
+          },
+          body: {
+            light: "#374151",
+            dark: "#D1D5DB",
+          },
+          muted: {
+            light: "#6B7280",
+            dark: "#9CA3AF",
+          },
+        },
+
+        // Backgrounds
+        background: {
+          app: {
+            light: "#F9FAFB",
+            dark: "#111827",
+          },
+          surface: {
+            light: "#FFFFFF",
+            dark: "#1F2937",
+          },
+          subtle: {
+            light: "#F3F4F6",
+            dark: "#374151",
+          },
+        },
+
+        // Borders & dividers
+        border: {
+          DEFAULT: "#E5E7EB",
+          strong: "#D1D5DB",
+          dark: "#374151",
+        },
+      },
+    },
   },
   plugins: [flowbiteReact],
 };
