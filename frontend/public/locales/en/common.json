@@ -12,6 +12,7 @@
     "home": "Home",
     "faq": "FAQ",
     "login": "Login",
+    "register": "Register",
     "logout": "Logout",
     "dashboard": "Dashboard"
   },
