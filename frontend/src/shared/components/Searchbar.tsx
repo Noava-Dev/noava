@@ -1,5 +1,6 @@
 import { Label, TextInput } from "flowbite-react";
 import { HiSearch } from "react-icons/hi";
+import { useTranslation } from "react-i18next";
 
 interface SearchbarProps {
   searchTerm: string;
@@ -7,15 +8,16 @@ interface SearchbarProps {
 }
 
 function Searchbar({ searchTerm, setSearchTerm }: SearchbarProps) {
+    const { t } = useTranslation('common');
     const SearchIcon = HiSearch;
     return (
         <div className="max-w-md">
             <div className="mb-2 block">
-                <Label htmlFor="search">Search</Label>
+                <Label htmlFor="search">{t('actions.search')}</Label>
             </div>
             <TextInput 
                 id="search" 
-                placeholder="Search FAQs..." 
+                placeholder={t('actions.searchPlaceholder')} 
                 icon={SearchIcon}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}

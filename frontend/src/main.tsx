@@ -6,6 +6,7 @@ import { ClerkProvider } from '@clerk/clerk-react';
 import 'flowbite';
 import { BrowserRouter } from 'react-router-dom';
 import { ToastProvider } from './contexts/ToastContext.tsx';
+import './i18n';
 
 // import Clerk publishable key
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;

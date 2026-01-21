@@ -1,0 +1,24 @@
+{
+  "title": "Questions Fréquemment Posées",
+  "description": "Trouvez des réponses aux questions courantes sur Noava",
+  "search": {
+    "placeholder": "Rechercher dans les questions fréquentes..."
+  },
+  "results": {
+    "showing": "Affichage de",
+    "of": "sur",
+    "results": "résultats"
+  },
+  "loading": "Chargement des questions fréquentes...",
+  "error": "Impossible de charger les questions. Veuillez réessayer plus tard.",
+  "empty": {
+    "title": "Aucun résultat trouvé",
+    "message": "Nous n'avons trouvé aucune question correspondant à",
+    "cta": "Effacer la recherche"
+  },
+  "contact": {
+    "title": "Vous avez encore des questions?",
+    "description": "Vous ne trouvez pas la réponse que vous cherchez? Notre équipe est là pour vous aider.",
+    "cta": "Contacter le Support"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "app": {
+    "title": "NOAVA",
+    "loading": "Laden...",
+    "error": "Er is iets misgegaan",
+    "retry": "Opnieuw proberen",
+    "clearSearch": "Zoekopdracht wissen",
+    "noResults": "Geen resultaten gevonden voor \"{{searchTerm}}\"",
+    "welcome": "Welkom bij NOAVA"
+  },
+  "navigation": {
+    "home": "Home",
+    "faq": "Veelgestelde Vragen",
+    "login": "Inloggen",
+    "logout": "Uitloggen",
+    "dashboard": "Dashboard"
+  },
+  "actions": {
+    "save": "Opslaan",
+    "cancel": "Annuleren",
+    "delete": "Verwijderen",
+    "edit": "Bewerken",
+    "create": "Aanmaken",
+    "search": "Zoeken",
+    "searchPlaceholder": "Zoeken...",
+    "submit": "Versturen",
+    "confirm": "Bevestigen",
+    "close": "Sluiten",
+    "getStarted": "Aan de slag"
+  },
+  "validation": {
+    "required": "Dit veld is verplicht",
+    "email": "Ongeldig e-mailadres",
+    "minLength": "Minimaal {{count}} karakters vereist",
+    "maxLength": "Maximaal {{count}} karakters toegestaan"
+  }
+}
