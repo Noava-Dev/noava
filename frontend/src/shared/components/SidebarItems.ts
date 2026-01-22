@@ -10,16 +10,16 @@ import {
 // renaming imports for clarity
 
 // top items in the sidebar
+// TODO: make sure labels can be translated
 export const mainItems = [
-  { label: "Dashboard", href: "/", icon: Dashboard },
+  { label: "Dashboard", href: "/home", icon: Dashboard },
   { label: "Decks", href: "/decks", icon: Layers },
-  { label: "Klassen", href: "/klassen", icon: Users },
-  { label: "Geschiedenis", href: "/geschiedenis", icon: History },
+  { label: "Klassen", href: "/classrooms", icon: Users },
   { label: "FAQ", href: "/faq", icon: FAQ },
 ];
 
 export const bottomItems = [
     // TODO: logic for notifications in badge count
-  { label: "Meldingen", href: "/meldingen", icon: Bell, badge: "2" },
+  { label: "Meldingen", href: "/notifications", icon: Bell, badge: "2" },
   { label: "Settings", href: "/settings", icon: Settings },
 ];
