@@ -14,13 +14,14 @@ function FAQPage() {
   const [allFaqs, setAllFaqs] = useState<FAQ[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { getAll } = faqService();
 
   // Haal FAQs op van de backend
   useEffect(() => {
     const fetchFaqs = async () => {
       try {
         setLoading(true);
-        const data = await faqService.getAll();
+        const data = await getAll();
         setAllFaqs(data);
         setError(null);
       } catch (err) {
