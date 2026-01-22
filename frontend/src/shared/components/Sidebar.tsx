@@ -33,8 +33,12 @@ const sidebarTheme: CustomFlowbiteTheme["sidebar"] = {
     base: "flex items-center gap-3 px-3 py-2.5 text-sm font-medium transition-colors",
     active: "bg-background text-sidebar-active shadow-sm",
     icon: {
-      // muted-foreground is a flowbite semantic color that i'm trying to use because it
-      // adapts AUTOMATICALLY in dark mode
+      // muted-foreground is a css variable thing. the docs are: 
+      //https://ui.shadcn.com/docs/theming
+      // I have tried at least 20 different combinations of tailwind.config.js colors but nothing has given me the same
+      //dynamic color changing as the css variable does. So for now i will leave it as it is because i'm going to lose my mind.
+      //dixi
+
       base: "size-5 text-text-muted-foreground transition colors",
       active: "text-sidebar-active ",
     },
@@ -131,7 +135,7 @@ export function SidebarNav() {
             <SidebarItemGroup>
               <div>
                 <div className="flex items-center gap-3 rounded-lg px-3 py-2">
-                  {/* CLERK: should technically work but right now as there is no logged user
+                  {/* CLERK: should technically work but right now as there is no logged in user
                      i can't test this functionality properly */}
                   <UserButton
                     appearance={{
@@ -147,7 +151,6 @@ export function SidebarNav() {
                         {user?.username || "User"}
                       </p>
 
-                      {/* will have to replace text-text-muted-light with text-text-muted-foreground see line 36-37 */}
                       <p className="text-xs text-text-muted-light">
                         {user?.primaryEmailAddress?.emailAddress ||
                           "user@noava.test"}

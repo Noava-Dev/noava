@@ -10,9 +10,9 @@ body {
   display: block;
 }
 
-/* because the navbar the ONLY thing (besides changing app.tsx) that i can do to not make it overlap is to 
-give the app container (so the place with the main content) some margins, etc. */
+/*because the sidebar is FIXED, the main content needs to have a small margin for it to not be covered
+by the sidebar. this can be solved with flexbox in App.tsx but this is a quicker and safer way for now */
 .app-container {
   width: 100%;
-  /* margin-left: 5rem; */
+  margin-left: 5rem;
 }
