@@ -14,28 +14,29 @@ import {
 } from "react-icons/lu";
 import { useLocation } from "react-router-dom";
 import type { CustomFlowbiteTheme } from "flowbite-react/types";
-import { useUser, SignOutButton } from "@clerk/clerk-react";
+import { useUser, SignOutButton, UserButton } from "@clerk/clerk-react";
 
-// TODO: add the correct colors to match the rest of the project
-// current custom theme but can be expanded later or moved to a central file
 const sidebarTheme: CustomFlowbiteTheme["sidebar"] = {
   root: {
-    base: "h-screen border-r border-sidebar-border bg-sidebar-bg transition-all duration-300",
+    base: "h-screen border transition-all duration-250",
     collapsed: {
       on: "w-20",
       off: "w-64",
     },
-    inner: "h-full flex flex-col bg-sidebar-bg overflow-hidden",
+
+    inner: "h-screen flex flex-col bg-background-surface-light",
   },
   logo: {
-    base: "py-6 text-xl font-bold text-sidebar-foreground",
+    base: "py-6 text-xl font-bold",
   },
   item: {
-    base: "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
+    base: "flex items-center gap-3 px-3 py-2.5 text-sm font-medium transition-colors",
     active: "bg-background text-sidebar-active shadow-sm",
     icon: {
-      base: "size-5 text-muted-foreground",
-      active: "text-sidebar-active",
+      // muted-foreground is a flowbite semantic color that i'm trying to use because it
+      // adapts AUTOMATICALLY in dark mode
+      base: "size-5 text-text-muted-foreground transition colors",
+      active: "text-sidebar-active ",
     },
   },
 };
@@ -44,19 +45,15 @@ export function SidebarNav() {
   const [collapsed, setCollapsed] = useState(true);
   const location = useLocation();
   const sidebarRef = useRef<HTMLDivElement>(null);
-  const { user, isLoaded } = useUser();
-  const initials =
-    isLoaded && user?.firstName && user?.lastName
-      ? `${user.firstName[0]}${
-          user.lastName ? user.lastName[0] : ""
-        }`.toUpperCase()
-      : "N";
+  const { user } = useUser();
+  // CLERK: when using clerk const isLoaded, isSignedIn should be added on the line above
+  // this is because if the clerk isn't loaded yet you can add the following function:
+  // if(!isLoaded) return null;
 
   useEffect(() => {
     setCollapsed(true);
   }, [location.pathname]);
 
-  // logic to collapse sidebar when clicking outside of it.
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
@@ -73,15 +70,11 @@ export function SidebarNav() {
   }, []);
 
   return (
-    <div
-      ref={sidebarRef}
-      className="relative h-screen flex-none sticky top-0 z-40"
-    >
+    <div ref={sidebarRef} className="fixed left-0 top-0 z-40 h-screen">
       <Sidebar
         theme={sidebarTheme}
         collapsed={collapsed}
         aria-label="Main sidebar"
-        className="sticky top-0 h-screen flex-none"
       >
         <SidebarLogo
           href="/"
@@ -92,7 +85,6 @@ export function SidebarNav() {
         </SidebarLogo>
 
         <SidebarItems className="flex flex-col flex-1 justify-between">
-          {/* Main navigation */}
           <SidebarItemGroup>
             {mainItems.map((item) => (
               <SidebarItem
@@ -107,7 +99,6 @@ export function SidebarNav() {
           </SidebarItemGroup>
 
           <div>
-            {/* Navigation on the bottom of the bar */}
             <SidebarItemGroup>
               {bottomItems.map((item) => (
                 <SidebarItem
@@ -116,10 +107,11 @@ export function SidebarNav() {
                   icon={item.icon}
                   active={location.pathname == item.href}
                 >
+                  {/* TODO: the badge is hardcoded in sidebarItems but should be dynamically fetched */}
                   <span className="flex items-center justify-between w-full">
                     {item.label}
                     {item.badge && !collapsed && (
-                      <span className="ml-2 rounded-full bg-destructive px-2 text-xs text-background">
+                      <span className="flex items-center justify-center rounded-full size-5 text-xs text-red-800 bg-red-200">
                         {item.badge}
                       </span>
                     )}
@@ -127,57 +119,63 @@ export function SidebarNav() {
                 </SidebarItem>
               ))}
 
-              {/* wrapped the logout button in Clerk's SignOutButton component 
+              {/* CLERK: wrapped the logout button in Clerk's SignOutButton component 
               should handle the logic automatically via clerk. The redirectUrl also redirects
                the user to the root after logging out*/}
-              <SignOutButton redirectUrl="">
-                <span className= "w-full">
+              <SignOutButton redirectUrl="/">
+                <span className="w-full">
                   <SidebarItem icon={LogOut}>Logout</SidebarItem>
                 </span>
               </SignOutButton>
-
             </SidebarItemGroup>
-              <SidebarItemGroup>
-                <div>
-                  <div
-                    className={`flex items-center gap-3 rounded-lg px-3 py-2 ${
-                      collapsed ? "justify-center" : ""
-                    } hover:bg-sidebar-accent transition-colors`}
-                  >
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-sidebar-active text-sm font-semibold text-background">
-                      {initials}
+            <SidebarItemGroup>
+              <div>
+                <div className="flex items-center gap-3 rounded-lg px-3 py-2">
+                  {/* CLERK: should technically work but right now as there is no logged user
+                     i can't test this functionality properly */}
+                  <UserButton
+                    appearance={{
+                      elements: {
+                        avatarBox: "h-9 w-9",
+                      },
+                    }}
+                  />
+
+                  {!collapsed && (
+                    <div className="">
+                      <p className="text-sm font-medium text-text-body-light">
+                        {user?.username || "User"}
+                      </p>
+
+                      {/* will have to replace text-text-muted-light with text-text-muted-foreground see line 36-37 */}
+                      <p className="text-xs text-text-muted-light">
+                        {user?.primaryEmailAddress?.emailAddress ||
+                          "user@noava.test"}
+                      </p>
                     </div>
-                    {!collapsed && (
-                      <div className="">
-                        <p className="truncate text-sm font-medium text-sidebar-foreground">
-                          {user?.fullName || "User"}
-                        </p>
-                        <p className="truncate text-xs text-muted-foreground">
-                          {user?.primaryEmailAddress?.emailAddress || ""}
-                        </p>
-                      </div>
-                    )}
-                  </div>
+                  )}
                 </div>
-              </SidebarItemGroup>
+              </div>
+            </SidebarItemGroup>
           </div>
         </SidebarItems>
       </Sidebar>
 
-      {/* Collapse button  */}
+      {/* collapse button */}
       <button
         onClick={() => setCollapsed(!collapsed)}
-        className="absolute -right-3 top-1/2 flex size-6 -translate-y-1/2 items-center justify-center rounded-full border border-sidebar-border bg-background text-muted-foreground shadow-sm hover:bg-sidebar-accent z-50"
+        className="
+        absolute 
+        -right-3 top-1/2 
+        flex size-6 items-center justify-center
+        rounded-full
+        hover:bg-sidebar-accent"
         aria-label="Toggle sidebar"
       >
         {collapsed ? (
-          <div>
-            <Right className="size-4" />
-          </div>
+          <div><Right className="size-4" /></div>
         ) : (
-          <div>
-            <Left className="size-4" />
-          </div>
+          <div><Left className="size-4" /></div>
         )}
       </button>
     </div>

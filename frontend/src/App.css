@@ -2,19 +2,17 @@
 html, body, #root {
   height: 100%;
   margin: 0;
+  width: 100%;
 }
 
 
 body {
   display: block;
 }
-#root {
-  display: flex;
-  width: 100%;
-}
 
+/* because the navbar the ONLY thing (besides changing app.tsx) that i can do to not make it overlap is to 
+give the app container (so the place with the main content) some margins, etc. */
 .app-container {
   width: 100%;
-  padding: 0;
-  max-width: none;
+  /* margin-left: 5rem; */
 }
