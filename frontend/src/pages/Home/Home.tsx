@@ -21,7 +21,7 @@ function Home() {
                     <p className="text-lg font-normal text-gray-300 mb-8 max-w-2xl mx-auto">
                         {t('hero.description')}
                     </p>
-
+                </div>
                 <div className="flex justify-center">
                     <SignUpButton>
                         <Button>{t('hero.cta')}</Button>
