@@ -2,7 +2,6 @@ import {
   LuLayoutDashboard as Dashboard, 
   LuLayers as Layers, 
   LuUsers as Users, 
-  LuHistory as History, 
   LuBell as Bell, 
   LuSettings as Settings,
   LuCircleHelp as FAQ 
