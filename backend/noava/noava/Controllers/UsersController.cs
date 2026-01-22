@@ -21,7 +21,7 @@ namespace noava.Controllers
         }
 
         [Authorize]
-        [HttpPost("me")]
+        [HttpGet("me")]
         public async Task<IActionResult> SyncUser()
         {
             var clerkId = User.FindFirstValue(ClaimTypes.NameIdentifier) ??
