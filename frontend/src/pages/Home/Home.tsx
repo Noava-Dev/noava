@@ -25,6 +25,11 @@ function Home() {
                         {t('hero.description')}
                     </p>
                 </div>
+                <div className="flex justify-center">
+                    <SignUpButton>
+                        <Button>{t('hero.cta')}</Button>
+                    </SignUpButton>
+                </div>
                 {/* <div className="flex justify-center">
                     {isSignedIn ? (
                         <Button onClick={() => navigate('/dashboard')}>{t('hero.cta')}</Button>
