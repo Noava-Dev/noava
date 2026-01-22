@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using noava.Data;
 using Noava.Repositories;
 using noava.Services;
+using noava.Repositories;
 
 namespace noava
 {
@@ -19,7 +20,11 @@ namespace noava
             // FAQ
             builder.Services.AddScoped<FaqRepository>();
             builder.Services.AddScoped<FaqService>();
-            
+
+            // Decks
+            builder.Services.AddScoped<DeckRepository>();
+            builder.Services.AddScoped<DeckService>();
+
 
             // Add services to the container.
             builder.Services.AddCors(options =>

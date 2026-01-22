@@ -26,6 +26,7 @@ function Home() {
                     <SignUpButton>
                         <Button>{t('hero.cta')}</Button>
                     </SignUpButton>
+                    </div>
                 </div>
             </section>
 
@@ -157,5 +158,4 @@ function Home() {
         </>
     );
 }
-
 export default Home;
