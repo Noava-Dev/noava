@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using noava.Data;
 using Noava.Repositories;
 using noava.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 namespace noava
 {
@@ -43,6 +45,21 @@ namespace noava
                     listenOptions.UseHttps();
                 });
             });
+            var clerkAuthority = builder.Configuration["Clerk:FrontendApiUrl"];
+
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.Authority = clerkAuthority; 
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = false,
+                    NameClaimType = "sub"
+                };
+            });
+
+            builder.Services.AddAuthorization();
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -59,6 +76,8 @@ namespace noava
 
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
+            app.UseMiddleware<RoleClaimsMiddleware>();
             app.UseAuthorization();
 
             app.UseCors("Frontend");

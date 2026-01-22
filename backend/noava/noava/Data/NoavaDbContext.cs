@@ -14,6 +14,7 @@ namespace noava.Data
         public DbSet<Deck> Decks { get; set; }
 
         public DbSet<FAQ> FAQs { get; set;  }
+        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
