@@ -18,7 +18,7 @@ import { useUser, SignOutButton, UserButton } from "@clerk/clerk-react";
 
 const sidebarTheme: CustomFlowbiteTheme["sidebar"] = {
   root: {
-    base: "h-screen border transition-all duration-250",
+    base: "h-screen border-r transition-all duration-250",
     collapsed: {
       on: "w-20",
       off: "w-64",
@@ -30,16 +30,16 @@ const sidebarTheme: CustomFlowbiteTheme["sidebar"] = {
     base: "py-6 text-xl font-bold",
   },
   item: {
-    base: "flex items-center gap-3 px-3 py-2.5 text-sm font-medium transition-colors",
-    active: "bg-background text-sidebar-active shadow-sm",
+    base: "flex items-center gap-3 px-3 py-2.5 text-sm font-medium dark:hover:text-white",
+    active: "text-sidebar-active shadow-sm",
     icon: {
       // muted-foreground is a css variable thing. the docs are: 
       //https://ui.shadcn.com/docs/theming
       // I have tried at least 20 different combinations of tailwind.config.js colors but nothing has given me the same
       //dynamic color changing as the css variable does. So for now i will leave it as it is because i'm going to lose my mind.
-      //dixi
+      //also this css variable helps with giving the svg icons the correct color when hovering in light mode.
 
-      base: "size-5 text-text-muted-foreground transition colors",
+      base: "size-5 text-muted-foreground",
       active: "text-sidebar-active ",
     },
   },
@@ -147,11 +147,11 @@ export function SidebarNav() {
 
                   {!collapsed && (
                     <div className="">
-                      <p className="text-sm font-medium text-text-body-light">
+                      <p className="text-sm font-medium text-text-body-light dark:text-text-body-dark">
                         {user?.username || "User"}
                       </p>
 
-                      <p className="text-xs text-text-muted-light">
+                      <p className="text-xs text-text-muted-light dark:text-text-muted-dark">
                         {user?.primaryEmailAddress?.emailAddress ||
                           "user@noava.test"}
                       </p>
@@ -172,7 +172,8 @@ export function SidebarNav() {
         -right-3 top-1/2 
         flex size-6 items-center justify-center
         rounded-full
-        hover:bg-sidebar-accent"
+        hover:bg-sidebar-accent
+        dark:bg-slate-500"
         aria-label="Toggle sidebar"
       >
         {collapsed ? (
