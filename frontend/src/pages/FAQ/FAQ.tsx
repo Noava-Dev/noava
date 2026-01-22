@@ -7,18 +7,25 @@ import Header from "../Home/components/Header";
 import PageHeader from "../../shared/components/PageHeader";
 import NoavaFooter from "../../shared/components/NoavaFooter";
 import { useTranslation } from 'react-i18next';
+import { useUser } from "@clerk/clerk-react";
 
 function FAQPage() {
   const { t } = useTranslation('faq');
+  const { isLoaded } = useUser();
   const [searchTerm, setSearchTerm] = useState('');
   const [allFaqs, setAllFaqs] = useState<FAQ[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { getAll } = faqService();
 
-  // Haal FAQs op van de backend
+  // Haal FAQs op van de backend - wacht tot Clerk geladen is
   useEffect(() => {
     const fetchFaqs = async () => {
+      // Wacht tot Clerk volledig geladen is
+      if (!isLoaded) {
+        return;
+      }
+
       try {
         setLoading(true);
         const data = await getAll();
@@ -33,7 +40,7 @@ function FAQPage() {
     };
 
     fetchFaqs();
-  }, [t]);
+  }, [isLoaded, t]);
 
   const filteredFaqs = allFaqs.filter(faq => 
     faq.question.toLowerCase().includes(searchTerm.toLowerCase()) ||

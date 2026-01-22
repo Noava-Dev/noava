@@ -1,10 +1,11 @@
 
-using Microsoft.EntityFrameworkCore;
-using noava.Data;
-using Noava.Repositories;
-using noava.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using noava.Data;
+using noava.Services;
+using Noava.Repositories;
+using System.Security.Claims;
 
 namespace noava
 {
@@ -48,16 +49,18 @@ namespace noava
             var clerkAuthority = builder.Configuration["Clerk:FrontendApiUrl"];
 
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(options =>
-            {
-                options.Authority = clerkAuthority; 
-                options.TokenValidationParameters = new TokenValidationParameters
+                .AddJwtBearer(options =>
                 {
-                    ValidateIssuer = true,
-                    ValidateAudience = false,
-                    NameClaimType = "sub"
-                };
-            });
+                    options.Authority = clerkAuthority;
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = false,
+                        NameClaimType = ClaimTypes.NameIdentifier,
+                        RoleClaimType = ClaimTypes.Role
+                    };
+                });
+
 
             builder.Services.AddAuthorization();
 
@@ -76,11 +79,11 @@ namespace noava
 
             app.UseHttpsRedirection();
 
+            app.UseCors("Frontend");
+
             app.UseAuthentication();
             app.UseMiddleware<RoleClaimsMiddleware>();
             app.UseAuthorization();
-
-            app.UseCors("Frontend");
 
             app.MapControllers();
 

@@ -1,5 +1,4 @@
 ﻿using noava.Data;
-using System;
 using System.Security.Claims;
 
 public class RoleClaimsMiddleware
@@ -15,23 +14,32 @@ public class RoleClaimsMiddleware
     {
         if (context.User.Identity?.IsAuthenticated == true)
         {
-            var clerkId = context.User.FindFirst("sub")?.Value;
+            var clerkId = context.User.Identity.Name;
 
-            if (clerkId != null)
+            if (!string.IsNullOrEmpty(clerkId))
             {
                 var user = await db.Users.FindAsync(clerkId);
+
                 if (user != null)
                 {
-                    var claimsIdentity = context.User.Identity as ClaimsIdentity;
-                    if (claimsIdentity != null &&
-                        !claimsIdentity.HasClaim(c => c.Type == ClaimTypes.Role))
+                    var identity = new ClaimsIdentity(
+                        context.User.Identity,
+                        context.User.Claims,
+                        context.User.Identity.AuthenticationType,
+                        ClaimTypes.Name,
+                        ClaimTypes.Role
+                    );
+
+                    if (!identity.HasClaim(c => c.Type == ClaimTypes.Role))
                     {
-                        claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, user.Role.ToString()));
+                        identity.AddClaim(
+                            new Claim(ClaimTypes.Role, user.Role.ToString())
+                        );
                     }
+                    context.User = new ClaimsPrincipal(identity);
                 }
             }
         }
-
         await _next(context);
     }
 }
