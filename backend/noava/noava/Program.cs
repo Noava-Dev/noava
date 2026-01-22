@@ -26,7 +26,7 @@ namespace noava
             {
                 options.AddPolicy("Frontend",
                     policy => policy
-                    .WithOrigins("http://localhost:5173")
+                    .WithOrigins("*")
                         .AllowAnyHeader()
                         .AllowAnyMethod()
                 );
@@ -36,9 +36,9 @@ namespace noava
 
             builder.WebHost.ConfigureKestrel(options =>
             {
-                options.ListenLocalhost(5000);
+                options.ListenAnyIP(5000);
 
-                options.ListenLocalhost(5001, listenOptions =>
+                options.ListenAnyIP(5001, listenOptions =>
                 {
                     listenOptions.UseHttps();
                 });
