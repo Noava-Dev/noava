@@ -26,11 +26,6 @@ function Home() {
                     </p>
                 </div>
                 <div className="flex justify-center">
-                    <SignUpButton>
-                        <Button>{t('hero.cta')}</Button>
-                    </SignUpButton>
-                </div>
-                <div className="flex justify-center">
                     {isSignedIn ? (
                         <Button onClick={() => navigate('/dashboard')}>{t('hero.cta')}</Button>
                     ) : (
@@ -125,7 +120,7 @@ function Home() {
                 </div>
             </section>
 
-            {/* Available everywhere Section - Licht in light mode, donker in dark mode */}
+            {/* Available everywhere Section  */}
             <section className="bg-gray-50 dark:bg-gray-800 py-16">
                 <div className="container mx-auto px-4 max-w-6xl">
                     <div className="text-center mb-12">
