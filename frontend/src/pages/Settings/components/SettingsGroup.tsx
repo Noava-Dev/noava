@@ -43,9 +43,9 @@ export function SettingsGroup({
                     </div>
                 </div>
             </div>
-            <div className="mt-4 flex gap-3 flex-wrap">
+            <div className="mt-4 grid grid-cols-2 gap-3">
                 {options.map((btn) => (
-                <SettingsBtn key={btn.label} {...btn} />
+                <SettingsBtn className="w-1/2" key={btn.label} {...btn} />
                 ))}
             </div>
         </div>

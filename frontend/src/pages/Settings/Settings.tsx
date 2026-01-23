@@ -16,7 +16,7 @@ function SettingsPage() {
         <div className="flex flex-col bg-background-app-light dark:bg-background-app-dark h-screen">
             <header>
                 <PageHeader>
-                    <div className="text-center">
+                    <div className="flex flex-col text-center p-3 gap-2">
                         <h1 className="text-4xl font-bold text-text-title-light dark:text-text-title-dark">
                             Settings
                         </h1>
