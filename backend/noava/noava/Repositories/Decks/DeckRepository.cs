@@ -39,7 +39,7 @@ namespace noava.Repositories
 
         public async Task<Deck> UpdateAsync(Deck deck)
         {
-            deck.UpdatedAt = DateTime.UtcNow;
+            
             _context.Decks.Update(deck);
             await _context.SaveChangesAsync();
             return deck;

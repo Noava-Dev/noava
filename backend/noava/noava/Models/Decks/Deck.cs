@@ -1,12 +1,8 @@
-﻿namespace noava.Models
-{
-    public enum DeckVisibility
-    {
-        Public = 0,
-        Shared = 1,
-        Private = 2
-    }
+﻿using noava.Models.Enums;
 
+
+namespace noava.Models
+{
     public class Deck
     {
         public int DeckId { get; set; }

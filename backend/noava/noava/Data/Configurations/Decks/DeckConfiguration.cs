@@ -9,7 +9,7 @@ namespace noava.Data.Configurations
         public void Configure(EntityTypeBuilder<Deck> builder)
         {
             builder.HasKey(d => d.DeckId);
-            builder.HasKey(d => d.DeckId);
+           
 
             builder.Property(d => d.Title)
                 .IsRequired()

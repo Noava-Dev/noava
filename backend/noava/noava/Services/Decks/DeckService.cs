@@ -35,6 +35,8 @@ namespace noava.Services
             existingDeck.Language = updatedDeck.Language;
             existingDeck.Visibility = updatedDeck.Visibility;
 
+            existingDeck.UpdatedAt = DateTime.UtcNow; // PR comment
+
             return await _repository.UpdateAsync(existingDeck);
         }
 
