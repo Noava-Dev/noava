@@ -6,6 +6,7 @@ import { faqService } from "../../services/FAQService";
 import Header from "../Home/components/Header";
 import PageHeader from "../../shared/components/PageHeader";
 import NoavaFooter from "../../shared/components/NoavaFooter";
+import Loading from "../../shared/components/Loading";
 import { useTranslation } from 'react-i18next';
 
 function FAQPage() {
@@ -56,9 +57,8 @@ function FAQPage() {
         </PageHeader>
         <div className="bg-white dark:bg-gray-900 min-h-screen">
           <div className="container mx-auto px-4 py-8">
-            <div className="text-center py-12">
-              <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-4 border-primary-500 mb-4"></div>
-              <p className="text-gray-700 dark:text-gray-300 text-lg">{t('loading')}</p>
+            <div className="py-12">
+              <Loading size="xl" color="info" center />
             </div>
           </div>
         </div>
