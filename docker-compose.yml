@@ -10,9 +10,9 @@ services:
     volumes:
       - db_data:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
+      - '5432:5432'
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER}']
       interval: 5s
       timeout: 5s
       retries: 10
@@ -29,15 +29,15 @@ services:
       ConnectionStrings__NoavaDatabaseLocal: ${ConnectionStrings__NoavaDatabaseLocal}
       Clerk__SecretKeyDefault: ${Clerk__SecretKeyDefault}
     ports:
-      - "5000:5000"
+      - '5000:5000'
     entrypoint: >
       /bin/bash -c "
       dotnet ef database update &&
-      dotnet backend.dll
+      dotnet noava.dll
       "
 
   frontend:
-    build: 
+    build:
       context: ./frontend
       args:
         VITE_API_BASE_URL: ${VITE_API_BASE_URL}
@@ -50,7 +50,7 @@ services:
     depends_on:
       - backend
     ports:
-      - "80:80"
+      - '80:80'
 
 volumes:
   db_data:

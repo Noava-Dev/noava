@@ -1,41 +1,21 @@
-import { useEffect } from 'react';
-
 import './App.css';
-/* import {
-  SignedIn,
-  SignedOut,
-  UserButton,
-  SignInButton,
-} from '@clerk/clerk-react'; */
 import AppRoutes from './AppRoutes';
+import { UserRoleProvider } from './contexts/UserRoleContext';
+import { SidebarNav } from './shared/components/Sidebar';
 
 function App() {
-
-  console.log(import.meta.env.VITE_API_BASE_URL);
-
-  useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_BASE_URL}/health`)
-      .then((res) => res.json())
-      .then((data) => console.log(data.status))
-      .catch(console.error);
-  }, []);
-
   return (
-    
-    <>
-    <div className="app-container">
-    <AppRoutes />
-      {/* <header>
-        
-        <SignedOut>
-          <SignInButton />
-        </SignedOut>
-        <SignedIn>
-          <UserButton />
-        </SignedIn>
-      </header> */}
-    </div>
-    </>
+    <UserRoleProvider>
+      <div className="flex h-screen">
+        <div>
+          <SidebarNav />
+        </div>
+
+        <main className="app-container">
+          <AppRoutes />
+        </main>
+      </div>
+    </UserRoleProvider>
   );
 }
 
