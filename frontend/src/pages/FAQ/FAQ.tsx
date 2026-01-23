@@ -6,6 +6,7 @@ import { faqService } from "../../services/FAQService";
 import Header from "../Home/components/Header";
 import PageHeader from "../../shared/components/PageHeader";
 import NoavaFooter from "../../shared/components/NoavaFooter";
+import Loading from "../../shared/components/Loading";
 import { useTranslation } from 'react-i18next';
 
 function FAQPage() {
@@ -38,6 +39,65 @@ function FAQPage() {
     faq.question.toLowerCase().includes(searchTerm.toLowerCase()) ||
     faq.answer.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  if (loading) {
+    return (
+      <>
+        <Header />
+        <PageHeader>
+          <div className="text-center">
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+              {t('title')}
+            </h1>
+            <p className="text-lg text-gray-700 dark:text-gray-300">
+              {t('description')}
+            </p>
+          </div>
+        </PageHeader>
+        <div className="bg-white dark:bg-gray-900 min-h-screen">
+          <div className="container mx-auto px-4 py-8">
+            <div className="py-12">
+              <Loading size="xl" color="info" center />
+            </div>
+          </div>
+        </div>
+        <NoavaFooter />
+      </>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <>
+        <Header />
+        <PageHeader>
+          <div className="text-center">
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+              {t('title')}
+            </h1>
+            <p className="text-lg text-gray-700 dark:text-gray-300">
+              {t('description')}
+            </p>
+          </div>
+        </PageHeader>
+        <div className="bg-white dark:bg-gray-900 min-h-screen">
+          <div className="container mx-auto px-4 py-8">
+            <div className="text-center py-12">
+              <p className="text-red-500 dark:text-red-400 text-lg mb-4">{error}</p>
+              <button 
+                onClick={() => window.location.reload()}
+                className="bg-primary-500 text-white px-6 py-3 rounded-lg hover:bg-primary-600 transition-colors shadow-md hover:shadow-lg"
+              >
+                Retry
+              </button>
+            </div>
+          </div>
+        </div>
+        <NoavaFooter />
+      </>
+    );
+  }
 
   return (
     <>
