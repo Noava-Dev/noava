@@ -3,15 +3,18 @@ import { Button, Card } from "flowbite-react";
 import NoavaFooter from "../../shared/components/NoavaFooter";
 import { HiCube, HiUserGroup, HiViewGrid, HiChartBar, HiDesktopComputer, HiOutlineDeviceMobile } from "react-icons/hi";
 import { useTranslation } from 'react-i18next';
-import { SignUpButton } from "@clerk/clerk-react";
+import { SignUpButton, useUser } from "@clerk/clerk-react";
+import { useNavigate } from "react-router-dom";
 
 function Home() {
     const { t } = useTranslation('home');
+    const { isSignedIn } = useUser();
+    const navigate = useNavigate();
     return (
         <>
             <Header />
             
-            {/* Hero Section - Altijd donker */}
+            {/* Hero Section */}
             <section className="bg-gray-900 dark:bg-gray-900 py-16">
                 <div className="container mx-auto px-4 py-16 max-w-4xl text-center">
                     <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-white mb-6">
@@ -27,9 +30,18 @@ function Home() {
                         <Button>{t('hero.cta')}</Button>
                     </SignUpButton>
                 </div>
+                <div className="flex justify-center">
+                    {isSignedIn ? (
+                        <Button onClick={() => navigate('/dashboard')}>{t('hero.cta')}</Button>
+                    ) : (
+                        <SignUpButton>
+                            <Button>{t('hero.cta')}</Button>
+                        </SignUpButton>
+                    )}
+                </div>
             </section>
 
-            {/* Everything you need Section - Altijd donker */}
+            {/* Everything you need Section */}
             <section className="bg-gray-900 dark:bg-gray-900 py-16">
                 <div className="container mx-auto px-4 py-16 max-w-6xl">
                     <div className="text-center mb-12">

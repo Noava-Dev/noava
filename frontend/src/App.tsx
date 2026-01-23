@@ -1,25 +1,21 @@
-import { useEffect } from 'react';
-
 import './App.css';
-/* import {
-  SignedIn,
-  SignedOut,
-  UserButton,
-  SignInButton,
-} from '@clerk/clerk-react'; */
 import AppRoutes from './AppRoutes';
+import { UserRoleProvider } from './contexts/UserRoleContext';
 import { SidebarNav } from './shared/components/Sidebar';
 
 function App() {
   return (
-    <div className="flex h-screen">
-      <div>
-        <SidebarNav />
+    <UserRoleProvider>
+      <div className="flex h-screen">
+        <div>
+          <SidebarNav />
+        </div>
+
+        <main className="app-container">
+          <AppRoutes />
+        </main>
       </div>
-      <main className="app-container">
-        <AppRoutes />
-      </main>
-    </div>
+    </UserRoleProvider>
   );
 }
 
