@@ -3,8 +3,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using noava.Data;
-using noava.Services;
-using Noava.Repositories;
+using noava.Repositories.Contracts;
+using noava.Repositories.Implementations;
+using noava.Services.Contracts;
+using noava.Services.Implementations;
 using System.Security.Claims;
 
 namespace noava
@@ -19,10 +21,13 @@ namespace noava
             builder.Services.AddDbContext<NoavaDbContext>(options =>
                 options.UseNpgsql(builder.Configuration.GetConnectionString("NoavaDatabaseLocal")));
 
-            // FAQ
-            builder.Services.AddScoped<FaqRepository>();
-            builder.Services.AddScoped<FaqService>();
-            
+            builder.Services.AddScoped<IFaqRepository, FaqRepository>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+            builder.Services.AddScoped<IFaqService, FaqService>();
+            builder.Services.AddScoped<IUserService, UserService>();
+
+
 
             // Add services to the container.
             builder.Services.AddCors(options =>

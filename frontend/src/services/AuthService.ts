@@ -7,10 +7,8 @@ export const authService = () => {
   const getMe = async (): Promise<User> => {
     try {
       const response = await api.get<User>("/users/me");
-      console.log("getMe response:", response);
       return response.data;
     } catch (err) {
-      console.error("Failed to fetch me endpoint:", err);
       throw new Error("Failed to fetch me endpoint");
     }
   };

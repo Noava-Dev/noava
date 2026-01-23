@@ -30,7 +30,7 @@ function Home() {
                         <Button>{t('hero.cta')}</Button>
                     </SignUpButton>
                 </div>
-                {/* <div className="flex justify-center">
+                <div className="flex justify-center">
                     {isSignedIn ? (
                         <Button onClick={() => navigate('/dashboard')}>{t('hero.cta')}</Button>
                     ) : (
@@ -38,7 +38,7 @@ function Home() {
                             <Button>{t('hero.cta')}</Button>
                         </SignUpButton>
                     )}
-                </div> */}
+                </div>
             </section>
 
             {/* Everything you need Section */}

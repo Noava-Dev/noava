@@ -1,11 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using noava.Data;
-using noava.Models;
-using noava.Models.Enums;
+using noava.Services.Contracts;
 using System.Security.Claims;
 
 namespace noava.Controllers
@@ -14,11 +9,11 @@ namespace noava.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly NoavaDbContext _db;
+        private readonly IUserService _userService;
 
-        public UsersController(NoavaDbContext db)
+        public UsersController(IUserService userService)
         {
-            _db = db;
+            _userService = userService;
         }
 
         [Authorize]
@@ -31,19 +26,7 @@ namespace noava.Controllers
             if (string.IsNullOrEmpty(clerkId))
                 return Unauthorized("No ClerkId found in token.");
 
-            var user = await _db.Users.SingleOrDefaultAsync(u => u.ClerkId == clerkId);
-
-            if (user == null)
-            {
-                user = new User
-                {
-                    ClerkId = clerkId,
-                    Role = UserRole.USER
-                };
-
-                _db.Users.Add(user);
-                await _db.SaveChangesAsync();
-            }
+            var user = await _userService.SyncUserAsync(clerkId);
 
             return Ok(new
             {
@@ -51,6 +34,5 @@ namespace noava.Controllers
                 Role = user.Role.ToString()
             });
         }
-
     }
 }
