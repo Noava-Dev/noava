@@ -4,28 +4,13 @@ import {
     LuGlobe as globe,
     LuMessageCircleQuestion as CircleQuestion } 
 from "react-icons/lu";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import PageHeader from "../../shared/components/PageHeader";
-import { Tooltip } from "flowbite-react";
-import { SettingsButton } from "./components/SettingsButton";
+import { SettingsGroup } from "./components/SettingsGroup";
 
-const themeOptions = [
-  { id: "light", label: "Light", icon: sun },
-  { id: "dark", label: "Dark", icon: moon },
-//   { id: "system", label: "System", icon: a computer or smth }
-]
-const languageOptions = [
-  { id: "en", label: "English" },
-  { id: "nl", label: "Nederlands" },
-  { id: "de", label: "Deutsch" },
-  { id: "fr", label: "Français" },
-]
 function SettingsPage() {
     const [theme, setTheme] = useState<"light" | "dark">("light");
     const [language, setLanguage] = useState("en");
-
-    const handleThemeChange = (selected: "light" | "dark") => setTheme(selected)
-    const handleLanguageChange = (selected: string) => setLanguage(selected)
 
     return(
         <div className="flex flex-col bg-background-app-light dark:bg-background-app-dark">
@@ -43,18 +28,29 @@ function SettingsPage() {
             </header>
             <div>
                 <div>
-                    <SettingsButton 
-                        label="light"
-                        icon={sun}
-                        active={theme === "light"}
-                        onClick= {() => setTheme("light")}
-                    />
-                    <SettingsButton 
-                        label="dark"
-                        icon={moon}
-                        active={theme === "dark"}
-                        onClick= {() => setTheme("dark")}
-                    />
+                   <SettingsGroup
+                        title="Theme"
+                        description="Select your preferred color scheme"
+                        tooltip = "Choose between light and dark mode to customize the appearance of the application based on your preference or environment."
+                        groupIcon={theme === "dark" ? moon : sun}
+                        options={[
+                            {label: "Light", icon: sun, active: theme === "light", onClick: () => setTheme("light")},
+                            {label: "dark", icon: moon, active: theme === "dark", onClick: () => setTheme("dark") }
+                        ]}
+                   />
+                   <SettingsGroup
+                        title="Language"
+                        description= "Choose your preferred language"
+                        tooltip = "Select your preferred language for the application interface. This will change all text and labels throughout the app."
+                        groupIcon={globe}
+                        options={[
+                            {label: "English",active: language === "en", onClick: () => setLanguage("en")},
+                            {label: "Nederlands",active: language === "nl", onClick: () => setLanguage("nl")},
+                            {label: "Français",active: language === "fr", onClick: () => setLanguage("fr")},
+                            {label: "Deutsch",active: language === "de", onClick: () => setLanguage("de")},
+
+                        ]}
+                   />
                 </div>
             </div>
             
