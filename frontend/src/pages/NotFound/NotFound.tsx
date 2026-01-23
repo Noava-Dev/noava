@@ -1,4 +1,4 @@
-import { Button, Card } from "flowbite-react";
+import { Card } from "flowbite-react";
 import { HiHome, HiQuestionMarkCircle } from "react-icons/hi";
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -25,15 +25,20 @@ function NotFound() {
                         </p>
                     </div>
 
-                    <div className="mb-12">
-                        <Button 
-                            size="lg" 
-                            onClick={() => navigate('/')}
-                            className="inline-flex items-center"
+                    <div className="mt-12 text-text-muted-light dark:text-text-muted-dark">
+                        <svg 
+                            className="w-64 h-64 mx-auto opacity-20" 
+                            fill="none" 
+                            viewBox="0 0 24 24" 
+                            stroke="currentColor"
                         >
-                            <HiHome className="mr-2 h-5 w-5" />
-                            {t('notFound.backHome')}
-                        </Button>
+                            <path 
+                                strokeLinecap="round" 
+                                strokeLinejoin="round" 
+                                strokeWidth={0.5} 
+                                d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" 
+                            />
+                        </svg>
                     </div>
 
                     <div className="mt-8">
@@ -50,9 +55,6 @@ function NotFound() {
                                     <h3 className="text-lg font-semibold text-text-title-light dark:text-text-title-dark">
                                         {t('navigation.home')}
                                     </h3>
-                                    <p className="text-sm text-text-muted-light dark:text-text-muted-dark text-center">
-                                        {t('app.welcome')}
-                                    </p>
                                 </div>
                             </Card>
 
@@ -65,28 +67,9 @@ function NotFound() {
                                     <h3 className="text-lg font-semibold text-text-title-light dark:text-text-title-dark">
                                         {t('navigation.faq')}
                                     </h3>
-                                    <p className="text-sm text-text-muted-light dark:text-text-muted-dark text-center">
-                                        {t('app.welcome')}
-                                    </p>
                                 </div>
                             </Card>
                         </div>
-                    </div>
-
-                    <div className="mt-12 text-text-muted-light dark:text-text-muted-dark">
-                        <svg 
-                            className="w-64 h-64 mx-auto opacity-20" 
-                            fill="none" 
-                            viewBox="0 0 24 24" 
-                            stroke="currentColor"
-                        >
-                            <path 
-                                strokeLinecap="round" 
-                                strokeLinejoin="round" 
-                                strokeWidth={0.5} 
-                                d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" 
-                            />
-                        </svg>
                     </div>
                 </div>
             </div>
