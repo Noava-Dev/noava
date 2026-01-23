@@ -1,6 +1,7 @@
 import {Route, Routes} from "react-router-dom";
 import FAQ from "./pages/FAQ/FAQ";
 import Home from "./pages/Home/Home"
+import NotFound from "./pages/NotFound/NotFound";
 import SettingsPage from "./pages/Settings/Settings";
 
 function Placeholder({ title }: { title: string }) {
@@ -21,8 +22,9 @@ export default function AppRoutes() {
             <Route path="/settings" element={<SettingsPage/>} />
             <Route path="/faq" element={<FAQ/>}/>
             <Route element={<PrivateRoute allowedRoles={RoleGroups.ALL_AUTHENTICATED} />}>
-                <Route path="/dashboard" element={<Placeholder title="dashboard" />}/>
+                <Route path="/dashboard" />
             </Route>
+            <Route path="*" element={<NotFound/>}/>
         </Routes>
     );
 }
