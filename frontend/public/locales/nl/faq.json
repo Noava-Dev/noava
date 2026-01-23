@@ -1,0 +1,24 @@
+{
+  "title": "Veelgestelde Vragen",
+  "description": "Vind antwoorden op veelgestelde vragen over Noava",
+  "search": {
+    "placeholder": "Zoek in veelgestelde vragen..."
+  },
+  "results": {
+    "showing": "Weergave van",
+    "of": "van",
+    "results": "resultaten"
+  },
+  "loading": "Veelgestelde vragen worden geladen...",
+  "error": "Kan veelgestelde vragen niet laden. Probeer het later opnieuw.",
+  "empty": {
+    "title": "Geen resultaten gevonden",
+    "message": "We konden geen veelgestelde vragen vinden die overeenkomen met",
+    "cta": "Zoekopdracht wissen"
+  },
+  "contact": {
+    "title": "Heeft u nog vragen?",
+    "description": "Kunt u het antwoord dat u zoekt niet vinden? Ons team helpt u graag.",
+    "cta": "Contact opnemen met Support"
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "hero": {
+    "title": "Flashcards built for school and classrooms",
+    "description": "The simple, powerful way for teachers to create study materials and for students to learn. Designed specifically for educational environments.",
+    "cta": "Get started"
+  },
+  "features": {
+    "title": "Everything you need",
+    "description": "Simple tools that make a real difference in the classroom",
+    "decks": {
+      "title": "Decks",
+      "description": "Organize flashcards into subject-specific decks. Create, share, and reuse across classes."
+    },
+    "classrooms": {
+      "title": "Classrooms",
+      "description": "Invite students, assign decks, and track progress. All in one collaborative space."
+    },
+    "dashboards": {
+      "title": "Dashboards",
+      "description": "Teachers get a bird's-eye view of classroom activity, completion rates, and student engagement."
+    },
+    "analytics": {
+      "title": "Analytics",
+      "description": "Detailed insights into individual and class performance. Identify who needs extra help."
+    }
+  },
+  "platforms": {
+    "title": "Available everywhere",
+    "description": "Study at school, at home, or on the bus. Your flashcards sync across all your devices.",
+    "mobile": "Mobile",
+    "desktop": "Desktop"
+  }
+}
