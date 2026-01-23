@@ -1,8 +1,7 @@
 import { 
     LuSun as sun,
     LuMoon as moon,
-    LuGlobe as globe,
-    LuMessageCircleQuestion as CircleQuestion } 
+    LuGlobe as globe,} 
 from "react-icons/lu";
 import { useState } from "react";
 import PageHeader from "../../shared/components/PageHeader";
