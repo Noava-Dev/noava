@@ -12,6 +12,10 @@ function SettingsPage() {
     const [theme, setTheme] = useState<"light" | "dark">("light");
     const [language, setLanguage] = useState("en");
 
+    // TODO: add logic for changing the theme of the app when setTheme is called
+    // TODO: add logic for changing the language of the app when setLanguage is called
+    // TODO: add logic to store settings in the db
+
     return(
         <div className="flex flex-col bg-background-app-light dark:bg-background-app-dark h-screen">
             <header>
