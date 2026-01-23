@@ -6,15 +6,15 @@ import ThemeButton from "./ThemeButton";
 function NoavaFooter() {
   return (
     <Footer container className="dark:bg-gray-900 rounded-none">
-      <div className="w-full text-center " >
-        <div className="w-full justify-between sm:flex sm:items-center sm:justify-between">
+      <div className="w-full text-center">
+        <div className="w-full flex flex-col items-center gap-4 sm:flex-row sm:justify-between sm:items-center">
           <FooterBrand
             href="#"
             src={Logo}
             alt="Noava Logo"
             name="Noava"
           />
-          <FooterLinkGroup>
+          <FooterLinkGroup className="flex flex-wrap justify-center gap-4 sm:gap-6">
             <FooterLink href="#">About</FooterLink>
             <FooterLink href="#">Privacy Policy</FooterLink>
             <FooterLink href="#">Licensing</FooterLink>
