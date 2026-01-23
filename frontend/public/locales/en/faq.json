@@ -1,0 +1,24 @@
+{
+  "title": "Frequently Asked Questions",
+  "description": "Find answers to common questions about Noava",
+  "search": {
+    "placeholder": "Search frequently asked questions..."
+  },
+  "results": {
+    "showing": "Showing",
+    "of": "of",
+    "results": "results"
+  },
+  "loading": "Loading FAQs...",
+  "error": "Failed to load FAQs. Please try again later.",
+  "empty": {
+    "title": "No results found",
+    "message": "We couldn't find any FAQs matching",
+    "cta": "Clear search"
+  },
+  "contact": {
+    "title": "Still have questions?",
+    "description": "Can't find the answer you're looking for? Our team is here to help.",
+    "cta": "Contact Support"
+  }
+}

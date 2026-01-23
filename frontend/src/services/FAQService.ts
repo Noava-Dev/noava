@@ -1,13 +1,18 @@
 import type { FAQ } from "../models/FAQ";
+import { useApi } from "../hooks/useApi";
 
-const API_URL = import.meta.env.VITE_API_BASE_URL;
+export const faqService = () => {
+  const api = useApi();
 
-export const faqService = {
-  async getAll(): Promise<FAQ[]> {
-    const response = await fetch(`${API_URL}/faq`);
-    if (!response.ok) {
-      throw new Error('Failed to fetch FAQs');
+  const getAll = async (): Promise<FAQ[]> => {
+    try {
+      const response = await api.get<FAQ[]>("/faq");
+      return response.data;
+    } catch (err) {
+      console.error("Failed to fetch FAQs:", err);
+      throw new Error("Failed to fetch FAQs");
     }
-    return response.json();
-  },
+  };
+
+  return { getAll };
 };

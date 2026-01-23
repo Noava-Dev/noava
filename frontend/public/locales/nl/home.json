@@ -1,0 +1,33 @@
+{
+  "hero": {
+    "title": "Flashcards gemaakt voor school en klaslokalen",
+    "description": "De eenvoudige, krachtige manier voor leraren om studiemateriaal te maken en voor leerlingen om te leren. Speciaal ontworpen voor educatieve omgevingen.",
+    "cta": "Aan de slag"
+  },
+  "features": {
+    "title": "Alles wat je nodig hebt",
+    "description": "Eenvoudige tools die echt het verschil maken in het klaslokaal",
+    "decks": {
+      "title": "Stapels",
+      "description": "Organiseer flashcards in vakoverschrijdende stapels. Maak, deel en hergebruik in alle klassen."
+    },
+    "classrooms": {
+      "title": "Klaslokalen",
+      "description": "Nodig studenten uit, wijs stapels toe en volg de voortgang. Alles in één samenwerkingsruimte."
+    },
+    "dashboards": {
+      "title": "Dashboards",
+      "description": "Leraren krijgen een overzicht van klasactiviteiten, voltooiingspercentages en studentenbetrokkenheid."
+    },
+    "analytics": {
+      "title": "Analytics",
+      "description": "Gedetailleerde inzichten in individuele en klasprestaties. Identificeer wie extra hulp nodig heeft."
+    }
+  },
+  "platforms": {
+    "title": "Overal beschikbaar",
+    "description": "Studeer op school, thuis of in de bus. Je flashcards synchroniseren op al je apparaten.",
+    "mobile": "Mobiel",
+    "desktop": "Desktop"
+  }
+}

@@ -2,25 +2,17 @@ html,
 body,
 #root {
   height: 100%;
+  margin: 0;
+  width: 100%;
 }
 
 body {
-  margin: 0;
-  display: flex;
-  justify-content: center;
-  
+  display: block;
 }
 
-/* App content container */
-#root {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
-
-/* Default page width */
+/*because the sidebar is FIXED, the main content needs to have a small margin for it to not be covered
+by the sidebar. this can be solved with flexbox in App.tsx but this is a quicker and safer way for now */
 .app-container {
   width: 100%;
-  max-width: 1280px;
-  padding: 1rem;
+  margin-left: 5rem;
 }

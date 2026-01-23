@@ -104,6 +104,20 @@ namespace noava.Migrations
                             Question = "Do you offer a free trial?"
                         });
                 });
+
+            modelBuilder.Entity("noava.Models.User", b =>
+                {
+                    b.Property<string>("ClerkId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("ClerkId");
+
+                    b.ToTable("Users");
+                });
 #pragma warning restore 612, 618
         }
     }
