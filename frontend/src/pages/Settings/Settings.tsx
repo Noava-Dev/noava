@@ -13,7 +13,7 @@ function SettingsPage() {
     const [language, setLanguage] = useState("en");
 
     return(
-        <div className="flex flex-col bg-background-app-light dark:bg-background-app-dark">
+        <div className="flex flex-col bg-background-app-light dark:bg-background-app-dark h-screen">
             <header>
                 <PageHeader>
                     <div className="text-center">
@@ -27,7 +27,7 @@ function SettingsPage() {
                 </PageHeader>
             </header>
             <div>
-                <div>
+                <div className="flex flex-col items-center">
                    <SettingsGroup
                         title="Theme"
                         description="Select your preferred color scheme"

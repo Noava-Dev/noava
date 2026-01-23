@@ -2,8 +2,6 @@ import { Tooltip } from "flowbite-react"
 import { LuMessageCircleQuestion as Question } from "react-icons/lu";
 import { SettingsBtn } from "./SettingsBtn";
 
-
-
 type SettingsBtnType = {
     label: string;
     icon?: any;
@@ -28,18 +26,16 @@ export function SettingsGroup({
 }: SettingsGroupType) {
     
     return(
-        <div className="kader flex flex-col">
-            <div className="categorieVanSettings flex justify-items-start">
-                <div className="et-icoontje">
-                    {GroupIcon && <GroupIcon className="h-6 w-6"/>}
+        <div className="kader flex flex-col rounded-lg border w-1/2 p-6 m-5 bg-background-surface-light dark:bg-background-surface-dark">
+            <div className="categorieVanSettings flex justify-items-start items-center">
+                <div className="et-icoontje flex justify-center items-center rounded-lg bg-primary-100 border size-10">
+                    {GroupIcon && <GroupIcon className="h-6 w-6" stroke='currentColor'/>}
                 </div>
-                <div className="tekst-theme-enzo flex flex-col">
-                    <div className="ENKEL-voor-theme-en-tooltip flex">
+                <div className="tekst-theme-enzo flex flex-col m-4">
+                    <div className="ENKEL-voor-theme-en-tooltip flex gap-3 items-center">
                         <h3>{title}</h3>
                         <Tooltip content={tooltip}>
-                            <button className="text-text-muted-light dark:text-text-muted-dark hover:text-text-title-light dark:hover:text-text-title-dark">
-                                <Question className="h-4 w-4"/>
-                            </button>
+                            <Question className="size-4"/>
                         </Tooltip>
                     </div>
                     <div className="de-description">
