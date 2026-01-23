@@ -10,7 +10,7 @@ export default function AppRoutes() {
             <Route path="/" element={<Home/>}/> 
             <Route path="/faq" element={<FAQ/>}/>
             <Route element={<PrivateRoute allowedRoles={RoleGroups.ALL_AUTHENTICATED} />}>
-                <Route path="/dashboard" element={<Placeholder title="dashboard" />}/>
+                <Route path="/dashboard"/>
             </Route>
         </Routes>
     );

@@ -1,8 +1,42 @@
 {
+  "faq": {
+    "what_is_noava": {
+      "question": "What is Noava?",
+      "answer": "Noava is a modern platform that helps you manage your business efficiently with advanced technology and user-friendly interfaces."
+    },
+    "how_does_it_work": {
+      "question": "How does it work?",
+      "answer": "Simply sign up, configure your preferences, and start using our intuitive dashboard to manage all your operations in one place."
+    },
+    "what_are_the_costs": {
+      "question": "What are the costs?",
+      "answer": "We offer flexible subscription plans starting at €9.99 per month. Visit our pricing page for details on included features."
+    },
+    "can_i_cancel_anytime": {
+      "question": "Can I cancel anytime?",
+      "answer": "Yes, you can cancel your subscription at any time without penalties or hidden costs. Your data remains accessible for 30 days after cancellation."
+    },
+    "is_my_data_secure": {
+      "question": "Is my data secure?",
+      "answer": "Absolutely. We use industry-standard encryption, regular security audits, and comply with GDPR regulations."
+    },
+    "support_options_available": {
+      "question": "What support options are available?",
+      "answer": "We offer 24/7 email support, live chat during business hours, and comprehensive documentation. Premium plans include priority support and dedicated account managers."
+    },
+    "integration_with_other_tools": {
+      "question": "Can I integrate with other tools?",
+      "answer": "Yes, Noava integrates with popular tools like Slack, Google Workspace, Microsoft 365, and many others via our API and pre-built connectors."
+    },
+    "free_trial": {
+      "question": "Do you offer a free trial?",
+      "answer": "Yes, we offer a 14-day free trial with full access to all features. No credit card required."
+    }
+  },
   "title": "Frequently Asked Questions",
-  "description": "Find answers to common questions about Noava",
+  "description": "Find answers to frequently asked questions about Noava",
   "search": {
-    "placeholder": "Search frequently asked questions..."
+    "placeholder": "Search FAQs..."
   },
   "results": {
     "showing": "Showing",
@@ -10,7 +44,7 @@
     "results": "results"
   },
   "loading": "Loading FAQs...",
-  "error": "Failed to load FAQs. Please try again later.",
+  "error": "Could not load FAQs. Please try again later.",
   "empty": {
     "title": "No results found",
     "message": "We couldn't find any FAQs matching",
@@ -18,7 +52,7 @@
   },
   "contact": {
     "title": "Still have questions?",
-    "description": "Can't find the answer you're looking for? Our team is here to help.",
-    "cta": "Contact Support"
+    "description": "Can't find the answer you're looking for? Our team is ready to help.",
+    "cta": "Contact us"
   }
 }

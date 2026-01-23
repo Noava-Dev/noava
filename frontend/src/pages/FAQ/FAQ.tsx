@@ -34,16 +34,33 @@ function FAQPage() {
     fetchFaqs();
   }, [t]);
 
-  const filteredFaqs = allFaqs.filter(faq => 
-    faq.question.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    faq.answer.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const getTranslatedQuestion = (faq: FAQ): string => {
+    if (faq.faqKey && t(`faq.${faq.faqKey}.question`, { defaultValue: '' })) {
+      return t(`faq.${faq.faqKey}.question`, { defaultValue: faq.question });
+    }
+    return faq.question;
+  };
+
+  const getTranslatedAnswer = (faq: FAQ): string => {
+    if (faq.faqKey && t(`faq.${faq.faqKey}.answer`, { defaultValue: '' })) {
+      return t(`faq.${faq.faqKey}.answer`, { defaultValue: faq.answer });
+    }
+    return faq.answer;
+  };
+
+  const filteredFaqs = allFaqs.filter(faq => {
+    const question = getTranslatedQuestion(faq);
+    const answer = getTranslatedAnswer(faq);
+    return question.toLowerCase().includes(searchTerm.toLowerCase()) ||
+           answer.toLowerCase().includes(searchTerm.toLowerCase());
+  });
+
 
   return (
     <>
       <Header />
       
-      {/* PageHeader - altijd zichtbaar */}
+      {/* PageHeader*/}
       <PageHeader>
         <div className="text-center mb-8">
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
@@ -59,7 +76,7 @@ function FAQPage() {
           <Searchbar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         </div>
 
-        {/* Results count - alleen als niet loading */}
+        {/* Results count */}
         {searchTerm && !loading && (
           <div className="text-center mb-8">
             <p className="text-sm text-gray-600 dark:text-gray-400 bg-primary-100 dark:bg-primary-900/40 inline-block px-4 py-2 rounded-full">
@@ -88,7 +105,7 @@ function FAQPage() {
             </div>
           )}
 
-          {/* FAQ Accordion - alleen als niet loading en geen error */}
+          {/* FAQ Accordion */}
           {!loading && !error && (
             <div className="space-y-3">
               {filteredFaqs.length > 0 ? (
@@ -106,13 +123,13 @@ function FAQPage() {
                         <AccordionTitle className="hover:bg-primary-50 light:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors duration-200 py-4 px-5 border border-gray-200 dark:border-gray-500 ">
                           <div className="flex items-center justify-between w-full">
                             <span className="text-lg font-semibold text-gray-900 dark:text-white pr-4">
-                              {faq.question}
+                              {getTranslatedQuestion(faq)}
                             </span>
                           </div>
                         </AccordionTitle>
                         <AccordionContent className="px-5 py-4 bg-gray-50 dark:bg-gray-700/50">
                           <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                            {faq.answer}
+                            {getTranslatedAnswer(faq)}
                           </p>
                         </AccordionContent>
                       </AccordionPanel>
@@ -143,7 +160,7 @@ function FAQPage() {
             </div>
           )}
 
-          {/* Footer CTA - alleen als niet loading en geen error */}
+          {/* Footer CTA */}
           {!loading && !error && filteredFaqs.length > 0 && (
             <div className="mt-16 text-center bg-primary-50 dark:bg-primary-900/20 rounded-2xl p-8 border border-gray-200 dark:border-gray-700">
               <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
