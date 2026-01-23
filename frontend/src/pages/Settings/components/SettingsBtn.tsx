@@ -19,7 +19,7 @@ export function SettingsBtn({
         rounded-lg border px-4 py-3 text-sm font-medium transition-colors
         ${
           active
-            ? "border-primary-500 bg-primary-100 text-primary-700 dark:bg-primary-500/10 dark:text-primary-500"
+            ? "border-primary-500 dark:border-primary-400 bg-primary-100 text-primary-700 dark:bg-primary-500/10 dark:text-primary-400"
             : "border-border bg-background-surface-light dark:bg-background-surface-dark text-text-body-light dark:text-text-body-dark hover:border-primary-300 hover:text-text-title-light dark:hover:border-primary-600 dark:hover:text-text-title-dark"
         }
       `}
