@@ -26,4 +26,6 @@ jobs:
             cd ~/noava
             git checkout main
             git pull origin main
-            docker compose up -d
+            docker compose up -d --build db
+            docker compose run --rm migrate
+            docker compose up -d backend frontend
