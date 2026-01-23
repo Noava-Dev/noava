@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using noava.Models;
+﻿using noava.Models;
 using noava.Models.Enums;
 using noava.Repositories.Contracts;
 using noava.Services.Contracts;
