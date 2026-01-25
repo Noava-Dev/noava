@@ -20,6 +20,19 @@ function App() {
       .catch(console.error);
   }, []);
 
+  useEffect(() => {
+    const applyTheme = () => {
+      const theme = localStorage.getItem("theme") || "light";
+      document.documentElement.classList.toggle("dark", theme === "dark");
+    };
+
+    applyTheme();
+    window.addEventListener("storage", applyTheme)
+    return () => {
+      window.removeEventListener("storage", applyTheme)
+    }
+  }, [])
+
   return (
     <div className="flex h-screen">
       <div>
