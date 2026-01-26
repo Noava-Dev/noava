@@ -12,19 +12,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # Checkout code
-    - name: Checkout repository
-      uses: actions/checkout@v3
+      # Checkout code
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    - name: Pull repo on VM
-      uses: appleboy/ssh-action@v1.0.3
-      with:
-        host: ${{ secrets.VM_HOST }}
-        username: ${{ secrets.VM_USER }}
-        key: ${{ secrets.VM_PRIVATE_SSH }}
-        script: |
-          cd ~/noava
-          git checkout main
-          git pull origin main
-          docker compose pull
-          docker compose up -d
+      - name: Pull repo on VM
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VM_HOST }}
+          username: ${{ secrets.VM_USER }}
+          key: ${{ secrets.VM_PRIVATE_SSH }}
+          script: |
+            cd ~/noava
+            git checkout main
+            git pull origin main
+            docker compose up -d --build db
+            docker compose run --rm migrate
+            docker compose up -d backend frontend

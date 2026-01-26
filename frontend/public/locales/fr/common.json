@@ -6,7 +6,7 @@
     "retry": "Réessayer",
     "clearSearch": "Effacer la recherche",
     "noResults": "Aucun résultat trouvé pour \"{{searchTerm}}\"",
-    "welcome": "Bienvenue chez NOAVA"
+    "welcome": "Bienvenue chez Noava"
   },
   "navigation": {
     "home": "Accueil",
@@ -33,6 +33,11 @@
     "required": "Ce champ est obligatoire",
     "email": "Adresse e-mail invalide",
     "minLength": "Minimum {{count}} caractères requis",
-    "maxLength": "Maximum {{count}} caractères autorisés"
-  }
+    "maxLength": "Maximum {{count}} caractères autorisés"  },
+  "notFound": {
+    "title": "404",
+    "heading": "Oups! Page introuvable",
+    "description": "La page que vous recherchez a peut-être été supprimée, son nom a changé ou est temporairement indisponible.",
+    "backHome": "Retour à l'accueil",
+    "suggestion": "Voici quelques liens utiles à la place:"  }
 }
