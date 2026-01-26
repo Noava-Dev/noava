@@ -1,6 +1,8 @@
 import { Card } from 'flowbite-react';
 import { HiPencil, HiTrash } from 'react-icons/hi';
 import { useTranslation } from 'react-i18next';
+import { useState, useEffect } from 'react';
+import { useAzureBlobService } from '../../services/AzureBlobService';
 import type { Deck } from '../../models/Deck';
 
 interface DeckCardProps {
@@ -11,6 +13,22 @@ interface DeckCardProps {
 
 function DeckCard({ deck, onEdit, onDelete }: DeckCardProps) {
   const { t } = useTranslation('decks');
+  const azureBlobService = useAzureBlobService();
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [loadingImage, setLoadingImage] = useState(false);
+
+  useEffect(() => {
+    if (deck.coverImageBlobName) {
+      setLoadingImage(true);
+      azureBlobService.getBlobSasUrl(deck.coverImageBlobName)
+        .then(url => setImageUrl(url))
+        .catch(err => {
+          console.error('Failed to get image URL:', err);
+          setImageUrl(null);
+        })
+        .finally(() => setLoadingImage(false));
+    }
+  }, [deck.coverImageBlobName]);
 
   const getVisibilityLabel = (visibility: number) => {
     switch (visibility) {
@@ -32,11 +50,29 @@ function DeckCard({ deck, onEdit, onDelete }: DeckCardProps) {
 
   return (
     <Card className="hover:shadow-lg transition-shadow duration-300">
-      
+      {/* Cover Image */}
+      <div className="w-full h-48 rounded-t-lg overflow-hidden">
+        {loadingImage ? (
+          <div className="w-full h-full bg-gray-200 dark:bg-gray-700 animate-pulse flex items-center justify-center">
+            <span className="text-gray-400">Loading...</span>
+          </div>
+        ) : imageUrl ? (
+          <img
+            src={imageUrl}
+            alt={deck.title}
+            className="w-full h-full object-cover"
+          />
+        ) : (
+          <div className="w-full h-full bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center">
+            <span className="text-6xl text-white font-bold">
+              {deck.title.charAt(0).toUpperCase()}
+            </span>
+          </div>
+        )}
+      </div>
 
       {/* Content */}
       <div className="p-4">
-        {/* Title  */}
         <div className="flex items-start justify-between mb-2">
           <h3 className="text-xl font-bold text-gray-900 dark:text-white flex-1">
             {deck.title}
@@ -46,14 +82,12 @@ function DeckCard({ deck, onEdit, onDelete }: DeckCardProps) {
           </span>
         </div>
 
-        {/* Description */}
         {deck.description && (
           <p className="text-gray-600 dark:text-gray-400 text-sm mb-3 line-clamp-2">
             {deck.description}
           </p>
         )}
 
-        {/* Language */}
         {deck.language && (
           <div className="mb-4">
             <span className="text-xs bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-2 py-1 rounded">
@@ -62,7 +96,6 @@ function DeckCard({ deck, onEdit, onDelete }: DeckCardProps) {
           </div>
         )}
 
-        {/* Actions */}
         <div className="flex gap-2 pt-3 border-t border-gray-200 dark:border-gray-700">
           <button
             onClick={() => onEdit?.(deck)}

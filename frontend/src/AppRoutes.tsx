@@ -16,7 +16,7 @@ export default function AppRoutes() {
     return (
         <Routes>
             <Route path="/" element={<Home/>}/> 
-            <Route path="/decks" element={<Placeholder title="Decks" />} />
+            <Route path="/decks" element={<Decks />} />
             <Route path="/classrooms" element={<Placeholder title="Klassen" />} />
             <Route path="/history" element={<Placeholder title="Geschiedenis" />} />
             <Route path="/notifications" element={<Placeholder title="Meldingen" />} />

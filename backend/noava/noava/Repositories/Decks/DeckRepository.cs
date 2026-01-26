@@ -1,13 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using noava.Data;
 using noava.Models;
-using System.Security.Authentication;
-
+using noava.Repositories.Contracts;
 
 namespace noava.Repositories
 {
-    public class DeckRepository
-
+    public class DeckRepository : IDeckRepository
     {
         private readonly NoavaDbContext _context;
 
@@ -16,13 +14,21 @@ namespace noava.Repositories
             _context = context;
         }
 
-
         public async Task<List<Deck>> GetAllAsync()
         {
             return await _context.Decks
                 .OrderByDescending(d => d.CreatedAt)
                 .ToListAsync();
         }
+
+        public async Task<List<Deck>> GetByUserIdAsync(string userId)
+        {
+            return await _context.Decks
+                .Where(d => d.UserId == userId)
+                .OrderByDescending(d => d.CreatedAt)
+                .ToListAsync();
+        }
+
         public async Task<Deck?> GetByIdAsync(int id)
         {
             return await _context.Decks
@@ -36,10 +42,8 @@ namespace noava.Repositories
             return deck;
         }
 
-
         public async Task<Deck> UpdateAsync(Deck deck)
         {
-            
             _context.Decks.Update(deck);
             await _context.SaveChangesAsync();
             return deck;
@@ -54,8 +58,5 @@ namespace noava.Repositories
             await _context.SaveChangesAsync();
             return true;
         }
-
-
-
     }
 }

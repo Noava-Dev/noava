@@ -3,13 +3,13 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using noava.Data;
-using Noava.Repositories;
-using noava.Services;
 using noava.Repositories;
 using noava.Repositories.Contracts;
 using noava.Repositories.Implementations;
+using noava.Services;
 using noava.Services.Contracts;
 using noava.Services.Implementations;
+using noava.Shared;
 using System.Security.Claims;
 
 namespace noava
@@ -26,9 +26,14 @@ namespace noava
 
             builder.Services.AddScoped<IFaqRepository, FaqRepository>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IDeckRepository, DeckRepository>();
 
             builder.Services.AddScoped<IFaqService, FaqService>();
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IDeckService, DeckService>();
+            builder.Services.AddScoped<IBlobService, BlobService>();
+
+
 
 
 
@@ -37,7 +42,8 @@ namespace noava
             {
                 options.AddPolicy("Frontend",
                     policy => policy
-                    .WithOrigins("*")
+                    //.WithOrigins("*")
+                    .AllowAnyOrigin()
                         .AllowAnyHeader()
                         .AllowAnyMethod()
                 );
@@ -87,13 +93,13 @@ namespace noava
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
-		        app.UseHttpsRedirection();
+		        //app.UseHttpsRedirection();
             }
 
             app.UseCors("Frontend");
 
-            app.UseAuthentication();
-            app.UseMiddleware<RoleClaimsMiddleware>();
+            //app.UseAuthentication();
+            //app.UseMiddleware<RoleClaimsMiddleware>();
             app.UseAuthorization();
 
             app.MapControllers();

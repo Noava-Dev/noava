@@ -36,6 +36,8 @@
     "descriptionPlaceholder": "Beschrijf je deck...",
     "languageLabel": "Taal",
     "languageSelect": "Kies een taal",
+    "imageLabel": "Cover afbeelding",
+    "imageHelp": "Upload een afbeelding voor je deck (max 5MB)",
     "visibilityLabel": "Zichtbaarheid",
     "visibilityPrivate": "Privé",
     "visibilityShared": "Gedeeld",
@@ -47,7 +49,8 @@
     },
     "createButton": "Maak deck",
     "updateButton": "Deck bijwerken",
-    "cancelButton": "Annuleren"
+    "cancelButton": "Annuleren",
+    "uploading": "Uploaden..."
   },
   "languages": {
     "select": "Selecteer een taal",

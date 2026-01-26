@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using noava.Models;
+using noava.Models.Enums;
 
 namespace noava.Data.Configurations
 {
@@ -19,16 +20,26 @@ namespace noava.Data.Configurations
                 .HasMaxLength(1000);
 
             builder.Property(d => d.Language)
+                .IsRequired()
                 .HasMaxLength(50);
 
             builder.Property(d => d.Visibility)
                 .HasConversion<int>();
+            builder.Property(d => d.CoverImageBlobName)
+                .HasMaxLength(500);
+
+            builder.Property(d => d.UserId)
+                .IsRequired()
+                .HasMaxLength(100);
 
             builder.Property(d => d.CreatedAt)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
             builder.Property(d => d.UpdatedAt)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP");
+            
+            
+            builder.HasIndex(d => d.UserId);
 
 
 
@@ -41,6 +52,7 @@ namespace noava.Data.Configurations
                     Description = "Franse woorden voor beginners",
                     Language = "Frans",
                     Visibility = DeckVisibility.Public,
+                    UserId = "user_38TGbnbcmzK7uZAbaABqTtzQtvz",
                     CreatedAt = DateTime.UtcNow,
                     UpdatedAt = DateTime.UtcNow
                 },
@@ -51,6 +63,7 @@ namespace noava.Data.Configurations
                     Description = "Engelse grammatica oefeningen",
                     Language = "Engels",
                     Visibility = DeckVisibility.Private,
+                    UserId = "user_38TGbnbcmzK7uZAbaABqTtzQtvz",
                     CreatedAt = DateTime.UtcNow,
                     UpdatedAt = DateTime.UtcNow
                 },
@@ -61,6 +74,7 @@ namespace noava.Data.Configurations
                     Description = "Spaanse zinnen voor dagelijks gebruik",
                     Language = "Spaans",
                     Visibility = DeckVisibility.Shared,
+                    UserId = "user_38TGbnbcmzK7uZAbaABqTtzQtvz",
                     CreatedAt = DateTime.UtcNow,
                     UpdatedAt = DateTime.UtcNow
                 }
