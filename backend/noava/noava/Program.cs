@@ -1,9 +1,16 @@
 
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using noava.Data;
 using Noava.Repositories;
 using noava.Services;
 using noava.Repositories;
+using noava.Repositories.Contracts;
+using noava.Repositories.Implementations;
+using noava.Services.Contracts;
+using noava.Services.Implementations;
+using System.Security.Claims;
 
 namespace noava
 {
@@ -17,13 +24,12 @@ namespace noava
             builder.Services.AddDbContext<NoavaDbContext>(options =>
                 options.UseNpgsql(builder.Configuration.GetConnectionString("NoavaDatabaseLocal")));
 
-            // FAQ
-            builder.Services.AddScoped<FaqRepository>();
-            builder.Services.AddScoped<FaqService>();
+            builder.Services.AddScoped<IFaqRepository, FaqRepository>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
 
-            // Decks
-            builder.Services.AddScoped<DeckRepository>();
-            builder.Services.AddScoped<DeckService>();
+            builder.Services.AddScoped<IFaqService, FaqService>();
+            builder.Services.AddScoped<IUserService, UserService>();
+
 
 
             // Add services to the container.
@@ -31,7 +37,7 @@ namespace noava
             {
                 options.AddPolicy("Frontend",
                     policy => policy
-                    .WithOrigins("http://localhost:5173")
+                    .WithOrigins("*")
                         .AllowAnyHeader()
                         .AllowAnyMethod()
                 );
@@ -41,13 +47,25 @@ namespace noava
 
             builder.WebHost.ConfigureKestrel(options =>
             {
-                options.ListenLocalhost(5000);
-
-                options.ListenLocalhost(5001, listenOptions =>
-                {
-                    listenOptions.UseHttps();
-                });
+                options.ListenAnyIP(5000);
             });
+            var clerkAuthority = builder.Configuration["Clerk:FrontendApiUrl"];
+
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.Authority = clerkAuthority;
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = false,
+                        NameClaimType = ClaimTypes.NameIdentifier,
+                        RoleClaimType = ClaimTypes.Role
+                    };
+                });
+
+
+            builder.Services.AddAuthorization();
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -60,13 +78,14 @@ namespace noava
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
+		app.UseHttpsRedirection();
             }
 
-            app.UseHttpsRedirection();
-
-            app.UseAuthorization();
-
             app.UseCors("Frontend");
+
+            app.UseAuthentication();
+            app.UseMiddleware<RoleClaimsMiddleware>();
+            app.UseAuthorization();
 
             app.MapControllers();
 

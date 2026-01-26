@@ -105,6 +105,10 @@ namespace noava.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("FaqKey")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("Question")
                         .IsRequired()
                         .HasColumnType("text");
@@ -118,50 +122,72 @@ namespace noava.Migrations
                         {
                             Id = 1,
                             Answer = "Noava is a modern platform that helps you manage your business efficiently with cutting-edge technology and user-friendly interfaces.",
+                            FaqKey = "what_is_noava",
                             Question = "What is Noava?"
                         },
                         new
                         {
                             Id = 2,
                             Answer = "Simply sign up, configure your preferences, and start using our intuitive dashboard to manage all your operations in one place.",
+                            FaqKey = "how_does_it_work",
                             Question = "How does it work?"
                         },
                         new
                         {
                             Id = 3,
                             Answer = "We offer flexible pricing plans starting from €9.99 per month. Visit our pricing page for detailed information about features included in each plan.",
+                            FaqKey = "what_are_the_costs",
                             Question = "What are the costs?"
                         },
                         new
                         {
                             Id = 4,
                             Answer = "Yes, you can cancel your subscription at any time without any penalties or hidden fees. Your data will remain accessible for 30 days after cancellation.",
+                            FaqKey = "can_i_cancel_anytime",
                             Question = "Can I cancel anytime?"
                         },
                         new
                         {
                             Id = 5,
                             Answer = "Absolutely. We use industry-standard encryption, regular security audits, and comply with GDPR regulations to ensure your data is always protected.",
+                            FaqKey = "is_my_data_secure",
                             Question = "Is my data secure?"
                         },
                         new
                         {
                             Id = 6,
                             Answer = "We offer 24/7 email support, live chat during business hours, and comprehensive documentation. Premium plans include priority support and dedicated account managers.",
+                            FaqKey = "support_options_available",
                             Question = "What support options are available?"
                         },
                         new
                         {
                             Id = 7,
                             Answer = "Yes, Noava integrates with popular tools like Slack, Google Workspace, Microsoft 365, and many others through our API and pre-built connectors.",
+                            FaqKey = "integration_with_other_tools",
                             Question = "Can I integrate with other tools?"
                         },
                         new
                         {
                             Id = 8,
                             Answer = "Yes, we offer a 14-day free trial with full access to all features. No credit card required to start your trial.",
+                            FaqKey = "free_trial",
                             Question = "Do you offer a free trial?"
                         });
+                });
+
+            modelBuilder.Entity("noava.Models.User", b =>
+                {
+                    b.Property<string>("ClerkId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("ClerkId");
+
+                    b.ToTable("Users");
                 });
 #pragma warning restore 612, 618
         }

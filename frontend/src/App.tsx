@@ -1,42 +1,31 @@
-import { useEffect } from 'react';
-
 import './App.css';
-/* import {
-  SignedIn,
-  SignedOut,
-  UserButton,
-  SignInButton,
-} from '@clerk/clerk-react'; */
 import AppRoutes from './AppRoutes';
+import { UserRoleProvider } from './contexts/UserRoleContext';
+import { SidebarNav } from './shared/components/Sidebar';
+import { useLocation } from 'react-router-dom';
 
 function App() {
-
-  console.log(import.meta.env.VITE_API_BASE_URL);
-
-  useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_BASE_URL}/health`)
-      .then((res) => res.json())
-      .then((data) => console.log(data.status))
-      .catch(console.error);
-  }, []);
+const location = useLocation();
+  
+  
+  const routesWithoutSidebar = ['/', '/home', '/faq'];
+  const showSidebar = !routesWithoutSidebar.includes(location.pathname);
 
   return (
-    
-    <>
-    <div className="app-container">
-    <AppRoutes />
-      {/* <header>
+    <UserRoleProvider>
+      <div className="flex h-screen">
         
-        <SignedOut>
-          <SignInButton />
-        </SignedOut>
-        <SignedIn>
-          <UserButton />
-        </SignedIn>
-      </header> */}
-    </div>
-    </>
+        {showSidebar && (
+          <div>
+            <SidebarNav />
+          </div>
+        )}
+
+        <main className={showSidebar ? "app-container" : "w-full"}>
+          <AppRoutes />
+        </main>
+      </div>
+    </UserRoleProvider>
   );
 }
-
 export default App;
