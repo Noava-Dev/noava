@@ -27,12 +27,10 @@ function SettingsPage() {
   //--------------------change language-----------------------------
 const { t, i18n } = useTranslation("settings");
 
-const [language, setLanguage] = useState(() => i18n.language || "en");
-
-useEffect(() => {
-  i18n.changeLanguage(language);
-  localStorage.setItem("preferredLanguage", language);
-}, [language, i18n]);
+const setLanguage = (lang: string) => {
+  i18n.changeLanguage(lang);
+  localStorage.setItem("preferredLanguage", lang);
+};
 
 
   return (
@@ -81,17 +79,17 @@ useEffect(() => {
             options={[
               {
                 label: "English",
-                active: language === "en",
+                active: i18n.language === "en",
                 onClick: () => setLanguage("en"),
               },
               {
                 label: "Nederlands",
-                active: language === "nl",
+                active:  i18n.language === "nl",
                 onClick: () => setLanguage("nl"),
               },
               {
                 label: "Français",
-                active: language === "fr",
+                active:  i18n.language === "fr",
                 onClick: () => setLanguage("fr"),
               },
             ]}
