@@ -2,6 +2,7 @@ import { LuSun as sun, LuMoon as moon, LuGlobe as globe } from "react-icons/lu";
 import { useState, useEffect } from "react";
 import PageHeader from "../../shared/components/PageHeader";
 import { SettingsGroup } from "./components/SettingsGroup";
+import { useTranslation } from 'react-i18next';
 
 function SettingsPage() {
 
@@ -24,15 +25,14 @@ function SettingsPage() {
 
 
   //--------------------change language-----------------------------
-  const [language, setLanguage] = useState(() => {
-    return localStorage.getItem("language") || "en";
-  });
+const { t, i18n } = useTranslation("settings");
 
-  useEffect(() => {
-    localStorage.setItem("language", language);
-    //TODO: add logic to actually change the language of the app.
-    //right now the language is set in the local storage but nothing happens with it.
-  }, [language])
+const [language, setLanguage] = useState(() => i18n.language || "en");
+
+useEffect(() => {
+  i18n.changeLanguage(language);
+  localStorage.setItem("preferredLanguage", language);
+}, [language, i18n]);
 
 
   return (
@@ -41,10 +41,10 @@ function SettingsPage() {
         <PageHeader>
           <div className="flex flex-col text-center p-3 gap-2">
             <h1 className="text-4xl font-bold text-text-title-light dark:text-text-title-dark">
-              Settings
+              {t('header.title')}
             </h1>
             <p className="text-text-body-light dark:text-text-body-dark">
-              Personalize your application experience.
+              {t('header.subtitle')}
             </p>
           </div>
         </PageHeader>
@@ -52,19 +52,19 @@ function SettingsPage() {
       <div>
         <div className="flex flex-col items-center">
           <SettingsGroup
-            title="Theme"
-            description="Select your preferred color scheme"
-            tooltip="Choose between light and dark mode to customize the appearance of the application based on your preference or environment."
+            title={t('theme.title')}
+            description={t("theme.description")}
+            tooltip={t("theme.tooltip")}
             groupIcon={theme === "dark" ? moon : sun}
             options={[
               {
-                label: "Light",
+                label: t("theme.light"),
                 icon: sun,
                 active: theme === "light",
                 onClick: () => setTheme("light"),
               },
               {
-                label: "dark",
+                label: t("theme.dark"),
                 icon: moon,
                 active: theme === "dark",
                 onClick: () => setTheme("dark"),
@@ -72,10 +72,12 @@ function SettingsPage() {
             ]}
           />
           <SettingsGroup
-            title="Language"
-            description="Choose your preferred language"
-            tooltip="Select your preferred language for the application interface. This will change all text and labels throughout the app."
+            title={t("language.title")}
+            description={t("language.description")}
+            tooltip={t("language.tooltip")}
             groupIcon={globe}
+            // labels are kept in their native languages so users can easily switch back
+            // if they change the language by accident and can’t understand the UI.
             options={[
               {
                 label: "English",
@@ -91,11 +93,6 @@ function SettingsPage() {
                 label: "Français",
                 active: language === "fr",
                 onClick: () => setLanguage("fr"),
-              },
-              {
-                label: "Deutsch",
-                active: language === "de",
-                onClick: () => setLanguage("de"),
               },
             ]}
           />
