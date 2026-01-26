@@ -23,10 +23,11 @@ namespace noava
 
             builder.Services.AddScoped<IFaqRepository, FaqRepository>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 
             builder.Services.AddScoped<IFaqService, FaqService>();
             builder.Services.AddScoped<IUserService, UserService>();
-
+            builder.Services.AddScoped<INotificationService, NotificationService>();
 
 
             // Add services to the container.
@@ -40,7 +41,14 @@ namespace noava
                 );
             });
 
-            builder.Services.AddControllers();
+            builder.Services
+                .AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.Converters.Add(
+                        new System.Text.Json.Serialization.JsonStringEnumConverter()
+                    );
+                });
 
             builder.WebHost.ConfigureKestrel(options =>
             {
@@ -80,8 +88,9 @@ namespace noava
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
-		        app.UseHttpsRedirection();
             }
+
+            app.UseHttpsRedirection();
 
             app.UseCors("Frontend");
 

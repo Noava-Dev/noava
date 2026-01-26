@@ -10,6 +10,7 @@ namespace noava.Data.Configurations
         {
             builder.HasKey(d => d.Id);
             builder.Property(d => d.Type)
+                .HasConversion<string>()
                 .IsRequired();
             builder.Property(d => d.TemplateKey)
                 .IsRequired();

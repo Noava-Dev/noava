@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using noava.DTOs.Notifications;
 using noava.Services.Contracts;
+using System.Security.Claims;
 
 namespace noava.Controllers
 {
@@ -21,7 +22,7 @@ namespace noava.Controllers
         [HttpGet]
         public async Task<IActionResult> GetMyNotifications()
         {
-            var userId = User.FindFirst("sub")?.Value;
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userId == null)
                 return Unauthorized();
 
@@ -32,7 +33,7 @@ namespace noava.Controllers
         [HttpGet("{id:long}")]
         public async Task<IActionResult> GetById(long id)
         {
-            var userId = User.FindFirst("sub")?.Value;
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userId == null)
                 return Unauthorized();
 
@@ -49,7 +50,7 @@ namespace noava.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var userId = User.FindFirst("sub")?.Value;
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userId == null)
                 return Unauthorized();
 
@@ -61,7 +62,7 @@ namespace noava.Controllers
         [HttpDelete("{id:long}")]
         public async Task<IActionResult> DeleteNotification(long id)
         {
-            var userId = User.FindFirst("sub")?.Value;
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userId == null)
                 return Unauthorized();
 

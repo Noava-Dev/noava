@@ -25,14 +25,13 @@ namespace noava.Mappers.Notifications
         {
             var entity = new Notification
             {
-                Id = dto.Id,
                 UserId = userId,
                 Type = dto.Type,
                 TemplateKey = dto.TemplateKey,
                 ParametersJson = dto.ParametersJson,
                 Link = dto.Link,
-                CreatedAt = dto.CreatedAt,
-                Actions = dto.Actions.Select(a => a.ToEntity()).ToList()
+                Actions = dto.Actions?.Select(a => a.ToEntity()).ToList()
+                  ?? []
             };
 
             return entity;
