@@ -9,7 +9,7 @@ function Placeholder({ title }: { title: string }) {
 }
 
 import PrivateRoute from "./shared/components/navigation/PrivateRoute";
-import { RoleGroups } from "./models/User";
+import { RoleGroups } from "./models/User"; 
 
 export default function AppRoutes() {
     return (
