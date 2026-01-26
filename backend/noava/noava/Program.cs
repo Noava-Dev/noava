@@ -45,6 +45,11 @@ namespace noava
             builder.WebHost.ConfigureKestrel(options =>
             {
                 options.ListenAnyIP(5000);
+
+                options.ListenAnyIP(5001, listenOptions =>
+                {
+                    listenOptions.UseHttps();
+                });
             });
             var clerkAuthority = builder.Configuration["Clerk:FrontendApiUrl"];
 
@@ -75,7 +80,7 @@ namespace noava
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
-		app.UseHttpsRedirection();
+		        app.UseHttpsRedirection();
             }
 
             app.UseCors("Frontend");

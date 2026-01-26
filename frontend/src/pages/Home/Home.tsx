@@ -17,25 +17,17 @@ function Home() {
   const { t } = useTranslation('home');
   const { isSignedIn } = useUser();
   const navigate = useNavigate();
+  
   return (
     <>
       <Header />
 
-                    <p className="text-lg font-normal text-gray-300 mb-8 max-w-2xl mx-auto">
-                        {t('hero.description')}
-                    </p>
-                </div>
-                <div className="flex justify-center">
-                    {isSignedIn ? (
-                        <Button onClick={() => navigate('/dashboard')}>{t('hero.cta')}</Button>
-                    ) : (
-                        <SignUpButton>
-                            <Button>{t('hero.cta')}</Button>
-                        </SignUpButton>
-                    )}
-                </div>
-            </section>
-
+      {/* Hero Section */}
+      <section className="py-16 text-center bg-gray dark:bg-gray-800">
+        <div className="container px-4 mx-auto">
+          <h1 className="mb-4 text-4xl font-extrabold tracking-tight text-white md:text-5xl lg:text-6xl">
+            {t('hero.title')}
+          </h1>
           <p className="max-w-2xl mx-auto mb-8 text-lg font-normal text-gray-300">
             {t('hero.description')}
           </p>
@@ -137,17 +129,17 @@ function Home() {
         </div>
       </section>
 
-            {/* Available everywhere Section  */}
-            <section className="bg-gray-50 dark:bg-gray-800 py-16">
-                <div className="container mx-auto px-4 max-w-6xl">
-                    <div className="text-center mb-12">
-                        <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-text-title-light dark:text-text-title-dark mb-4">
-                            {t('platforms.title')}
-                        </h2>
-                        <p className="text-lg font-normal text-text-body-light dark:text-text-body-dark">
-                            {t('platforms.description')}
-                        </p>
-                    </div>
+      {/* Available everywhere Section */}
+      <section className="bg-gray-50 dark:bg-gray-800 py-16">
+        <div className="container mx-auto px-4 max-w-6xl">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-text-title-light dark:text-text-title-dark mb-4">
+              {t('platforms.title')}
+            </h2>
+            <p className="text-lg font-normal text-text-body-light dark:text-text-body-dark">
+              {t('platforms.description')}
+            </p>
+          </div>
 
           <div className="grid max-w-2xl grid-cols-1 gap-6 mx-auto md:grid-cols-2">
             {/* Mobile Card */}
