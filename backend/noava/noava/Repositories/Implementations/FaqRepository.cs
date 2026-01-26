@@ -1,10 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using noava.Data;
 using noava.Models;
+using noava.Repositories.Contracts;
 
-namespace Noava.Repositories
+namespace noava.Repositories.Implementations
 {
-    public class FaqRepository
+    public class FaqRepository : IFaqRepository
     {
         private readonly NoavaDbContext _context;
 

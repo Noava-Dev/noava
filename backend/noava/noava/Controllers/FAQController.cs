@@ -1,8 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using noava.Data;
 using noava.Models;
-using noava.Services;
+using noava.Services.Contracts;
 
 namespace noava.Controllers
 {
@@ -10,9 +8,9 @@ namespace noava.Controllers
     [Route("api/[controller]")]
     public class FaqController : ControllerBase
     {
-        private readonly FaqService _faqService;
+        private readonly IFaqService _faqService;
 
-        public FaqController(FaqService faqService)
+        public FaqController(IFaqService faqService)
         {
             _faqService = faqService;
         }
@@ -25,4 +23,3 @@ namespace noava.Controllers
         }
     }
 }
-

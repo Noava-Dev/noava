@@ -1,0 +1,43 @@
+{
+  "app": {
+    "title": "NOAVA",
+    "loading": "Chargement...",
+    "error": "Une erreur s'est produite",
+    "retry": "Réessayer",
+    "clearSearch": "Effacer la recherche",
+    "noResults": "Aucun résultat trouvé pour \"{{searchTerm}}\"",
+    "welcome": "Bienvenue chez Noava"
+  },
+  "navigation": {
+    "home": "Accueil",
+    "faq": "FAQ",
+    "login": "Connexion",
+    "register": "Inscription",
+    "logout": "Déconnexion",
+    "dashboard": "Tableau de bord"
+  },
+  "actions": {
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "create": "Créer",
+    "search": "Rechercher",
+    "searchPlaceholder": "Rechercher...",
+    "submit": "Soumettre",
+    "confirm": "Confirmer",
+    "close": "Fermer",
+    "getStarted": "Commencer"
+  },
+  "validation": {
+    "required": "Ce champ est obligatoire",
+    "email": "Adresse e-mail invalide",
+    "minLength": "Minimum {{count}} caractères requis",
+    "maxLength": "Maximum {{count}} caractères autorisés"  },
+  "notFound": {
+    "title": "404",
+    "heading": "Oups! Page introuvable",
+    "description": "La page que vous recherchez a peut-être été supprimée, son nom a changé ou est temporairement indisponible.",
+    "backHome": "Retour à l'accueil",
+    "suggestion": "Voici quelques liens utiles à la place:"  }
+}

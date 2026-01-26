@@ -1,0 +1,45 @@
+{
+  "app": {
+    "title": "NOAVA",
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "retry": "Retry",
+    "clearSearch": "Clear search",
+    "noResults": "No results found for \"{{searchTerm}}\"",
+    "welcome": "Welcome to Noava"
+  },
+  "navigation": {
+    "home": "Home",
+    "faq": "FAQ",
+    "login": "Login",
+    "register": "Register",
+    "logout": "Logout",
+    "dashboard": "Dashboard"
+  },
+  "actions": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "search": "Search",
+    "searchPlaceholder": "Search...",
+    "submit": "Submit",
+    "confirm": "Confirm",
+    "close": "Close",
+    "getStarted": "Get started"
+  },
+  "validation": {
+    "required": "This field is required",
+    "email": "Invalid email address",
+    "minLength": "Minimum {{count}} characters required",
+    "maxLength": "Maximum {{count}} characters allowed"
+  },
+  "notFound": {
+    "title": "404",
+    "heading": "Oops! Page not found",
+    "description": "The page you are looking for might have been removed, had its name changed or is temporarily unavailable.",
+    "backHome": "Back to Homepage",
+    "suggestion": "Here are some helpful links instead:"
+  }
+}

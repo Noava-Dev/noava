@@ -1,0 +1,58 @@
+{
+  "faq": {
+    "what_is_noava": {
+      "question": "Qu'est-ce que Noava?",
+      "answer": "Noava est une plateforme moderne qui vous aide à gérer efficacement votre entreprise avec une technologie avancée et des interfaces conviviales."
+    },
+    "how_does_it_work": {
+      "question": "Comment ça fonctionne?",
+      "answer": "Inscrivez-vous simplement, configurez vos préférences et commencez avec notre tableau de bord intuitif pour gérer toutes vos opérations en un seul endroit."
+    },
+    "what_are_the_costs": {
+      "question": "Quels sont les coûts?",
+      "answer": "Nous proposons des plans d'abonnement flexibles à partir de 9,99 € par mois. Visitez notre page de tarification pour plus de détails sur les fonctionnalités incluses."
+    },
+    "can_i_cancel_anytime": {
+      "question": "Puis-je annuler à tout moment?",
+      "answer": "Oui, vous pouvez annuler votre abonnement à tout moment sans pénalités ni frais cachés. Vos données restent accessibles pendant 30 jours après l'annulation."
+    },
+    "is_my_data_secure": {
+      "question": "Mes données sont-elles sécurisées?",
+      "answer": "Absolument. Nous utilisons un chiffrement de niveau industriel, des audits de sécurité réguliers et sommes conformes au RGPD."
+    },
+    "support_options_available": {
+      "question": "Quelles options de support sont disponibles?",
+      "answer": "Nous offrons une assistance par e-mail 24/7, un chat en direct pendant les heures de bureau et une documentation complète. Les plans premium bénéficient d'un support prioritaire et de gestionnaires de compte dédiés."
+    },
+    "integration_with_other_tools": {
+      "question": "Puis-je intégrer avec d'autres outils?",
+      "answer": "Oui, Noava s'intègre avec des outils populaires comme Slack, Google Workspace, Microsoft 365, et bien d'autres via notre API et des connecteurs préconstruits."
+    },
+    "free_trial": {
+      "question": "Proposez-vous un essai gratuit?",
+      "answer": "Oui, nous offrons un essai gratuit de 14 jours avec un accès complet à toutes les fonctionnalités. Aucune carte de crédit requise."
+    }
+  },
+  "title": "Questions Fréquemment Posées",
+  "description": "Trouvez des réponses aux questions courantes sur Noava",
+  "search": {
+    "placeholder": "Rechercher dans les questions fréquentes..."
+  },
+  "results": {
+    "showing": "Affichage de",
+    "of": "sur",
+    "results": "résultats"
+  },
+  "loading": "Chargement des questions fréquentes...",
+  "error": "Impossible de charger les questions. Veuillez réessayer plus tard.",
+  "empty": {
+    "title": "Aucun résultat trouvé",
+    "message": "Nous n'avons trouvé aucune question correspondant à",
+    "cta": "Effacer la recherche"
+  },
+  "contact": {
+    "title": "Vous avez encore des questions?",
+    "description": "Vous ne trouvez pas la réponse que vous cherchez? Notre équipe est là pour vous aider.",
+    "cta": "Contacter le Support"
+  }
+}
