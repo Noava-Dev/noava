@@ -1,6 +1,6 @@
 ﻿namespace noava.Models.Enums
 {
-    public enum HttpMethod
+    public enum HttpMethodType
     {
         GET,
         POST,

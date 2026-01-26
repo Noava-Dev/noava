@@ -8,6 +8,6 @@ namespace noava.Services.Contracts
         Task<List<NotificationDto>> GetNotificationsForUserAsync(string userId);
         Task<NotificationDto> CreateNotificationAsync(NotificationDto notification, string userId);
         Task DeleteNotificationAsync(long notificationId, string userId);
-        Task<NotificationDto?> GetNotificationByIdAsync(long id);
+        Task<NotificationDto?> GetNotificationByIdAsync(long id, string userId);
     }
 }

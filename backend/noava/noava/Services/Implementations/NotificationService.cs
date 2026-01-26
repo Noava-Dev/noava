@@ -40,10 +40,14 @@ namespace noava.Services.Implementations
             await _repository.SaveChangesAsync();
         }
 
-        public async Task<NotificationDto?> GetNotificationByIdAsync(long id)
+        public async Task<NotificationDto?> GetNotificationByIdAsync(long id, string userId)
         {
             var notification = await _repository.GetByIdAsync(id);
             if (notification == null) { return null; }
+            if (notification.UserId != userId)
+            {
+                throw new UnauthorizedAccessException("You cannot view this notification.");
+            }
 
             return notification.ToDto();
         }
