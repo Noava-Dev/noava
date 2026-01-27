@@ -26,26 +26,22 @@ function DeckModal({ isOpen, onClose, onSubmit, deck }: DeckModalProps) {
 
   useEffect(() => {
     if (deck) {
-      // Edit mode - pre-fill form
+      
       setTitle(deck.title);
       setDescription(deck.description || '');
       setLanguage(deck.language || '');
       setVisibility(deck.visibility);
       setCoverImageBlobName(deck.coverImageBlobName);
       
-      // Generate preview URL from BlobName using SAS
+      
       if (deck.coverImageBlobName) {
         azureBlobService.getBlobSasUrl(deck.coverImageBlobName)
           .then(url => setImagePreview(url))
-          .catch(err => {
-            console.error('Failed to load image preview:', err);
-            setImagePreview(null);
-          });
       } else {
         setImagePreview(null);
       }
     } else {
-      // Create mode - reset form
+      
       setTitle('');
       setDescription('');
       setLanguage('');
@@ -60,7 +56,7 @@ function DeckModal({ isOpen, onClose, onSubmit, deck }: DeckModalProps) {
     const file = e.target.files?.[0];
     if (file) {
       setImageFile(file);
-      // Create local preview
+      
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result as string);
@@ -75,12 +71,10 @@ function DeckModal({ isOpen, onClose, onSubmit, deck }: DeckModalProps) {
     try {
       setUploading(true);
 
-      // Upload image if new file selected
+      
       let finalBlobName = coverImageBlobName;
       if (imageFile) {
-        console.log('Uploading image...');
-        finalBlobName = await azureBlobService.uploadImage(imageFile);
-        console.log('Image uploaded:', finalBlobName);
+        finalBlobName = await azureBlobService.uploadImage(imageFile);   
       }
 
       onSubmit({
@@ -100,7 +94,6 @@ function DeckModal({ isOpen, onClose, onSubmit, deck }: DeckModalProps) {
       setImagePreview(null);
       setImageFile(null);
     } catch (error) {
-      console.error('Error uploading image:', error);
       alert('Failed to upload image. Please try again.');
     } finally {
       setUploading(false);
@@ -148,7 +141,7 @@ function DeckModal({ isOpen, onClose, onSubmit, deck }: DeckModalProps) {
         <div className="p-6">
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Title */}
-            <div>
+            <div className='flex flex-col gap-2'>
               <Label htmlFor="title">
                 {t('modal.titleLabel')} *
               </Label>
@@ -164,7 +157,7 @@ function DeckModal({ isOpen, onClose, onSubmit, deck }: DeckModalProps) {
             </div>
 
             {/* Language */}
-            <div>
+            <div className='flex flex-col gap-2'>
               <Label htmlFor="language">
                 {t('modal.languageLabel')} *
               </Label>
@@ -186,7 +179,7 @@ function DeckModal({ isOpen, onClose, onSubmit, deck }: DeckModalProps) {
             </div>
 
             {/* Description */}
-            <div>
+            <div className='flex flex-col gap-2'>
               <Label htmlFor="description">
                 {t('modal.descriptionLabel')}
               </Label>
@@ -201,7 +194,7 @@ function DeckModal({ isOpen, onClose, onSubmit, deck }: DeckModalProps) {
             </div>
 
             {/* Image Upload */}
-            <div>
+            <div className='flex flex-col gap-2'>
               <Label htmlFor="image">
                 {t('modal.imageLabel')}
               </Label>
@@ -229,7 +222,7 @@ function DeckModal({ isOpen, onClose, onSubmit, deck }: DeckModalProps) {
             </div>
 
             {/* Visibility */}
-            <div>
+            <div className='flex flex-col gap-2'>
               <Label htmlFor="visibility">
                 {t('modal.visibilityLabel')} *
               </Label>

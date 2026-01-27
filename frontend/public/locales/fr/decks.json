@@ -1,18 +1,18 @@
 {
   "title": "Decks",
-  "subtitle": "Organisez vos cartes en paquets spécifiques par sujet",
+  "subtitle": "Organisez vos flashcards en decks spécifiques à chaque matière",
   "createButton": "Créer un deck",
   "search": {
     "label": "Rechercher"
   },
   "sort": {
     "label": "Trier par",
-    "newest": "Plus récent d'abord",
-    "oldest": "Plus ancien d'abord"
+    "newest": "Les plus récents d'abord",
+    "oldest": "Les plus anciens d'abord"
   },
   "results": {
-    "showing": "Affichage de",
-    "of": "sur",
+    "showing": "Affichage",
+    "of": "de",
     "decks": "decks",
     "found": "résultats trouvés"
   },
@@ -31,18 +31,20 @@
     "createTitle": "Créer un nouveau deck",
     "editTitle": "Modifier le deck",
     "titleLabel": "Titre",
-    "titlePlaceholder": "par ex., Vocabulaire français",
+    "titlePlaceholder": "ex. Vocabulaire Français",
     "descriptionLabel": "Description",
     "descriptionPlaceholder": "Décrivez votre deck...",
+    "imageLabel": "Image de couverture",
+    "imageHelp": "Taille recommandée : 300x200 pixels. Taille maximale : 2 Mo.",
     "languageLabel": "Langue",
-    "languageSelect": "Sélectionnez une langue",
+    "languageSelect": "Sélectionner une langue",
     "visibilityLabel": "Visibilité",
     "visibilityPrivate": "Privé",
     "visibilityShared": "Partagé",
     "visibilityPublic": "Public",
     "visibilityHelp": {
       "private": "Vous seul pouvez voir ce deck",
-      "shared": "Toute personne avec le lien peut voir ce deck",
+      "shared": "Toute personne ayant le lien peut voir ce deck",
       "public": "Tout le monde peut voir ce deck"
     },
     "createButton": "Créer le deck",
@@ -50,7 +52,7 @@
     "cancelButton": "Annuler"
   },
   "languages": {
-    "select": "Sélectionnez une langue",
+    "select": "Sélectionner une langue",
     "dutch": "Néerlandais",
     "french": "Français",
     "english": "Anglais",
@@ -72,6 +74,11 @@
     "deleteError": "Échec de la suppression du deck",
     "loadError": "Échec du chargement des decks"
   },
-  "deleteConfirm": "Êtes-vous sûr de vouloir supprimer ce deck ?",
+  "deleteModal": {
+    "title": "Confirmer la suppression",
+    "message": "Êtes-vous sûr de vouloir supprimer ce deck ?",
+    "yes": "Oui, supprimer",
+    "no": "Annuler"
+  },
   "loading": "Chargement des decks..."
 }

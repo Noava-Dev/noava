@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using noava.Shared;
 using noava.Models.BlobStorage;
 using Azure.Storage.Blobs.Models;
@@ -8,6 +9,7 @@ namespace noava.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class BlobController : ControllerBase
     {
         private readonly IBlobService _blobService;
@@ -18,17 +20,13 @@ namespace noava.Controllers
             _blobService = blobService;
         }
 
-        // POST: api/blob/upload
         [HttpPost("upload")]
         public async Task<ActionResult> UploadDeckImage(IFormFile file)
         {
-            Console.WriteLine("========== UPLOAD REQUEST ==========");
-            Console.WriteLine($"File: {file?.FileName}");
-
             try
             {
                 if (file == null || file.Length == 0)
-                    return BadRequest(new { error = "No file" });
+                    return BadRequest(new { error = "No file uploaded" });
 
                 var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp" };
                 var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
@@ -37,17 +35,15 @@ namespace noava.Controllers
                     return BadRequest(new { error = "Invalid file type" });
 
                 if (file.Length > 5 * 1024 * 1024)
-                    return BadRequest(new { error = "File too large" });
+                    return BadRequest(new { error = "File too large (max 5MB)" });
 
-                Console.WriteLine("Creating container...");
                 var container = await _blobService.EnsureContainer(new EnsureContainerRequest
                 {
                     ContainerName = DeckImagesContainer,
-                    AccessType = PublicAccessType.None  // Private
+                    AccessType = PublicAccessType.None
                 });
 
                 var blobName = $"{Guid.NewGuid()}{extension}";
-                Console.WriteLine($"Uploading: {blobName}");
 
                 await _blobService.SaveFile(new SaveFileRequest
                 {
@@ -56,24 +52,19 @@ namespace noava.Controllers
                     FormFile = file
                 });
 
-                Console.WriteLine("✅ Upload success!");
                 return Ok(new { blobName });
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"❌ ERROR: {ex.Message}");
-                return StatusCode(500, new { error = ex.Message });
+                return StatusCode(500, new { error = "Upload failed" });
             }
         }
 
-        // GET: api/blob/sas?blobName=xxx
         [HttpGet("sas")]
         public ActionResult GetBlobSasUrl([FromQuery] string blobName)
         {
             if (string.IsNullOrEmpty(blobName))
-            {
                 return BadRequest(new { error = "BlobName required" });
-            }
 
             try
             {
@@ -88,8 +79,7 @@ namespace noava.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"❌ SAS ERROR: {ex.Message}");
-                return StatusCode(500, new { error = ex.Message });
+                return StatusCode(500, new { error = "Failed to generate SAS URL" });
             }
         }
     }

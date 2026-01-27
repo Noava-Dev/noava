@@ -1,13 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using noava.Models;
-using noava.DTOs;
 using noava.Services.Contracts;
+using noava.DTOs;
+using System.Security.Claims;
 
 namespace noava.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    // [Authorize]  // ← COMMENT UIT
+    [Authorize]
     public class DeckController : ControllerBase
     {
         private readonly IDeckService _deckService;
@@ -19,8 +21,9 @@ namespace noava.Controllers
 
         private string GetUserId()
         {
-            // HARDCODED voor testing
-            return "user_38TGbnbcmzK7uZAbaABqTtzQtvz";
+            return User.FindFirstValue("sub")
+                   ?? User.FindFirstValue(ClaimTypes.NameIdentifier)
+                   ?? throw new UnauthorizedAccessException("User ID not found");
         }
 
         [HttpGet]

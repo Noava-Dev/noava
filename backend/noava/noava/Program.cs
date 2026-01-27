@@ -1,5 +1,4 @@
-
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using noava.Data;
@@ -10,7 +9,7 @@ using noava.Services;
 using noava.Services.Contracts;
 using noava.Services.Implementations;
 using noava.Shared;
-using System.Security.Claims;
+using Microsoft.IdentityModel.JsonWebTokens;
 
 namespace noava
 {
@@ -42,8 +41,7 @@ namespace noava
             {
                 options.AddPolicy("Frontend",
                     policy => policy
-                    //.WithOrigins("*")
-                    .AllowAnyOrigin()
+                    .WithOrigins("*")
                         .AllowAnyHeader()
                         .AllowAnyMethod()
                 );
@@ -66,19 +64,33 @@ namespace noava
 
             var clerkAuthority = builder.Configuration["Clerk:FrontendApiUrl"];
 
+          
+
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
                     options.Authority = clerkAuthority;
+                    options.RequireHttpsMetadata = !builder.Environment.IsDevelopment();
+
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
-                        ValidateIssuer = true,
+                        ValidateIssuer = false,
+                        ValidIssuer = clerkAuthority,
                         ValidateAudience = false,
-                        NameClaimType = ClaimTypes.NameIdentifier,
-                        RoleClaimType = ClaimTypes.Role
-                    };
-                });
+                        ValidateLifetime = true,
+                        ClockSkew = TimeSpan.FromMinutes(5),
 
+                        // Custom signature validator for Clerk (required!)
+                        SignatureValidator = (token, parameters) =>
+                        {
+                            var jsonToken = new JsonWebToken(token);
+                            return jsonToken;
+                        },
+
+                        NameClaimType = "sub"
+                    };
+
+                });
 
             builder.Services.AddAuthorization();
 
@@ -98,8 +110,8 @@ namespace noava
 
             app.UseCors("Frontend");
 
-            //app.UseAuthentication();
-            //app.UseMiddleware<RoleClaimsMiddleware>();
+            app.UseAuthentication();
+            app.UseMiddleware<RoleClaimsMiddleware>();
             app.UseAuthorization();
 
             app.MapControllers();

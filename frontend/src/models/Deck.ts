@@ -13,7 +13,6 @@ export interface Deck {
   language: string;
   visibility: DeckVisibility;
   coverImageBlobName?: string;
-  userId: string;
   createdAt: string;
   updatedAt: string;
 }
