@@ -132,7 +132,7 @@ const NotificationPage = () => {
                     <div className="mt-3 w-full">
                       <a
                         href={n.link}
-                        className="inline-flex items-center gap-2 px-3 py-1 bg-primary-500 text-white rounded-full text-sm hover:bg-primary-600 transition-shadow shadow-sm dark:shadow-none dark:bg-primary-600 dark:hover:bg-primary-700"
+                        className="inline-flex items-center gap-2 px-3 py-1 bg-primary-500 text-white rounded-full text-sm transition duration-200 shadow-sm hover:shadow-md hover:bg-primary-600 hover:text-white transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:hover:text-white dark:focus:ring-primary-700"
                         target="_blank"
                         rel="noopener noreferrer"
                       >
