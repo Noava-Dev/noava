@@ -47,10 +47,9 @@ const sidebarTheme: CustomFlowbiteTheme['sidebar'] = {
 };
 
 export function SidebarNav() {
-  const [collapsed, setCollapsed] = useState(true);
+  const [collapsed, setCollapsed] = useState(false);
   const [notificationCount, setNotificationCount] = useState<number>(0);
   const { getCount } = notificationService();
-
   const location = useLocation();
   const sidebarRef = useRef<HTMLDivElement>(null);
   const { user } = useUser();
