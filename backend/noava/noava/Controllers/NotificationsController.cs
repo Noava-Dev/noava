@@ -30,6 +30,18 @@ namespace noava.Controllers
             return Ok(notifications);
         }
 
+        [HttpGet("count")]
+        public async Task<IActionResult> GetMyNotificationCount()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userId == null)
+                return Unauthorized();
+
+            var notifications = await _notificationService.GetNotificationsForUserAsync(userId);
+
+            return Ok(new { count = notifications.Count });
+        }
+
         [HttpGet("{id:long}")]
         public async Task<IActionResult> GetById(long id)
         {

@@ -10,6 +10,7 @@ function Placeholder({ title }: { title: string }) {
 
 import PrivateRoute from "./shared/components/navigation/PrivateRoute";
 import { RoleGroups } from "./models/User"; 
+import NotificationPage from "./pages/Notification/Notification";
 
 export default function AppRoutes() {
     return (
@@ -18,7 +19,7 @@ export default function AppRoutes() {
             <Route path="/decks" element={<Placeholder title="Decks" />} />
             <Route path="/classrooms" element={<Placeholder title="Klassen" />} />
             <Route path="/history" element={<Placeholder title="Geschiedenis" />} />
-            <Route path="/notifications" element={<Placeholder title="Meldingen" />} />
+            <Route path="/notifications" element={<NotificationPage />} />
             <Route path="/settings" element={<SettingsPage/>} />
             <Route path="/faq" element={<FAQ/>}/>
             <Route element={<PrivateRoute allowedRoles={RoleGroups.ALL_AUTHENTICATED} />}>

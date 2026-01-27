@@ -1,4 +1,5 @@
 import { mainItems, bottomItems } from "../components/SidebarItems";
+import { notificationService } from "../../services/NotificationService";
 import { useState, useEffect, useRef } from "react";
 import {
   Sidebar,
@@ -47,6 +48,25 @@ const sidebarTheme: CustomFlowbiteTheme["sidebar"] = {
 
 export function SidebarNav() {
   const [collapsed, setCollapsed] = useState(true);
+  const [notificationCount, setNotificationCount] = useState<number>(0);
+  const { getCount } = notificationService();
+
+  useEffect(() => {
+    async function fetchNotificationCount() {
+      try {
+        const data = await getCount();
+        if (data && typeof data.count === 'number') {
+          setNotificationCount(data.count);
+          console.log("Notification count:", data.count);
+        } else {
+          setNotificationCount(0);
+        }
+      } catch {
+        setNotificationCount(0);
+      }
+    }
+    fetchNotificationCount();
+  }, []);
   const location = useLocation();
   const sidebarRef = useRef<HTMLDivElement>(null);
   const { user } = useUser();
@@ -111,12 +131,11 @@ export function SidebarNav() {
                   icon={item.icon}
                   active={location.pathname == item.href}
                 >
-                  {/* TODO: the badge is hardcoded in sidebarItems but should be dynamically fetched */}
                   <span className="flex items-center justify-between w-full">
                     {item.label}
-                    {item.badge && !collapsed && (
+                    {item.label === "Meldingen" && notificationCount > 0 && !collapsed && (
                       <span className="flex items-center justify-center rounded-full size-5 text-xs text-red-800 bg-red-200">
-                        {item.badge}
+                        {notificationCount}
                       </span>
                     )}
                   </span>
