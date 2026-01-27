@@ -13,30 +13,11 @@ function App() {
   const routesWithoutSidebar = ['/', '/home', '/faq'];
   const showSidebar = !routesWithoutSidebar.includes(location.pathname);
 
-  useEffect(() => {
-    const applyTheme = () => {
-      const theme = localStorage.getItem('theme') || 'light';
-      document.documentElement.classList.toggle('dark', theme === 'dark');
-    };
-
-    applyTheme();
-    window.addEventListener('storage', applyTheme);
-    return () => {
-      window.removeEventListener('storage', applyTheme);
-    };
-  }, []);
-
   //-------------- language ---------------------
-  const [language, setLanguage] = useState(() => {
-    return (
-      localStorage.getItem('preferredLanguage') || i18next.language || 'en'
-    );
-  });
-
   useEffect(() => {
-    i18next.changeLanguage(language);
-    localStorage.setItem('preferredLanguage', language);
-  }, [language]);
+    const lang = localStorage.getItem('preferredLanguage') || 'en';
+    i18next.changeLanguage(lang);
+  }, []);
 
   return (
     <UserRoleProvider>

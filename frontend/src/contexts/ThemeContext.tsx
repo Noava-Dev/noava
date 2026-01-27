@@ -5,7 +5,7 @@ type Theme = 'light' | 'dark';
 
 interface ThemeContextType {
   theme: Theme;
-  toggleTheme: () => void; //
+  toggleTheme: () => void;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
@@ -13,10 +13,14 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 const getInitialTheme = (): Theme => {
   // get set theme from localstorage
   const saved = localStorage.getItem('theme') as Theme | null;
-  if (saved) return saved;
+  if (saved) {
+    document.documentElement.classList.toggle('dark', saved === 'dark');
+    return saved;
+  }
 
   // fallback to system preference
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  document.documentElement.classList.toggle('dark', prefersDark);
   return prefersDark ? 'dark' : 'light';
 };
 
