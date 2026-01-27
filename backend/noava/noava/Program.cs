@@ -54,11 +54,15 @@ namespace noava
             {
                 options.ListenAnyIP(5000);
 
-                options.ListenAnyIP(5001, listenOptions =>
+                if (builder.Environment.IsDevelopment())
                 {
-                    listenOptions.UseHttps();
-                });
+                    options.ListenAnyIP(5001, listenOptions =>
+                    {
+                        listenOptions.UseHttps();
+                    });
+                }
             });
+
             var clerkAuthority = builder.Configuration["Clerk:FrontendApiUrl"];
 
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -88,6 +92,7 @@ namespace noava
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
+		        app.UseHttpsRedirection();
             }
 
             app.UseHttpsRedirection();
