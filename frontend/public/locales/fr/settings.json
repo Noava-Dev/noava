@@ -8,7 +8,7 @@
     "description": "Choisissez votre palette de couleurs préférée",
     "tooltip": "Choisissez entre le mode clair et sombre pour personnaliser l'apparence de l'application.",
     "light": "Clair",
-    "dark": "Sombre"
+    "dark": "Obscur"
   },
   "language": {
     "title": "Langue",
