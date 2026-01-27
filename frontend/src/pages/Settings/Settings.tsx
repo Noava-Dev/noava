@@ -5,29 +5,16 @@ import {
   LuMessageCircleQuestion as Question,
   LuChevronDown as ChevronDown,
 } from 'react-icons/lu';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import PageHeader from '../../shared/components/PageHeader';
 import { SettingsGroup } from './components/SettingsGroup';
 import { useTranslation } from 'react-i18next';
 import { Tooltip, Dropdown, DropdownItem } from 'flowbite-react';
+import { useTheme } from '../../contexts/ThemeContext';
 
 function SettingsPage() {
   //-------------------change theme------------------------------
-  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
-    return (localStorage.getItem('theme') as 'light' | 'dark') || 'light';
-  });
-
-  useEffect(() => {
-    const root = document.documentElement;
-
-    if (theme === 'dark') {
-      root.classList.add('dark');
-    } else {
-      root.classList.remove('dark');
-    }
-
-    localStorage.setItem('theme', theme);
-  }, [theme]);
+  const { theme, toggleTheme } = useTheme();
 
   //--------------------change language-----------------------------
   const { t, i18n } = useTranslation('settings');
@@ -75,13 +62,13 @@ function SettingsPage() {
                 label: t('theme.light'),
                 icon: sun,
                 active: theme === 'light',
-                onClick: () => setTheme('light'),
+                onClick: () => theme === 'dark' && toggleTheme(),
               },
               {
                 label: t('theme.dark'),
                 icon: moon,
                 active: theme === 'dark',
-                onClick: () => setTheme('dark'),
+                onClick: () => theme === 'light' && toggleTheme(),
               },
             ]}
           />
