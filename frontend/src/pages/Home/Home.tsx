@@ -17,6 +17,7 @@ function Home() {
   const { t } = useTranslation('home');
   const { isSignedIn } = useUser();
   const navigate = useNavigate();
+  
   return (
     <>
       <Header />
