@@ -2,13 +2,18 @@ namespace noava.Models
 {
     public class School
     {
-        public int SchoolId { get; set; }
-        public string Name { get; set;}
-        public int OwnerId { get; set; }
-        public int CreatedBy { get; set; }
+        public int Id { get; set; }
+        public required string Name { get; set; } = null!;
 
-        public DateTime CreatedAt = DateTime.Now;
+        public User CreatedBy { get; set; } = null!;
+        //UserId is easier for querying quickly instead of loading the entire user
+        public required int CreatedByUserId { get; set; }
+
+        public ICollection<SchoolAdmin> SchoolAdmins { get; set; } = null!;
+
+
+        public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
     }
-   
+
 }
