@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using noava.DTOs.Classrooms;
 using noava.Services.Contracts;
-using noava.Temp.DTOs.request;
-using noava.Temp.DTOs.response;
 using System.Security.Claims;
 
 namespace noava.Controllers

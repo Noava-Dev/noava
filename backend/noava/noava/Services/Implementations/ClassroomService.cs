@@ -1,9 +1,8 @@
-﻿using noava.Models;
+﻿using noava.DTOs.Classrooms;
+using noava.Mappers.Classrooms;
+using noava.Models;
 using noava.Repositories.Contracts;
 using noava.Services.Contracts;
-using noava.Temp.DTOs.request;
-using noava.Temp.DTOs.response;
-using noava.Temp.Mappers.Classrooms;
 using System.Security.Cryptography;
 
 namespace noava.Services.Implementations

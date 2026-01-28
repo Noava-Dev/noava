@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace noava.Temp.DTOs.response
+namespace noava.DTOs.Classrooms
 {
     public class ClassroomResponseDto
     {

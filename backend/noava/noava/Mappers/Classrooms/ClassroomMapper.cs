@@ -1,8 +1,7 @@
-﻿using noava.Models;
-using noava.Temp.DTOs.request;
-using noava.Temp.DTOs.response;
+﻿using noava.DTOs.Classrooms;
+using noava.Models;
 
-namespace noava.Temp.Mappers.Classrooms
+namespace noava.Mappers.Classrooms
 {
     public static class ClassroomMapper
     {
