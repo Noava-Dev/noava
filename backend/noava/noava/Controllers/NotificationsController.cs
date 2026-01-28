@@ -62,11 +62,7 @@ namespace noava.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (userId == null)
-                return Unauthorized();
-
-            await _notificationService.CreateNotificationAsync(dto, userId);
+            await _notificationService.CreateNotificationAsync(dto);
 
             return CreatedAtAction(nameof(GetMyNotifications), null);
         }

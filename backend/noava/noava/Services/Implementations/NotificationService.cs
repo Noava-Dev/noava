@@ -16,9 +16,9 @@ namespace noava.Services.Implementations
             _repository = repository;
         }
 
-        public async Task<NotificationDto> CreateNotificationAsync(NotificationDto notificationDto, string userId)
+        public async Task<NotificationDto> CreateNotificationAsync(NotificationDto notificationDto)
         {
-            var notification = notificationDto.ToEntity(userId);
+            var notification = notificationDto.ToEntity();
 
             await _repository.AddAsync(notification);
             await _repository.SaveChangesAsync();

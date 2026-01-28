@@ -21,11 +21,11 @@ namespace noava.Mappers.Notifications
             return dto;
         }
 
-        public static Notification ToEntity(this NotificationDto dto, string userId)
+        public static Notification ToEntity(this NotificationDto dto)
         {
             var entity = new Notification
             {
-                UserId = userId,
+                UserId = dto.UserId,
                 Type = dto.Type,
                 TemplateKey = dto.TemplateKey,
                 ParametersJson = dto.ParametersJson,
