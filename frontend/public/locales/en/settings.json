@@ -1,0 +1,18 @@
+{
+  "header": {
+    "title": "Settings",
+    "subtitle": "Personalize your application experience."
+  },
+  "theme": {
+    "title": "Theme",
+    "description": "Select your preferred color scheme",
+    "tooltip": "Choose between light and dark mode to customize the appearance of the application.",
+    "light": "Light",
+    "dark": "Dark"
+  },
+  "language": {
+    "title": "Language",
+    "description": "Choose your preferred language",
+    "tooltip": "Select your preferred language for the application interface."
+  }
+}
