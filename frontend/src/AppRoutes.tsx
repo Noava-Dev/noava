@@ -11,6 +11,7 @@ function Placeholder({ title }: { title: string }) {
 
 import PrivateRoute from './shared/components/navigation/PrivateRoute';
 import { RoleGroups } from './models/User';
+import AdminDashboard from './pages/Admin/Dashboard/AdminDashboard';
 
 export default function AppRoutes() {
   return (
@@ -30,6 +31,13 @@ export default function AppRoutes() {
         <Route path="/dashboard" />
       </Route>
       <Route path="*" element={<NotFound />} />
+
+      {/* Admin routes */}
+      <Route element={<PrivateRoute allowedRoles={RoleGroups.ADMIN_ONLY} />}>
+        <Route path="/admin">
+          <Route path="dashboard" element={<AdminDashboard />} />
+        </Route>
+      </Route>
     </Routes>
   );
 }
