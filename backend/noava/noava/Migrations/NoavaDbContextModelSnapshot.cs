@@ -357,6 +357,8 @@ namespace noava.Migrations
                     b.HasIndex("NotificationId");
 
                     b.ToTable("NotificationActions");
+                });
+
             modelBuilder.Entity("noava.Models.StudySessions", b =>
                 {
                     b.Property<int>("Id")
@@ -444,6 +446,8 @@ namespace noava.Migrations
             modelBuilder.Entity("noava.Models.User", b =>
                 {
                     b.Navigation("Notifications");
+                });
+
             modelBuilder.Entity("noava.Models.Card", b =>
                 {
                     b.HasOne("noava.Models.Deck", null)
