@@ -33,9 +33,7 @@ export default function AppRoutes() {
       <Route path="*" element={<NotFound />} />
 
       {/* Admin routes */}
-      {/* <Route element={<PrivateRoute allowedRoles={RoleGroups.ADMIN_ONLY} />}> */}
-      <Route
-        element={<PrivateRoute allowedRoles={RoleGroups.ALL_AUTHENTICATED} />}>
+      <Route element={<PrivateRoute allowedRoles={RoleGroups.ADMIN_ONLY} />}>
         <Route path="/admin">
           <Route path="dashboard" element={<AdminDashboard />} />
         </Route>
