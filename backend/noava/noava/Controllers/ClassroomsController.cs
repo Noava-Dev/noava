@@ -23,6 +23,9 @@ namespace noava.Controllers
         [HttpPost]
         public async Task<ActionResult<ClassroomResponseDto>> Create([FromBody] ClassroomRequestDto request)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userId == null)
                 return Unauthorized();
@@ -31,7 +34,7 @@ namespace noava.Controllers
 
             return CreatedAtAction(
                 nameof(GetById),
-                new { id = result.Id },
+                new { id = result.Id, userId},
                 result);
         }
 
