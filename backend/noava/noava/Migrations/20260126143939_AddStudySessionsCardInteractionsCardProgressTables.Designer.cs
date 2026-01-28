@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using noava.Data;
@@ -11,9 +12,11 @@ using noava.Data;
 namespace noava.Migrations
 {
     [DbContext(typeof(NoavaDbContext))]
-    partial class NoavaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260126143939_AddStudySessionsCardInteractionsCardProgressTables")]
+    partial class AddStudySessionsCardInteractionsCardProgressTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,46 +33,7 @@ namespace noava.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("BackAudio")
-                        .HasColumnType("text");
-
-                    b.Property<string>("BackImage")
-                        .HasColumnType("text");
-
-                    b.Property<string>("BackText")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasDefaultValueSql("now()");
-
-                    b.Property<int>("DeckId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("FrontAudio")
-                        .HasColumnType("text");
-
-                    b.Property<string>("FrontImage")
-                        .HasColumnType("text");
-
-                    b.Property<string>("FrontText")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Memo")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasDefaultValueSql("now()");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("DeckId");
 
                     b.ToTable("Cards");
                 });
@@ -199,88 +163,15 @@ namespace noava.Migrations
 
             modelBuilder.Entity("noava.Models.Deck", b =>
                 {
-                    b.Property<int>("DeckId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("DeckId"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("CoverImageBlobName")
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(1000)
-                        .HasColumnType("character varying(1000)");
-
-                    b.Property<string>("Language")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<int>("Visibility")
-                        .HasColumnType("integer");
-
-                    b.HasKey("DeckId");
-
-                    b.HasIndex("UserId");
+                    b.HasKey("Id");
 
                     b.ToTable("Decks");
-
-                    b.HasData(
-                        new
-                        {
-                            DeckId = 1,
-                            CreatedAt = new DateTime(2026, 1, 26, 12, 23, 31, 803, DateTimeKind.Utc).AddTicks(8118),
-                            Description = "Franse woorden voor beginners",
-                            Language = "Frans",
-                            Title = "Frans Woordenschat",
-                            UpdatedAt = new DateTime(2026, 1, 26, 12, 23, 31, 803, DateTimeKind.Utc).AddTicks(8119),
-                            UserId = "user_38TGbnbcmzK7uZAbaABqTtzQtvz",
-                            Visibility = 0
-                        },
-                        new
-                        {
-                            DeckId = 2,
-                            CreatedAt = new DateTime(2026, 1, 26, 12, 23, 31, 803, DateTimeKind.Utc).AddTicks(8121),
-                            Description = "Engelse grammatica oefeningen",
-                            Language = "Engels",
-                            Title = "Engels Grammatica",
-                            UpdatedAt = new DateTime(2026, 1, 26, 12, 23, 31, 803, DateTimeKind.Utc).AddTicks(8121),
-                            UserId = "user_38TGbnbcmzK7uZAbaABqTtzQtvz",
-                            Visibility = 2
-                        },
-                        new
-                        {
-                            DeckId = 3,
-                            CreatedAt = new DateTime(2026, 1, 26, 12, 23, 31, 803, DateTimeKind.Utc).AddTicks(8123),
-                            Description = "Spaanse zinnen voor dagelijks gebruik",
-                            Language = "Spaans",
-                            Title = "Spaans Conversatie",
-                            UpdatedAt = new DateTime(2026, 1, 26, 12, 23, 31, 803, DateTimeKind.Utc).AddTicks(8123),
-                            UserId = "user_38TGbnbcmzK7uZAbaABqTtzQtvz",
-                            Visibility = 1
-                        });
                 });
 
             modelBuilder.Entity("noava.Models.FAQ", b =>
@@ -421,15 +312,6 @@ namespace noava.Migrations
                     b.HasKey("ClerkId");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("noava.Models.Card", b =>
-                {
-                    b.HasOne("noava.Models.Deck", null)
-                        .WithMany()
-                        .HasForeignKey("DeckId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("noava.Models.CardInteractions", b =>

@@ -34,6 +34,8 @@ namespace noava
 
 
 
+            builder.Services.AddScoped<ILeitnerBoxService, LeitnerBoxService>();
+
 
 
             // Add services to the container.
