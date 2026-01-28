@@ -30,6 +30,8 @@ namespace noava
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IDeckRepository, DeckRepository>();
             builder.Services.AddScoped<ICardRepository, CardRepository>();
+            builder.Services.AddScoped<IClassroomRepository, ClassroomRepository>();
+            builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 
             builder.Services.AddScoped<IFaqService, FaqService>();
             builder.Services.AddScoped<IUserService, UserService>();
@@ -38,10 +40,12 @@ namespace noava
             builder.Services.AddScoped<ICardService, CardService>();
 
 
+            builder.Services.AddScoped<INotificationService, NotificationService>();
+
+
 
             builder.Services.AddScoped<ILeitnerBoxService, LeitnerBoxService>();
-
-
+            builder.Services.AddScoped<IClassroomService, ClassroomService>();
 
             // Add services to the container.
             builder.Services.AddCors(options =>
@@ -54,7 +58,14 @@ namespace noava
                 );
             });
 
-            builder.Services.AddControllers();
+            builder.Services
+                .AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.Converters.Add(
+                        new System.Text.Json.Serialization.JsonStringEnumConverter()
+                    );
+                });
 
             builder.WebHost.ConfigureKestrel(options =>
             {
@@ -85,8 +96,6 @@ namespace noava
                         ValidateAudience = false,
                         ValidateLifetime = true,
                         RoleClaimType = ClaimTypes.Role
-
-
                     };
 
                 });
