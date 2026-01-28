@@ -1,13 +1,15 @@
-
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using noava.Data;
+using noava.Repositories;
 using noava.Repositories.Contracts;
 using noava.Repositories.Implementations;
+using noava.Services;
 using noava.Services.Contracts;
 using noava.Services.Implementations;
-using System.Security.Claims;
+using noava.Shared;
+using Microsoft.IdentityModel.JsonWebTokens;
 
 namespace noava
 {
@@ -23,12 +25,18 @@ namespace noava
 
             builder.Services.AddScoped<IFaqRepository, FaqRepository>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
-            builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
+            builder.Services.AddScoped<IDeckRepository, DeckRepository>();
             builder.Services.AddScoped<IClassroomRepository, ClassroomRepository>();
+            builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 
             builder.Services.AddScoped<IFaqService, FaqService>();
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IDeckService, DeckService>();
+            builder.Services.AddScoped<IBlobService, BlobService>();
             builder.Services.AddScoped<INotificationService, NotificationService>();
+
+
+
             builder.Services.AddScoped<ILeitnerBoxService, LeitnerBoxService>();
             builder.Services.AddScoped<IClassroomService, ClassroomService>();
 
@@ -67,19 +75,25 @@ namespace noava
 
             var clerkAuthority = builder.Configuration["Clerk:FrontendApiUrl"];
 
+          
+
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
                     options.Authority = clerkAuthority;
+                    options.RequireHttpsMetadata = !builder.Environment.IsDevelopment();
+
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = true,
                         ValidateAudience = false,
-                        NameClaimType = ClaimTypes.NameIdentifier,
-                        RoleClaimType = ClaimTypes.Role
-                    };
-                });
+                        ValidateLifetime = true,
+                        ClockSkew = TimeSpan.FromMinutes(5),
 
+                
+                    };
+
+                });
 
             builder.Services.AddAuthorization();
 
@@ -94,7 +108,7 @@ namespace noava
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
-		        app.UseHttpsRedirection();
+		        //app.UseHttpsRedirection();
             }
 
             app.UseCors("Frontend");

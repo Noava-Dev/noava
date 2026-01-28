@@ -1,6 +1,7 @@
+import FAQ from "./pages/FAQ/FAQ";
+import Home from "./pages/Home/Home"
+import Decks from "./pages/Decks/Decks";
 import { Route, Routes } from 'react-router-dom';
-import FAQ from './pages/FAQ/FAQ';
-import Home from './pages/Home/Home';
 import NotFound from './pages/NotFound/NotFound';
 import SettingsPage from './pages/Settings/Settings';
 import NoavaFooter from './shared/components/NoavaFooter';
@@ -24,7 +25,7 @@ export default function AppRoutes() {
       <Route path="/faq" element={<FAQ />} />
       <Route
         element={<PrivateRoute allowedRoles={RoleGroups.ALL_AUTHENTICATED} />}>
-        <Route path="/decks" element={<Placeholder title="Decks" />} />
+        <Route path="/decks" element={<Decks />} />
         <Route path="/dashboard" />
       </Route>
       <Route path="*" element={<NotFound />} />

@@ -30,7 +30,8 @@ export const useApi = (): AxiosInstance => {
         try {
           await clerkReadyRef.current?.promise;
 
-          const token = await getToken({ template: "default" }).catch(() => null);
+          const token = await getToken();
+
           if (token) config.headers.Authorization = `Bearer ${token}`;
         } catch (err) {}
 

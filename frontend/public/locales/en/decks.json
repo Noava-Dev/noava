@@ -1,0 +1,84 @@
+{
+  "title": "Decks",
+  "subtitle": "Organize your flashcards into subject-specific decks",
+  "createButton": "Create Deck",
+  "search": {
+    "label": "Search"
+  },
+  "sort": {
+    "label": "Sort by",
+    "newest": "Newest first",
+    "oldest": "Oldest first"
+  },
+  "results": {
+    "showing": "Showing",
+    "of": "of",
+    "decks": "decks",
+    "found": "results found"
+  },
+  "empty": {
+    "title": "No decks yet",
+    "message": "Create your first deck to get started!",
+    "button": "Create Your First Deck",
+    "noResults": "No decks found",
+    "clearSearch": "Clear search"
+  },
+  "card": {
+    "edit": "Edit",
+    "delete": "Delete"
+  },
+  "modal": {
+    "createTitle": "Create New Deck",
+    "editTitle": "Edit Deck",
+    "titleLabel": "Title",
+    "titlePlaceholder": "e.g., French Vocabulary",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "Describe your deck...",
+    "imageLabel": "Cover Image",
+    "imageHelp": "Recommended size: 300x200 pixels. Max size: 2MB.",
+    "languageLabel": "Language",
+    "languageSelect": "Select a language",
+    "visibilityLabel": "Visibility",
+    "visibilityPrivate": "Private",
+    "visibilityShared": "Shared",
+    "visibilityPublic": "Public",
+    "visibilityHelp": {
+      "private": "Only you can see this deck",
+      "shared": "Anyone with the link can see this deck",
+      "public": "Everyone can see this deck"
+    },
+    "createButton": "Create Deck",
+    "updateButton": "Update Deck",
+    "cancelButton": "Cancel"
+  },
+  "languages": {
+    "select": "Select a language",
+    "dutch": "Dutch",
+    "french": "French",
+    "english": "English",
+    "german": "German",
+    "spanish": "Spanish",
+    "italian": "Italian"
+  },
+  "visibility": {
+    "public": "Public",
+    "shared": "Shared",
+    "private": "Private"
+  },
+  "toast": {
+    "createSuccess": "Deck created successfully!",
+    "updateSuccess": "Deck updated successfully!",
+    "deleteSuccess": "Deck deleted successfully!",
+    "createError": "Failed to create deck",
+    "updateError": "Failed to update deck",
+    "deleteError": "Failed to delete deck",
+    "loadError": "Failed to load decks"
+  },
+  "deleteModal": {
+    "title": "Confirm Deletion",
+    "message": "Are you sure you want to delete this deck?",
+    "yes": "Yes, delete",
+    "no": "Cancel"
+  },
+  "loading": "Loading decks..."
+}
