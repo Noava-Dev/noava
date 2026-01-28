@@ -10,7 +10,7 @@ namespace noava.DTOs.Notifications
         public string TemplateKey { get; set; } = string.Empty;
         public string? ParametersJson { get; set; }
         public string? Link { get; set; }
-        public List<NotificationActionDto>? Actions { get; set; } = new List<NotificationActionDto>();
+        public ICollection<NotificationActionDto>? Actions { get; set; } = new List<NotificationActionDto>();
         public DateTime? CreatedAt { get; set; }
     }
 }
