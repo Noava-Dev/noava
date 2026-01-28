@@ -1,0 +1,33 @@
+{
+    "title": "Meldingen",
+    "empty": "Geen meldingen",
+    "view": "Meer info",
+    "tooltip": {
+        "delete": "Verwijder notificatie"
+    },
+    "aria": {
+        "deleteNotification": "Verwijder notificatie"
+    },
+    "errors": {
+        "title": "Fout",
+        "fetch": "Meldingen konden niet worden opgehaald",
+        "delete": "Kon melding niet verwijderen",
+        "action": "Actie kon niet worden uitgevoerd",
+        "params": "Ongeldige notificatie-parameters"
+    },
+    "notifications": {
+        "genericTitle": "Notificatie",
+        "received": "Je hebt een nieuwe melding",
+        "items": {
+            "classroom": {
+                "invite": {
+                    "received": "Je bent uitgenodigd voor {{classroomName}} door {{teacherName}}",
+                    "actions": {
+                        "accept": "Uitnodiging accepteren",
+                        "deny": "Afwijzen"
+                    }
+                }
+            }
+        }
+    }
+}

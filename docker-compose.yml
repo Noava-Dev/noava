@@ -23,7 +23,15 @@ services:
       context: ./backend
       dockerfile: Dockerfile.migrate
     working_dir: /app
-    command: ["dotnet", "ef", "database", "update", "--project", "./noava/noava.csproj"]
+    command:
+      [
+        'dotnet',
+        'ef',
+        'database',
+        'update',
+        '--project',
+        './noava/noava.csproj',
+      ]
     env_file:
       - ./.env
     depends_on:
