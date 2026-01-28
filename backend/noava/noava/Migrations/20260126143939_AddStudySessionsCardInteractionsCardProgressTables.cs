@@ -13,16 +13,32 @@ namespace noava.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Cards",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Cards", x => x.Id);
-                });
+                    name: "Cards",
+                    columns: table => new
+                    {
+                        Id = table.Column<int>(type: "integer", nullable: false)
+                            .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        DeckId = table.Column<int>(type: "integer", nullable: false),
+                        FrontText = table.Column<string>(type: "text", nullable: false),
+                        BackText = table.Column<string>(type: "text", nullable: false),
+                        FrontImage = table.Column<string>(type: "text", nullable: true),
+                        FrontAudio = table.Column<string>(type: "text", nullable: true),
+                        BackImage = table.Column<string>(type: "text", nullable: true),
+                        BackAudio = table.Column<string>(type: "text", nullable: true),
+                        Memo = table.Column<string>(type: "text", nullable: true),
+                        CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
+                        UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()")
+                    },
+                    constraints: table =>
+                    {
+                        table.PrimaryKey("PK_Cards", x => x.Id);
+                        table.ForeignKey(
+                            name: "FK_Cards_Decks_DeckId",
+                            column: x => x.DeckId,
+                            principalTable: "Decks",
+                            principalColumn: "DeckId",
+                            onDelete: ReferentialAction.Cascade);
+                    });
 
             migrationBuilder.CreateTable(
                 name: "StudySessions",
@@ -46,7 +62,7 @@ namespace noava.Migrations
                         name: "FK_StudySessions_Decks_DeckId",
                         column: x => x.DeckId,
                         principalTable: "Decks",
-                        principalColumn: "Id",
+                        principalColumn: "DeckId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_StudySessions_Users_ClerkId",
@@ -125,7 +141,7 @@ namespace noava.Migrations
                         name: "FK_CardInteractions_Decks_DeckId",
                         column: x => x.DeckId,
                         principalTable: "Decks",
-                        principalColumn: "Id",
+                        principalColumn: "DeckId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_CardInteractions_StudySessions_StudySessionId",

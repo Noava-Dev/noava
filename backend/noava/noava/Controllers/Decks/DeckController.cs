@@ -21,9 +21,10 @@ namespace noava.Controllers
 
         private string GetUserId()
         {
-            return User.FindFirstValue("sub")
-                   ?? User.FindFirstValue(ClaimTypes.NameIdentifier)
-                   ?? throw new UnauthorizedAccessException("User ID not found");
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userId == null)
+               throw new UnauthorizedAccessException("User ID not found");
+            return userId;
         }
 
         [HttpGet]

@@ -12,6 +12,7 @@ function Placeholder({ title }: { title: string }) {
 
 import PrivateRoute from './shared/components/navigation/PrivateRoute';
 import { RoleGroups } from './models/User';
+import FlashcardDetail from "./pages/Flashcards/FlashcardDetail";
 
 export default function AppRoutes() {
   return (
@@ -30,6 +31,7 @@ export default function AppRoutes() {
         element={<PrivateRoute allowedRoles={RoleGroups.ALL_AUTHENTICATED} />}>
         <Route path="/dashboard" />
       </Route>
+      <Route path="/decks/:deckId/cards" element={<FlashcardDetail />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
