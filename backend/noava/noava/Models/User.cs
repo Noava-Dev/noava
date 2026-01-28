@@ -11,5 +11,6 @@ namespace noava.Models
         public UserRole Role { get; set; } = UserRole.USER;
 
         public ICollection<Notification> Notifications { get; set; } = new List<Notification>();
+        public ICollection<ClassroomUser> ClassroomUsers { get; set; } = new List<ClassroomUser>();
     }
 }

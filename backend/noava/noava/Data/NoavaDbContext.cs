@@ -20,6 +20,8 @@ namespace noava.Data
         public DbSet<CardProgress> CardProgress { get; set; }
         public DbSet<CardInteractions> CardInteractions { get; set; }
         public DbSet<StudySessions> StudySessions { get; set; }
+        public DbSet<Classroom> Classrooms { get; set; }
+        public DbSet<ClassroomUser> ClassroomUsers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

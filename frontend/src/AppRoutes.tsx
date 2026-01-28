@@ -17,7 +17,6 @@ export default function AppRoutes() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="/decks" element={<Placeholder title="Decks" />} />
       <Route path="/classrooms" element={<Placeholder title="Klassen" />} />
       <Route path="/history" element={<Placeholder title="Geschiedenis" />} />
       <Route path="/notifications" element={<NotificationPage />} />
@@ -25,6 +24,7 @@ export default function AppRoutes() {
       <Route path="/faq" element={<FAQ />} />
       <Route
         element={<PrivateRoute allowedRoles={RoleGroups.ALL_AUTHENTICATED} />}>
+        <Route path="/decks" element={<Placeholder title="Decks" />} />
         <Route path="/dashboard" />
       </Route>
       <Route path="*" element={<NotFound />} />
