@@ -28,6 +28,7 @@
     "delete": "Supprimer"
   },
   "modal": {
+    "loading": "Chargement du deck...",
     "createTitle": "Créer un nouveau deck",
     "editTitle": "Modifier le deck",
     "titleLabel": "Titre",

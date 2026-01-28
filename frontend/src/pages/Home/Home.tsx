@@ -23,9 +23,9 @@ function Home() {
       <Header />
 
       {/* Hero Section */}
-      <section className="py-16 text-center bg-gray dark:bg-gray-800">
-        <div className="container px-4 mx-auto">
-          <h1 className="mb-4 text-4xl font-extrabold tracking-tight text-white md:text-5xl lg:text-6xl">
+       <section className="py-16 bg-gray-900 dark:bg-gray-900">
+        <div className="container max-w-4xl px-4 py-16 mx-auto text-center">
+          <h1 className="mb-6 text-4xl font-bold tracking-tight text-white md:text-5xl">
             {t('hero.title')}
           </h1>
           <p className="max-w-2xl mx-auto mb-8 text-lg font-normal text-gray-300">

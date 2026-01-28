@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { HiX, HiUpload } from 'react-icons/hi';
 import { DeckVisibility, type Deck, type CreateDeckRequest } from '../../models/Deck';
 import { useAzureBlobService } from '../../services/AzureBlobService';
-
+import { useToast } from '../../contexts/ToastContext';
 interface DeckModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -23,6 +23,7 @@ function DeckModal({ isOpen, onClose, onSubmit, deck }: DeckModalProps) {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
+  const {  showError } = useToast();
 
   useEffect(() => {
     if (deck) {
@@ -94,7 +95,7 @@ function DeckModal({ isOpen, onClose, onSubmit, deck }: DeckModalProps) {
       setImagePreview(null);
       setImageFile(null);
     } catch (error) {
-      alert('Failed to upload image. Please try again.');
+      showError(t('toast.uploadError'), t('toast.uploadError'));
     } finally {
       setUploading(false);
     }

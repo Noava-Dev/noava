@@ -28,7 +28,7 @@
     "delete": "Delete"
   },
   "modal": {
-    "createTitle": "Create New Deck",
+    "loading": "Loading deck...",    "createTitle": "Create New Deck",
     "editTitle": "Edit Deck",
     "titleLabel": "Title",
     "titlePlaceholder": "e.g., French Vocabulary",
@@ -72,7 +72,9 @@
     "createError": "Failed to create deck",
     "updateError": "Failed to update deck",
     "deleteError": "Failed to delete deck",
-    "loadError": "Failed to load decks"
+    "loadError": "Failed to load decks",
+    "uploadError": "Failed to upload image"
+    
   },
   "deleteModal": {
     "title": "Confirm Deletion",

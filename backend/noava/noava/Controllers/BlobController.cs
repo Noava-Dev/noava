@@ -28,7 +28,7 @@ namespace noava.Controllers
                 if (file == null || file.Length == 0)
                     return BadRequest(new { error = "No file uploaded" });
 
-                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp" };
+                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".webp" };
                 var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
 
                 if (!allowedExtensions.Contains(extension))

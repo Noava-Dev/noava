@@ -28,6 +28,7 @@
     "delete": "Verwijderen"
   },
   "modal": {
+    "loading": "Deck laden...",
     "createTitle": "Nieuw Deck Aanmaken",
     "editTitle": "Deck Bewerken",
     "titleLabel": "Titel",

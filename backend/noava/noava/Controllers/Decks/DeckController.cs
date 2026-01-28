@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using noava.Models;
-using noava.Services.Contracts;
-using noava.DTOs;
+using noava.Services.Interfaces;
+using noava.DTOs.Request;
+using noava.DTOs.Response;
 using System.Security.Claims;
 
 namespace noava.Controllers
@@ -21,21 +21,20 @@ namespace noava.Controllers
 
         private string GetUserId()
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (userId == null)
-               throw new UnauthorizedAccessException("User ID not found");
-            return userId;
+            return User.FindFirstValue("sub")
+                   ?? User.FindFirstValue(ClaimTypes.NameIdentifier)
+                   ?? throw new UnauthorizedAccessException("User ID not found");
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Deck>>> GetAllDecks()
+        public async Task<ActionResult<List<DeckResponse>>> GetAllDecks()
         {
             var decks = await _deckService.GetAllDecksAsync();
             return Ok(decks);
         }
 
         [HttpGet("user")]
-        public async Task<ActionResult<List<Deck>>> GetMyDecks()
+        public async Task<ActionResult<List<DeckResponse>>> GetMyDecks()
         {
             var userId = GetUserId();
             var decks = await _deckService.GetUserDecksAsync(userId);
@@ -43,7 +42,7 @@ namespace noava.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Deck>> GetDeck(int id)
+        public async Task<ActionResult<DeckResponse>> GetDeck(int id)
         {
             var deck = await _deckService.GetDeckByIdAsync(id);
             if (deck == null) return NotFound();
@@ -51,40 +50,18 @@ namespace noava.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Deck>> CreateDeck([FromBody] CreateDeckRequest request)
+        public async Task<ActionResult<DeckResponse>> CreateDeck([FromBody] DeckRequest request)
         {
             var userId = GetUserId();
-
-            var deck = new Deck
-            {
-                Title = request.Title,
-                Description = request.Description,
-                Language = request.Language,
-                Visibility = request.Visibility,
-                CoverImageBlobName = request.CoverImageBlobName,
-                UserId = userId
-            };
-
-            var createdDeck = await _deckService.CreateDeckAsync(deck);
+            var createdDeck = await _deckService.CreateDeckAsync(request, userId);
             return CreatedAtAction(nameof(GetDeck), new { id = createdDeck.DeckId }, createdDeck);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<Deck>> UpdateDeck(int id, [FromBody] UpdateDeckRequest request)
+        public async Task<ActionResult<DeckResponse>> UpdateDeck(int id, [FromBody] DeckRequest request)
         {
             var userId = GetUserId();
-
-            var deck = new Deck
-            {
-                Title = request.Title,
-                Description = request.Description,
-                Language = request.Language,
-                Visibility = request.Visibility,
-                CoverImageBlobName = request.CoverImageBlobName,
-                UserId = userId
-            };
-
-            var updatedDeck = await _deckService.UpdateDeckAsync(id, deck, userId);
+            var updatedDeck = await _deckService.UpdateDeckAsync(id, request, userId);
             if (updatedDeck == null) return NotFound();
             return Ok(updatedDeck);
         }

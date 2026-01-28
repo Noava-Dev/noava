@@ -18,7 +18,10 @@ export default function AppRoutes() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="/decks" element={<Decks />} />
+      <Route path="/decks" element={<PrivateRoute allowedRoles={RoleGroups.ALL_AUTHENTICATED} />}>
+          <Route index element={<Decks />} />
+          <Route path=":deckId/cards" element={<FlashcardDetail />} />
+      </Route>
       <Route path="/classrooms" element={<Placeholder title="Klassen" />} />
       <Route path="/history" element={<Placeholder title="Geschiedenis" />} />
       <Route
@@ -31,7 +34,7 @@ export default function AppRoutes() {
         element={<PrivateRoute allowedRoles={RoleGroups.ALL_AUTHENTICATED} />}>
         <Route path="/dashboard" />
       </Route>
-      <Route path="/decks/:deckId/cards" element={<FlashcardDetail />} />
+      
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

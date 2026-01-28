@@ -12,6 +12,7 @@ using noava.Shared;
 using Microsoft.IdentityModel.JsonWebTokens;
 using noava.Services.Interfaces;
 using noava.Repositories.Interfaces;
+using System.Security.Claims;
 
 namespace noava
 {
@@ -83,9 +84,9 @@ namespace noava
                         ValidateIssuer = true,
                         ValidateAudience = false,
                         ValidateLifetime = true,
-                        ClockSkew = TimeSpan.FromMinutes(5),
+                        RoleClaimType = ClaimTypes.Role
 
-                
+
                     };
 
                 });
