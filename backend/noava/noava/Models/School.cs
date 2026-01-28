@@ -2,14 +2,13 @@ namespace noava.Models
 {
     public class School
     {
-        public int Id { get; set; }
+        public int SchoolId { get; set; }
         public string Name { get; set;}
-        public string? Description { get; set; }
+        public int OwnerId { get; set; }
+        public int CreatedBy { get; set; }
 
-        //a collection of schooladmins or a collection of users with the role school admin?
-        public Icollection<SchoolAdmin> Admins { get; set;} = new List<SchoolAdmin>();
-
-        //dateTime could be added here but is it necessary?
+        public DateTime CreatedAt = DateTime.Now;
+        public DateTime UpdatedAt { get; set; }
     }
    
 }
