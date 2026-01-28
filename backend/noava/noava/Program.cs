@@ -74,20 +74,12 @@ namespace noava
 
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
-                        ValidateIssuer = false,
-                        ValidIssuer = clerkAuthority,
+                        ValidateIssuer = true,
                         ValidateAudience = false,
                         ValidateLifetime = true,
                         ClockSkew = TimeSpan.FromMinutes(5),
 
-                        // Custom signature validator for Clerk (required!)
-                        SignatureValidator = (token, parameters) =>
-                        {
-                            var jsonToken = new JsonWebToken(token);
-                            return jsonToken;
-                        },
-
-                        NameClaimType = "sub"
+                
                     };
 
                 });
