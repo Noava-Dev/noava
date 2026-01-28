@@ -9,8 +9,6 @@
         DeckUpdated,
         DeckCommentAdded,
         DeckStudyReminder,
-        FriendRequestReceived,
-        FriendRequestAccepted,
         SystemAlert,
         SystemMaintenance
     }

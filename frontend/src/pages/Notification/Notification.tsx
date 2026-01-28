@@ -103,10 +103,9 @@ const NotificationPage = () => {
                 >
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-baseline gap-2">
-                        <div className="text-sm font-medium text-gray-700 dark:text-gray-200">{t('notifications.genericTitle')}</div>
-                        <div className="text-sm text-gray-500 dark:text-gray-400">-</div>
-                        <div className="text-sm text-gray-500 dark:text-gray-400">{formatDateToEuropean(n.createdAt)}</div>
+                      <div>
+                        <div className="text-lg md:text-xl font-semibold text-gray-900 dark:text-white">{t('notifications.genericTitle')}</div>
+                        <div className="mt-1 text-xs md:text-sm text-gray-500 dark:text-gray-400">{formatDateToEuropean(n.createdAt)}</div>
                       </div>
 
                       <div className="mt-2 text-base text-gray-800 dark:text-gray-100 whitespace-normal break-words break-all">
@@ -141,12 +140,12 @@ const NotificationPage = () => {
                     </div>
                   )}
 
-                  <div className="mt-4 w-full flex justify-end flex-wrap gap-2">
+                  <div className="mt-4 w-full flex justify-end gap-2 overflow-auto">
                     {n.actions.map((action) => (
                       <Button
                         key={action.labelKey}
                         size="xs"
-                        className="whitespace-normal max-w-full break-words bg-white text-gray-800 hover:bg-gray-100 dark:bg-primary-600 dark:text-white dark:hover:bg-primary-700 border border-gray-200 dark:border-transparent"
+                        className="whitespace-nowrap bg-white text-gray-800 hover:bg-gray-100 dark:bg-primary-600 dark:text-white dark:hover:bg-primary-700 border border-gray-200 dark:border-transparent"
                         onClick={() => handleAction(n, action)}
                         disabled={processingId === n.id}
                       >

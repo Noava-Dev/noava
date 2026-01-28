@@ -95,8 +95,6 @@ namespace noava
 		        app.UseHttpsRedirection();
             }
 
-            app.UseHttpsRedirection();
-
             app.UseCors("Frontend");
 
             app.UseAuthentication();
