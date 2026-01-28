@@ -7,7 +7,7 @@ namespace noava.Models
 
         public User CreatedBy { get; set; } = null!;
         //UserId is easier for querying quickly instead of loading the entire user
-        public required int CreatedByUserId { get; set; }
+        public required string CreatedByUserId { get; set; }
 
         public ICollection<SchoolAdmin> SchoolAdmins { get; set; } = null!;
 

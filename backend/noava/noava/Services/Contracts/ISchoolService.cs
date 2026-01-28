@@ -8,10 +8,10 @@ namespace noava.Services.Contracts
         Task<School?> GetSchoolByIdAsync(int id);
         Task<School> CreateSchoolAsync(
                 string name,
-                int createdByUserId,
-                IEnumerable<int> adminUserIds
+                string createdByUserId,
+                IEnumerable<string> adminUserIds
             );
-        Task<School> UpdateSchoolAsync(School school);
+        Task<School> UpdateSchoolAsync(int schoolId, string name);
         Task DeleteSchoolAsync(int id);
     }
 }

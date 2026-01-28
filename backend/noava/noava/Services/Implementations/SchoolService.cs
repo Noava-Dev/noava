@@ -1,5 +1,6 @@
 ﻿using noava.Models;
 using noava.Repositories.Contracts;
+using noava.Repositories.Implementations;
 using noava.Services.Contracts;
 
 namespace noava.Services.Implementations
@@ -7,13 +8,18 @@ namespace noava.Services.Implementations
     public class SchoolService : ISchoolService
     {
         private readonly ISchoolRepository _schoolRepository;
+        private readonly ISchoolAdminRepository _schoolAdminRepository;
+        private readonly IUserRepository _userRepository;
 
-        public SchoolService(ISchoolRepository schoolRepository)
+        public SchoolService(ISchoolRepository schoolRepository, ISchoolAdminRepository schoolAdminRepository, IUserRepository userRepository)
         {
             _schoolRepository = schoolRepository;
+            _schoolAdminRepository = schoolAdminRepository;
+            _userRepository = userRepository;
         }
 
-        public async Task<List<School>> GetSchoolsAsync()
+
+        public async Task<List<School>> GetAllSchoolsAsync()
         {
             return await _schoolRepository.GetAllSchoolsAsync();
         }
@@ -32,48 +38,20 @@ namespace noava.Services.Implementations
 
         // add and delete SchoolAdmins instead of adding all the logic inside UpdateSchoolAsync
         //add SchoolAdmins:
-        public async Task AddSchoolAdminsAsync(int schoolId, IEnumerable<int> newAdminUserIds)
+        public async Task AddSchoolAdminsAsync(int schoolId, IEnumerable<string> newAdminUserIds)
         {
-            var school = await _schoolRepository.GetSchoolByIdAsync(schoolId);
-            if (school is null)
-                throw new InvalidOperationException("School not found.");
-
-            var existingAdminIds = school.SchoolAdmins.Select(a => a.UserId).ToList();
-
-            foreach (var userId in newAdminUserIds.Distinct())
-            {
-                if (!existingAdminIds.Contains(userId))
-                {
-                    school.SchoolAdmins.Add(new SchoolAdmin
-                    {
-                        SchoolId = school.Id,
-                        UserId = userId
-                    });
-                }
-            }
-
-            school.UpdatedAt = DateTime.UtcNow;
-            await _schoolRepository.UpdateSchoolAsync(school);
+            await _schoolAdminRepository.AddAdminsAsync(schoolId, newAdminUserIds);
         }
 
         //remove admins
-        public async Task RemoveSchoolAdminsAsync(int schoolId, IEnumerable<int> adminUserIdsToRemove)
+        public async Task RemoveSchoolAdminsAsync(int schoolId, IEnumerable<string> adminUserIdsToRemove)
         {
-            var school = await _schoolRepository.GetSchoolByIdAsync(schoolId);
-            if (school is null)
-                throw new InvalidOperationException("School not found.");
-
-            school.SchoolAdmins = school.SchoolAdmins
-                .Where(a => !adminUserIdsToRemove.Contains(a.UserId))
-                .ToList();
-
-            school.UpdatedAt = DateTime.UtcNow;
-            await _schoolRepository.UpdateSchoolAsync(school);
+            await _schoolAdminRepository.RemoveAdminsAsync(schoolId, adminUserIdsToRemove);
         }
 
 
 
-        public async Task<School> CreateSchoolAsync( string name, int createdByUserId, IEnumerable<int> adminUserIds)
+        public async Task<School> CreateSchoolAsync( string name, string createdByUserId, IEnumerable<string> adminUserIds)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException("School name is required.");
@@ -89,20 +67,17 @@ namespace noava.Services.Implementations
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,
                 SchoolAdmins = admins.Select(id => new SchoolAdmin
-                { 
-                    UserId = id
+                {
+                    UserId = id,
                 }).ToList()
             };
 
             return await _schoolRepository.CreateSchoolAsync(school);
         }
 
-        public async Task<School> UpdateSchoolAsync(
-            int schoolId,
-            string name
- )
+        public async Task<School> UpdateSchoolAsync(int schoolId, string name)
         {
-            var school = await _schoolRepository.GetSchoolByIdAsync(schoolId);
+            School school = await _schoolRepository.GetSchoolByIdAsync(schoolId);
             if (school is null)
                 throw new InvalidOperationException("School not found.");
 
