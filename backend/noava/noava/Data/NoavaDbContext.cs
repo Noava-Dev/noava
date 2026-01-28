@@ -12,11 +12,14 @@ namespace noava.Data
         }
 
         public DbSet<Deck> Decks { get; set; }
+        public DbSet<Card> Cards { get; set; }
         public DbSet<FAQ> FAQs { get; set;  }
         public DbSet<User> Users { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<NotificationAction> NotificationActions { get; set; }
-
+        public DbSet<CardProgress> CardProgress { get; set; }
+        public DbSet<CardInteractions> CardInteractions { get; set; }
+        public DbSet<StudySessions> StudySessions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

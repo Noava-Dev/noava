@@ -13,7 +13,7 @@ import {
   LuChevronsRight as Right,
   LuLogOut as LogOut,
 } from 'react-icons/lu';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import type { CustomFlowbiteTheme } from 'flowbite-react/types';
 import { useUser, SignOutButton, UserButton } from '@clerk/clerk-react';
 
@@ -51,6 +51,7 @@ export function SidebarNav() {
   const [notificationCount, setNotificationCount] = useState<number>(0);
   const { getCount } = notificationService();
   const location = useLocation();
+  const navigate = useNavigate();
   const sidebarRef = useRef<HTMLDivElement>(null);
   const { user } = useUser();
   // CLERK: when using clerk const isLoaded, isSignedIn should be added on the line above
@@ -123,10 +124,11 @@ export function SidebarNav() {
               {bottomItems.map((item) => (
                 <SidebarItem
                   key={item.label}
-                  href={item.href}
                   icon={item.icon}
                   active={location.pathname == item.href}
-                >
+                  onClick={() => navigate(item.href)}
+                  className="hover:cursor-pointer">
+                  {/* TODO: the badge is hardcoded in sidebarItems but should be dynamically fetched */}
                   <span className="flex items-center justify-between w-full">
                     {item.label}
                     {item.label === "Meldingen" && notificationCount > 0 && !collapsed && (

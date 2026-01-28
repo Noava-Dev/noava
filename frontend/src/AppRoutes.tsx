@@ -7,6 +7,7 @@ import NoavaFooter from './shared/components/NoavaFooter';
 import PrivateRoute from './shared/components/navigation/PrivateRoute';
 import { RoleGroups } from './models/User';
 import NotificationPage from "./pages/Notification/Notification";
+import AdminDashboard from './pages/Admin/Dashboard/AdminDashboard';
 
 function Placeholder({ title }: { title: string }) {
   return <NoavaFooter />;
@@ -27,6 +28,13 @@ export default function AppRoutes() {
         <Route path="/dashboard" />
       </Route>
       <Route path="*" element={<NotFound />} />
+
+      {/* Admin routes */}
+      <Route element={<PrivateRoute allowedRoles={RoleGroups.ADMIN_ONLY} />}>
+        <Route path="/admin">
+          <Route path="dashboard" element={<AdminDashboard />} />
+        </Route>
+      </Route>
     </Routes>
   );
 }

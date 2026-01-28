@@ -28,7 +28,7 @@ namespace noava
             builder.Services.AddScoped<IFaqService, FaqService>();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<INotificationService, NotificationService>();
-
+            builder.Services.AddScoped<ILeitnerBoxService, LeitnerBoxService>();
 
             // Add services to the container.
             builder.Services.AddCors(options =>
