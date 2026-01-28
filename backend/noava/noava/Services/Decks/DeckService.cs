@@ -1,8 +1,11 @@
 ﻿using noava.Models;
+using noava.DTOs.Request;
+using noava.DTOs.Response;
+using noava.Services.Interfaces;
+using noava.Shared;
 using noava.Models.BlobStorage;
 using noava.Repositories.Contracts;
 using noava.Services.Contracts;
-using noava.Shared;
 
 namespace noava.Services
 {
@@ -10,56 +13,88 @@ namespace noava.Services
     {
         private readonly IDeckRepository _repository;
         private readonly IBlobService _blobService;
+
         public DeckService(IDeckRepository repository, IBlobService blobService)
         {
-            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
-            _blobService = blobService ?? throw new ArgumentNullException(nameof(blobService));
-        }
-
-        public DeckService(IDeckRepository repository)
-        {
             _repository = repository;
+            _blobService = blobService;
         }
 
-        public async Task<List<Deck>> GetAllDecksAsync()
+        // Helper: Map Deck model to DeckResponse DTO
+        private DeckResponse MapToResponse(Deck deck)
         {
-            return await _repository.GetAllAsync();
+            return new DeckResponse
+            {
+                DeckId = deck.DeckId,
+                UserId = deck.UserId,
+                Title = deck.Title,
+                Description = deck.Description,
+                Language = deck.Language,
+                Visibility = deck.Visibility,
+                CoverImageBlobName = deck.CoverImageBlobName,
+                CreatedAt = deck.CreatedAt,
+                UpdatedAt = deck.UpdatedAt
+            };
         }
 
-        public async Task<List<Deck>> GetUserDecksAsync(string userId)
+        public async Task<List<DeckResponse>> GetAllDecksAsync()
         {
-            return await _repository.GetByUserIdAsync(userId);
+            var decks = await _repository.GetAllAsync();
+            return decks.Select(d => MapToResponse(d)).ToList();
         }
 
-        public async Task<Deck?> GetDeckByIdAsync(int id)
+        public async Task<List<DeckResponse>> GetUserDecksAsync(string userId)
         {
-            return await _repository.GetByIdAsync(id);
+            var decks = await _repository.GetByUserIdAsync(userId);
+            return decks.Select(d => MapToResponse(d)).ToList();
         }
 
-        public async Task<Deck> CreateDeckAsync(Deck deck)
+        public async Task<DeckResponse?> GetDeckByIdAsync(int id)
         {
-            return await _repository.CreateAsync(deck);
+            var deck = await _repository.GetByIdAsync(id);
+            if (deck == null) return null;
+            return MapToResponse(deck);
         }
 
-        public async Task<Deck?> UpdateDeckAsync(int id, Deck updatedDeck, string userId)
+        public async Task<DeckResponse> CreateDeckAsync(DeckRequest request, string userId)
+        {
+            var deck = new Deck
+            {
+                Title = request.Title,
+                Description = request.Description,
+                Language = request.Language,
+                Visibility = request.Visibility,
+                CoverImageBlobName = request.CoverImageBlobName,
+                UserId = userId
+            };
+
+            var createdDeck = await _repository.CreateAsync(deck);
+            return MapToResponse(createdDeck);
+        }
+
+        public async Task<DeckResponse?> UpdateDeckAsync(int id, DeckRequest request, string userId)
         {
             var existingDeck = await _repository.GetByIdAsync(id);
             if (existingDeck == null) return null;
 
             if (existingDeck.UserId != userId) return null;
 
+            // Check if image changed
             var oldImageBlobName = existingDeck.CoverImageBlobName;
-            var newImageBlobName = updatedDeck.CoverImageBlobName;
+            var newImageBlobName = request.CoverImageBlobName;
             bool imageChanged = oldImageBlobName != newImageBlobName;
 
-            existingDeck.Title = updatedDeck.Title;
-            existingDeck.Description = updatedDeck.Description;
-            existingDeck.Language = updatedDeck.Language;
-            existingDeck.Visibility = updatedDeck.Visibility;
-            existingDeck.CoverImageBlobName = newImageBlobName; // ← BlobName
+            // Update deck
+            existingDeck.Title = request.Title;
+            existingDeck.Description = request.Description;
+            existingDeck.Language = request.Language;
+            existingDeck.Visibility = request.Visibility;
+            existingDeck.CoverImageBlobName = newImageBlobName;
             existingDeck.UpdatedAt = DateTime.UtcNow;
 
-            // Delete old image if changed and old image exists
+            var result = await _repository.UpdateAsync(existingDeck);
+
+            // Delete old image if changed
             if (imageChanged && !string.IsNullOrEmpty(oldImageBlobName))
             {
                 try
@@ -72,22 +107,23 @@ namespace noava.Services
                 }
                 catch (Exception ex)
                 {
-                    // Log error but don't fail the update
                     Console.WriteLine($"Failed to delete old image: {ex.Message}");
                 }
             }
 
-            return await _repository.UpdateAsync(existingDeck);
+            return MapToResponse(result);
         }
 
         public async Task<bool> DeleteDeckAsync(int id, string userId)
         {
             var deck = await _repository.GetByIdAsync(id);
             if (deck == null) return false;
+
             if (deck.UserId != userId) return false;
 
             var result = await _repository.DeleteAsync(id);
 
+            // Delete image from blob storage if exists
             if (result && !string.IsNullOrEmpty(deck.CoverImageBlobName))
             {
                 try
@@ -106,6 +142,5 @@ namespace noava.Services
 
             return result;
         }
-
     }
 }

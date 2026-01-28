@@ -251,33 +251,33 @@ namespace noava.Migrations
                         new
                         {
                             DeckId = 1,
-                            CreatedAt = new DateTime(2026, 1, 26, 12, 23, 31, 803, DateTimeKind.Utc).AddTicks(8118),
+                            CreatedAt = new DateTime(2026, 1, 28, 13, 12, 38, 637, DateTimeKind.Utc).AddTicks(5260),
                             Description = "Franse woorden voor beginners",
                             Language = "Frans",
                             Title = "Frans Woordenschat",
-                            UpdatedAt = new DateTime(2026, 1, 26, 12, 23, 31, 803, DateTimeKind.Utc).AddTicks(8119),
+                            UpdatedAt = new DateTime(2026, 1, 28, 13, 12, 38, 637, DateTimeKind.Utc).AddTicks(5260),
                             UserId = "user_38TGbnbcmzK7uZAbaABqTtzQtvz",
                             Visibility = 0
                         },
                         new
                         {
                             DeckId = 2,
-                            CreatedAt = new DateTime(2026, 1, 26, 12, 23, 31, 803, DateTimeKind.Utc).AddTicks(8121),
+                            CreatedAt = new DateTime(2026, 1, 28, 13, 12, 38, 637, DateTimeKind.Utc).AddTicks(5262),
                             Description = "Engelse grammatica oefeningen",
                             Language = "Engels",
                             Title = "Engels Grammatica",
-                            UpdatedAt = new DateTime(2026, 1, 26, 12, 23, 31, 803, DateTimeKind.Utc).AddTicks(8121),
+                            UpdatedAt = new DateTime(2026, 1, 28, 13, 12, 38, 637, DateTimeKind.Utc).AddTicks(5263),
                             UserId = "user_38TGbnbcmzK7uZAbaABqTtzQtvz",
                             Visibility = 2
                         },
                         new
                         {
                             DeckId = 3,
-                            CreatedAt = new DateTime(2026, 1, 26, 12, 23, 31, 803, DateTimeKind.Utc).AddTicks(8123),
+                            CreatedAt = new DateTime(2026, 1, 28, 13, 12, 38, 637, DateTimeKind.Utc).AddTicks(5265),
                             Description = "Spaanse zinnen voor dagelijks gebruik",
                             Language = "Spaans",
                             Title = "Spaans Conversatie",
-                            UpdatedAt = new DateTime(2026, 1, 26, 12, 23, 31, 803, DateTimeKind.Utc).AddTicks(8123),
+                            UpdatedAt = new DateTime(2026, 1, 28, 13, 12, 38, 637, DateTimeKind.Utc).AddTicks(5265),
                             UserId = "user_38TGbnbcmzK7uZAbaABqTtzQtvz",
                             Visibility = 1
                         });

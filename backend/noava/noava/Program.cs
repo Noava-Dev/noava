@@ -10,6 +10,9 @@ using noava.Services.Contracts;
 using noava.Services.Implementations;
 using noava.Shared;
 using Microsoft.IdentityModel.JsonWebTokens;
+using noava.Services.Interfaces;
+using noava.Repositories.Interfaces;
+using System.Security.Claims;
 
 namespace noava
 {
@@ -26,6 +29,7 @@ namespace noava
             builder.Services.AddScoped<IFaqRepository, FaqRepository>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IDeckRepository, DeckRepository>();
+            builder.Services.AddScoped<ICardRepository, CardRepository>();
             builder.Services.AddScoped<IClassroomRepository, ClassroomRepository>();
             builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 
@@ -33,6 +37,9 @@ namespace noava
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IDeckService, DeckService>();
             builder.Services.AddScoped<IBlobService, BlobService>();
+            builder.Services.AddScoped<ICardService, CardService>();
+
+
             builder.Services.AddScoped<INotificationService, NotificationService>();
 
 
@@ -88,9 +95,7 @@ namespace noava
                         ValidateIssuer = true,
                         ValidateAudience = false,
                         ValidateLifetime = true,
-                        ClockSkew = TimeSpan.FromMinutes(5),
-
-                
+                        RoleClaimType = ClaimTypes.Role
                     };
 
                 });

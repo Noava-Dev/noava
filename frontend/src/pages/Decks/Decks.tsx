@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Button, ModalHeader, Select } from 'flowbite-react';
+import { Button, ModalBody, ModalFooter, ModalHeader, Select } from 'flowbite-react';
 import { Modal } from 'flowbite-react';
 import { HiPlus } from 'react-icons/hi';
 import { useTranslation } from 'react-i18next';
@@ -124,7 +124,7 @@ const cancelDelete = () => {
   if (loading) {
     return (
       <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
-        <main className="ml-0 md:ml-64 flex-1 w-full">
+        <div className="ml-0 flex-1 w-full">
           <PageHeader>
             <div className="pt-4 md:pt-8">
               <div className="animate-pulse">
@@ -145,14 +145,14 @@ const cancelDelete = () => {
             </div>
           </div>
           <NoavaFooter />
-        </main>
+        </div>
       </div>
     );
   }
 
   return (
     <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
-      <main className="ml-0 md:ml-64 flex-1 w-full">
+      <div className="ml-0  flex-1 w-full">
         <PageHeader>
           {/* Hero Section */}
           <div className="mb-6 md:mb-8 pt-4 md:pt-8">
@@ -266,26 +266,40 @@ const cancelDelete = () => {
           deck={editingDeck}
         />
 
-        {/* Delete Modal */}
-        <Modal show={deleteDeckId !== null} onClose={cancelDelete} size="md">
-          <ModalHeader>{t('deleteModal.title')}</ModalHeader>
-          <Modal>
-            <p className="text-gray-600 dark:text-gray-400">
-              {t('deleteModal.message')}
-            </p>
-          </Modal>
+        {/* Delete Confirmation Modal */}
+      <Modal show={deleteDeckId !== null} onClose={cancelDelete} size="md">
+        <ModalHeader>
+          {t('deleteModal.title')}
+        </ModalHeader>
         
-            <Button color="red" onClick={confirmDelete}>
-              {t('deleteModal.yes')}
-            </Button>
-            <Button color="gray" onClick={cancelDelete}>
+        <ModalBody>
+          <p className="text-gray-600 dark:text-gray-400">
+            {t('deleteModal.message')}
+          </p>
+        </ModalBody>
+        
+        <ModalFooter>
+          <div className="flex justify-end gap-3 w-full">
+            <Button 
+              color="gray" 
+              onClick={cancelDelete}
+              size="sm"
+            >
               {t('deleteModal.no')}
             </Button>
-          
-        </Modal>
+            <Button 
+              color="red" 
+              onClick={confirmDelete}
+              size="sm"
+            >
+              {t('deleteModal.yes')}
+            </Button>
+          </div>
+        </ModalFooter>
+      </Modal>
 
         <NoavaFooter />
-      </main>
+      </div>
     </div>
   );
 }

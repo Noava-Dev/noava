@@ -9,7 +9,7 @@ i18n
     lng: 'en',
     fallbackLng: 'en',
     
-    ns: ['common', 'faq', 'home', 'settings','decks'],
+    ns: ['common', 'faq', 'home', 'settings','decks', 'flashcards'],
     defaultNS: 'common',
 
     debug: false,
