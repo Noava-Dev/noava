@@ -174,7 +174,7 @@ const cancelDelete = () => {
               <Button 
                 onClick={() => setIsModalOpen(true)} 
                 size="lg"
-                className="w-full md:w-auto bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800"
+                className="md:w-fit w-full bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800"
               >
                 <HiPlus className="mr-2 h-5 w-5" />
                 {t('createButton')}
@@ -250,10 +250,6 @@ const cancelDelete = () => {
                 <p className="text-gray-500 dark:text-gray-400 text-xl md:text-2xl mb-6">
                   {t('empty.message')}
                 </p>
-                <Button onClick={() => setIsModalOpen(true)} size="lg">
-                  <HiPlus className="mr-2 h-5 w-5" />
-                  {t('empty.button')}
-                </Button>
               </div>
             )}
           </div>

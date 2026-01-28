@@ -289,19 +289,6 @@ function FlashcardDetail() {
               <p className="text-gray-600 dark:text-gray-500 mb-6">
                 {searchTerm ? 'Try adjusting your search' : 'Start learning by creating your first flashcard!'}
               </p>
-              {!searchTerm && (
-                <Button
-                  size="lg"
-                  className="bg-cyan-500 hover:bg-cyan-600"
-                  onClick={() => {
-                    setSelectedFlashcard(undefined);
-                    setIsModalOpen(true);
-                  }}
-                >
-                  <HiPlus className="mr-2 h-5 w-5" />
-                  Create First Card
-                </Button>
-              )}
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

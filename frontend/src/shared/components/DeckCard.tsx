@@ -42,14 +42,14 @@ function DeckCard({ deck, onEdit, onDelete }: DeckCardProps) {
     }
   };
 
- /*  const getVisibilityColor = (visibility: number) => {
-    switch (visibility) {
-      case 0: return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300';
-      case 1: return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300';
-      case 2: return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300';
-      default: return 'bg-gray-100 text-gray-800';
-    }
-  }; */
+  //  const getVisibilityColor = (visibility: number) => {
+  //   switch (visibility) {
+  //     case 0: return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300';
+  //     case 1: return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300';
+  //     case 2: return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300';
+  //     default: return 'bg-gray-100 text-gray-800';
+  //   }
+  // };
 
   const handleCardClick = () => {
     navigate(`/decks/${deck.deckId}/cards`);
@@ -62,7 +62,7 @@ function DeckCard({ deck, onEdit, onDelete }: DeckCardProps) {
 
 
   return (
-    <div className="relative rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300" onClick={handleCardClick}>
+    <div className="relative rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 hover:cursor-pointer" onClick={handleCardClick}>
       <div className="relative w-full h-64 sm:h-72 md:h-80">
         {loadingImage ? (
           <div className="w-full h-full bg-gray-200 dark:bg-gray-700 animate-pulse flex items-center justify-center">
