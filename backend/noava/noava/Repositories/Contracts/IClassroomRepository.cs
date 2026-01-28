@@ -4,11 +4,14 @@ namespace noava.Repositories.Contracts
 {
     public interface IClassroomRepository
     {
-        Task<Classroom> GetByIdAsync(int id);
+        Task<Classroom?> GetByIdAsync(int id);
         Task<IEnumerable<Classroom>> GetAllAsync();
+        Task<IEnumerable<Classroom>> GetAllByUserAsync(string userId);
+
         Task AddAsync(Classroom classroom);
         Task UpdateAsync(Classroom classroom);
-        Task DeleteAsync(int id);
-        Task<Classroom> GetByJoinCodeAsync(string joinCode);
+        void Delete(Classroom classroom);
+        Task SaveChangesAsync();
+        Task<Classroom?> GetByJoinCodeAsync(string joinCode);
     }
 }

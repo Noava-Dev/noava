@@ -16,7 +16,7 @@ namespace noava.Models
         public string Description { get; set; }
         public string JoinCode { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public DateTime? UpdatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
         public ICollection<ClassroomUser> ClassroomUsers { get; set; } = new List<ClassroomUser>();
     }
 }
