@@ -12,10 +12,14 @@ function Placeholder({ title }: { title: string }) {
 import PrivateRoute from './shared/components/navigation/PrivateRoute';
 import { RoleGroups } from './models/User';
 import AdminDashboard from './pages/Admin/Dashboard/AdminDashboard';
+import SignIn from './pages/SignIn/SignIn';
+import SignUp from './pages/Register/Register';
 
 export default function AppRoutes() {
   return (
     <Routes>
+      <Route path="/sign-in" element={<SignIn />} />
+      <Route path="/sign-up" element={<SignUp />} />
       <Route path="/" element={<Home />} />
       <Route path="/decks" element={<Placeholder title="Decks" />} />
       <Route path="/classrooms" element={<Placeholder title="Klassen" />} />
