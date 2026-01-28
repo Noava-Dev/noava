@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using noava.Data;
@@ -11,9 +12,11 @@ using noava.Data;
 namespace noava.Migrations
 {
     [DbContext(typeof(NoavaDbContext))]
-    partial class NoavaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260126143939_AddStudySessionsCardInteractionsCardProgressTables")]
+    partial class AddStudySessionsCardInteractionsCardProgressTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,46 +33,7 @@ namespace noava.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("BackAudio")
-                        .HasColumnType("text");
-
-                    b.Property<string>("BackImage")
-                        .HasColumnType("text");
-
-                    b.Property<string>("BackText")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasDefaultValueSql("now()");
-
-                    b.Property<int>("DeckId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("FrontAudio")
-                        .HasColumnType("text");
-
-                    b.Property<string>("FrontImage")
-                        .HasColumnType("text");
-
-                    b.Property<string>("FrontText")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Memo")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasDefaultValueSql("now()");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("DeckId");
 
                     b.ToTable("Cards");
                 });
@@ -348,15 +312,6 @@ namespace noava.Migrations
                     b.HasKey("ClerkId");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("noava.Models.Card", b =>
-                {
-                    b.HasOne("noava.Models.Deck", null)
-                        .WithMany()
-                        .HasForeignKey("DeckId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("noava.Models.CardInteractions", b =>
