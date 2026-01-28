@@ -23,11 +23,11 @@ namespace noava
 
             builder.Services.AddScoped<IFaqRepository, FaqRepository>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IClassroomRepository, ClassroomRepository>();
 
             builder.Services.AddScoped<IFaqService, FaqService>();
             builder.Services.AddScoped<IUserService, UserService>();
-
-
+            builder.Services.AddScoped<IClassroomService, ClassroomService>();
 
             // Add services to the container.
             builder.Services.AddCors(options =>

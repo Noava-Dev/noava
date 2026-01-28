@@ -6,9 +6,11 @@ namespace noava.Models
     public class User
     {
         [Key]
-        public string ClerkId { get; set; } = String.Empty;
+        public string ClerkId { get; set; } = string.Empty;
 
         [Required]
         public UserRole Role { get; set; } = UserRole.USER;
+        public ICollection<ClassroomUser> ClassroomUsers { get; set; } = new List<ClassroomUser>();
+
     }
 }

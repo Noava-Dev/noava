@@ -15,6 +15,8 @@ namespace noava.Data
 
         public DbSet<FAQ> FAQs { get; set;  }
         public DbSet<User> Users { get; set; }
+        public DbSet<Classroom> Classrooms { get; set; }
+        public DbSet<ClassroomUser> ClassroomUsers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
