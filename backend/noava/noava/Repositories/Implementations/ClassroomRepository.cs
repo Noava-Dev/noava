@@ -37,6 +37,7 @@ namespace noava.Repositories.Implementations
         public async Task<Classroom?> GetByIdAsync(int id)
         {
             return await _context.Classrooms
+                .Include(c => c.ClassroomUsers)
                 .FirstOrDefaultAsync(c => c.Id == id);
         }
 
@@ -48,6 +49,7 @@ namespace noava.Repositories.Implementations
         public async Task<Classroom?> GetByJoinCodeAsync(string joinCode)
         {
             return await _context.Classrooms
+                .Include(c => c.ClassroomUsers)
                 .FirstOrDefaultAsync(c => c.JoinCode == joinCode);
         }
 
