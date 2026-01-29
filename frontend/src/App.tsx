@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import './App.css';
 import AppRoutes from './AppRoutes';
 import { UserRoleProvider } from './contexts/UserRoleContext';
-import { SidebarNav } from './shared/components/Sidebar';
 import { useLocation } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
 import i18next from 'i18next';
+import NoavaSidebar from './shared/components/navigation/NoavaSidebar';
 
 function App() {
   const location = useLocation();
@@ -24,12 +24,12 @@ function App() {
       <I18nextProvider i18n={i18next}>
         <div className="flex h-screen">
           {showSidebar && (
-            <div>
-              <SidebarNav />
+            <div className="flex-shrink-0">
+              <NoavaSidebar />
             </div>
           )}
 
-          <main className={showSidebar ? 'app-container' : 'w-full'}>
+          <main className="flex-1 overflow-auto">
             <AppRoutes />
           </main>
         </div>
