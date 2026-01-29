@@ -2,9 +2,9 @@ import {
   LuBuilding2 as SchoolBuilding,
   LuTrash2 as Trash,
   LuPencil as Pencil,
-  LuPlus,
-  LuX,
-  LuSearch,
+//   LuPlus,
+//   LuX,
+//   LuSearch,
   LuUsers as Admins,
 } from "react-icons/lu";
 

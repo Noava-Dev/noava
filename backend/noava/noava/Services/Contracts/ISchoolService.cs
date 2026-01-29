@@ -13,5 +13,7 @@ namespace noava.Services.Contracts
             );
         Task<School> UpdateSchoolAsync(int schoolId, string name);
         Task DeleteSchoolAsync(int id);
+        Task RemoveSchoolAdminsAsync(int schoolId, IEnumerable<string> adminUserIdsToRemove);
+        Task AddSchoolAdminsAsync(int schoolId, IEnumerable<string> newAdminUserIds);
     }
 }
