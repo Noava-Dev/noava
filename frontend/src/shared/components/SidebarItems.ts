@@ -21,7 +21,7 @@ export const mainItems = [
 
 export const bottomItems = [
   // TODO: logic for notifications in badge count
-  { label: 'Meldingen', href: '/notifications', icon: Bell, badge: '2' },
+  { label: 'Meldingen', href: '/notifications', icon: Bell },
   { label: 'Settings', href: '/settings', icon: Settings },
   { label: 'Admin', href: '/admin/dashboard', icon: RiShieldUserLine },
 ];
