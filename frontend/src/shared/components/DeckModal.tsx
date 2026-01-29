@@ -2,7 +2,7 @@ import { Label, TextInput, Textarea, Select, Button, FileInput } from 'flowbite-
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { HiX, HiUpload } from 'react-icons/hi';
-import { DeckVisibility, type Deck, type CreateDeckRequest } from '../../models/Deck';
+import { DeckVisibility, type DeckVisibilityType, type Deck, type CreateDeckRequest } from '../../models/Deck';
 import { useAzureBlobService } from '../../services/AzureBlobService';
 import { useToast } from '../../contexts/ToastContext';
 interface DeckModalProps {
@@ -18,7 +18,7 @@ function DeckModal({ isOpen, onClose, onSubmit, deck }: DeckModalProps) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [language, setLanguage] = useState('');
-  const [visibility, setVisibility] = useState<DeckVisibility>(DeckVisibility.Private);
+  const [visibility, setVisibility] = useState<DeckVisibilityType>(DeckVisibility.Private);
   const [coverImageBlobName, setCoverImageBlobName] = useState<string | undefined>(undefined);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -36,7 +36,7 @@ function DeckModal({ isOpen, onClose, onSubmit, deck }: DeckModalProps) {
       
       
       if (deck.coverImageBlobName) {
-        azureBlobService.getBlobSasUrl(deck.coverImageBlobName)
+        azureBlobService.getSasUrl('deck-images', deck.coverImageBlobName)
           .then(url => setImagePreview(url))
       } else {
         setImagePreview(null);
@@ -75,7 +75,7 @@ function DeckModal({ isOpen, onClose, onSubmit, deck }: DeckModalProps) {
       
       let finalBlobName = coverImageBlobName;
       if (imageFile) {
-        finalBlobName = await azureBlobService.uploadImage(imageFile);   
+        finalBlobName = await azureBlobService.upload('deck-images', imageFile);   
       }
 
       onSubmit({
@@ -230,7 +230,7 @@ function DeckModal({ isOpen, onClose, onSubmit, deck }: DeckModalProps) {
               <Select
                 id="visibility"
                 value={visibility}
-                onChange={(e) => setVisibility(Number(e.target.value) as DeckVisibility)}
+                onChange={(e) => setVisibility(Number(e.target.value) as DeckVisibilityType)}
                 disabled={uploading}
               >
                 <option value={DeckVisibility.Private}>{t('modal.visibilityPrivate')}</option>
