@@ -1,4 +1,4 @@
-import Header from './components/Header';
+import Header from '../../shared/components/navigation/Header';
 import { Button, Card } from 'flowbite-react';
 import NoavaFooter from '../../shared/components/NoavaFooter';
 import {
@@ -17,13 +17,13 @@ function Home() {
   const { t } = useTranslation('home');
   const { isSignedIn } = useUser();
   const navigate = useNavigate();
-  
+
   return (
     <>
       <Header />
 
       {/* Hero Section */}
-       <section className="py-16 bg-gray-900 dark:bg-gray-900">
+      <section className="py-16 bg-gray-900 dark:bg-gray-900">
         <div className="container max-w-4xl px-4 py-16 mx-auto text-center">
           <h1 className="mb-6 text-4xl font-bold tracking-tight text-white md:text-5xl">
             {t('hero.title')}
