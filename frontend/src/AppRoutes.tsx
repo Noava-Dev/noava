@@ -13,9 +13,15 @@ import AdminDashboard from './pages/Admin/Dashboard/AdminDashboard';
 import NotificationPage from "./pages/Notification/Notification";
 import Loading from './shared/components/Loading';
 import FlashcardDetail from "./pages/Flashcards/FlashcardDetail";
+import NoavaSidebar from "./shared/components/navigation/NoavaSidebar";
 
 function Placeholder({ title }: { title: string }) {
-  return <NoavaFooter />;
+  return(
+    <>
+      <div>{title}</div>
+      <NoavaFooter />
+    </>
+  );
 }
 
 export default function AppRoutes() {
@@ -37,7 +43,7 @@ export default function AppRoutes() {
           <Route path=":deckId/cards" element={<FlashcardDetail />} />
       </Route>
       <Route path="/classrooms" element={<Placeholder title="Klassen" />} />
-      <Route path="/history" element={<Placeholder title="Geschiedenis" />} />
+      <Route path="/history" element={<NoavaSidebar />} />
       <Route path="/notifications" element={<NotificationPage />} />
       <Route path="/settings" element={<SettingsPage />} />
       <Route path="/faq" element={<FAQ />} />

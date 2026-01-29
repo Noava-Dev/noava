@@ -1,6 +1,7 @@
-import { Footer, FooterBrand, FooterCopyright, FooterDivider, FooterLink, FooterLinkGroup } from "flowbite-react";
+import { Footer, FooterBrand, FooterCopyright, FooterDivider, FooterLinkGroup } from "flowbite-react";
 import Logo from "../../assets/noava-logo-blue-nobg.png";
 import ThemeButton from "./ThemeButton";
+import { Link } from "react-router-dom";
 
 
 function NoavaFooter() {
@@ -9,16 +10,16 @@ function NoavaFooter() {
       <div className="w-full text-center">
         <div className="w-full flex flex-col items-center gap-4 sm:flex-row sm:justify-between sm:items-center">
           <FooterBrand
-            href="#"
+            href="/"
             src={Logo}
             alt="Noava Logo"
             name="Noava"
           />
           <FooterLinkGroup className="flex flex-wrap justify-center gap-4 sm:gap-6">
-            <FooterLink href="#">About</FooterLink>
-            <FooterLink href="#">Privacy Policy</FooterLink>
-            <FooterLink href="#">Licensing</FooterLink>
-            <FooterLink href="#">Contact</FooterLink>
+            <Link to="#" className="text-black hover:text-primary-500 dark:text-white dark:hover:text-primary-300">About</Link>
+            <Link to="#" className="text-black hover:text-primary-500 dark:text-white dark:hover:text-primary-300">Privacy Policy</Link>
+            <Link to="#" className="text-black hover:text-primary-500 dark:text-white dark:hover:text-primary-300">Licensing</Link>
+            <Link to="#" className="text-black hover:text-primary-500 dark:text-white dark:hover:text-primary-300">Contact</Link>
           </FooterLinkGroup>
           <ThemeButton />
         </div>

@@ -33,9 +33,9 @@ function Header() {
                     <NavbarToggle />
                 </div>
                 <NavbarCollapse>
-                    <Link to="#" className="navbar-link">Docs</Link>
-                    <Link to="/dashboard">Dashboard</Link>
-                    <Link to="/faq">FAQ</Link>
+                    <Link to="/docs" className="text-black hover:text-primary-500 dark:text-white dark:hover:text-primary-300">Docs</Link>
+                    <Link to="/dashboard" className="text-black hover:text-primary-500 dark:text-white dark:hover:text-primary-300">Dashboard</Link>
+                    <Link to="/faq" className="text-black hover:text-primary-500 dark:text-white dark:hover:text-primary-300">FAQ</Link>
                 </NavbarCollapse>
             </Navbar>
         </>
