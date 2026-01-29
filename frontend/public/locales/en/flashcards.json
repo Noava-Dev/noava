@@ -48,12 +48,35 @@
     "mastered": "Mastered",
     "learning": "Learning",
     "new": "New",
-    "addCard": "Add Card"
+    "addCard": "Add Card",
+    "studyNow": "Study Now",
+    "shuffle": "Shuffle",
+    "quickReview": "Quick Review"
   },
   "deleteConfirmModal": {
   "title": "Delete Flashcard",
   "message": "Are you sure you want to delete this flashcard? This action cannot be undone.",
   "confirm": "Delete",
   "cancel": "Cancel"
-}
+},
+"quickReview": {
+    "title": "Quick Review",
+    "mode": "Quick Review Mode",
+    "loading": "Loading review session...",
+    "noCards": "No cards available for review",
+    "progress": "Progress",
+    "front": "Front",
+    "back": "Back",
+    "clickToFlip": "Click to flip",
+    "clickToFlipBack": "Click to flip back",
+    "skip": "Skip",
+    "next": "Next Card",
+    "finish": "Finish",
+    "complete": {
+      "title": "Session Complete!",
+      "message": "You reviewed {{count}} cards",
+      "backToDeck": "Back to Deck",
+      "restart": "Restart Review"
+    }
+  }
 }

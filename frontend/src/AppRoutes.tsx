@@ -10,6 +10,7 @@ import { RoleGroups } from './models/User';
 import NotificationPage from "./pages/Notification/Notification";
 import AdminDashboard from './pages/Admin/Dashboard/AdminDashboard';
 import FlashcardDetail from "./pages/Flashcards/FlashcardDetail";
+import QuickReview from '../src/pages/Review/Quickreview';
 
 function Placeholder({ title }: { title: string }) {
   return <NoavaFooter />;
@@ -22,6 +23,7 @@ export default function AppRoutes() {
       <Route path="/decks" element={<PrivateRoute allowedRoles={RoleGroups.ALL_AUTHENTICATED} />}>
           <Route index element={<Decks />} />
           <Route path=":deckId/cards" element={<FlashcardDetail />} />
+          <Route path=":deckId/review" element={<QuickReview />} />
       </Route>
       <Route path="/classrooms" element={<Placeholder title="Klassen" />} />
       <Route path="/history" element={<Placeholder title="Geschiedenis" />} />

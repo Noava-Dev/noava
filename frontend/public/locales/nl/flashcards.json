@@ -48,12 +48,35 @@
     "mastered": "Beheerst",
     "learning": "Bezig met Leren",
     "new": "Nieuw",
-    "addCard": "Kaart Toevoegen"
+    "addCard": "Kaart Toevoegen",
+    "studyNow": "Nu Studeren",
+    "shuffle": "Schudden",
+    "quickReview": "Snelle Review"
   },
   "deleteConfirmModal": {
   "title": "Flashcard Verwijderen",
   "message": "Weet je zeker dat je deze flashcard wilt verwijderen? Deze actie kan niet ongedaan gemaakt worden.",
   "confirm": "Verwijderen",
   "cancel": "Annuleren"
-}
+},
+"quickReview": {
+    "title": "Snelle Herhaling",
+    "mode": "Snelle Herhalingsmodus",
+    "loading": "Herhaling laden...",
+    "noCards": "Geen kaarten beschikbaar voor herhaling",
+    "progress": "Voortgang",
+    "front": "Voorkant",
+    "back": "Achterkant",
+    "clickToFlip": "Klik om om te draaien",
+    "clickToFlipBack": "Klik om terug te draaien",
+    "skip": "Overslaan",
+    "next": "Volgende Kaart",
+    "finish": "Voltooien",
+    "complete": {
+      "title": "Sessie Voltooid!",
+      "message": "Je hebt {{count}} kaarten herhaald",
+      "backToDeck": "Terug naar Deck",
+      "restart": "Herhaling Opnieuw Starten"
+    }
+  }
 }
