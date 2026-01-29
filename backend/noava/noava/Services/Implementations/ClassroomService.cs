@@ -1,9 +1,9 @@
-﻿using noava.Models;
+﻿using noava.DTOs.Request.Classrooms;
+using noava.DTOs.Response.Classrooms;
+using noava.Mappers.Classrooms;
+using noava.Models;
 using noava.Repositories.Contracts;
 using noava.Services.Contracts;
-using noava.Temp.DTOs.request;
-using noava.Temp.DTOs.response;
-using noava.Temp.Mappers.Classrooms;
 using System.Security.Cryptography;
 
 namespace noava.Services.Implementations
@@ -31,13 +31,13 @@ namespace noava.Services.Implementations
             await _classroomRepository.AddAsync(classroom);
             await _classroomRepository.SaveChangesAsync();
 
-            return classroom.ToResponseDto();
+            return classroom.ToResponseDto(userId);
         }
 
         public async Task<IEnumerable<ClassroomResponseDto>> GetAllByUserAsync(string userId)
         {
             var classrooms = await _classroomRepository.GetAllByUserAsync(userId);
-            return classrooms.ToResponseDtos();
+            return classrooms.ToResponseDtos(userId);
         }
 
         public async Task<ClassroomResponseDto?> GetByIdAsync(int id, string userId)
@@ -53,26 +53,13 @@ namespace noava.Services.Implementations
             if (!isMember)
                 return null;
 
-            return classroom.ToResponseDto();
+            return classroom.ToResponseDto(userId);
         }
 
-        public async Task<ClassroomResponseDto?> GetByJoinCodeAsync(string joinCode)
+        public async Task<ClassroomResponseDto?> GetByJoinCodeAsync(string joinCode, string userId)
         {
             var classroom = await _classroomRepository.GetByJoinCodeAsync(joinCode);
-            return classroom?.ToResponseDto();
-        }
-
-        private static string GenerateClassroomCode()
-        {
-            var guidBytes = Guid.NewGuid().ToByteArray();
-            var randomBytes = RandomNumberGenerator.GetBytes(8);
-
-            var combined = guidBytes.Concat(randomBytes).ToArray();
-
-            return Convert.ToBase64String(combined)
-                .TrimEnd('=')
-                .Replace('+', '-')
-                .Replace('/', '_');
+            return classroom?.ToResponseDto(userId);
         }
 
         public async Task<ClassroomResponseDto?> JoinByClassroomCode(string joinCode, string userId)
@@ -96,7 +83,83 @@ namespace noava.Services.Implementations
                 await _classroomRepository.SaveChangesAsync();
             }
 
-            return classroom.ToResponseDto();
+            return classroom.ToResponseDto(userId);
+        }
+
+        public async Task<ClassroomResponseDto> UpdateAsync(int id,ClassroomRequestDto classroomDto,string userId)
+        {
+            var classroom = await _classroomRepository.GetByIdAsync(id);
+
+            if (classroom == null)
+                throw new KeyNotFoundException("Classroom not found.");
+
+            var isTeacher = classroom.ClassroomUsers
+                .Any(cu => cu.UserId == userId && cu.IsTeacher);
+
+            if (!isTeacher)
+                throw new UnauthorizedAccessException("Only teachers can update a classroom.");
+
+            classroom.Name = classroomDto.Name;
+            classroom.Description = classroomDto.Description;
+
+            await _classroomRepository.UpdateAsync(classroom);
+            await _classroomRepository.SaveChangesAsync();
+
+            return classroom.ToResponseDto(userId);
+        }
+
+        public async Task<ClassroomResponseDto> DeleteAsync(int id, string userId)
+        {
+            var classroom = await _classroomRepository.GetByIdAsync(id);
+
+            if (classroom == null)
+                throw new KeyNotFoundException("Classroom not found.");
+
+            var isTeacher = classroom.ClassroomUsers
+                .Any(cu => cu.UserId == userId && cu.IsTeacher);
+
+            if (!isTeacher)
+                throw new UnauthorizedAccessException("Only teachers can delete a classroom.");
+
+            _classroomRepository.Delete(classroom);
+            await _classroomRepository.SaveChangesAsync();
+
+            return classroom.ToResponseDto(userId);
+        }
+
+        public async Task<ClassroomResponseDto?> UpdateJoinCode(int id, string userId)
+        {
+            var classroom = await _classroomRepository.GetByIdAsync(id);
+
+            if (classroom == null)
+                throw new KeyNotFoundException("Classroom not found.");
+
+            var isTeacher = classroom.ClassroomUsers
+                .Any(cu => cu.UserId == userId && cu.IsTeacher);
+
+            if (!isTeacher)
+                throw new UnauthorizedAccessException("Only teachers can update the join code.");
+
+            classroom.JoinCode = GenerateClassroomCode();
+
+            await _classroomRepository.UpdateAsync(classroom);
+            await _classroomRepository.SaveChangesAsync();
+
+            return classroom.ToResponseDto(userId);
+        }
+
+
+        private static string GenerateClassroomCode()
+        {
+            var guidBytes = Guid.NewGuid().ToByteArray();
+            var randomBytes = RandomNumberGenerator.GetBytes(8);
+
+            var combined = guidBytes.Concat(randomBytes).ToArray();
+
+            return Convert.ToBase64String(combined)
+                .TrimEnd('=')
+                .Replace('+', '-')
+                .Replace('/', '_');
         }
     }
 }

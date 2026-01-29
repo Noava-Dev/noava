@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using noava.DTOs.Notifications;
+using noava.DTOs.Request.Notifications;
+using noava.DTOs.Response.Notifications;
 using noava.Services.Contracts;
 using System.Security.Claims;
 
@@ -57,7 +58,7 @@ namespace noava.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateNotification([FromBody] NotificationDto dto)
+        public async Task<IActionResult> CreateNotification([FromBody] NotificationRequestDto dto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);

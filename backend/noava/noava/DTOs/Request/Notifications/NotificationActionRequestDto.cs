@@ -1,8 +1,8 @@
 ﻿using noava.Models.Enums;
 
-namespace noava.DTOs.Notifications
+namespace noava.DTOs.Request.Notifications
 {
-    public class NotificationActionDto
+    public class NotificationActionRequestDto
     {
         public string LabelKey { get; set; } = string.Empty;
         public string Endpoint { get; set; } = string.Empty;

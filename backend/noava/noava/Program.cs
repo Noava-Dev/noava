@@ -38,12 +38,7 @@ namespace noava
             builder.Services.AddScoped<IDeckService, DeckService>();
             builder.Services.AddScoped<IBlobService, BlobService>();
             builder.Services.AddScoped<ICardService, CardService>();
-
-
             builder.Services.AddScoped<INotificationService, NotificationService>();
-
-
-
             builder.Services.AddScoped<ILeitnerBoxService, LeitnerBoxService>();
             builder.Services.AddScoped<IClassroomService, ClassroomService>();
 
