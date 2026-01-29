@@ -5,10 +5,13 @@ import { Route, Routes } from 'react-router-dom';
 import NotFound from './pages/NotFound/NotFound';
 import SettingsPage from './pages/Settings/Settings';
 import NoavaFooter from './shared/components/NoavaFooter';
+import { SignUp as SignUpClerk } from "@clerk/clerk-react";
+import { SignIn as SignInClerk } from "@clerk/clerk-react";
 import PrivateRoute from './shared/components/navigation/PrivateRoute';
 import { RoleGroups } from './models/User';
-import NotificationPage from "./pages/Notification/Notification";
 import AdminDashboard from './pages/Admin/Dashboard/AdminDashboard';
+import NotificationPage from "./pages/Notification/Notification";
+import Loading from './shared/components/Loading';
 import FlashcardDetail from "./pages/Flashcards/FlashcardDetail";
 
 function Placeholder({ title }: { title: string }) {
@@ -18,6 +21,16 @@ function Placeholder({ title }: { title: string }) {
 export default function AppRoutes() {
   return (
     <Routes>
+      <Route path="/sign-in" element={
+        <div className="min-h-screen flex items-center justify-center py-8">
+          <SignInClerk fallback={<Loading />} />
+        </div>
+        } />
+      <Route path="/sign-up" element={
+        <div className="min-h-screen flex items-center justify-center py-8">
+          <SignUpClerk fallback={<Loading />} />
+        </div>
+        } />
       <Route path="/" element={<Home />} />
       <Route path="/decks" element={<PrivateRoute allowedRoles={RoleGroups.ALL_AUTHENTICATED} />}>
           <Route index element={<Decks />} />

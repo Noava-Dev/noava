@@ -10,7 +10,7 @@ import i18next from 'i18next';
 function App() {
   const location = useLocation();
 
-  const routesWithoutSidebar = ['/', '/home', '/faq'];
+  const routesWithoutSidebar = ['/', '/home', '/faq', '/sign-up', '/sign-in'];
   const showSidebar = !routesWithoutSidebar.includes(location.pathname);
 
   //-------------- language ---------------------
