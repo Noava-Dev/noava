@@ -17,15 +17,17 @@ function Home() {
   const { t } = useTranslation('home');
   const { isSignedIn } = useUser();
   const navigate = useNavigate();
+  
   return (
     <>
       <Header />
-      <section className="py-16 bg-gray-900 dark:bg-gray-900">
+
+      {/* Hero Section */}
+       <section className="py-16 bg-gray-900 dark:bg-gray-900">
         <div className="container max-w-4xl px-4 py-16 mx-auto text-center">
           <h1 className="mb-6 text-4xl font-bold tracking-tight text-white md:text-5xl">
             {t('hero.title')}
           </h1>
-
           <p className="max-w-2xl mx-auto mb-8 text-lg font-normal text-gray-300">
             {t('hero.description')}
           </p>
@@ -127,11 +129,11 @@ function Home() {
         </div>
       </section>
 
-      {/* Available everywhere Section  */}
-      <section className="py-16 bg-gray-50 dark:bg-gray-800">
-        <div className="container max-w-6xl px-4 mx-auto">
-          <div className="mb-12 text-center">
-            <h2 className="mb-4 text-3xl font-bold tracking-tight md:text-4xl text-text-title-light dark:text-text-title-dark">
+      {/* Available everywhere Section */}
+      <section className="bg-gray-50 dark:bg-gray-800 py-16">
+        <div className="container mx-auto px-4 max-w-6xl">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-text-title-light dark:text-text-title-dark mb-4">
               {t('platforms.title')}
             </h2>
             <p className="text-lg font-normal text-text-body-light dark:text-text-body-dark">

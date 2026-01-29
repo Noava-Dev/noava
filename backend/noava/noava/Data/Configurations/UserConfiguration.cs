@@ -12,6 +12,11 @@ namespace noava.Data.Configurations
             builder.Property(d => d.Role)
                 .HasConversion<string>()
                 .IsRequired();
+            builder.HasMany(u => u.Notifications)
+                   .WithOne(n => n.User)
+                   .HasForeignKey(n => n.UserId)
+                   .HasPrincipalKey(u => u.ClerkId)
+                   .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
