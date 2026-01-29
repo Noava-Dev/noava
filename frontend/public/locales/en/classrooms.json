@@ -9,6 +9,8 @@
     "label": "Sort by",
     "newest": "Newest",
     "oldest": "Oldest"
+    ,"az": "A → Z",
+    "za": "Z → A"
   },
   "results": {
     "found": "results found"
@@ -50,6 +52,9 @@
   },
   "detail": {
     "description": "Description",
+    "info": "Information",
+    "membersPlaceholder": "Class members and settings will appear here.",
+    "joinCode": "Join code",
     "edit": "Edit",
     "delete": "Delete",
     "back": "Back"

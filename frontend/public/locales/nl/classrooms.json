@@ -8,7 +8,9 @@
   "sort": {
     "label": "Sorteren",
     "newest": "Nieuwste",
-    "oldest": "Oudste"
+    "oldest": "Oudste",
+    "az": "A → Z",
+    "za": "Z → A"
   },
   "results": {
     "found": "resultaten gevonden"
@@ -50,6 +52,9 @@
   },
   "detail": {
     "description": "Beschrijving",
+    "info": "Informatie",
+    "membersPlaceholder": "Leden en instellingen van de klas verschijnen hier.",
+    "joinCode": "Deelcode",
     "edit": "Bewerken",
     "delete": "Verwijderen",
     "back": "Terug"

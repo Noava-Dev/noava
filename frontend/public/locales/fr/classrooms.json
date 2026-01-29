@@ -9,6 +9,8 @@
     "label": "Trier",
     "newest": "Les plus récentes",
     "oldest": "Les plus anciennes"
+    ,"az": "A → Z",
+    "za": "Z → A"
   },
   "results": {
     "found": "résultats trouvés"
@@ -50,6 +52,9 @@
   },
   "detail": {
     "description": "Description",
+    "info": "Informations",
+    "membersPlaceholder": "Les membres et les réglages de la classe apparaîtront ici.",
+    "joinCode": "Code d'accès",
     "edit": "Modifier",
     "delete": "Supprimer",
     "back": "Retour"

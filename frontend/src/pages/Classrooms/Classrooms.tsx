@@ -19,7 +19,7 @@ function ClassroomsPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingClassroom, setEditingClassroom] = useState<ClassroomResponse | undefined>(undefined);
   const [searchTerm, setSearchTerm] = useState('');
-  const [sortOrder, setSortOrder] = useState<'newest' | 'oldest'>('newest');
+  const [sortOrder, setSortOrder] = useState<'newest' | 'oldest' | 'az' | 'za'>('az');
   const { showSuccess, showError } = useToast();
   const [deleteId, setDeleteId] = useState<number | null>(null);
 
@@ -95,11 +95,20 @@ function ClassroomsPage() {
     c.description?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const sorted = [...filtered].sort((a, b) => {
-    const aT = new Date(a.createdAt).getTime();
-    const bT = new Date(b.createdAt).getTime();
-    return sortOrder === 'newest' ? bT - aT : aT - bT;
-  });
+const sorted = [...filtered].sort((a, b) => {
+  switch (sortOrder) {
+    case 'az':
+      return a.name.localeCompare(b.name, undefined, { sensitivity: 'base' });
+    case 'za':
+      return b.name.localeCompare(a.name, undefined, { sensitivity: 'base' });
+    case 'newest':
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+    case 'oldest':
+      return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+    default:
+      return 0;
+  }
+});
 
   return (
     <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -132,9 +141,11 @@ function ClassroomsPage() {
 
               <div className="space-y-2">
                 <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide">{t('sort.label')}</label>
-                <Select value={sortOrder} onChange={(e) => setSortOrder(e.target.value as 'newest' | 'oldest')} className="cursor-pointer">
+                <Select value={sortOrder} onChange={(e) => setSortOrder(e.target.value as 'newest' | 'oldest' | 'az' | 'za')} className="cursor-pointer">
                   <option value="newest">{t('sort.newest')}</option>
                   <option value="oldest">{t('sort.oldest')}</option>
+                  <option value="az">{t('sort.az')}</option>
+                  <option value="za">{t('sort.za')}</option>
                 </Select>
               </div>
             </div>
