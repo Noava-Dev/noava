@@ -199,15 +199,88 @@ namespace noava.Migrations
 
             modelBuilder.Entity("noava.Models.Deck", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("DeckId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("DeckId"));
 
-                    b.HasKey("Id");
+                    b.Property<string>("CoverImageBlobName")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
+
+                    b.Property<string>("Language")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<int>("Visibility")
+                        .HasColumnType("integer");
+
+                    b.HasKey("DeckId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Decks");
+
+                    b.HasData(
+                        new
+                        {
+                            DeckId = 1,
+                            CreatedAt = new DateTime(2026, 1, 28, 13, 12, 38, 637, DateTimeKind.Utc).AddTicks(5260),
+                            Description = "Franse woorden voor beginners",
+                            Language = "Frans",
+                            Title = "Frans Woordenschat",
+                            UpdatedAt = new DateTime(2026, 1, 28, 13, 12, 38, 637, DateTimeKind.Utc).AddTicks(5260),
+                            UserId = "user_38TGbnbcmzK7uZAbaABqTtzQtvz",
+                            Visibility = 0
+                        },
+                        new
+                        {
+                            DeckId = 2,
+                            CreatedAt = new DateTime(2026, 1, 28, 13, 12, 38, 637, DateTimeKind.Utc).AddTicks(5262),
+                            Description = "Engelse grammatica oefeningen",
+                            Language = "Engels",
+                            Title = "Engels Grammatica",
+                            UpdatedAt = new DateTime(2026, 1, 28, 13, 12, 38, 637, DateTimeKind.Utc).AddTicks(5263),
+                            UserId = "user_38TGbnbcmzK7uZAbaABqTtzQtvz",
+                            Visibility = 2
+                        },
+                        new
+                        {
+                            DeckId = 3,
+                            CreatedAt = new DateTime(2026, 1, 28, 13, 12, 38, 637, DateTimeKind.Utc).AddTicks(5265),
+                            Description = "Spaanse zinnen voor dagelijks gebruik",
+                            Language = "Spaans",
+                            Title = "Spaans Conversatie",
+                            UpdatedAt = new DateTime(2026, 1, 28, 13, 12, 38, 637, DateTimeKind.Utc).AddTicks(5265),
+                            UserId = "user_38TGbnbcmzK7uZAbaABqTtzQtvz",
+                            Visibility = 1
+                        });
                 });
 
             modelBuilder.Entity("noava.Models.FAQ", b =>
@@ -293,6 +366,72 @@ namespace noava.Migrations
                         });
                 });
 
+            modelBuilder.Entity("noava.Models.Notification", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Link")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ParametersJson")
+                        .HasColumnType("text");
+
+                    b.Property<string>("TemplateKey")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Notifications");
+                });
+
+            modelBuilder.Entity("noava.Models.NotificationAction", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Endpoint")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("LabelKey")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Method")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<long>("NotificationId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NotificationId");
+
+                    b.ToTable("NotificationActions");
+                });
+
             modelBuilder.Entity("noava.Models.StudySessions", b =>
                 {
                     b.Property<int>("Id")
@@ -348,6 +487,38 @@ namespace noava.Migrations
                     b.HasKey("ClerkId");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("noava.Models.Notification", b =>
+                {
+                    b.HasOne("noava.Models.User", "User")
+                        .WithMany("Notifications")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("noava.Models.NotificationAction", b =>
+                {
+                    b.HasOne("noava.Models.Notification", "Notification")
+                        .WithMany("Actions")
+                        .HasForeignKey("NotificationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Notification");
+                });
+
+            modelBuilder.Entity("noava.Models.Notification", b =>
+                {
+                    b.Navigation("Actions");
+                });
+
+            modelBuilder.Entity("noava.Models.User", b =>
+                {
+                    b.Navigation("Notifications");
                 });
 
             modelBuilder.Entity("noava.Models.Card", b =>

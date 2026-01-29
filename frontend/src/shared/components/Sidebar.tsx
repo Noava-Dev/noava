@@ -1,5 +1,6 @@
-import { mainItems, bottomItems } from '../components/SidebarItems';
-import { useState, useEffect, useRef } from 'react';
+import { mainItems, bottomItems } from "../components/SidebarItems";
+import { notificationService } from "../../services/NotificationService";
+import { useState, useEffect, useRef } from "react";
 import {
   Sidebar,
   SidebarItem,
@@ -47,6 +48,8 @@ const sidebarTheme: CustomFlowbiteTheme['sidebar'] = {
 
 export function SidebarNav() {
   const [collapsed, setCollapsed] = useState(false);
+  const [notificationCount, setNotificationCount] = useState<number>(0);
+  const { getCount } = notificationService();
   const location = useLocation();
   const navigate = useNavigate();
   const sidebarRef = useRef<HTMLDivElement>(null);
@@ -68,6 +71,23 @@ export function SidebarNav() {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
+  }, []);
+
+    useEffect(() => {
+    async function fetchNotificationCount() {
+      try {
+        const data = await getCount();
+        if (data && typeof data.count === 'number') {
+          setNotificationCount(data.count);
+          console.log("Notification count:", data.count);
+        } else {
+          setNotificationCount(0);
+        }
+      } catch {
+        setNotificationCount(0);
+      }
+    }
+    fetchNotificationCount();
   }, []);
 
   return (
@@ -111,9 +131,9 @@ export function SidebarNav() {
                   {/* TODO: the badge is hardcoded in sidebarItems but should be dynamically fetched */}
                   <span className="flex items-center justify-between w-full">
                     {item.label}
-                    {item.badge && !collapsed && (
-                      <span className="flex items-center justify-center text-xs text-red-800 bg-red-200 rounded-full size-5">
-                        {item.badge}
+                    {item.label === "Meldingen" && notificationCount > 0 && !collapsed && (
+                      <span className="flex items-center justify-center rounded-full size-5 text-xs text-red-800 bg-red-200">
+                        {notificationCount}
                       </span>
                     )}
                   </span>

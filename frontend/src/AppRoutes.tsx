@@ -1,6 +1,7 @@
+import FAQ from "./pages/FAQ/FAQ";
+import Home from "./pages/Home/Home"
+import Decks from "./pages/Decks/Decks";
 import { Route, Routes } from 'react-router-dom';
-import FAQ from './pages/FAQ/FAQ';
-import Home from './pages/Home/Home';
 import NotFound from './pages/NotFound/NotFound';
 import SettingsPage from './pages/Settings/Settings';
 import NoavaFooter from './shared/components/NoavaFooter';
@@ -9,13 +10,13 @@ import { SignIn as SignInClerk } from "@clerk/clerk-react";
 import PrivateRoute from './shared/components/navigation/PrivateRoute';
 import { RoleGroups } from './models/User';
 import AdminDashboard from './pages/Admin/Dashboard/AdminDashboard';
+import NotificationPage from "./pages/Notification/Notification";
 import Loading from './shared/components/Loading';
+import FlashcardDetail from "./pages/Flashcards/FlashcardDetail";
 
 function Placeholder({ title }: { title: string }) {
   return <NoavaFooter />;
 }
-
-
 
 export default function AppRoutes() {
   return (
@@ -31,19 +32,20 @@ export default function AppRoutes() {
         </div>
         } />
       <Route path="/" element={<Home />} />
-      <Route path="/decks" element={<Placeholder title="Decks" />} />
+      <Route path="/decks" element={<PrivateRoute allowedRoles={RoleGroups.ALL_AUTHENTICATED} />}>
+          <Route index element={<Decks />} />
+          <Route path=":deckId/cards" element={<FlashcardDetail />} />
+      </Route>
       <Route path="/classrooms" element={<Placeholder title="Klassen" />} />
       <Route path="/history" element={<Placeholder title="Geschiedenis" />} />
-      <Route
-        path="/notifications"
-        element={<Placeholder title="Meldingen" />}
-      />
+      <Route path="/notifications" element={<NotificationPage />} />
       <Route path="/settings" element={<SettingsPage />} />
       <Route path="/faq" element={<FAQ />} />
       <Route
         element={<PrivateRoute allowedRoles={RoleGroups.ALL_AUTHENTICATED} />}>
         <Route path="/dashboard" />
       </Route>
+      
       <Route path="*" element={<NotFound />} />
 
       {/* Admin routes */}

@@ -1,0 +1,85 @@
+{
+  "title": "Decks",
+  "subtitle": "Organisez vos flashcards en decks spécifiques à chaque matière",
+  "createButton": "Créer un deck",
+  "search": {
+    "label": "Rechercher"
+  },
+  "sort": {
+    "label": "Trier par",
+    "newest": "Les plus récents d'abord",
+    "oldest": "Les plus anciens d'abord"
+  },
+  "results": {
+    "showing": "Affichage",
+    "of": "de",
+    "decks": "decks",
+    "found": "résultats trouvés"
+  },
+  "empty": {
+    "title": "Pas encore de decks",
+    "message": "Créez votre premier deck pour commencer !",
+    "button": "Créer votre premier deck",
+    "noResults": "Aucun deck trouvé",
+    "clearSearch": "Effacer la recherche"
+  },
+  "card": {
+    "edit": "Modifier",
+    "delete": "Supprimer"
+  },
+  "modal": {
+    "loading": "Chargement du deck...",
+    "createTitle": "Créer un nouveau deck",
+    "editTitle": "Modifier le deck",
+    "titleLabel": "Titre",
+    "titlePlaceholder": "ex. Vocabulaire Français",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "Décrivez votre deck...",
+    "imageLabel": "Image de couverture",
+    "imageHelp": "Taille recommandée : 300x200 pixels. Taille maximale : 2 Mo.",
+    "languageLabel": "Langue",
+    "languageSelect": "Sélectionner une langue",
+    "visibilityLabel": "Visibilité",
+    "visibilityPrivate": "Privé",
+    "visibilityShared": "Partagé",
+    "visibilityPublic": "Public",
+    "visibilityHelp": {
+      "private": "Vous seul pouvez voir ce deck",
+      "shared": "Toute personne ayant le lien peut voir ce deck",
+      "public": "Tout le monde peut voir ce deck"
+    },
+    "createButton": "Créer le deck",
+    "updateButton": "Mettre à jour le deck",
+    "cancelButton": "Annuler"
+  },
+  "languages": {
+    "select": "Sélectionner une langue",
+    "dutch": "Néerlandais",
+    "french": "Français",
+    "english": "Anglais",
+    "german": "Allemand",
+    "spanish": "Espagnol",
+    "italian": "Italien"
+  },
+  "visibility": {
+    "public": "Public",
+    "shared": "Partagé",
+    "private": "Privé"
+  },
+  "toast": {
+    "createSuccess": "Deck créé avec succès !",
+    "updateSuccess": "Deck mis à jour avec succès !",
+    "deleteSuccess": "Deck supprimé avec succès !",
+    "createError": "Échec de la création du deck",
+    "updateError": "Échec de la mise à jour du deck",
+    "deleteError": "Échec de la suppression du deck",
+    "loadError": "Échec du chargement des decks"
+  },
+  "deleteModal": {
+    "title": "Confirmer la suppression",
+    "message": "Êtes-vous sûr de vouloir supprimer ce deck ?",
+    "yes": "Oui, supprimer",
+    "no": "Annuler"
+  },
+  "loading": "Chargement des decks..."
+}

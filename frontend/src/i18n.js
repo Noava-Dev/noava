@@ -6,10 +6,10 @@ i18n
   .use(Backend)
   .use(initReactI18next)
   .init({
-    lng: 'nl',
+    lng: 'en',
     fallbackLng: 'en',
     
-    ns: ['common', 'faq', 'home', 'settings'],
+    ns: ['common', 'faq', 'home', 'settings','decks', 'flashcards'],
     defaultNS: 'common',
 
     debug: false,
