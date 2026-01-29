@@ -1,6 +1,8 @@
 import FAQ from "./pages/FAQ/FAQ";
 import Home from "./pages/Home/Home"
 import Decks from "./pages/Decks/Decks";
+import Classrooms from "./pages/Classrooms/Classrooms";
+import ClassroomDetail from "./pages/Classrooms/ClassroomDetail";
 import { Route, Routes } from 'react-router-dom';
 import NotFound from './pages/NotFound/NotFound';
 import SettingsPage from './pages/Settings/Settings';
@@ -23,7 +25,10 @@ export default function AppRoutes() {
           <Route index element={<Decks />} />
           <Route path=":deckId/cards" element={<FlashcardDetail />} />
       </Route>
-      <Route path="/classrooms" element={<Placeholder title="Klassen" />} />
+        <Route path="/classrooms" element={<PrivateRoute allowedRoles={RoleGroups.ALL_AUTHENTICATED} />}>
+          <Route index element={<Classrooms />} />
+          <Route path=":classroomId" element={<ClassroomDetail />} />
+        </Route>
       <Route path="/history" element={<Placeholder title="Geschiedenis" />} />
       <Route path="/notifications" element={<NotificationPage />} />
       <Route path="/settings" element={<SettingsPage />} />

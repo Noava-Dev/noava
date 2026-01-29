@@ -1,0 +1,58 @@
+{
+  "title": "Klassen",
+  "subtitle": "Beheer en neem deel aan je klassen.",
+  "createButton": "Nieuwe klas",
+  "search": {
+    "label": "Zoeken"
+  },
+  "sort": {
+    "label": "Sorteren",
+    "newest": "Nieuwste",
+    "oldest": "Oudste"
+  },
+  "results": {
+    "found": "resultaten gevonden"
+  },
+  "empty": {
+    "noResults": "Geen klassen gevonden",
+    "clearSearch": "Zoekopdracht wissen",
+    "message": "Je hebt nog geen klassen."
+  },
+  "modal": {
+    "createTitle": "Klas aanmaken",
+    "editTitle": "Klas bewerken",
+    "nameLabel": "Naam",
+    "descriptionLabel": "Beschrijving",
+    "createButton": "Aanmaken",
+    "updateButton": "Bijwerken",
+    "cancelButton": "Annuleren"
+  },
+  "toast": {
+    "loadError": "Kon klassen niet laden",
+    "createSuccess": "Klas aangemaakt",
+    "createError": "Kon klas niet aanmaken",
+    "updateSuccess": "Klas bijgewerkt",
+    "updateError": "Kon klas niet bijwerken",
+    "deleteSuccess": "Klas verwijderd",
+    "deleteError": "Kon klas niet verwijderen",
+    "nameAndDescriptionRequired": "Naam en beschrijving zijn verplicht"
+  },
+  "deleteModal": {
+    "title": "Klas verwijderen",
+    "message": "Weet je zeker dat je deze klas wilt verwijderen? Dit kan niet ongedaan gemaakt worden.",
+    "yes": "Ja",
+    "no": "Nee"
+  },
+  "card": {
+    "edit": "Bewerken",
+    "delete": "Verwijderen",
+    "show": "Bekijk"
+  },
+  "detail": {
+    "description": "Beschrijving",
+    "edit": "Bewerken",
+    "delete": "Verwijderen",
+    "back": "Terug"
+  },
+  "notFound": "Klas niet gevonden"
+}

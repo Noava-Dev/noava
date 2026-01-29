@@ -1,0 +1,58 @@
+{
+  "title": "Classes",
+  "subtitle": "Gérez et rejoignez vos classes.",
+  "createButton": "Créer une classe",
+  "search": {
+    "label": "Rechercher"
+  },
+  "sort": {
+    "label": "Trier",
+    "newest": "Les plus récentes",
+    "oldest": "Les plus anciennes"
+  },
+  "results": {
+    "found": "résultats trouvés"
+  },
+  "empty": {
+    "noResults": "Aucune classe trouvée",
+    "clearSearch": "Effacer la recherche",
+    "message": "Vous n'avez pas encore de classes."
+  },
+  "modal": {
+    "createTitle": "Créer une classe",
+    "editTitle": "Modifier la classe",
+    "nameLabel": "Nom",
+    "descriptionLabel": "Description",
+    "createButton": "Créer",
+    "updateButton": "Mettre à jour",
+    "cancelButton": "Annuler"
+  },
+  "toast": {
+    "loadError": "Impossible de charger les classes",
+    "createSuccess": "Classe créée",
+    "createError": "Échec de la création de la classe",
+    "updateSuccess": "Classe mise à jour",
+    "updateError": "Échec de la mise à jour",
+    "deleteSuccess": "Classe supprimée",
+    "deleteError": "Échec de la suppression",
+    "nameAndDescriptionRequired": "Le nom et la description sont requis"
+  },
+  "deleteModal": {
+    "title": "Supprimer la classe",
+    "message": "Voulez-vous vraiment supprimer cette classe ? Cette action est irréversible.",
+    "yes": "Oui",
+    "no": "Non"
+  },
+  "card": {
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "show": "Voir"
+  },
+  "detail": {
+    "description": "Description",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "back": "Retour"
+  },
+  "notFound": "Classe introuvable"
+}

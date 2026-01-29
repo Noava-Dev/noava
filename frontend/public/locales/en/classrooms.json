@@ -1,0 +1,58 @@
+{
+  "title": "Classrooms",
+  "subtitle": "Manage and join your classrooms.",
+  "createButton": "Create Classroom",
+  "search": {
+    "label": "Search"
+  },
+  "sort": {
+    "label": "Sort by",
+    "newest": "Newest",
+    "oldest": "Oldest"
+  },
+  "results": {
+    "found": "results found"
+  },
+  "empty": {
+    "noResults": "No classrooms found",
+    "clearSearch": "Clear search",
+    "message": "You have no classrooms yet."
+  },
+  "modal": {
+    "createTitle": "Create Classroom",
+    "editTitle": "Edit Classroom",
+    "nameLabel": "Name",
+    "descriptionLabel": "Description",
+    "createButton": "Create",
+    "updateButton": "Update",
+    "cancelButton": "Cancel"
+  },
+  "toast": {
+    "loadError": "Failed to load classrooms",
+    "createSuccess": "Classroom created",
+    "createError": "Failed to create classroom",
+    "updateSuccess": "Classroom updated",
+    "updateError": "Failed to update classroom",
+    "deleteSuccess": "Classroom deleted",
+    "deleteError": "Failed to delete classroom",
+    "nameAndDescriptionRequired": "Name and description are required"
+  },
+  "deleteModal": {
+    "title": "Delete Classroom",
+    "message": "Are you sure you want to delete this classroom? This action cannot be undone.",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "card": {
+    "edit": "Edit",
+    "delete": "Delete",
+    "show": "Show"
+  },
+  "detail": {
+    "description": "Description",
+    "edit": "Edit",
+    "delete": "Delete",
+    "back": "Back"
+  },
+  "notFound": "Classroom not found"
+}
