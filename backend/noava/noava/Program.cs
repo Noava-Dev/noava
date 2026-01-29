@@ -29,6 +29,12 @@ namespace noava
             builder.Services.AddScoped<IFaqService, FaqService>();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<INotificationService, NotificationService>();
+            builder.Services.AddScoped<ISchoolRepository, SchoolRepository>();
+
+            builder.Services.AddScoped<IFaqService, FaqService>();
+            builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<ISchoolService, SchoolService>();
+
             builder.Services.AddScoped<ILeitnerBoxService, LeitnerBoxService>();
             builder.Services.AddScoped<IClassroomService, ClassroomService>();
 

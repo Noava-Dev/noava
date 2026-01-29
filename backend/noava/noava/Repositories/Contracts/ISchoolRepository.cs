@@ -13,6 +13,5 @@ namespace noava.Repositories.Contracts
         Task<School> CreateSchoolAsync(School school);
         Task<School> UpdateSchoolAsync(School school);
         Task DeleteSchoolAsync(int id);
-        Task<School> UpdateSchoolAsync(int schoolId, string name);
     }
 }

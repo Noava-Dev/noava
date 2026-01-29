@@ -8,6 +8,7 @@ import PrivateRoute from './shared/components/navigation/PrivateRoute';
 import { RoleGroups } from './models/User';
 import NotificationPage from "./pages/Notification/Notification";
 import AdminDashboard from './pages/Admin/Dashboard/AdminDashboard';
+import SchoolsPage from './pages/Schools/Schools';
 
 function Placeholder({ title }: { title: string }) {
   return <NoavaFooter />;
@@ -22,6 +23,7 @@ export default function AppRoutes() {
       <Route path="/notifications" element={<NotificationPage />} />
       <Route path="/settings" element={<SettingsPage />} />
       <Route path="/faq" element={<FAQ />} />
+      <Route path="/schools" element={<SchoolsPage />} />
       <Route
         element={<PrivateRoute allowedRoles={RoleGroups.ALL_AUTHENTICATED} />}>
         <Route path="/decks" element={<Placeholder title="Decks" />} />
