@@ -1,6 +1,5 @@
 ﻿using noava.Models.Enums;
 
-
 namespace noava.Models
 {
     public class Deck
@@ -14,6 +13,7 @@ namespace noava.Models
         public required string UserId { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+        public virtual ICollection<DeckUser> DeckUsers { get; set; } = new List<DeckUser>();
 
 
     }

@@ -3,13 +3,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace noava.Models
 {
-    [Table("Users_Decks")]
-    public class UserDeck
+    [Table("Deck_Users")]
+    public class DeckUser
     {
-
         [Required]
         [Column("ClerkId")]
-        public string ClerkId { get; set; } = string.Empty;
+        public string ClerkId { get; set; }
 
         [Required]
         [Column("DeckId")]
@@ -17,15 +16,13 @@ namespace noava.Models
 
         [Required]
         [Column("IsOwner")]
-        public bool IsOwner { get; set; } = false;  
+        public bool IsOwner { get; set; }
 
         [Column("AddedAt")]
-        public DateTime AddedAt { get; set; } = DateTime.UtcNow;
+        public DateTime AddedAt { get; set; }
 
-        [ForeignKey("ClerkId")]
+        // Navigation properties
         public virtual User? User { get; set; }
-
-        [ForeignKey("DeckId")]
         public virtual Deck? Deck { get; set; }
     }
 }

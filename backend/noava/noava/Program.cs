@@ -31,14 +31,18 @@ namespace noava
             builder.Services.AddScoped<ICardRepository, CardRepository>();
             builder.Services.AddScoped<IClassroomRepository, ClassroomRepository>();
             builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
-         
+            builder.Services.AddScoped<IDeckUserRepository, DeckUserRepository>();
+            builder.Services.AddScoped<IDeckInvitationRepository, DeckInvitationRepository>();
+
 
             builder.Services.AddScoped<IFaqService, FaqService>();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IDeckService, DeckService>();
             builder.Services.AddScoped<IBlobService, BlobService>();
             builder.Services.AddScoped<ICardService, CardService>();
-            
+            builder.Services.AddScoped<IDeckInvitationService, DeckInvitationService>();
+            builder.Services.AddScoped<IDeckOwnershipService, DeckOwnershipService>();
+
 
 
             builder.Services.AddScoped<INotificationService, NotificationService>();
