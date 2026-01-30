@@ -1,19 +1,20 @@
-﻿using noava.DTOs.Notifications;
+﻿using noava.DTOs.Request.Notifications;
+using noava.DTOs.Response.Notifications;
 using noava.Models;
 
 namespace noava.Mappers.Notifications
 {
     public static class NotificationMapper
     {
-        public static NotificationDto ToDto(this Notification notification)
+        public static NotificationResponseDto ToDto(this Notification notification)
         {
-            var dto = new NotificationDto
+            var dto = new NotificationResponseDto
             {
                 Id = notification.Id,
                 Type = notification.Type,
                 TemplateKey = notification.TemplateKey,
-                ParametersJson = notification.ParametersJson,
-                Link = notification.Link,
+                ParametersJson = notification.ParametersJson ?? string.Empty,
+                Link = notification.Link ?? string.Empty,
                 CreatedAt = notification.CreatedAt,
                 Actions = notification.Actions.Select(a => a.ToDto()).ToList()
             };
@@ -21,7 +22,7 @@ namespace noava.Mappers.Notifications
             return dto;
         }
 
-        public static Notification ToEntity(this NotificationDto dto)
+        public static Notification ToEntity(this NotificationRequestDto dto)
         {
             var entity = new Notification
             {

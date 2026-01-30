@@ -29,6 +29,7 @@ namespace noava.Repositories.Implementations
         public async Task<IEnumerable<Classroom>> GetAllByUserAsync(string userId)
         {
             return await _context.Classrooms
+                                 .Include(c => c.ClassroomUsers)
                                  .Where(c => c.ClassroomUsers.Any(cu => cu.UserId == userId))
                                  .OrderByDescending(c => c.CreatedAt)
                                  .ToListAsync();
@@ -43,7 +44,8 @@ namespace noava.Repositories.Implementations
 
         public Task UpdateAsync(Classroom classroom)
         {
-            throw new NotImplementedException();
+            _context.Classrooms.Update(classroom);
+            return Task.CompletedTask;
         }
 
         public async Task<Classroom?> GetByJoinCodeAsync(string joinCode)

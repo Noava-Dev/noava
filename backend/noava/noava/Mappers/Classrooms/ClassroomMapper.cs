@@ -1,8 +1,8 @@
-﻿using noava.Models;
-using noava.Temp.DTOs.request;
-using noava.Temp.DTOs.response;
+﻿using noava.DTOs.Request.Classrooms;
+using noava.DTOs.Response.Classrooms;
+using noava.Models;
 
-namespace noava.Temp.Mappers.Classrooms
+namespace noava.Mappers.Classrooms
 {
     public static class ClassroomMapper
     {
@@ -19,14 +19,23 @@ namespace noava.Temp.Mappers.Classrooms
             return entity;
         }
 
-        public static ClassroomResponseDto ToResponseDto(this Classroom entity)
+        public static ClassroomResponseDto ToResponseDto(this Classroom entity, string userId)
         {
+
+            var isTeacher = entity.ClassroomUsers
+                .Any(cu => cu.UserId == userId && cu.IsTeacher);
+
             var dto = new ClassroomResponseDto
             {
                 Id = entity.Id,
                 Name = entity.Name,
                 Description = entity.Description,
                 JoinCode = entity.JoinCode,
+                Permissions = new ClassroomPermissionsDto
+                {
+                    CanEdit = isTeacher,
+                    CanDelete = isTeacher
+                },
                 CreatedAt = entity.CreatedAt,
                 UpdatedAt = entity.UpdatedAt
             };
@@ -34,9 +43,9 @@ namespace noava.Temp.Mappers.Classrooms
             return dto;
         }
 
-        public static IEnumerable<ClassroomResponseDto> ToResponseDtos(this IEnumerable<Classroom> entities)
+        public static IEnumerable<ClassroomResponseDto> ToResponseDtos(this IEnumerable<Classroom> entities, string userId)
         {
-            return entities.Select(e => e.ToResponseDto());
+            return entities.Select(e => e.ToResponseDto(userId));
         }
     }
 }

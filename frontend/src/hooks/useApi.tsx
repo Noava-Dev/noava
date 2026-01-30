@@ -31,7 +31,7 @@ export const useApi = (): AxiosInstance => {
           await clerkReadyRef.current?.promise;
 
           const token = await getToken();
-
+          console.log(token);
           if (token) config.headers.Authorization = `Bearer ${token}`;
         } catch (err) {}
 

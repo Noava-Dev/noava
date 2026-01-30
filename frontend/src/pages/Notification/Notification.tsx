@@ -4,6 +4,7 @@ import { notificationService } from "../../services/NotificationService";
 import type { Notification, NotificationAction } from "../../models/Notification";
 import { HiOutlineX } from "react-icons/hi";
 import { useTranslation } from 'react-i18next';
+import { useApi } from '../../hooks/useApi';
 import { formatDateToEuropean } from "../../services/DateService";
 import { useToast } from '../../contexts/ToastContext';
 import { useAuth } from "@clerk/clerk-react";
@@ -16,6 +17,7 @@ const NotificationPage = () => {
   const { getToken } = useAuth();
   const service = notificationService();
   const { t } = useTranslation('notification');
+  const api = useApi();
   const { showError } = useToast();
 
   function parseParams(data?: any): Record<string, unknown> {
@@ -27,7 +29,7 @@ const NotificationPage = () => {
       }
       if (typeof parsed === 'object' && parsed !== null) return parsed;
     } catch (e) {
-      showError(t('errors.params'), t('errors.title'));
+      showError(t('errors.title'), t('errors.params'));
     }
     return {};
   }
@@ -43,7 +45,7 @@ const NotificationPage = () => {
       setNotifications(data);
     } catch (error) {
       setNotifications([]);
-      showError(t('errors.fetch'), t('errors.title'));
+      showError(t('errors.title'), t('errors.fetch'));
     } finally {
       setLoading(false);
     }
@@ -58,7 +60,7 @@ const NotificationPage = () => {
       await service.deleteNotification(id);
     } catch (error) {
       setNotifications(previous);
-      showError(t('errors.delete'), t('errors.title'));
+      showError(t('errors.title'), t('errors.delete'));
     } finally {
       setProcessingId(null);
     }
@@ -67,34 +69,12 @@ const NotificationPage = () => {
   async function handleAction(notification: Notification, action: NotificationAction) {
     setProcessingId(notification.id);
     try {
-      const token = await getToken();
-      if (!token) throw new Error("Not authenticated");
-
-      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
-      // Remove /api prefix from endpoint if it exists since base URL already includes it
-      let endpoint = action.endpoint;
-      if (endpoint.startsWith('/api/')) {
-        endpoint = endpoint.substring(4); // Remove '/api'
-      }
-      
-      const url = endpoint.startsWith('http') 
-        ? endpoint 
-        : `${apiBaseUrl}${endpoint.startsWith('/') ? endpoint : '/' + endpoint}`;
-
-      const response = await fetch(url, { 
-        method: action.method,
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      });
-      
-      if (!response.ok) throw new Error("Action failed");
+      await api.request({ method: action.method, url: action.endpoint });
 
       await service.deleteNotification(notification.id);
       setNotifications((prev) => prev.filter((n) => n.id !== notification.id));
     } catch (error) {
-      try { showError(t('errors.action'), t('errors.title')); } catch {}
+      try { showError(t('errors.title'), t('errors.action')); } catch {}
     } finally {
       setProcessingId(null);
     }

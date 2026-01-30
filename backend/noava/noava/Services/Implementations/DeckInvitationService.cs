@@ -1,6 +1,6 @@
 ﻿using noava.DTOs.Request;
+using noava.DTOs.Request.Notifications;
 using noava.DTOs.Response;
-using noava.DTOs.Notifications;
 using noava.Models;
 using noava.Models.Enums;
 using noava.Repositories.Contracts;
@@ -72,7 +72,7 @@ namespace noava.Services.Implementations
         var invitedBy = await _userRepo.GetByClerkIdAsync(invitedByClerkId);
 
  
-            var notificationDto = new NotificationDto
+            var notificationDto = new NotificationRequestDto
             {
                 UserId = invitedUser.ClerkId,
                 Type = NotificationType.DeckInvitationReceived,
@@ -84,15 +84,15 @@ namespace noava.Services.Implementations
                     invitationId = invitation.InvitationId
                 }),
                 Link = $"/decks/{deck.DeckId}/invitations/{invitation.InvitationId}",
-                Actions = new List<NotificationActionDto>
+                Actions = new List<NotificationActionRequestDto>
                 {
-                    new NotificationActionDto
+                    new NotificationActionRequestDto
                     {
                         LabelKey = "accept",  
                         Endpoint = $"/api/deckinvitation/{invitation.InvitationId}/accept",  
                         Method = HttpMethodType.POST  
                     },
-                    new NotificationActionDto
+                    new NotificationActionRequestDto
                     {
                         LabelKey = "decline",  
                         Endpoint = $"/api/deckinvitation/{invitation.InvitationId}/decline",  
@@ -145,7 +145,7 @@ namespace noava.Services.Implementations
             };
             await _userDeckRepo.AddAsync(deckUser);
 
-            var notificationDto = new NotificationDto
+            var notificationDto = new NotificationRequestDto
             {
                 UserId = invitation.InvitedByClerkId,
                 Type = NotificationType.DeckInvitationAccepted,
@@ -180,7 +180,7 @@ namespace noava.Services.Implementations
             await _invitationRepo.UpdateAsync(invitation);
 
             // ← UPDATED: No actions needed for decline notification
-            var notificationDto = new NotificationDto
+            var notificationDto = new NotificationRequestDto
             {
                 UserId = invitation.InvitedByClerkId,
                 Type = NotificationType.DeckInvitationDeclined,
