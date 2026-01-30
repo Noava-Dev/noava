@@ -122,7 +122,7 @@ function Dashboard() {
 
           <section className="min-h-screen py-8 bg-white dark:bg-gray-900 md:py-12">
             {loading ? (
-              <Loading />
+              <Loading size="xl" color="info" center />
             ) : (
               <div className="container flex flex-col gap-6 px-4 mx-auto max-w-7xl">
                 {/* Stat Cards */}

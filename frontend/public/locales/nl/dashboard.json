@@ -16,12 +16,25 @@
       "tooltip": "Totale tijd besteed aan het bestuderen van flashcards deze week"
     },
     "cardsdue": {
-      "title": "Kaarten Te Beoordelen",
+      "title": "Te Beoordelen Kaarten",
       "tooltip": "Kaarten gepland voor beoordeling vandaag volgens het spaced repetition-algoritme"
     }
   },
   "decks": {
     "empty": "Nog geen decks",
     "viewAll": "Alles bekijken"
+  },
+  "toast": {
+    "loadError": "Kan decks niet laden",
+    "updateSuccess": "Deck succesvol bijgewerkt",
+    "updateError": "Deck kon niet worden bijgewerkt",
+    "deleteSuccess": "Deck succesvol verwijderd",
+    "deleteError": "Deck kon niet worden verwijderd"
+  },
+  "deleteModal": {
+    "title": "Verwijderen Bevestigen",
+    "message": "Weet je zeker dat je dit deck wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.",
+    "yes": "Ja, verwijderen",
+    "no": "Annuleren"
   }
 }

@@ -23,5 +23,18 @@
   "decks": {
     "empty": "Pas encore de decks",
     "viewAll": "Voir tout"
+  },
+  "toast": {
+    "loadError": "Impossible de charger les decks",
+    "updateSuccess": "Deck mis à jour avec succès",
+    "updateError": "Échec de la mise à jour du deck",
+    "deleteSuccess": "Deck supprimé avec succès",
+    "deleteError": "Échec de la suppression du deck"
+  },
+  "deleteModal": {
+    "title": "Confirmer la Suppression",
+    "message": "Êtes-vous sûr de vouloir supprimer ce deck? Cette action est irréversible.",
+    "yes": "Oui, supprimer",
+    "no": "Annuler"
   }
 }
