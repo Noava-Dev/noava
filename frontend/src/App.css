@@ -9,10 +9,3 @@ body,
 body {
   display: block;
 }
-
-/*because the sidebar is FIXED, the main content needs to have a small margin for it to not be covered
-by the sidebar. this can be solved with flexbox in App.tsx but this is a quicker and safer way for now */
-.app-container {
-  width: 100%;
-  margin-left: 5rem;
-}

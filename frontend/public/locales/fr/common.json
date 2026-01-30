@@ -1,6 +1,7 @@
 {
   "app": {
     "title": "NOAVA",
+    "success": "Succès",
     "loading": "Chargement...",
     "error": "Une erreur s'est produite",
     "retry": "Réessayer",
@@ -22,6 +23,7 @@
     "delete": "Supprimer",
     "edit": "Modifier",
     "create": "Créer",
+    "invite": "Inviter",
     "search": "Rechercher",
     "searchPlaceholder": "Rechercher...",
     "submit": "Soumettre",

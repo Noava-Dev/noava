@@ -5,7 +5,7 @@ namespace noava.Repositories.Contracts
     public interface IDeckRepository
     {
         Task<List<Deck>> GetAllAsync();
-        Task<List<Deck>> GetByUserIdAsync(string userId);
+        Task<List<Deck>> GetByUserIdAsync(string userId, int? limit);
         Task<Deck?> GetByIdAsync(int id);
         Task<Deck> CreateAsync(Deck deck);
         Task<Deck> UpdateAsync(Deck deck);

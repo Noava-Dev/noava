@@ -4,17 +4,20 @@ import { notificationService } from "../../services/NotificationService";
 import type { Notification, NotificationAction } from "../../models/Notification";
 import { HiOutlineX } from "react-icons/hi";
 import { useTranslation } from 'react-i18next';
+import { useApi } from '../../hooks/useApi';
 import { formatDateToEuropean } from "../../services/DateService";
 import { useToast } from '../../contexts/ToastContext';
+import { useAuth } from "@clerk/clerk-react";
 
 const NotificationPage = () => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState(true);
   const [processingId, setProcessingId] = useState<number | null>(null);
 
-
+  const { getToken } = useAuth();
   const service = notificationService();
   const { t } = useTranslation('notification');
+  const api = useApi();
   const { showError } = useToast();
 
   function parseParams(data?: any): Record<string, unknown> {
@@ -26,7 +29,7 @@ const NotificationPage = () => {
       }
       if (typeof parsed === 'object' && parsed !== null) return parsed;
     } catch (e) {
-      showError(t('errors.params'), t('errors.title'));
+      showError(t('errors.title'), t('errors.params'));
     }
     return {};
   }
@@ -42,7 +45,7 @@ const NotificationPage = () => {
       setNotifications(data);
     } catch (error) {
       setNotifications([]);
-      showError(t('errors.fetch'), t('errors.title'));
+      showError(t('errors.title'), t('errors.fetch'));
     } finally {
       setLoading(false);
     }
@@ -57,7 +60,7 @@ const NotificationPage = () => {
       await service.deleteNotification(id);
     } catch (error) {
       setNotifications(previous);
-      showError(t('errors.delete'), t('errors.title'));
+      showError(t('errors.title'), t('errors.delete'));
     } finally {
       setProcessingId(null);
     }
@@ -66,13 +69,12 @@ const NotificationPage = () => {
   async function handleAction(notification: Notification, action: NotificationAction) {
     setProcessingId(notification.id);
     try {
-      const response = await fetch(action.endpoint, { method: action.method });
-      if (!response.ok) throw new Error("Action failed");
+      await api.request({ method: action.method, url: action.endpoint });
 
       await service.deleteNotification(notification.id);
       setNotifications((prev) => prev.filter((n) => n.id !== notification.id));
     } catch (error) {
-      try { showError(t('errors.action'), t('errors.title')); } catch {}
+      try { showError(t('errors.title'), t('errors.action')); } catch {}
     } finally {
       setProcessingId(null);
     }

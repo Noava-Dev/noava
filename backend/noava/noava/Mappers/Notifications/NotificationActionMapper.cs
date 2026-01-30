@@ -1,13 +1,14 @@
-﻿using noava.DTOs.Notifications;
+﻿using noava.DTOs.Request.Notifications;
+using noava.DTOs.Response.Notifications;
 using noava.Models;
 
 namespace noava.Mappers.Notifications
 {
     public static class NotificationActionMapper
     {
-        public static NotificationActionDto ToDto(this NotificationAction action)
+        public static NotificationActionResponseDto ToDto(this NotificationAction action)
         {
-            return new NotificationActionDto
+            return new NotificationActionResponseDto
             {
                 LabelKey = action.LabelKey,
                 Endpoint = action.Endpoint,
@@ -15,7 +16,7 @@ namespace noava.Mappers.Notifications
             };
         }
 
-        public static NotificationAction ToEntity(this NotificationActionDto dto)
+        public static NotificationAction ToEntity(this NotificationActionRequestDto dto)
         {
             return new NotificationAction
             {

@@ -21,6 +21,15 @@ import FlashcardModal from '../../shared/components/FlashcardModal';
 import type { Deck } from '../../models/Deck';
 import type { Flashcard, CreateFlashcardRequest, UpdateFlashcardRequest } from '../../models/Flashcard';
 import Searchbar from '../../shared/components/Searchbar';
+import { useAzureBlobService } from '../../services/AzureBlobService';
+import { ManageOwnersModal } from '../../shared/components/ManageOwnersModal';
+
+interface FlashcardWithImages extends Flashcard {
+  frontImageUrl?: string | null;
+  backImageUrl?: string | null;
+}
+
+
 
 function FlashcardDetail() {
   const { deckId } = useParams<{ deckId: string }>();
@@ -29,15 +38,17 @@ function FlashcardDetail() {
   const deckService = useDeckService();
   const flashcardService = useFlashcardService();
   const { showError, showSuccess } = useToast();
+  const azureBlobService = useAzureBlobService();  
 
   const [deck, setDeck] = useState<Deck | null>(null);
-  const [flashcards, setFlashcards] = useState<Flashcard[]>([]);
+  const [flashcards, setFlashcards] = useState<FlashcardWithImages[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedFlashcard, setSelectedFlashcard] = useState<Flashcard | undefined>(undefined);
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const [cardToDelete, setCardToDelete] = useState<number | null>(null);
+  const [manageOwnersOpened, setManageOwnersOpened] = useState(false);
 
   useEffect(() => {
     if (deckId) {
@@ -62,21 +73,49 @@ function FlashcardDetail() {
   const fetchFlashcards = async () => {
     try {
       const cards = await flashcardService.getByDeckId(Number(deckId));
-      setFlashcards(cards);
-    } catch (error) {
-      showError(t('flashcardDetail.error'), t('flashcardDetail.error'));
-      console.error(error);
-    }
-  };
+      
+      // Load images for all cards
+      const cardsWithImages = await Promise.all(
+        cards.map(async (card) => {
+          let frontImageUrl = null;
+          let backImageUrl = null;
+
+          // Load front image if exists
+          if (card.frontImage) {
+            try {
+              frontImageUrl = await azureBlobService.getSasUrl('card-images', card.frontImage);
+            } catch (error) {
+              console.error(`Failed to load front image for card ${card.cardId}:`, error);
+            }
+          }
+
+          // Load back image if exists
+          if (card.backImage) {
+            
+              backImageUrl = await azureBlobService.getSasUrl('card-images', card.backImage);
+            
+          }
+
+          return {
+            ...card,
+            frontImageUrl,
+            backImageUrl
+          };
+        })
+      );
+
+    setFlashcards(cardsWithImages);
+        } catch (error) {
+          showError(t('flashcardDetail.error'), t('flashcardDetail.error'));
+        }
+      };
 
   const handleCreateFlashcard = async (flashcard: CreateFlashcardRequest) => {
     try {
       if (selectedFlashcard) {
-        // Update existing flashcard
         await flashcardService.update(selectedFlashcard.cardId, flashcard as UpdateFlashcardRequest);
         showSuccess('Success', 'Flashcard updated successfully');
       } else {
-        // Create new flashcard
         await flashcardService.create(Number(deckId), flashcard);
         showSuccess('Success', 'Flashcard created successfully');
       }
@@ -85,7 +124,6 @@ function FlashcardDetail() {
       await fetchFlashcards();
     } catch (error) {
       showError('Error', selectedFlashcard ? 'Failed to update flashcard' : 'Failed to create flashcard');
-      console.error(error);
     }
   };
 
@@ -110,7 +148,6 @@ function FlashcardDetail() {
       await fetchFlashcards();
     } catch (error) {
       showError('Error', 'Failed to delete flashcard');
-      console.error(error);
     }
   };
 
@@ -194,16 +231,26 @@ function FlashcardDetail() {
                 {deck.description}
               </p>
             )}
+            
 
             {/* Action Buttons */}
             <div className="flex flex-wrap gap-3 mb-8">
+              <Button
+                  size="lg"
+                  className="bg-cyan-500 hover:bg-cyan-600"
+                  disabled={flashcards.length === 0}
+                  onClick={() => navigate(`/decks/${deckId}/review`)} 
+                    >
+                    <HiPlay className="w-5 h-5 mr-2" />
+                    {t('flashcardDetail.quickReview')}
+              </Button>
               <Button
                 size="lg"
                 className="bg-cyan-500 hover:bg-cyan-600"
                 disabled={totalCards === 0}
               >
                 <HiPlay className="w-5 h-5 mr-2" />
-                Study Now
+                {t('flashcardDetail.studyNow')}
               </Button>
               <Button
                 size="lg"
@@ -212,15 +259,14 @@ function FlashcardDetail() {
                 disabled={totalCards === 0}
               >
                 <HiRefresh className="w-5 h-5 mr-2" />
-                Shuffle
+                {t('flashcardDetail.shuffle')}
               </Button>
               <Button
-                size="lg"
-                color="dark"
-                className="bg-gray-800 hover:bg-gray-700 border border-gray-700 ml-auto"
-              >
-                <HiUserGroup className="w-5 h-5 mr-2" />
-              </Button>
+                  onClick={() => setManageOwnersOpened(true)}
+                >
+                  <HiUserGroup className="w-5 h-5 mr-2" />
+                  {t('ownership.manageAccess')}
+                </Button>
               <Button
                 size="lg"
                 color="dark"
@@ -295,44 +341,86 @@ function FlashcardDetail() {
               {filteredFlashcards.map((card) => (
                 <div
                   key={card.cardId}
-                  className="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow p-6 border border-gray-200 dark:border-gray-700 relative"
+                  className="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow border border-gray-200 dark:border-gray-700 relative overflow-hidden"
                 >
                   {/* Action buttons */}
-                  <div className="absolute top-4 right-4 flex gap-2">
+                  <div className="absolute top-4 right-4 flex gap-2 z-10">
                     <button
                       onClick={() => handleEditFlashcard(card)}
-                      className="p-2 text-gray-400 hover:text-cyan-500 dark:hover:text-cyan-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                      className="p-2 text-gray-400 hover:text-cyan-500 dark:hover:text-cyan-400 hover:bg-white dark:hover:bg-gray-700 rounded-lg transition-colors shadow-sm"
                       title={t('flashcardDetail.editCard')}
                     >
                       <HiPencil className="h-5 w-5" />
                     </button>
                     <button
                       onClick={() => handleDeleteFlashcard(card.cardId)}
-                      className="p-2 text-gray-400 hover:text-red-500 dark:hover:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                      className="p-2 text-gray-400 hover:text-red-500 dark:hover:text-red-400 hover:bg-white dark:hover:bg-gray-700 rounded-lg transition-colors shadow-sm"
                       title={t('flashcardDetail.deleteCard')}
                     >
                       <HiTrash className="h-5 w-5" />
                     </button>
                   </div>
 
-                  <div className="mb-4 pr-20">
-                    <div className="text-xs text-cyan-500 dark:text-cyan-400 font-semibold mb-2">{t('flashcardDetail.frontSide')}</div>
-                    <p className="text-gray-900 dark:text-white text-lg font-semibold">{card.frontText}</p>
-                  </div>
-                  <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
-                    <div className="text-xs text-gray-500 dark:text-gray-400 font-semibold mb-2">{t('flashcardDetail.backSide')}</div>
-                    <p className="text-gray-700 dark:text-gray-300">{card.backText}</p>
-                  </div>
-                  {card.memo && (
-                    <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-                      <p className="text-xs text-gray-500 dark:text-gray-400 italic">{card.memo}</p>
+                  {/* Front Side */}
+                  <div className="p-6">
+                    {/* Front Image */}
+                    {card.frontImageUrl && (
+  <div className="mb-4 flex justify-center bg-gray-100 dark:bg-gray-700 rounded-lg p-2">
+    <img 
+      src={card.frontImageUrl} 
+      alt="Front" 
+      className="max-h-40 max-w-full object-contain rounded-lg"
+    />
+  </div>
+)}
+                    <div className="mb-4 pr-12">
+                      <div className="text-xs text-cyan-500 dark:text-cyan-400 font-semibold mb-2 uppercase tracking-wide">
+                        {t('flashcardDetail.frontSide')}
+                      </div>
+                      <p className="text-gray-900 dark:text-white text-lg font-semibold line-clamp-2">
+                        {card.frontText}
+                      </p>
                     </div>
-                  )}
+
+                    {/* Divider */}
+                    <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
+                      {/* Back Image */}
+                      {card.backImageUrl && (
+                      <div className="mb-4 flex justify-center bg-gray-100 dark:bg-gray-700 rounded-lg p-2">
+                        <img 
+                          src={card.backImageUrl} 
+                          alt="Back" 
+                          className="max-h-40 max-w-full object-contain rounded-lg"
+                        />
+                      </div>
+                    )}
+
+                      <div className="text-xs text-gray-500 dark:text-gray-400 font-semibold mb-2 uppercase tracking-wide">
+                        {t('flashcardDetail.backSide')}
+                      </div>
+                      <p className="text-gray-700 dark:text-gray-300 line-clamp-2">
+                        {card.backText}
+                      </p>
+                    </div>
+
+                    {/* Memo */}
+                    {card.memo && (
+                      <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                        <div className="flex items-start gap-2">
+                          <span className="text-yellow-500 dark:text-yellow-400 flex-shrink-0"></span>
+                          <p className="text-xs text-gray-600 dark:text-gray-400 italic line-clamp-2">
+                            {card.memo}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
               ))}
             </div>
           )}
         </div>
+
 
         {/* Flashcard Modal */}
         <FlashcardModal
@@ -379,6 +467,12 @@ function FlashcardDetail() {
             </div>
           </div>
         )}
+        <ManageOwnersModal
+  opened={manageOwnersOpened}
+  onClose={() => setManageOwnersOpened(false)}
+  deckId={parseInt(deckId!)}
+  deckTitle={deck?.title || ''}
+/>
 
         <NoavaFooter />
       </div>

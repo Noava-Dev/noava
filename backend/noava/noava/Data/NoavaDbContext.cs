@@ -24,6 +24,9 @@ namespace noava.Data
         public DbSet<NotificationAction> NotificationActions { get; set; }
         public DbSet<Classroom> Classrooms { get; set; }
         public DbSet<ClassroomUser> ClassroomUsers { get; set; }
+        public DbSet<DeckUser> DecksUsers { get; set; } 
+        public DbSet<DeckInvitation> DeckInvitations { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

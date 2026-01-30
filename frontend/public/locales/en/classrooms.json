@@ -1,0 +1,119 @@
+{
+  "title": "Classrooms",
+  "subtitle": "Manage and join your classrooms.",
+  "createButton": "Create Classroom",
+  "search": { "label": "Search" },
+  "sort": {
+    "label": "Sort by",
+    "newest": "Newest",
+    "oldest": "Oldest",
+    "az": "Alphabetical",
+    "za": "Reverse alphabetical"
+  },
+  "results": { "found": "results found" },
+  "empty": {
+    "noResults": "No classrooms found",
+    "tryAnother": "Try a different search term",
+    "clearSearch": "Clear search",
+    "message": "You have no classrooms yet."
+  },
+  "modal": {
+    "createTitle": "Create Classroom",
+    "editTitle": "Edit Classroom",
+    "nameLabel": "Name",
+    "descriptionLabel": "Description",
+    "createButton": "Create",
+    "updateButton": "Update",
+    "cancelButton": "Cancel"
+  },
+  "members": {
+    "title": "Members",
+    "subtitle": "Manage classroom members",
+    "invite": "Invite",
+    "inviteTitle": "Invite user",
+    "inviteHelp": "Enter the email of the user you want to invite to this classroom.",
+    "invitePlaceholder": "user@example.com",
+    "inviteSuccess": "Invitation sent",
+    "inviteError": "Failed to send invitation, this user might not exist",
+    "notAuthorized": "Not authorized",
+    "onlyTeachers": "Only teachers may access this page",
+    "editTitle": "Edit member",
+    "isTeacher": "Is teacher",
+    "saving": "Saving...",
+    "updateSuccess": "Member updated",
+    "updateError": "Failed to update member",
+    "deleteSuccess": "Member removed",
+    "deleteError": "Failed to remove member",
+    "deleteConfirmTitle": "Remove member",
+    "deleteConfirmMessage": "Are you sure you want to remove this member?",
+    "noMembers": "No members found",
+    "searchPlaceholder": "Search by name or email",
+    "columns": {
+      "name": "Name",
+      "email": "Email",
+      "role": "Role",
+      "actions": "Actions"
+    },
+    "role": { "teacher": "Teacher", "student": "Student" },
+    "member": "Member"
+  },
+  "toast": {
+    "loadError": "Failed to load classrooms",
+    "createSuccess": "Classroom created",
+    "createError": "Failed to create classroom",
+    "updateSuccess": "Classroom updated",
+    "updateError": "Failed to update classroom",
+    "deleteSuccess": "Classroom deleted",
+    "deleteError": "Failed to delete classroom",
+    "nameAndDescriptionRequired": "Name and description are required",
+    "requestCodeSuccess": "New code requested",
+    "requestCodeError": "Failed to request new code"
+  },
+  "deleteModal": {
+    "title": "Delete Classroom",
+    "message": "Are you sure you want to delete this classroom? This action cannot be undone.",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "card": {
+    "edit": "Edit",
+    "regenerateCode": "Request new code",
+    "delete": "Delete",
+    "show": "Show"
+  },
+  "requestCodeModal": {
+    "title": "Request new classroom code",
+    "message": "Are you sure you want to request a new join code? This will invalidate the previous code.",
+    "yes": "Request",
+    "no": "Cancel"
+  },
+  "detail": {
+    "description": "Description",
+    "info": "Information",
+    "membersPlaceholder": "Class members and settings will appear here.",
+    "joinCode": "Join code",
+    "edit": "Edit",
+    "delete": "Delete",
+    "back": "Back"
+  },
+  "actions": {
+    "cancel": "Cancel",
+    "invite": "Invite"
+  },
+  "joinButton": "Join",
+  "join": {
+    "title": "Join classroom",
+    "subtitle": "Enter a join code to join a classroom",
+    "form": {
+      "label": "Join code",
+      "placeholder": "e.g. ABC123",
+      "empty": "Please enter a join code",
+      "submit": "Join",
+      "cancel": "Cancel",
+      "joining": "Joining..."
+    },
+    "success": "You were added to the classroom",
+    "error": "Failed to join with that code"
+  },
+  "notFound": "Classroom not found"
+}

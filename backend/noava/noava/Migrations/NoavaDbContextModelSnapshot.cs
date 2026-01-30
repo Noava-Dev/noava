@@ -59,7 +59,6 @@ namespace noava.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Memo")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("UpdatedAt")
@@ -197,6 +196,60 @@ namespace noava.Migrations
                         });
                 });
 
+            modelBuilder.Entity("noava.Models.Classroom", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<string>("JoinCode")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("JoinCode")
+                        .IsUnique();
+
+                    b.ToTable("Classrooms");
+                });
+
+            modelBuilder.Entity("noava.Models.ClassroomUser", b =>
+                {
+                    b.Property<int>("ClassroomId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsTeacher")
+                        .HasColumnType("boolean");
+
+                    b.HasKey("ClassroomId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ClassroomUsers");
+                });
+
             modelBuilder.Entity("noava.Models.Deck", b =>
                 {
                     b.Property<int>("DeckId")
@@ -251,36 +304,117 @@ namespace noava.Migrations
                         new
                         {
                             DeckId = 1,
-                            CreatedAt = new DateTime(2026, 1, 28, 13, 12, 38, 637, DateTimeKind.Utc).AddTicks(5260),
+                            CreatedAt = new DateTime(2026, 1, 30, 12, 36, 43, 515, DateTimeKind.Utc).AddTicks(4055),
                             Description = "Franse woorden voor beginners",
                             Language = "Frans",
                             Title = "Frans Woordenschat",
-                            UpdatedAt = new DateTime(2026, 1, 28, 13, 12, 38, 637, DateTimeKind.Utc).AddTicks(5260),
+                            UpdatedAt = new DateTime(2026, 1, 30, 12, 36, 43, 515, DateTimeKind.Utc).AddTicks(4056),
                             UserId = "user_38TGbnbcmzK7uZAbaABqTtzQtvz",
                             Visibility = 0
                         },
                         new
                         {
                             DeckId = 2,
-                            CreatedAt = new DateTime(2026, 1, 28, 13, 12, 38, 637, DateTimeKind.Utc).AddTicks(5262),
+                            CreatedAt = new DateTime(2026, 1, 30, 12, 36, 43, 515, DateTimeKind.Utc).AddTicks(4058),
                             Description = "Engelse grammatica oefeningen",
                             Language = "Engels",
                             Title = "Engels Grammatica",
-                            UpdatedAt = new DateTime(2026, 1, 28, 13, 12, 38, 637, DateTimeKind.Utc).AddTicks(5263),
+                            UpdatedAt = new DateTime(2026, 1, 30, 12, 36, 43, 515, DateTimeKind.Utc).AddTicks(4058),
                             UserId = "user_38TGbnbcmzK7uZAbaABqTtzQtvz",
                             Visibility = 2
                         },
                         new
                         {
                             DeckId = 3,
-                            CreatedAt = new DateTime(2026, 1, 28, 13, 12, 38, 637, DateTimeKind.Utc).AddTicks(5265),
+                            CreatedAt = new DateTime(2026, 1, 30, 12, 36, 43, 515, DateTimeKind.Utc).AddTicks(4060),
                             Description = "Spaanse zinnen voor dagelijks gebruik",
                             Language = "Spaans",
                             Title = "Spaans Conversatie",
-                            UpdatedAt = new DateTime(2026, 1, 28, 13, 12, 38, 637, DateTimeKind.Utc).AddTicks(5265),
+                            UpdatedAt = new DateTime(2026, 1, 30, 12, 36, 43, 515, DateTimeKind.Utc).AddTicks(4061),
                             UserId = "user_38TGbnbcmzK7uZAbaABqTtzQtvz",
                             Visibility = 1
                         });
+                });
+
+            modelBuilder.Entity("noava.Models.DeckInvitation", b =>
+                {
+                    b.Property<int>("InvitationId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("InvitationId"));
+
+                    b.Property<int>("DeckId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("InvitedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("InvitedByClerkId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("InvitedUserClerkId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("InvitedUserEmail")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("RespondedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("InvitationId");
+
+                    b.HasIndex("DeckId");
+
+                    b.HasIndex("InvitedByClerkId");
+
+                    b.HasIndex("InvitedUserClerkId");
+
+                    b.HasIndex("InvitedUserEmail");
+
+                    b.HasIndex("Status");
+
+                    b.ToTable("DeckInvitations", (string)null);
+                });
+
+            modelBuilder.Entity("noava.Models.DeckUser", b =>
+                {
+                    b.Property<string>("ClerkId")
+                        .HasColumnType("text")
+                        .HasColumnName("ClerkId");
+
+                    b.Property<int>("DeckId")
+                        .HasColumnType("integer")
+                        .HasColumnName("DeckId");
+
+                    b.Property<DateTime>("AddedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("AddedAt");
+
+                    b.Property<int?>("DeckId1")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("IsOwner")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false)
+                        .HasColumnName("IsOwner");
+
+                    b.HasKey("ClerkId", "DeckId");
+
+                    b.HasIndex("ClerkId");
+
+                    b.HasIndex("DeckId");
+
+                    b.HasIndex("DeckId1");
+
+                    b.ToTable("Decks_Users", (string)null);
                 });
 
             modelBuilder.Entity("noava.Models.FAQ", b =>
@@ -489,38 +623,6 @@ namespace noava.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("noava.Models.Notification", b =>
-                {
-                    b.HasOne("noava.Models.User", "User")
-                        .WithMany("Notifications")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("noava.Models.NotificationAction", b =>
-                {
-                    b.HasOne("noava.Models.Notification", "Notification")
-                        .WithMany("Actions")
-                        .HasForeignKey("NotificationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Notification");
-                });
-
-            modelBuilder.Entity("noava.Models.Notification", b =>
-                {
-                    b.Navigation("Actions");
-                });
-
-            modelBuilder.Entity("noava.Models.User", b =>
-                {
-                    b.Navigation("Notifications");
-                });
-
             modelBuilder.Entity("noava.Models.Card", b =>
                 {
                     b.HasOne("noava.Models.Deck", null)
@@ -572,6 +674,96 @@ namespace noava.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("noava.Models.ClassroomUser", b =>
+                {
+                    b.HasOne("noava.Models.Classroom", "Classroom")
+                        .WithMany("ClassroomUsers")
+                        .HasForeignKey("ClassroomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("noava.Models.User", "User")
+                        .WithMany("ClassroomUsers")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Classroom");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("noava.Models.DeckInvitation", b =>
+                {
+                    b.HasOne("noava.Models.Deck", "Deck")
+                        .WithMany()
+                        .HasForeignKey("DeckId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("noava.Models.User", "InvitedBy")
+                        .WithMany()
+                        .HasForeignKey("InvitedByClerkId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("noava.Models.User", "InvitedUser")
+                        .WithMany()
+                        .HasForeignKey("InvitedUserClerkId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Deck");
+
+                    b.Navigation("InvitedBy");
+
+                    b.Navigation("InvitedUser");
+                });
+
+            modelBuilder.Entity("noava.Models.DeckUser", b =>
+                {
+                    b.HasOne("noava.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("ClerkId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("noava.Models.Deck", "Deck")
+                        .WithMany()
+                        .HasForeignKey("DeckId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("noava.Models.Deck", null)
+                        .WithMany("DeckUsers")
+                        .HasForeignKey("DeckId1");
+
+                    b.Navigation("Deck");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("noava.Models.Notification", b =>
+                {
+                    b.HasOne("noava.Models.User", "User")
+                        .WithMany("Notifications")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("noava.Models.NotificationAction", b =>
+                {
+                    b.HasOne("noava.Models.Notification", "Notification")
+                        .WithMany("Actions")
+                        .HasForeignKey("NotificationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Notification");
+                });
+
             modelBuilder.Entity("noava.Models.StudySessions", b =>
                 {
                     b.HasOne("noava.Models.User", null)
@@ -585,6 +777,28 @@ namespace noava.Migrations
                         .HasForeignKey("DeckId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("noava.Models.Classroom", b =>
+                {
+                    b.Navigation("ClassroomUsers");
+                });
+
+            modelBuilder.Entity("noava.Models.Deck", b =>
+                {
+                    b.Navigation("DeckUsers");
+                });
+
+            modelBuilder.Entity("noava.Models.Notification", b =>
+                {
+                    b.Navigation("Actions");
+                });
+
+            modelBuilder.Entity("noava.Models.User", b =>
+                {
+                    b.Navigation("ClassroomUsers");
+
+                    b.Navigation("Notifications");
                 });
 #pragma warning restore 612, 618
         }

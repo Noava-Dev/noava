@@ -1,13 +1,14 @@
-﻿using noava.DTOs.Notifications;
+﻿using noava.DTOs.Request.Notifications;
+using noava.DTOs.Response.Notifications;
 using noava.Models;
 
 namespace noava.Services.Contracts
 {
     public interface INotificationService
     {
-        Task<List<NotificationDto>> GetNotificationsForUserAsync(string userId);
-        Task<NotificationDto> CreateNotificationAsync(NotificationDto notification);
+        Task<List<NotificationResponseDto>> GetNotificationsForUserAsync(string userId);
+        Task<NotificationResponseDto> CreateNotificationAsync(NotificationRequestDto notification);
         Task DeleteNotificationAsync(long notificationId, string userId);
-        Task<NotificationDto?> GetNotificationByIdAsync(long id, string userId);
+        Task<NotificationResponseDto?> GetNotificationByIdAsync(long id, string userId);
     }
 }

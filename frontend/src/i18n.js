@@ -8,8 +8,16 @@ i18n
   .init({
     lng: 'en',
     fallbackLng: 'en',
-    
-    ns: ['common', 'faq', 'home', 'settings','decks', 'flashcards'],
+
+    ns: [
+      'common',
+      'faq',
+      'home',
+      'settings',
+      'decks',
+      'flashcards',
+      'dashboard',
+    ],
     defaultNS: 'common',
 
     debug: false,

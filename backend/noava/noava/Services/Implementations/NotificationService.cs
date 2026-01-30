@@ -1,4 +1,5 @@
-﻿using noava.DTOs.Notifications;
+﻿using noava.DTOs.Request.Notifications;
+using noava.DTOs.Response.Notifications;
 using noava.Mappers.Notifications;
 using noava.Models;
 using noava.Repositories.Contracts;
@@ -16,14 +17,14 @@ namespace noava.Services.Implementations
             _repository = repository;
         }
 
-        public async Task<NotificationDto> CreateNotificationAsync(NotificationDto notificationDto)
+        public async Task<NotificationResponseDto> CreateNotificationAsync(NotificationRequestDto notificationDto)
         {
             var notification = notificationDto.ToEntity();
 
             await _repository.AddAsync(notification);
             await _repository.SaveChangesAsync();
 
-            return notificationDto;
+            return notification.ToDto();
         }
 
         public async Task DeleteNotificationAsync(long notificationId, string userId)
@@ -40,7 +41,7 @@ namespace noava.Services.Implementations
             await _repository.SaveChangesAsync();
         }
 
-        public async Task<NotificationDto?> GetNotificationByIdAsync(long id, string userId)
+        public async Task<NotificationResponseDto?> GetNotificationByIdAsync(long id, string userId)
         {
             var notification = await _repository.GetByIdAsync(id);
             if (notification == null) { return null; }
@@ -52,7 +53,7 @@ namespace noava.Services.Implementations
             return notification.ToDto();
         }
 
-        public async Task<List<NotificationDto>> GetNotificationsForUserAsync(string userId)
+        public async Task<List<NotificationResponseDto>> GetNotificationsForUserAsync(string userId)
         {
             var notifications = await _repository.GetByUserIdAsync(userId);
             return notifications.Select(n => n.ToDto()).ToList();

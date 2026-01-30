@@ -1,0 +1,128 @@
+{
+  "title": "Klassen",
+  "subtitle": "Beheer en neem deel aan je klassen.",
+  "createButton": "Nieuwe klas",
+  "search": {
+    "label": "Zoeken"
+  },
+  "sort": {
+    "label": "Sorteren",
+    "newest": "Nieuwste",
+    "oldest": "Oudste",
+    "az": "Alfabetisch",
+    "za": "Omgekeerd alfabetisch"
+  },
+  "results": {
+    "found": "resultaten gevonden"
+  },
+  "empty": {
+    "noResults": "Geen klassen gevonden",
+    "tryAnother": "Probeer een andere zoekterm",
+    "clearSearch": "Zoekopdracht wissen",
+    "message": "Je hebt nog geen klassen."
+  },
+  "modal": {
+    "createTitle": "Klas aanmaken",
+    "editTitle": "Klas bewerken",
+    "nameLabel": "Naam",
+    "descriptionLabel": "Beschrijving",
+    "createButton": "Aanmaken",
+    "updateButton": "Bijwerken",
+    "cancelButton": "Annuleren"
+  },
+  "toast": {
+    "loadError": "Kon klassen niet laden",
+    "createSuccess": "Klas aangemaakt",
+    "createError": "Kon klas niet aanmaken",
+    "updateSuccess": "Klas bijgewerkt",
+    "updateError": "Kon klas niet bijwerken",
+    "deleteSuccess": "Klas verwijderd",
+    "deleteError": "Kon klas niet verwijderen",
+    "nameAndDescriptionRequired": "Naam en beschrijving zijn verplicht",
+    "requestCodeSuccess": "Nieuwe code aangevraagd",
+    "requestCodeError": "Kon geen nieuwe code aanvragen"
+  },
+  "deleteModal": {
+    "title": "Klas verwijderen",
+    "message": "Weet je zeker dat je deze klas wilt verwijderen? Dit kan niet ongedaan gemaakt worden.",
+    "yes": "Ja",
+    "no": "Nee"
+  },
+  "card": {
+    "edit": "Bewerken",
+    "regenerateCode": "Nieuwe code aanvragen",
+    "delete": "Verwijderen",
+    "show": "Bekijk"
+  },
+
+  "requestCodeModal": {
+    "title": "Nieuwe deelcode aanvragen",
+    "message": "Weet je zeker dat je een nieuwe deelcode wilt aanvragen? De vorige code wordt ongeldig.",
+    "yes": "Aanvragen",
+    "no": "Annuleren"
+  },
+  "detail": {
+    "description": "Beschrijving",
+    "info": "Informatie",
+    "membersPlaceholder": "Leden en instellingen van de klas verschijnen hier.",
+    "joinCode": "Deelcode",
+    "edit": "Bewerken",
+    "delete": "Verwijderen",
+    "back": "Terug"
+  },
+  "actions": {
+    "cancel": "Annuleren",
+    "invite": "Nodig uit"
+  },
+  "members": {
+    "title": "Leden",
+    "subtitle": "Beheer klasleden",
+    "invite": "Nodig uit",
+    "inviteTitle": "Gebruiker uitnodigen",
+    "inviteHelp": "Voer het e-mailadres in van de gebruiker die je wilt uitnodigen voor deze klas.",
+    "invitePlaceholder": "gebruiker@voorbeeld.com",
+    "inviteSuccess": "Uitnodiging verzonden",
+    "inviteError": "Kon uitnodiging niet verzenden, deze gebruiker bestaat mogelijk niet",
+    "notAuthorized": "Niet geautoriseerd",
+    "onlyTeachers": "Alleen leraren mogen deze pagina openen",
+    "editTitle": "Lid bewerken",
+    "isTeacher": "Is leraar",
+    "saving": "Bezig met opslaan...",
+    "updateSuccess": "Lid bijgewerkt",
+    "updateError": "Kon lid niet bijwerken",
+    "deleteSuccess": "Lid verwijderd",
+    "deleteError": "Kon lid niet verwijderen",
+    "deleteConfirmTitle": "Lid verwijderen",
+    "deleteConfirmMessage": "Weet je zeker dat je dit lid wilt verwijderen?",
+    "noMembers": "Geen leden gevonden",
+    "searchPlaceholder": "Zoek op naam of e-mail",
+    "columns": {
+      "name": "Naam",
+      "email": "E-mail",
+      "role": "Rol",
+      "actions": "Acties"
+    },
+    "role": {
+      "teacher": "Leraar",
+      "student": "Student"
+    },
+    "member": "Lid"
+  },
+  
+  "joinButton": "Deelnemen",
+  "join": {
+    "title": "Deelnemen aan klas",
+    "subtitle": "Voer een join-code in om aan een klas deel te nemen",
+    "form": {
+      "label": "Deelcode",
+      "placeholder": "bv. ABC123",
+      "empty": "Voer een deelcode in",
+      "submit": "Deelnemen",
+      "cancel": "Annuleren",
+      "joining": "Bezig met deelnemen..."
+    },
+    "success": "Je bent toegevoegd aan de klas",
+    "error": "Kon niet deelnemen met die code"
+  },
+  "notFound": "Klas niet gevonden"
+}

@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import { useAzureBlobService } from '../../services/AzureBlobService';
 import type { Deck } from '../../models/Deck';
 import { useNavigate } from 'react-router-dom';
-import { getVisibilityBadgeColor } from '../utils/visibilityUtils';
+import { getVisibilityLabel, getVisibilityBadgeColor } from '../utils/visibilityUtils';
 
 interface DeckCardProps {
   deck: Deck;
@@ -20,10 +20,10 @@ function DeckCard({ deck, onEdit, onDelete }: DeckCardProps) {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [loadingImage, setLoadingImage] = useState(false);
 
-  useEffect(() => {
-    if (deck.coverImageBlobName) {
+  useEffect(() => { 
+     if (deck.coverImageBlobName) {
       setLoadingImage(true);
-      azureBlobService.getBlobSasUrl(deck.coverImageBlobName)
+      azureBlobService.getSasUrl('deck-images', deck.coverImageBlobName)
         .then(url => setImageUrl(url))
         .catch(err => {
           console.error('Failed to get image URL:', err);
@@ -31,25 +31,9 @@ function DeckCard({ deck, onEdit, onDelete }: DeckCardProps) {
         })
         .finally(() => setLoadingImage(false));
     }
-  }, [deck.coverImageBlobName]);
+  }, [deck.coverImageBlobName]); 
 
-  const getVisibilityLabel = (visibility: number) => {
-    switch (visibility) {
-      case 0: return t('visibility.public');
-      case 1: return t('visibility.shared');
-      case 2: return t('visibility.private');
-      default: return 'Unknown';
-    }
-  };
 
-  //  const getVisibilityColor = (visibility: number) => {
-  //   switch (visibility) {
-  //     case 0: return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300';
-  //     case 1: return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300';
-  //     case 2: return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300';
-  //     default: return 'bg-gray-100 text-gray-800';
-  //   }
-  // };
 
   const handleCardClick = () => {
     navigate(`/decks/${deck.deckId}/cards`);
@@ -111,9 +95,9 @@ function DeckCard({ deck, onEdit, onDelete }: DeckCardProps) {
             <span className="text-xs bg-white/20 backdrop-blur-md text-white px-2 sm:px-3 py-1 rounded-full font-medium uppercase tracking-wide border border-white/30">
               {deck.language}
             </span>
-            <Badge color={getVisibilityBadgeColor(deck.visibility)}>  {/* ← USE UTILITY */}
-              {getVisibilityLabel(deck.visibility)}  {/* ← USE UTILITY */}
-            </Badge>
+            <Badge color={getVisibilityBadgeColor(deck.visibility)}>
+            {getVisibilityLabel(deck.visibility, t)}
+          </Badge>
           </div>
           <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-1 sm:mb-2 drop-shadow-lg line-clamp-2">
             {deck.title}

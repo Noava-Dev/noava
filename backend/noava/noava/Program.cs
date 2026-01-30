@@ -1,17 +1,20 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using noava.Data;
 using noava.Repositories;
 using noava.Repositories.Contracts;
 using noava.Repositories.Implementations;
+using noava.Repositories.Interfaces;
 using noava.Services;
 using noava.Services.Contracts;
 using noava.Services.Implementations;
 using noava.Shared;
-using Microsoft.IdentityModel.JsonWebTokens;
 using noava.Services.Interfaces;
-using noava.Repositories.Interfaces;
+using noava.Shared;
+using noava.Shared.Contract;
+using noava.Shared.Implementation;
 using System.Security.Claims;
 
 namespace noava
@@ -32,12 +35,18 @@ namespace noava
             builder.Services.AddScoped<ICardRepository, CardRepository>();
             builder.Services.AddScoped<IClassroomRepository, ClassroomRepository>();
             builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
+            builder.Services.AddScoped<IDeckUserRepository, DeckUserRepository>();
+            builder.Services.AddScoped<IDeckInvitationRepository, DeckInvitationRepository>();
+
 
             builder.Services.AddScoped<IFaqService, FaqService>();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IDeckService, DeckService>();
             builder.Services.AddScoped<IBlobService, BlobService>();
             builder.Services.AddScoped<ICardService, CardService>();
+            builder.Services.AddScoped<IDeckInvitationService, DeckInvitationService>();
+            builder.Services.AddScoped<IDeckOwnershipService, DeckOwnershipService>();
+
 
 
             builder.Services.AddScoped<INotificationService, NotificationService>();
@@ -51,10 +60,9 @@ namespace noava
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<ISchoolService, SchoolService>();
 
-
-
             builder.Services.AddScoped<ILeitnerBoxService, LeitnerBoxService>();
             builder.Services.AddScoped<IClassroomService, ClassroomService>();
+            builder.Services.AddHttpClient<IClerkService, ClerkService>();
 
             // Add services to the container.
             builder.Services.AddCors(options =>
