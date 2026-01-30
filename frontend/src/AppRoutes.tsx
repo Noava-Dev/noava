@@ -14,6 +14,7 @@ import { SignIn as SignInClerk } from '@clerk/clerk-react';
 import PrivateRoute from './shared/components/navigation/PrivateRoute';
 import { RoleGroups } from './models/User';
 import AdminDashboard from './pages/Admin/Dashboard/AdminDashboard';
+import SchoolsPage from './pages/Schools/Schools';
 import QuickReview from '../src/pages/Review/Quickreview';
 import NotificationPage from './pages/Notification/Notification';
 import Loading from './shared/components/Loading';
@@ -65,6 +66,7 @@ export default function AppRoutes() {
       <Route path="/notifications" element={<NotificationPage />} />
       <Route path="/settings" element={<SettingsPage />} />
       <Route path="/faq" element={<FAQ />} />
+      <Route path="/schools" element={<SchoolsPage />} />
       <Route
         element={<PrivateRoute allowedRoles={RoleGroups.ALL_AUTHENTICATED} />}>
         <Route path="/dashboard" element={<Dashboard />} />
