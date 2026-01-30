@@ -16,6 +16,7 @@ import {
 import { useLocation, useNavigate } from 'react-router-dom';
 import type { CustomFlowbiteTheme } from 'flowbite-react/types';
 import { useUser, SignOutButton, UserButton } from '@clerk/clerk-react';
+import { useUserRole } from "../../hooks/useUserRole";
 
 const sidebarTheme: CustomFlowbiteTheme['sidebar'] = {
   root: {
@@ -54,6 +55,7 @@ export function SidebarNav() {
   const navigate = useNavigate();
   const sidebarRef = useRef<HTMLDivElement>(null);
   const { user } = useUser();
+  const { userRole } = useUserRole();
   // CLERK: when using clerk const isLoaded, isSignedIn should be added on the line above
   // this is because if the clerk isn't loaded yet you can add the following function:
   // if(!isLoaded) return null;
@@ -121,24 +123,25 @@ export function SidebarNav() {
 
           <div>
             <SidebarItemGroup>
-              {bottomItems.map((item) => (
-                <SidebarItem
-                  key={item.label}
-                  icon={item.icon}
-                  active={location.pathname == item.href}
-                  onClick={() => navigate(item.href)}
-                  className="hover:cursor-pointer">
-                  {/* TODO: the badge is hardcoded in sidebarItems but should be dynamically fetched */}
-                  <span className="flex items-center justify-between w-full">
-                    {item.label}
-                    {item.label === "Meldingen" && notificationCount > 0 && !collapsed && (
-                      <span className="flex items-center justify-center rounded-full size-5 text-xs text-red-800 bg-red-200">
-                        {notificationCount}
-                      </span>
-                    )}
-                  </span>
-                </SidebarItem>
-              ))}
+              {bottomItems.map((item) => {
+                if (item.label === "Admin" && userRole !== "ADMIN") return null;
+                return (
+                  <SidebarItem
+                    key={item.label}
+                    icon={item.icon}
+                    active={location.pathname == item.href}
+                    onClick={() => navigate(item.href)}
+                    className="hover:cursor-pointer">
+                    <span className="flex items-center justify-between w-full">
+                      {item.label}
+                      {item.label === "Meldingen" && notificationCount > 0 && !collapsed && (
+                        <span className="flex items-center justify-center rounded-full size-5 text-xs text-red-800 bg-red-200">
+                          {notificationCount}
+                        </span>
+                      )}
+                    </span>
+                  </SidebarItem>
+                )})}
 
               {/* CLERK: wrapped the logout button in Clerk's SignOutButton component
               should handle the logic automatically via clerk. The redirectUrl also redirects
