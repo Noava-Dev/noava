@@ -92,7 +92,7 @@ namespace noava.Controllers
             var incomingAdmins =
                     await _clerkservice.GetClerkUserIdByEmailsAsync(request.SchoolAdminEmails);
 
-            var schoolAdminsToAdd = incomingAdmins.Except(exisitingAdmins);
+            var schoolAdminsToAdd = incomingAdmins.Except(exisitingAdmins); 
             if (schoolAdminsToAdd.Any())
             {
                 await _schoolService.AddSchoolAdminsAsync(id, schoolAdminsToAdd);

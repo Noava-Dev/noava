@@ -40,19 +40,15 @@ namespace noava.Services.Implementations
         }
 
         // add and delete SchoolAdmins instead of adding all the logic inside UpdateSchoolAsync
-        //add SchoolAdmins:
         public async Task AddSchoolAdminsAsync(int schoolId, IEnumerable<string> newAdminUserIds)
         {
             await _schoolAdminRepository.AddAdminsAsync(schoolId, newAdminUserIds);
         }
 
-        //remove admins
         public async Task RemoveSchoolAdminsAsync(int schoolId, IEnumerable<string> adminUserIdsToRemove)
         {
             await _schoolAdminRepository.RemoveAdminsAsync(schoolId, adminUserIdsToRemove);
         }
-
-
 
         public async Task<School> CreateSchoolAsync( string name, string createdByUserId, IEnumerable<string> schoolAdminEmails)
         {
