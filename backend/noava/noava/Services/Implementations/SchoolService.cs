@@ -11,9 +11,9 @@ namespace noava.Services.Implementations
         private readonly ISchoolRepository _schoolRepository;
         private readonly ISchoolAdminRepository _schoolAdminRepository;
         private readonly IUserRepository _userRepository;
-        private readonly IClerkService _clerkService;
+        private readonly IClerkSchoolService _clerkService;
 
-        public SchoolService(ISchoolRepository schoolRepository, ISchoolAdminRepository schoolAdminRepository, IUserRepository userRepository, IClerkService clerkService)
+        public SchoolService(ISchoolRepository schoolRepository, ISchoolAdminRepository schoolAdminRepository, IUserRepository userRepository, IClerkSchoolService clerkService)
         {
             _schoolRepository = schoolRepository;
             _schoolAdminRepository = schoolAdminRepository;

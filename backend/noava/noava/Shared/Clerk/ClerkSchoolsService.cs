@@ -4,18 +4,18 @@ using System.Text.Json;
 
 namespace noava.Shared.Clerk
 {
-    public class ClerkService
+    public class ClerkSchoolsService : IClerkSchoolService
     {
         private readonly HttpClient _httpClient;
         private readonly string _apiKey;
 
-        public ClerkService(HttpClient httpClient, IConfiguration config)
+        public ClerkSchoolsService(HttpClient httpClient, IConfiguration config)
         {
             _httpClient = httpClient;
-            _apiKey = config["Clerk:SecretKey"] ?? throw new ArgumentNullException("Clerk API Key missing");
+            _apiKey = config["Clerk:SecretKeyDefault"] ?? throw new ArgumentNullException("Clerk API Key missing");
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _apiKey);
         }
-        public async Task<List<string>> GetClerkUserIdByEmailAsync(IEnumerable<string> emails)
+        public async Task<List<string>> GetClerkUserIdByEmailsAsync(IEnumerable<string> emails)
         {
             if (!emails.Any()) return [];
 

@@ -17,7 +17,7 @@ namespace noava.Controllers
     public class SchoolsController : ControllerBase
     {
         private readonly ISchoolService _schoolService;
-        private readonly IClerkService _clerkservice;
+        private readonly IClerkSchoolService _clerkservice;
         private readonly IUserService _userService;
         private string GetCurrentUserId()
         {
@@ -27,7 +27,7 @@ namespace noava.Controllers
             return userId;
         }
 
-        public SchoolsController(ISchoolService schoolService, IClerkService clerkService, IUserService userService)
+        public SchoolsController(ISchoolService schoolService, IClerkSchoolService clerkService, IUserService userService)
         {
             _schoolService = schoolService;
             _clerkservice = clerkService;

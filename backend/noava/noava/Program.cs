@@ -16,6 +16,7 @@ using noava.Shared;
 using noava.Shared.Contract;
 using noava.Shared.Implementation;
 using System.Security.Claims;
+using noava.Shared.Clerk;
 
 namespace noava
 {
@@ -29,6 +30,7 @@ namespace noava
             builder.Services.AddDbContext<NoavaDbContext>(options =>
                 options.UseNpgsql(builder.Configuration.GetConnectionString("NoavaDatabaseLocal")));
 
+            // Repository Registrations
             builder.Services.AddScoped<IFaqRepository, FaqRepository>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IDeckRepository, DeckRepository>();
@@ -37,32 +39,28 @@ namespace noava
             builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
             builder.Services.AddScoped<IDeckUserRepository, DeckUserRepository>();
             builder.Services.AddScoped<IDeckInvitationRepository, DeckInvitationRepository>();
+            builder.Services.AddScoped<ISchoolRepository, SchoolRepository>();
+            builder.Services.AddScoped<ISchoolAdminRepository, SchoolAdminRepository>();
 
-
+            // Service Registrations
             builder.Services.AddScoped<IFaqService, FaqService>();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IDeckService, DeckService>();
-            builder.Services.AddScoped<IBlobService, BlobService>();
             builder.Services.AddScoped<ICardService, CardService>();
             builder.Services.AddScoped<IDeckInvitationService, DeckInvitationService>();
             builder.Services.AddScoped<IDeckOwnershipService, DeckOwnershipService>();
-
-
-
             builder.Services.AddScoped<INotificationService, NotificationService>();
-            builder.Services.AddScoped<ISchoolRepository, SchoolRepository>();
-
-            builder.Services.AddScoped<IFaqService, FaqService>();
-            builder.Services.AddScoped<IUserService, UserService>();
-            builder.Services.AddScoped<ISchoolRepository, SchoolRepository>();
-
-            builder.Services.AddScoped<IFaqService, FaqService>();
-            builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<ISchoolService, SchoolService>();
-
             builder.Services.AddScoped<ILeitnerBoxService, LeitnerBoxService>();
             builder.Services.AddScoped<IClassroomService, ClassroomService>();
-            builder.Services.AddHttpClient<IClerkService, ClerkService>();
+            builder.Services.AddScoped<IBlobService, BlobService>();
+
+            // External Service Registrations
+            builder.Services.AddHttpClient();
+            // Classrooms (Youmni)
+            builder.Services.AddScoped<IClerkService, ClerkService>();
+            // Schools (Luna)
+            builder.Services.AddScoped<IClerkSchoolService, ClerkSchoolsService>();
 
             // Add services to the container.
             builder.Services.AddCors(options =>

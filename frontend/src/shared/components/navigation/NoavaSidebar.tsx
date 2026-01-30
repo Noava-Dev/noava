@@ -151,7 +151,7 @@ function NoavaSidebar() {
                 rounded>
                 <div className="space-y-1 font-medium text-text-body-light dark:text-text-body-dark">
                   <div className="truncate">{user?.username}</div>
-                  <div className="text-sm text-gray-500 truncate dark:text-gray-400">
+                  <div className="max-w-[22ch] text-sm text-gray-500 truncate dark:text-gray-400">
                     {user?.primaryEmailAddress?.emailAddress}
                   </div>
                 </div>
