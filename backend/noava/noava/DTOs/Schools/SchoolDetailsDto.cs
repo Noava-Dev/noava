@@ -1,6 +1,6 @@
 ﻿namespace noava.DTOs.Schools
 {
-    public class SchoolResponseDto
+    public class SchoolDetailsDto
     {
         //mainly for GETs
 

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using noava.DTOs.Schools;
-using noava.Mappers;
+using noava.Mappers.Schools;
 using noava.Services.Contracts;
 
 namespace noava.Controllers

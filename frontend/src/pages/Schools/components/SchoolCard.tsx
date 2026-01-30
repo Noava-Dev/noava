@@ -2,53 +2,52 @@ import {
   LuBuilding2 as SchoolBuilding,
   LuTrash2 as Trash,
   LuPencil as Pencil,
-//   LuPlus,
-//   LuX,
-//   LuSearch,
   LuUsers as Admins,
 } from "react-icons/lu";
 
-type SchoolCardType = {};
+type SchoolAdminDto = {
+  id: string;
+  name: string;
+  email: string;
+};
 
-export function SchoolCard({}: SchoolCardType) {
+type SchoolCardProps = {
+  name: string;
+  description?: string;
+  admins: SchoolAdminDto[];
+  createdAt: Date;
+};
+
+export function SchoolCard({ name, admins, createdAt }: SchoolCardProps) {
   return (
-    <div className="flex bg-card w-1/2 justify-between p-5 shadow-sm hover:shadow-md rounded-xl border-r ">
-      <div className="flex items-center gap-4">
-        <div className="flex size-14 items-center justify-center rounded-lg bg-background-subtle-light ">
-          <SchoolBuilding className="size-7"/>
+    <div className="rounded-lg border border-border bg-card p-5 shadow-sm hover:shadow-sm flex justify-between">
+      <div className="flex items-start gap-4">
+        <div className="flex size-12 items-center justify-center rounded-lg bg-background-app-light">
+          <SchoolBuilding className="size-6" />
         </div>
-        <div className="de-info flex flex-col gap-1">
-          <div>
-            <h2 className="text-base font-semibold text-foreground">
-              <b>Erasmushogeschool Brussel</b>
-            </h2>
-          </div>
-          <div className="flex items-center gap-4 text-xs text-muted-foreground">
+
+        <div className="flex flex-col gap-2">
+          <h3 className="text-base font-semibold text-foreground">{name}</h3>
+          <div className="mt-3 flex items-center gap-4 text-xs text-muted-foreground">
             <div className="flex items-center gap-1.5">
-              <div className="icoontje">
-                <Admins className="size-3.5" />
-              </div>
-              <div className="admin">
-                <p>2 admins</p>
-              </div>
+              <Admins className="size-3.5" />
+              {/* added the logic below to see if it should say admin or adminS so it's
+              gramatically correct  */}
+              <span>{admins.length} admin{admins.length !== 1 ? "s" : ""}</span>
             </div>
-            <div>
-              <p>Created 29 januari, 2024</p>
-            </div>
+            <span>Created {createdAt.toLocaleDateString()}</span>
           </div>
-          <div></div>
         </div>
       </div>
-      <div className="flex gap-4">
-        <div className="flex size-8 cursor-pointer items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">
-          <Pencil/>
-        </div>
-        <div className="flex size-8 cursor-pointer items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">
-          <Trash/>
-        </div>
+
+      <div className="flex items-center gap-1">
+        <button className="rounded-lg p-2 text-muted-foreground hover:bg-muted hover:text-foreground">
+          <Pencil className="size-4" />
+        </button>
+        <button className="rounded-lg p-2 text-muted-foreground hover:bg-destructive/10 hover:text-destructive">
+          <Trash className="size-4" />
+        </button>
       </div>
     </div>
   );
 }
-
-//TODO: add Badges for the people that are school admins
