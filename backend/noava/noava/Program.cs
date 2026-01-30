@@ -1,12 +1,17 @@
-
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using noava.Data;
+using noava.Repositories;
 using noava.Repositories.Contracts;
 using noava.Repositories.Implementations;
+using noava.Services;
 using noava.Services.Contracts;
 using noava.Services.Implementations;
+using noava.Shared;
+using Microsoft.IdentityModel.JsonWebTokens;
+using noava.Services.Interfaces;
+using noava.Repositories.Interfaces;
 using System.Security.Claims;
 
 namespace noava
@@ -23,11 +28,18 @@ namespace noava
 
             builder.Services.AddScoped<IFaqRepository, FaqRepository>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
-            builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
+            builder.Services.AddScoped<IDeckRepository, DeckRepository>();
+            builder.Services.AddScoped<ICardRepository, CardRepository>();
             builder.Services.AddScoped<IClassroomRepository, ClassroomRepository>();
+            builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 
             builder.Services.AddScoped<IFaqService, FaqService>();
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IDeckService, DeckService>();
+            builder.Services.AddScoped<IBlobService, BlobService>();
+            builder.Services.AddScoped<ICardService, CardService>();
+
+
             builder.Services.AddScoped<INotificationService, NotificationService>();
             builder.Services.AddScoped<ISchoolRepository, SchoolRepository>();
 
@@ -38,6 +50,8 @@ namespace noava
             builder.Services.AddScoped<IFaqService, FaqService>();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<ISchoolService, SchoolService>();
+
+
 
             builder.Services.AddScoped<ILeitnerBoxService, LeitnerBoxService>();
             builder.Services.AddScoped<IClassroomService, ClassroomService>();
@@ -77,19 +91,23 @@ namespace noava
 
             var clerkAuthority = builder.Configuration["Clerk:FrontendApiUrl"];
 
+          
+
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
                     options.Authority = clerkAuthority;
+                    options.RequireHttpsMetadata = !builder.Environment.IsDevelopment();
+
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = true,
                         ValidateAudience = false,
-                        NameClaimType = ClaimTypes.NameIdentifier,
+                        ValidateLifetime = true,
                         RoleClaimType = ClaimTypes.Role
                     };
-                });
 
+                });
 
             builder.Services.AddAuthorization();
 
@@ -104,7 +122,7 @@ namespace noava
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
-		        app.UseHttpsRedirection();
+		        //app.UseHttpsRedirection();
             }
 
             app.UseCors("Frontend");

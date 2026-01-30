@@ -29,8 +29,7 @@ namespace noava.Data.Configurations
 
             builder.Property(d => d.BackAudio);
 
-            builder.Property(d => d.Memo)
-                .IsRequired();
+            builder.Property(d => d.Memo);
 
             builder.Property(d => d.CreatedAt)
                 .HasDefaultValueSql("now()")

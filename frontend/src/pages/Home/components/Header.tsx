@@ -1,7 +1,8 @@
-import { Button, Navbar, NavbarBrand, NavbarCollapse, NavbarLink, NavbarToggle } from "flowbite-react";
+import { Button, Navbar, NavbarBrand, NavbarCollapse, NavbarToggle } from "flowbite-react";
 import { SignInButton, SignUpButton, UserButton, useUser } from "@clerk/clerk-react";
 import Logo from '../../../assets/noava-logo-blue-nobg.png';
 import { useTranslation } from 'react-i18next';
+import { Link } from "react-router-dom";
 
 
 function Header() {
@@ -32,9 +33,9 @@ function Header() {
                     <NavbarToggle />
                 </div>
                 <NavbarCollapse>
-                    <NavbarLink href="#">Docs</NavbarLink>
-                    <NavbarLink href="#">Dashboard</NavbarLink>
-                    <NavbarLink href="/faq">FAQ</NavbarLink>
+                    <Link to="#" className="navbar-link">Docs</Link>
+                    <Link to="/dashboard">Dashboard</Link>
+                    <Link to="/faq">FAQ</Link>
                 </NavbarCollapse>
             </Navbar>
         </>

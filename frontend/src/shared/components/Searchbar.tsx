@@ -1,4 +1,4 @@
-import { Label, TextInput } from "flowbite-react";
+import { TextInput } from "flowbite-react";
 import { HiSearch } from "react-icons/hi";
 import { useTranslation } from "react-i18next";
 
@@ -13,7 +13,7 @@ function Searchbar({ searchTerm, setSearchTerm }: SearchbarProps) {
     return (
         <div className="max-w-md">
             <div className="mb-2 block">
-                <Label htmlFor="search">{t('actions.search')}</Label>
+                
             </div>
             <TextInput 
                 id="search" 
