@@ -28,7 +28,7 @@
     "delete": "Delete"
   },
   "modal": {
-    "loading": "Loading deck...",    
+    "loading": "Loading deck...",
     "createTitle": "Create New Deck",
     "editTitle": "Edit Deck",
     "titleLabel": "Title",
@@ -78,7 +78,7 @@
   },
   "deleteModal": {
     "title": "Confirm Deletion",
-    "message": "Are you sure you want to delete this deck?",
+    "message": "Are you sure you want to delete this deck? This action cannot be undone.",
     "yes": "Yes, delete",
     "no": "Cancel"
   },

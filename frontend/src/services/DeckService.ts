@@ -1,6 +1,9 @@
 import { useApi } from '../hooks/useApi';
-import type { Deck, CreateDeckRequest, UpdateDeckRequest } from '../models/Deck';
-
+import type {
+  Deck,
+  CreateDeckRequest,
+  UpdateDeckRequest,
+} from '../models/Deck';
 
 export const useDeckService = () => {
   const api = useApi();
@@ -11,8 +14,10 @@ export const useDeckService = () => {
       return response.data;
     },
 
-    async getMyDecks(): Promise<Deck[]> {
-      const response = await api.get<Deck[]>('/deck/user');
+    async getMyDecks(limit?: number): Promise<Deck[]> {
+      const response = await api.get<Deck[]>('/deck/user', {
+        params: limit ? { limit } : undefined,
+      });
       return response.data;
     },
 

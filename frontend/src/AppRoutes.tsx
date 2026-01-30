@@ -14,6 +14,7 @@ import NotificationPage from './pages/Notification/Notification';
 import Loading from './shared/components/Loading';
 import FlashcardDetail from './pages/Flashcards/FlashcardDetail';
 import NoavaSidebar from './shared/components/navigation/NoavaSidebar';
+import Dashboard from './pages/Dashboard/Dashboard';
 
 function Placeholder({ title }: { title: string }) {
   return (
@@ -57,7 +58,7 @@ export default function AppRoutes() {
       <Route path="/faq" element={<FAQ />} />
       <Route
         element={<PrivateRoute allowedRoles={RoleGroups.ALL_AUTHENTICATED} />}>
-        <Route path="/dashboard" />
+        <Route path="/dashboard" element={<Dashboard />} />
       </Route>
 
       <Route path="*" element={<NotFound />} />
