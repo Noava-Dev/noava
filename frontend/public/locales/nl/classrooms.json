@@ -70,6 +70,45 @@
     "delete": "Verwijderen",
     "back": "Terug"
   },
+  "actions": {
+    "cancel": "Annuleren",
+    "invite": "Nodig uit"
+  },
+  "members": {
+    "title": "Leden",
+    "subtitle": "Beheer klasleden",
+    "invite": "Nodig uit",
+    "inviteTitle": "Gebruiker uitnodigen",
+    "inviteHelp": "Voer het e-mailadres in van de gebruiker die je wilt uitnodigen voor deze klas.",
+    "invitePlaceholder": "gebruiker@voorbeeld.com",
+    "inviteSuccess": "Uitnodiging verzonden",
+    "inviteError": "Kon uitnodiging niet verzenden, deze gebruiker bestaat mogelijk niet",
+    "notAuthorized": "Niet geautoriseerd",
+    "onlyTeachers": "Alleen leraren mogen deze pagina openen",
+    "editTitle": "Lid bewerken",
+    "isTeacher": "Is leraar",
+    "saving": "Bezig met opslaan...",
+    "updateSuccess": "Lid bijgewerkt",
+    "updateError": "Kon lid niet bijwerken",
+    "deleteSuccess": "Lid verwijderd",
+    "deleteError": "Kon lid niet verwijderen",
+    "deleteConfirmTitle": "Lid verwijderen",
+    "deleteConfirmMessage": "Weet je zeker dat je dit lid wilt verwijderen?",
+    "noMembers": "Geen leden gevonden",
+    "searchPlaceholder": "Zoek op naam of e-mail",
+    "columns": {
+      "name": "Naam",
+      "email": "E-mail",
+      "role": "Rol",
+      "actions": "Acties"
+    },
+    "role": {
+      "teacher": "Leraar",
+      "student": "Student"
+    },
+    "member": "Lid"
+  },
+  
   "joinButton": "Deelnemen",
   "join": {
     "title": "Deelnemen aan klas",

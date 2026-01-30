@@ -1,12 +1,15 @@
 ﻿using noava.DTOs.Request.Classrooms;
+using noava.DTOs.Request.Notifications;
 using noava.DTOs.Response.Classrooms;
 using noava.DTOs.Response.Users;
 using noava.Mappers.Classrooms;
 using noava.Models;
+using noava.Models.Enums;
 using noava.Repositories.Contracts;
 using noava.Services.Contracts;
 using noava.Shared.Contract;
 using System.Security.Cryptography;
+using System.Text.Json;
 
 namespace noava.Services.Implementations
 {
@@ -14,13 +17,16 @@ namespace noava.Services.Implementations
     {
         private readonly IClassroomRepository _classroomRepository;
         private readonly IClerkService _clerkService;
+        private readonly INotificationService _notificationService;
 
         public ClassroomService(
             IClassroomRepository classroomRepository,
-            IClerkService clerkService)
+            IClerkService clerkService,
+            INotificationService notificationService)
         {
             _classroomRepository = classroomRepository;
             _clerkService = clerkService;
+            _notificationService = notificationService;
         }
 
         public async Task<ClassroomResponseDto> CreateAsync(ClassroomRequestDto classroomDto, string userId)
@@ -238,6 +244,52 @@ namespace noava.Services.Implementations
             }
 
             return clerkUsers;
+        }
+        public async Task<ClassroomResponseDto> InviteUserByEmail(int classroomId,string userId,string email)
+        {
+            var classroom = await _classroomRepository.GetByIdAsync(classroomId)
+                ?? throw new KeyNotFoundException("Classroom not found.");
+
+            var isTeacher = classroom.ClassroomUsers
+                .Any(cu => cu.UserId == userId && cu.IsTeacher);
+
+            if (!isTeacher)
+                throw new UnauthorizedAccessException("Only teachers can invite users.");
+
+            var invitedUser = await _clerkService.GetUserByEmailAsync(email)
+                ?? throw new KeyNotFoundException("User with this email not found.");
+
+            var teacher = await _clerkService.GetUserAsync(userId)
+                ?? throw new KeyNotFoundException("Inviting teacher not found.");
+
+            var teacherFullName = $"{teacher.FirstName} {teacher.LastName}".Trim();
+
+            var parametersJson = JsonSerializer.Serialize(new
+            {
+                classroomName = classroom.Name,
+                teacherName = teacherFullName
+            });
+
+            var notification = new NotificationRequestDto
+            {
+                Type = NotificationType.ClassroomInvitationReceived,
+                TemplateKey = "notifications.items.classroom.invite.received",
+                UserId = invitedUser.ClerkId,
+                ParametersJson = parametersJson,
+                Actions = new List<NotificationActionRequestDto>
+                {
+                    new NotificationActionRequestDto
+                    {
+                        LabelKey = "notifications.items.classroom.invite.actions.accept",
+                        Endpoint = $"/classrooms/join/{classroom.JoinCode}",
+                        Method = HttpMethodType.POST
+                    }
+                }
+            };
+
+            await _notificationService.CreateNotificationAsync(notification);
+
+            return classroom.ToResponseDto(userId);
         }
 
         private static string GenerateClassroomCode()

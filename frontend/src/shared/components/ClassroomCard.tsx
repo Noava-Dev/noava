@@ -29,7 +29,7 @@ function ClassroomCard({ classroom, onEdit, onDelete, onRequestNewCode }: Classr
   };
 
   return (
-    <div className="relative rounded-lg overflow-visible shadow-lg hover:shadow-xl transition-shadow duration-300 hover:cursor-pointer flex h-full" onClick={handleCardClick}>
+    <div className="relative rounded-lg overflow-visible shadow-lg hover:shadow-xl transition-shadow duration-300 hover:cursor-pointer flex h-full bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700" onClick={handleCardClick}>
       <div className="p-4 sm:p-6 flex flex-col flex-1">
         <div className="flex items-start justify-between mb-2">
           <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-1 line-clamp-2">

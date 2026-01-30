@@ -1,4 +1,5 @@
 import type { ClassroomRequest, ClassroomResponse } from "../models/Classroom";
+import type { ClerkUserResponse } from "../models/User";
 import { useApi } from "../hooks/useApi";
 
 export const classroomService = () => {
@@ -74,13 +75,57 @@ export const classroomService = () => {
     }
   };
 
+  const getUsersByClassroom = async (id: number, page = 1, pageSize = 50): Promise<ClerkUserResponse[]> => {
+    try {
+      const response = await api.get<ClerkUserResponse[]>(`/classrooms/${id}/users`, { params: { page, pageSize } });
+      return response.data;
+    } catch (err) {
+      console.error(`Failed to fetch users for classroom with id ${id}:`, err);
+      throw new Error('Failed to fetch classroom users');
+    }
+  };
+
+  const removeUser = async (classroomId: number, targetUserId: string): Promise<ClassroomResponse> => {
+    try {
+      const response = await api.delete<ClassroomResponse>(`/classrooms/${classroomId}/users/${targetUserId}`);
+      return response.data;
+    } catch (err) {
+      console.error(`Failed to remove user ${targetUserId} from classroom ${classroomId}:`, err);
+      throw new Error('Failed to remove user from classroom');
+    }
+  };
+
+  const setUserRole = async (classroomId: number, targetUserId: string, isTeacher: boolean): Promise<ClassroomResponse> => {
+    try {
+      const response = await api.put<ClassroomResponse>(`/classrooms/${classroomId}/users/${targetUserId}/role`, null, { params: { isTeacher } });
+      return response.data;
+    } catch (err) {
+      console.error(`Failed to set role for user ${targetUserId} in classroom ${classroomId}:`, err);
+      throw new Error('Failed to set user role');
+    }
+  };
+
+  const inviteByEmail = async (classroomId: number, email: string): Promise<ClassroomResponse> => {
+    try {
+      const response = await api.post<ClassroomResponse>(`/classrooms/${classroomId}/invite`, null, { params: { email } });
+      return response.data;
+    } catch (err) {
+      console.error(`Failed to invite user ${email} to classroom ${classroomId}:`, err);
+      throw new Error('Failed to invite user to classroom');
+    }
+  };
+
   return {
     create,
     getAllForUser,
     getById,
     joinByCode,
+    getUsersByClassroom,
     update,
     delete: deleteClassroom,
     updateJoinCode,
+    removeUser,
+    setUserRole,
+    inviteByEmail,
   };
 };

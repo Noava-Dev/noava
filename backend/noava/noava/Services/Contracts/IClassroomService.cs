@@ -18,5 +18,6 @@ namespace noava.Services.Contracts
         Task<ClassroomResponseDto> SetUserTeacherStatusAsync(int classroomId, string targetUserId, string userId, bool isTeacher);
         Task<ClassroomResponseDto> DeleteAsync(int id, string userId);
         Task<IEnumerable<ClerkUserResponseDto>> GetAllUsersByClassroomAsync(int classroomId, int page, int pageSize);
+        Task<ClassroomResponseDto> InviteUserByEmail(int classroomId, string userId, string email);
     }
 }

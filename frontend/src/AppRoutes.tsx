@@ -4,6 +4,7 @@ import Decks from "./pages/Decks/Decks";
 import Classrooms from "./pages/Classrooms/Classrooms";
 import ClassroomDetail from "./pages/Classrooms/ClassroomDetail";
 import JoinClassroom from "./pages/Classrooms/JoinClassroom";
+import MembersPage from './pages/Classrooms/Members';
 import { Route, Routes } from 'react-router-dom';
 import NotFound from './pages/NotFound/NotFound';
 import SettingsPage from './pages/Settings/Settings';
@@ -30,6 +31,7 @@ export default function AppRoutes() {
           <Route index element={<Classrooms />} />
           <Route path="join" element={<JoinClassroom />} />
           <Route path=":classroomId" element={<ClassroomDetail />} />
+            <Route path=":classroomId/members" element={<MembersPage />} />
         </Route>
       <Route path="/history" element={<Placeholder title="Geschiedenis" />} />
       <Route path="/notifications" element={<NotificationPage />} />

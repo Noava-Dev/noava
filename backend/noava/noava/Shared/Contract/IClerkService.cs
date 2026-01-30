@@ -6,5 +6,6 @@ namespace noava.Shared.Contract
     {
         Task<ClerkUserResponseDto?> GetUserAsync(string clerkUserId);
         Task<IEnumerable<ClerkUserResponseDto>> GetUsersAsync(IEnumerable<string> clerkUserIds);
+        Task<ClerkUserResponseDto?> GetUserByEmailAsync(string email);
     }
 }

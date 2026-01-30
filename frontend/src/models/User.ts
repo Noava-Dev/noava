@@ -15,3 +15,11 @@ export interface User {
   clerkId: string;
   role: UserRole;
 }
+
+export interface ClerkUserResponse {
+  clerkId: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  isTeacher: boolean;
+}

@@ -40,7 +40,7 @@ function ClassroomsPage() {
       const data = await classroomSvc.getAllForUser();
       setClassrooms(data);
     } catch (error) {
-      showError(t('toast.loadError'), t('toast.loadError'));
+      showError(t('app.error'), t('toast.loadError'));
     } finally {
       setLoading(false);
     }
@@ -53,7 +53,7 @@ function ClassroomsPage() {
       setIsModalOpen(false);
       fetchClassrooms();
     } catch (error) {
-      showError(t('toast.createError'), t('toast.createError'));
+      showError(t('app.error'), t('toast.createError'));
     }
   };
 
@@ -66,7 +66,7 @@ function ClassroomsPage() {
       setEditingClassroom(undefined);
       fetchClassrooms();
     } catch (error) {
-      showError(t('toast.updateError'), t('toast.updateError'));
+      showError(t('app.error'), t('toast.updateError'));
     }
   };
 
@@ -79,7 +79,7 @@ function ClassroomsPage() {
       showSuccess(t('toast.deleteSuccess'), t('toast.deleteSuccess'));
       fetchClassrooms();
     } catch (error) {
-      showError(t('toast.deleteError'), t('toast.deleteError'));
+      showError(t('app.error'), t('toast.deleteError'));
     } finally {
       setDeleteId(null);
     }
@@ -96,7 +96,7 @@ function ClassroomsPage() {
       showSuccess(t('toast.requestCodeSuccess'), t('toast.requestCodeSuccess'));
       fetchClassrooms();
     } catch (error) {
-      showError(t('toast.requestCodeError'), t('toast.requestCodeError'));
+      showError(t('app.error'), t('toast.requestCodeError'));
     } finally {
       setRequestCodeId(null);
     }

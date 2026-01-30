@@ -18,7 +18,7 @@ export default function JoinClassroom() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!code.trim()) {
-      showError(t('join.form.empty'), t('join.form.empty'));
+      showError(t('app.error'), t('join.form.empty'));
       return;
     }
 
@@ -28,7 +28,7 @@ export default function JoinClassroom() {
       showSuccess(t('join.success'), t('join.success'));
       navigate('/classrooms');
     } catch (err) {
-      showError(t('join.error'), t('join.error'));
+      showError(t('app.error'), t('join.error'));
     } finally {
       setLoading(false);
     }

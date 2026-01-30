@@ -1,6 +1,7 @@
 {
   "app": {
     "title": "NOAVA",
+    "success": "Success",
     "loading": "Loading...",
     "error": "Something went wrong",
     "retry": "Retry",
@@ -22,6 +23,7 @@
     "delete": "Delete",
     "edit": "Edit",
     "create": "Create",
+    "invite": "Invite",
     "search": "Search",
     "searchPlaceholder": "Search...",
     "submit": "Submit",

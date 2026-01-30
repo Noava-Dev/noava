@@ -61,5 +61,32 @@ namespace noava.Shared.Implementation
                 .Select(u => u.ToResponse())
                 .ToList();
         }
+
+        public async Task<ClerkUserResponseDto?> GetUserByEmailAsync(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+                return null;
+
+            var response = await _httpClient.GetAsync(
+                $"users?email_address={Uri.EscapeDataString(email)}"
+            );
+
+            response.EnsureSuccessStatusCode();
+
+            var json = await response.Content.ReadAsStringAsync();
+
+            var requestDtos =
+                JsonSerializer.Deserialize<List<ClerkUserRequestDto>>(
+                    json,
+                    new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    })
+                ?? new List<ClerkUserRequestDto>();
+
+            return requestDtos
+                .Select(u => u.ToResponse())
+                .FirstOrDefault();
+        }
     }
 }

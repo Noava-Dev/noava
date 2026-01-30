@@ -30,7 +30,7 @@ function ClassroomDetailPage() {
             const data = await classroomSvc.getById(id);
             setClassroom(data);
         } catch (error) {
-            showError(t('toast.loadError'), t('toast.loadError'));
+            showError(t('app.error'), t('toast.loadError'));
         } finally {
             setLoading(false);
         }
@@ -58,26 +58,40 @@ function ClassroomDetailPage() {
         );
     }
 
-    if (!classroom) return <div className="min-h-screen">{t('notFound')}</div>;
+    if (!classroom) return (
+        <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900 items-center justify-center">
+            <div className="text-gray-900 dark:text-white">{t('notFound')}</div>
+        </div>
+    );
 
     return (
         <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
             <div className="ml-0 flex-1 w-full">
                 <PageHeader>
-                    <div className="pt-4 md:pt-8">
-                        <h1 className="text-3xl md:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight">{classroom.name}</h1>
-                        <p className="text-base text-gray-600 dark:text-gray-300 mt-2 max-w-3xl">
-                            {classroom.description}
-                        </p>
+                        <div className="pt-4 md:pt-8">
+                            <div className="flex items-start justify-between gap-4">
+                                <div className="min-w-0 flex-1">
+                                    <h1 className="text-3xl md:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight">{classroom.name}</h1>
+                                    <p className="text-base text-gray-600 dark:text-gray-300 mt-2 max-w-3xl">
+                                        {classroom.description}
+                                    </p>
 
-                        <div className="mt-4">
-                            <div className="inline-block bg-gray-100 dark:bg-gray-700 rounded-lg px-3 py-2 font-mono text-sm text-gray-800 dark:text-gray-100">
-                                {t('detail.joinCode')}: <span className="ml-2 font-semibold">{classroom.joinCode}</span>
+                                    <div className="mt-4">
+                                        <div className="inline-block bg-gray-100 dark:bg-gray-700 rounded-lg px-3 py-2 font-mono text-sm text-gray-800 dark:text-gray-100">
+                                            {t('detail.joinCode')}: <span className="ml-2 font-semibold">{classroom.joinCode}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {classroom.permissions?.canEdit && (
+                                    <div className="flex-shrink-0">
+                                        <Button onClick={() => navigate(`/classrooms/${id}/members`)}>{t('members.title')}</Button>
+                                    </div>
+                                )}
                             </div>
                         </div>
-                    </div>
                 </PageHeader>
-                <div className="mt-6 flex justify-start">
+                <div className="mt-6 flex items-center gap-3">
                     <Button color="gray" onClick={() => navigate('/classrooms')}>{t('detail.back')}</Button>
                 </div>
             </div>

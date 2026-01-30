@@ -33,7 +33,7 @@ function ClassroomModal({ isOpen, onClose, onSubmit, classroom }: ClassroomModal
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name || !description) return showError(t('toast.nameAndDescriptionRequired'), t('toast.nameAndDescriptionRequired'));
+    if (!name || !description) return showError(t('app.error'), t('toast.nameAndDescriptionRequired'));
 
     onSubmit({ name, description });
   };

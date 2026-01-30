@@ -86,7 +86,6 @@ function DeckModal({ isOpen, onClose, onSubmit, deck }: DeckModalProps) {
         coverImageBlobName: finalBlobName,
       });
 
-      // Reset form
       setTitle('');
       setDescription('');
       setLanguage('');

@@ -61,6 +61,31 @@ namespace noava.Controllers
             return Ok(result);
         }
 
+        [HttpPost("{id:int}/invite")]
+        public async Task<ActionResult<ClassroomResponseDto>> InviteUserByEmail(int id, [FromQuery] string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+                return BadRequest("Email is required.");
+
+            var userId = GetUserId();
+            if (userId == null)
+                return Unauthorized();
+
+            try
+            {
+                var result = await _classroomService.InviteUserByEmail(id,userId,email);
+                return Ok(result);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Forbid();
+            }
+        }
+
         [HttpGet("{id:int}/users")]
         public async Task<ActionResult<IEnumerable<ClerkUserResponseDto>>> GetUsersByClassroom(
             int id,
