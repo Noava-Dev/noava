@@ -37,8 +37,13 @@ namespace noava.Data.Configurations
 
             builder.Property(d => d.UpdatedAt)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP");
-            
-            
+
+            builder.HasMany(d => d.DeckUsers)
+                .WithOne(ud => ud.Deck)
+                .HasForeignKey(ud => ud.DeckId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+
             builder.HasIndex(d => d.UserId);
 
 

@@ -22,10 +22,13 @@ import type { Deck } from '../../models/Deck';
 import type { Flashcard, CreateFlashcardRequest, UpdateFlashcardRequest } from '../../models/Flashcard';
 import Searchbar from '../../shared/components/Searchbar';
 import { useAzureBlobService } from '../../services/AzureBlobService';
+import { ManageOwnersModal } from '../../shared/components/ManageOwnersModal';
+
 interface FlashcardWithImages extends Flashcard {
   frontImageUrl?: string | null;
   backImageUrl?: string | null;
 }
+
 
 
 function FlashcardDetail() {
@@ -45,6 +48,7 @@ function FlashcardDetail() {
   const [selectedFlashcard, setSelectedFlashcard] = useState<Flashcard | undefined>(undefined);
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const [cardToDelete, setCardToDelete] = useState<number | null>(null);
+  const [manageOwnersOpened, setManageOwnersOpened] = useState(false);
 
   useEffect(() => {
     if (deckId) {
@@ -258,12 +262,11 @@ function FlashcardDetail() {
                 {t('flashcardDetail.shuffle')}
               </Button>
               <Button
-                size="lg"
-                color="dark"
-                className="bg-gray-800 hover:bg-gray-700 border border-gray-700 ml-auto"
-              >
-                <HiUserGroup className="w-5 h-5 mr-2" />
-              </Button>
+                  onClick={() => setManageOwnersOpened(true)}
+                >
+                  <HiUserGroup className="w-5 h-5 mr-2" />
+                  {t('ownership.manageAccess')}
+                </Button>
               <Button
                 size="lg"
                 color="dark"
@@ -464,6 +467,12 @@ function FlashcardDetail() {
             </div>
           </div>
         )}
+        <ManageOwnersModal
+  opened={manageOwnersOpened}
+  onClose={() => setManageOwnersOpened(false)}
+  deckId={parseInt(deckId!)}
+  deckTitle={deck?.title || ''}
+/>
 
         <NoavaFooter />
       </div>
