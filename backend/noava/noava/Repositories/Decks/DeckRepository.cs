@@ -21,12 +21,18 @@ namespace noava.Repositories
                 .ToListAsync();
         }
 
-        public async Task<List<Deck>> GetByUserIdAsync(string userId)
+        public async Task<List<Deck>> GetByUserIdAsync(string userId, int? limit)
         {
-            return await _context.Decks
+            IQueryable<Deck> query = _context.Decks
                 .Where(d => d.UserId == userId)
-                .OrderByDescending(d => d.CreatedAt)
-                .ToListAsync();
+                .OrderByDescending(d => d.CreatedAt);
+
+            if (limit.HasValue)
+            {
+                query = query.Take(limit.Value);
+            }
+
+            return await query.ToListAsync();
         }
 
         public async Task<Deck?> GetByIdAsync(int id)

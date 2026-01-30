@@ -37,10 +37,10 @@ namespace noava.Controllers
         }
 
         [HttpGet("user")]
-        public async Task<ActionResult<List<DeckResponse>>> GetMyDecks()
+        public async Task<ActionResult<List<DeckResponse>>> GetMyDecks([FromQuery] int? limit = null)
         {
             var userId = GetUserId();
-            var decks = await _deckService.GetUserDecksAsync(userId);
+            var decks = await _deckService.GetUserDecksAsync(userId, limit);
             return Ok(decks);
         }
 

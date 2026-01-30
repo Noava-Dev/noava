@@ -1,0 +1,27 @@
+{
+  "title": "Dashboard",
+  "subtitle": "Your personal Noava dashboard",
+  "yourDecks": "Your Decks",
+  "statcard": {
+    "cardsreviewed": {
+      "title": "Cards Reviewed",
+      "tooltip": "Total number of flashcard reviews you've completed across all decks"
+    },
+    "accuracyrate": {
+      "title": "Accuracy Rate",
+      "tooltip": "Percentage of cards you answered correctly on the first attempt"
+    },
+    "studytime": {
+      "title": "Study Time",
+      "tooltip": "Total time spent studying flashcards this week"
+    },
+    "cardsdue": {
+      "title": "Cards Due",
+      "tooltip": "Cards scheduled for review today based on spaced repetition algorithm"
+    }
+  },
+  "decks": {
+    "empty": "No decks yet",
+    "viewAll": "View all"
+  }
+}

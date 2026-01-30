@@ -1,0 +1,27 @@
+{
+  "title": "Dashboard",
+  "subtitle": "Je persoonlijke Noava-dashboard",
+  "yourDecks": "Jouw Decks",
+  "statcard": {
+    "cardsreviewed": {
+      "title": "Beoordeelde Kaarten",
+      "tooltip": "Totaal aantal flashcard-beoordelingen dat je hebt voltooid in alle decks"
+    },
+    "accuracyrate": {
+      "title": "Nauwkeurigheid",
+      "tooltip": "Percentage kaarten dat je correct beantwoordde bij de eerste poging"
+    },
+    "studytime": {
+      "title": "Studietijd",
+      "tooltip": "Totale tijd besteed aan het bestuderen van flashcards deze week"
+    },
+    "cardsdue": {
+      "title": "Kaarten Te Beoordelen",
+      "tooltip": "Kaarten gepland voor beoordeling vandaag volgens het spaced repetition-algoritme"
+    }
+  },
+  "decks": {
+    "empty": "Nog geen decks",
+    "viewAll": "Alles bekijken"
+  }
+}
