@@ -1,9 +1,6 @@
-"use client";
-
 import { useEffect, useState } from "react";
 import { SchoolCard } from "./components/SchoolCard";
 
-// DTO types from backend
 interface SchoolAdminDto {
   id: string;
   name: string;
@@ -14,7 +11,7 @@ interface SchoolDto {
   id: string;
   name: string;
   admins: SchoolAdminDto[];
-  createdAt: string; // ISO string from backend
+  createdAt: string; 
 }
 
 // TODO: replace with the actual api call. just to test atm
