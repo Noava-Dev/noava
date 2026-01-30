@@ -1,17 +1,19 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using noava.Data;
 using noava.Repositories;
 using noava.Repositories.Contracts;
 using noava.Repositories.Implementations;
+using noava.Repositories.Interfaces;
 using noava.Services;
 using noava.Services.Contracts;
 using noava.Services.Implementations;
-using noava.Shared;
-using Microsoft.IdentityModel.JsonWebTokens;
 using noava.Services.Interfaces;
-using noava.Repositories.Interfaces;
+using noava.Shared;
+using noava.Shared.Contract;
+using noava.Shared.Implementation;
 using System.Security.Claims;
 
 namespace noava
@@ -41,6 +43,7 @@ namespace noava
             builder.Services.AddScoped<INotificationService, NotificationService>();
             builder.Services.AddScoped<ILeitnerBoxService, LeitnerBoxService>();
             builder.Services.AddScoped<IClassroomService, ClassroomService>();
+            builder.Services.AddHttpClient<IClerkService, ClerkService>();
 
             // Add services to the container.
             builder.Services.AddCors(options =>

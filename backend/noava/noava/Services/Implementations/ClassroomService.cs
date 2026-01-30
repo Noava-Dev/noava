@@ -1,9 +1,11 @@
 ﻿using noava.DTOs.Request.Classrooms;
 using noava.DTOs.Response.Classrooms;
+using noava.DTOs.Response.Users;
 using noava.Mappers.Classrooms;
 using noava.Models;
 using noava.Repositories.Contracts;
 using noava.Services.Contracts;
+using noava.Shared.Contract;
 using System.Security.Cryptography;
 
 namespace noava.Services.Implementations
@@ -11,10 +13,14 @@ namespace noava.Services.Implementations
     public class ClassroomService : IClassroomService
     {
         private readonly IClassroomRepository _classroomRepository;
+        private readonly IClerkService _clerkService;
 
-        public ClassroomService(IClassroomRepository classroomRepository)
+        public ClassroomService(
+            IClassroomRepository classroomRepository,
+            IClerkService clerkService)
         {
             _classroomRepository = classroomRepository;
+            _clerkService = clerkService;
         }
 
         public async Task<ClassroomResponseDto> CreateAsync(ClassroomRequestDto classroomDto, string userId)
@@ -108,6 +114,58 @@ namespace noava.Services.Implementations
             return classroom.ToResponseDto(userId);
         }
 
+        public async Task<ClassroomResponseDto> RemoveUserAsync(int classroomId, string targetUserId, string userId)
+        {
+            var classroom = await _classroomRepository.GetByIdAsync(classroomId);
+            if (classroom == null)
+                throw new KeyNotFoundException("Classroom not found.");
+
+            var isTeacher = classroom.ClassroomUsers
+                .Any(cu => cu.UserId == userId && cu.IsTeacher);
+
+            if (!isTeacher) 
+                throw new UnauthorizedAccessException("Only teachers can remove users.");
+
+            var targetUser = classroom.ClassroomUsers
+                .FirstOrDefault(cu => cu.UserId == targetUserId);
+
+            if (targetUser == null)
+                throw new KeyNotFoundException("Target user not found in the classroom.");
+
+            classroom.ClassroomUsers.Remove(targetUser);
+
+            await _classroomRepository.UpdateAsync(classroom);
+            await _classroomRepository.SaveChangesAsync();
+
+            return classroom.ToResponseDto(userId);
+        }
+
+        public async Task<ClassroomResponseDto> SetUserTeacherStatusAsync(int classroomId, string targetUserId, string userId, bool isTeacher)
+        {
+            var classroom = await _classroomRepository.GetByIdAsync(classroomId);
+            if (classroom == null)
+                throw new KeyNotFoundException("Classroom not found.");
+
+            var requesterIsTeacher = classroom.ClassroomUsers
+                .Any(cu => cu.UserId == userId && cu.IsTeacher);
+
+            if (!requesterIsTeacher)
+                throw new UnauthorizedAccessException("Only teachers can change roles.");
+
+            var targetUser = classroom.ClassroomUsers
+                .FirstOrDefault(cu => cu.UserId == targetUserId);
+
+            if (targetUser == null)
+                throw new KeyNotFoundException("Target user not found in the classroom.");
+
+            targetUser.IsTeacher = isTeacher;
+
+            await _classroomRepository.UpdateAsync(classroom);
+            await _classroomRepository.SaveChangesAsync();
+
+            return classroom.ToResponseDto(userId);
+        }
+
         public async Task<ClassroomResponseDto> DeleteAsync(int id, string userId)
         {
             var classroom = await _classroomRepository.GetByIdAsync(id);
@@ -148,6 +206,39 @@ namespace noava.Services.Implementations
             return classroom.ToResponseDto(userId);
         }
 
+        public async Task<IEnumerable<ClerkUserResponseDto>> GetAllUsersByClassroomAsync(
+            int classroomId, int page, int pageSize)
+        {
+            var classroom = await _classroomRepository.GetByIdAsync(classroomId);
+            if (classroom == null)
+                throw new KeyNotFoundException("Classroom not found.");
+
+            var userIds = classroom.ClassroomUsers
+                .Select(cu => cu.UserId)
+                .Distinct()
+                .ToList();
+
+            if (!userIds.Any())
+                return Enumerable.Empty<ClerkUserResponseDto>();
+
+            var pagedUserIds = userIds
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            var clerkUsers = await _clerkService.GetUsersAsync(pagedUserIds);
+
+            var teacherLookup = classroom.ClassroomUsers
+                .Where(cu => cu.IsTeacher)
+                .ToDictionary(cu => cu.UserId, cu => true);
+
+            foreach (var user in clerkUsers)
+            {
+                user.IsTeacher = teacherLookup.ContainsKey(user.ClerkId);
+            }
+
+            return clerkUsers;
+        }
 
         private static string GenerateClassroomCode()
         {
