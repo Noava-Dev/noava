@@ -43,9 +43,9 @@ namespace noava.Services
             return decks.Select(d => MapToResponse(d)).ToList();
         }
 
-        public async Task<List<DeckResponse>> GetUserDecksAsync(string userId)
+        public async Task<List<DeckResponse>> GetUserDecksAsync(string userId, int? limit = null)
         {
-            var decks = await _repository.GetByUserIdAsync(userId);
+            var decks = await _repository.GetByUserIdAsync(userId, limit);
             return decks.Select(d => MapToResponse(d)).ToList();
         }
 
