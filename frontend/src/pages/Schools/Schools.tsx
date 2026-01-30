@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { SchoolCard } from "./components/SchoolCard";
+import PageHeader from "../../shared/components/PageHeader";
 
 interface SchoolAdminDto {
   id: string;
@@ -11,7 +12,7 @@ interface SchoolDto {
   id: string;
   name: string;
   admins: SchoolAdminDto[];
-  createdAt: string; 
+  createdAt: string;
 }
 
 // TODO: replace with the actual api call. just to test atm
@@ -55,25 +56,25 @@ export default function SchoolsPage() {
   }
 
   return (
-    <main className="flex-1 p-8 bg-muted/30 min-h-screen">
-      <div className="mx-auto max-w-4xl space-y-4">
-        {schools.length === 0 ? (
-          <div className="rounded-lg border border-border bg-card p-8 text-center">
-            <p className="text-muted-foreground">
-              No schools found. Create a new school!
-            </p>
-          </div>
-        ) : (
-          schools.map((school) => (
-            <SchoolCard
-              key={school.id}
-              name={school.name}
-              createdAt={new Date(school.createdAt)}
-              admins={school.admins}
-            />
-          ))
-        )}
-      </div>
-    </main>
+      <main className="flex-1 p-8 bg-muted/30 min-h-screen">
+        <div className="mx-auto max-w-4xl space-y-4">
+          {schools.length === 0 ? (
+            <div className="rounded-lg border border-border bg-card p-8 text-center">
+              <p className="text-muted-foreground">
+                No schools found. Create a new school!
+              </p>
+            </div>
+          ) : (
+            schools.map((school) => (
+              <SchoolCard
+                key={school.id}
+                name={school.name}
+                createdAt={new Date(school.createdAt)}
+                admins={school.admins}
+              />
+            ))
+          )}
+        </div>
+      </main>
   );
 }

@@ -2,6 +2,7 @@
 using noava.Repositories.Contracts;
 using noava.Repositories.Implementations;
 using noava.Services.Contracts;
+using noava.Shared.Clerk;
 
 namespace noava.Services.Implementations
 {
@@ -10,12 +11,14 @@ namespace noava.Services.Implementations
         private readonly ISchoolRepository _schoolRepository;
         private readonly ISchoolAdminRepository _schoolAdminRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IClerkService _clerkService;
 
-        public SchoolService(ISchoolRepository schoolRepository, ISchoolAdminRepository schoolAdminRepository, IUserRepository userRepository)
+        public SchoolService(ISchoolRepository schoolRepository, ISchoolAdminRepository schoolAdminRepository, IUserRepository userRepository, IClerkService clerkService)
         {
             _schoolRepository = schoolRepository;
             _schoolAdminRepository = schoolAdminRepository;
             _userRepository = userRepository;
+            _clerkService = clerkService;
         }
 
 
@@ -51,14 +54,16 @@ namespace noava.Services.Implementations
 
 
 
-        public async Task<School> CreateSchoolAsync( string name, string createdByUserId, IEnumerable<string> adminUserIds)
+        public async Task<School> CreateSchoolAsync( string name, string createdByUserId, IEnumerable<string> schoolAdminEmails)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException("School name is required.");
 
-            var admins = adminUserIds?.Distinct().ToList() ?? [];
-            if (admins.Count == 0)
+            if (schoolAdminEmails == null || !schoolAdminEmails.Any())
                 throw new ArgumentException("At least one school admin is required.");
+
+            var schoolAdminUserIds = await _clerkService.GetClerkUserIdByEmailsAsync(schoolAdminEmails);
+
 
             var school = new School
             {
@@ -66,9 +71,9 @@ namespace noava.Services.Implementations
                 CreatedByUserId = createdByUserId,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,
-                SchoolAdmins = admins.Select(id => new SchoolAdmin
+                SchoolAdmins = schoolAdminUserIds.Select(id => new SchoolAdmin
                 {
-                    UserId = id,
+                    UserId = id
                 }).ToList()
             };
 

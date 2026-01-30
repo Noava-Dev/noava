@@ -2,11 +2,10 @@
 {
     public class SchoolDetailsDto
     {
-        //mainly for GETs
 
         public int Id { get; set; }
         public string SchoolName { get; set; } = null!;
-        public List<string> AdminUserIds { get; set; } = new();
+        public List<UserSummaryDto> Admins { get; set; } = new();
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
     }

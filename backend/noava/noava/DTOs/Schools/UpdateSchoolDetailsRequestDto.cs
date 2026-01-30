@@ -3,6 +3,6 @@
     public class UpdateSchoolDetailsRequestDto
     {
         public string SchoolName { get; set; } = null!;
-        public List<string> AdminUserIds { get; set; } = [];
+        public List<string> SchoolAdminEmails { get; set; } = [];
     }
 }

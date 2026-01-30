@@ -1,8 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using noava.DTOs.Schools;
 using noava.Mappers.Schools;
+using noava.Models.Enums;
 using noava.Services.Contracts;
+using noava.Shared.Clerk;
+using System.Security.Claims;
 
 namespace noava.Controllers
 {
@@ -12,17 +17,34 @@ namespace noava.Controllers
     public class SchoolsController : ControllerBase
     {
         private readonly ISchoolService _schoolService;
+        private readonly IClerkService _clerkservice;
+        private readonly IUserService _userService;
+        private string GetCurrentUserId()
+        {
+            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+                throw new UnauthorizedAccessException("User not logged in.");
+            return userId;
+        }
 
-        public SchoolsController(ISchoolService schoolService)
+        public SchoolsController(ISchoolService schoolService, IClerkService clerkService, IUserService userService)
         {
             _schoolService = schoolService;
+            _clerkservice = clerkService;
+            _userService = userService;
         }
 
         [HttpGet]
         public async Task<ActionResult<List<SchoolDetailsDto>>> GetAll()
         {
             var schools = await _schoolService.GetAllSchoolsAsync();
-            var result = schools.Select(SchoolMapper.ToDetailsDto).ToList();
+            var result = new List<SchoolDetailsDto>();
+            foreach(var school in schools)
+            {
+                var clerkIds = school.SchoolAdmins.Select(sa => sa.UserId).ToList();
+                var schoolAdmins = await _clerkservice.GetUsersByClerkIdsAsync(clerkIds);
+                result.Add(SchoolMapper.ToDetailsDto(school, schoolAdmins));
+            }
 
             return Ok(result);
         }
@@ -31,47 +53,64 @@ namespace noava.Controllers
         public async Task<ActionResult<SchoolDetailsDto>> GetById(int id)
         {
             var school = await _schoolService.GetSchoolByIdAsync(id);
-            return Ok(SchoolMapper.ToDetailsDto(school));
+            var clerkIds = school.SchoolAdmins.Select(sa => sa.UserId).ToList();
+            var schoolAdmins = await _clerkservice.GetUsersByClerkIdsAsync(clerkIds);
+            return Ok(SchoolMapper.ToDetailsDto(school, schoolAdmins));
         }
 
+        [Authorize(Roles = "ADMIN")]
         [HttpPost]
         public async Task<ActionResult<SchoolDetailsDto>> Create(
             [FromBody] CreateSchoolRequestDto request)
         {
+            var createdByUserId = GetCurrentUserId();
             var school = await _schoolService.CreateSchoolAsync(
                 request.Name,
-                request.CreatedByUserId,
-                request.AdminUserIds
+                createdByUserId,
+                request.SchoolAdminEmails
             );
+            var clerkIds = school.SchoolAdmins.Select(sa => sa.UserId).ToList();
+            var schoolAdmins = await _clerkservice.GetUsersByClerkIdsAsync(clerkIds);
 
-            var dto = SchoolMapper.ToDetailsDto(school);
-
-            return CreatedAtAction(nameof(GetById), new { id = dto.Id }, dto);
+            return CreatedAtAction(
+                nameof(GetById),
+                new { id = school.Id },
+                SchoolMapper.ToDetailsDto(school, schoolAdmins)
+    );
         }
 
+        [Authorize(Roles = "ADMIN")]
         [HttpPut("{id:int}")]
-        public async Task<ActionResult<SchoolDetailsDto>> UpdateSchoolName(
+        public async Task<ActionResult<SchoolDetailsDto>> UpdateSchool(
             int id,
             [FromBody] UpdateSchoolDetailsRequestDto request)
         {
+            // Update the name
             var school = await _schoolService.UpdateSchoolAsync(id, request.SchoolName);
-            var existingAdminIds = school.SchoolAdmins.Select(a => a.UserId).ToList();
 
-            var adminsToAdd = request.AdminUserIds.Except(existingAdminIds);
-            if (adminsToAdd.Any())
+            var exisitingAdmins = school.SchoolAdmins.Select(sa => sa.UserId).ToList();
+            var incomingAdmins =
+                    await _clerkservice.GetClerkUserIdByEmailsAsync(request.SchoolAdminEmails);
+
+            var schoolAdminsToAdd = incomingAdmins.Except(exisitingAdmins);
+            if (schoolAdminsToAdd.Any())
             {
-                await _schoolService.AddSchoolAdminsAsync(id, adminsToAdd);
+                await _schoolService.AddSchoolAdminsAsync(id, schoolAdminsToAdd);
             }
 
-            var adminsToRemove = existingAdminIds.Except(request.AdminUserIds);
-            if (adminsToRemove.Any())
+            var schoolAdminsToRemove = exisitingAdmins.Except(incomingAdmins);
+            if (schoolAdminsToRemove.Any())
             {
-                await _schoolService.RemoveSchoolAdminsAsync(id, adminsToRemove);
+                await _schoolService.RemoveSchoolAdminsAsync(id, schoolAdminsToRemove);
             }
 
-            return Ok(SchoolMapper.ToDetailsDto(school));
+            var schoolAdmins = await _clerkservice.GetUsersByClerkIdsAsync(incomingAdmins.ToList());
+
+            return Ok(SchoolMapper.ToDetailsDto(school, schoolAdmins));
         }
 
+
+        [Authorize(Roles = "ADMIN")]
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {

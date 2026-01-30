@@ -5,7 +5,7 @@ namespace noava.Mappers.Schools
 {
     public static class SchoolMapper
     {
-        public static SchoolDetailsDto ToDetailsDto(School school)
+        public static SchoolDetailsDto ToDetailsDto(School school, List<UserSummaryDto> admins)
         {
             return new SchoolDetailsDto
             {
@@ -13,8 +13,7 @@ namespace noava.Mappers.Schools
                 SchoolName = school.Name,
                 CreatedAt = school.CreatedAt,
                 UpdatedAt = school.UpdatedAt,
-                //AdminUserIds = school.SchoolAdmins
-                /// i need a user DTO that will return the user email and full name
+                Admins = admins
 
             };
         }
