@@ -6,13 +6,14 @@ import { HiOutlineX } from "react-icons/hi";
 import { useTranslation } from 'react-i18next';
 import { formatDateToEuropean } from "../../services/DateService";
 import { useToast } from '../../contexts/ToastContext';
+import { useAuth } from "@clerk/clerk-react";
 
 const NotificationPage = () => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState(true);
   const [processingId, setProcessingId] = useState<number | null>(null);
 
-
+  const { getToken } = useAuth();
   const service = notificationService();
   const { t } = useTranslation('notification');
   const { showError } = useToast();
@@ -66,7 +67,28 @@ const NotificationPage = () => {
   async function handleAction(notification: Notification, action: NotificationAction) {
     setProcessingId(notification.id);
     try {
-      const response = await fetch(action.endpoint, { method: action.method });
+      const token = await getToken();
+      if (!token) throw new Error("Not authenticated");
+
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+      // Remove /api prefix from endpoint if it exists since base URL already includes it
+      let endpoint = action.endpoint;
+      if (endpoint.startsWith('/api/')) {
+        endpoint = endpoint.substring(4); // Remove '/api'
+      }
+      
+      const url = endpoint.startsWith('http') 
+        ? endpoint 
+        : `${apiBaseUrl}${endpoint.startsWith('/') ? endpoint : '/' + endpoint}`;
+
+      const response = await fetch(url, { 
+        method: action.method,
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      
       if (!response.ok) throw new Error("Action failed");
 
       await service.deleteNotification(notification.id);

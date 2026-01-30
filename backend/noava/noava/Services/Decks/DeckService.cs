@@ -12,12 +12,14 @@ namespace noava.Services
     public class DeckService : IDeckService
     {
         private readonly IDeckRepository _repository;
+        IDeckUserRepository _deckUserRepo;
         private readonly IBlobService _blobService;
 
-        public DeckService(IDeckRepository repository, IBlobService blobService)
+        public DeckService(IDeckRepository repository, IBlobService blobService, IDeckUserRepository deckUserRepo)
         {
             _repository = repository;
             _blobService = blobService;
+            _deckUserRepo = deckUserRepo;
         }
 
         // Helper: Map Deck model to DeckResponse DTO
@@ -69,7 +71,17 @@ namespace noava.Services
             };
 
             var createdDeck = await _repository.CreateAsync(deck);
-            return MapToResponse(createdDeck);
+            var deckUser = new DeckUser
+            {
+                ClerkId = userId,
+                DeckId = deck.DeckId,
+                IsOwner = true,
+                AddedAt = DateTime.UtcNow
+            };
+
+            await _deckUserRepo.AddAsync(deckUser);
+
+            return MapToResponse(deck);
         }
 
         public async Task<DeckResponse?> UpdateDeckAsync(int id, DeckRequest request, string userId)
