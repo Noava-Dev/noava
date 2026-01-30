@@ -3,6 +3,7 @@ import Home from "./pages/Home/Home"
 import Decks from "./pages/Decks/Decks";
 import Classrooms from "./pages/Classrooms/Classrooms";
 import ClassroomDetail from "./pages/Classrooms/ClassroomDetail";
+import JoinClassroom from "./pages/Classrooms/JoinClassroom";
 import { Route, Routes } from 'react-router-dom';
 import NotFound from './pages/NotFound/NotFound';
 import SettingsPage from './pages/Settings/Settings';
@@ -27,6 +28,7 @@ export default function AppRoutes() {
       </Route>
         <Route path="/classrooms" element={<PrivateRoute allowedRoles={RoleGroups.ALL_AUTHENTICATED} />}>
           <Route index element={<Classrooms />} />
+          <Route path="join" element={<JoinClassroom />} />
           <Route path=":classroomId" element={<ClassroomDetail />} />
         </Route>
       <Route path="/history" element={<Placeholder title="Geschiedenis" />} />

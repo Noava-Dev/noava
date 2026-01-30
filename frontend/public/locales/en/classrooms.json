@@ -8,15 +8,16 @@
   "sort": {
     "label": "Sort by",
     "newest": "Newest",
-    "oldest": "Oldest"
-    ,"az": "A → Z",
-    "za": "Z → A"
+    "oldest": "Oldest",
+    "az": "Alphabetical",
+     "za": "Reverse alphabetical"
   },
   "results": {
     "found": "results found"
   },
   "empty": {
     "noResults": "No classrooms found",
+    "tryAnother": "Try a different search term",
     "clearSearch": "Clear search",
     "message": "You have no classrooms yet."
   },
@@ -37,7 +38,9 @@
     "updateError": "Failed to update classroom",
     "deleteSuccess": "Classroom deleted",
     "deleteError": "Failed to delete classroom",
-    "nameAndDescriptionRequired": "Name and description are required"
+    "nameAndDescriptionRequired": "Name and description are required",
+    "requestCodeSuccess": "New code requested",
+    "requestCodeError": "Failed to request new code"
   },
   "deleteModal": {
     "title": "Delete Classroom",
@@ -47,8 +50,16 @@
   },
   "card": {
     "edit": "Edit",
+    "regenerateCode": "Request new code",
     "delete": "Delete",
     "show": "Show"
+  },
+
+  "requestCodeModal": {
+    "title": "Request new classroom code",
+    "message": "Are you sure you want to request a new join code? This will invalidate the previous code.",
+    "yes": "Request",
+    "no": "Cancel"
   },
   "detail": {
     "description": "Description",
@@ -58,6 +69,21 @@
     "edit": "Edit",
     "delete": "Delete",
     "back": "Back"
+  },
+  "joinButton": "Join",
+  "join": {
+    "title": "Join classroom",
+    "subtitle": "Enter a join code to join a classroom",
+    "form": {
+      "label": "Join code",
+      "placeholder": "e.g. ABC123",
+      "empty": "Please enter a join code",
+      "submit": "Join",
+      "cancel": "Cancel",
+      "joining": "Joining..."
+    },
+    "success": "You were added to the classroom",
+    "error": "Failed to join with that code"
   },
   "notFound": "Classroom not found"
 }

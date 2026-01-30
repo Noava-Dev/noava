@@ -8,15 +8,16 @@
   "sort": {
     "label": "Trier",
     "newest": "Les plus récentes",
-    "oldest": "Les plus anciennes"
-    ,"az": "A → Z",
-    "za": "Z → A"
+    "oldest": "Les plus anciennes",
+    "az": "Alphabétique",
+    "za": "Inverse alphabétique"
   },
   "results": {
     "found": "résultats trouvés"
   },
   "empty": {
     "noResults": "Aucune classe trouvée",
+    "tryAnother": "Essayez un autre terme de recherche",
     "clearSearch": "Effacer la recherche",
     "message": "Vous n'avez pas encore de classes."
   },
@@ -37,7 +38,9 @@
     "updateError": "Échec de la mise à jour",
     "deleteSuccess": "Classe supprimée",
     "deleteError": "Échec de la suppression",
-    "nameAndDescriptionRequired": "Le nom et la description sont requis"
+    "nameAndDescriptionRequired": "Le nom et la description sont requis",
+    "requestCodeSuccess": "Nouveau code demandé",
+    "requestCodeError": "Échec de la demande du nouveau code"
   },
   "deleteModal": {
     "title": "Supprimer la classe",
@@ -47,8 +50,16 @@
   },
   "card": {
     "edit": "Modifier",
+    "regenerateCode": "Demander un nouveau code",
     "delete": "Supprimer",
     "show": "Voir"
+  },
+
+  "requestCodeModal": {
+    "title": "Demander un nouveau code de classe",
+    "message": "Souhaitez-vous demander un nouveau code d'accès ? L'ancien code sera invalidé.",
+    "yes": "Demander",
+    "no": "Annuler"
   },
   "detail": {
     "description": "Description",
@@ -58,6 +69,21 @@
     "edit": "Modifier",
     "delete": "Supprimer",
     "back": "Retour"
+  },
+  "joinButton": "Rejoindre",
+  "join": {
+    "title": "Rejoindre une classe",
+    "subtitle": "Saisissez un code pour rejoindre une classe",
+    "form": {
+      "label": "Code d'accès",
+      "placeholder": "ex. ABC123",
+      "empty": "Veuillez saisir un code d'accès",
+      "submit": "Rejoindre",
+      "cancel": "Annuler",
+      "joining": "Rejoindre..."
+    },
+    "success": "Vous avez été ajouté à la classe",
+    "error": "Échec de la jonction avec ce code"
   },
   "notFound": "Classe introuvable"
 }

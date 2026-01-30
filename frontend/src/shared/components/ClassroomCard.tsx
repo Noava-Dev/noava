@@ -1,5 +1,5 @@
 import { Dropdown, DropdownItem, DropdownDivider, Button } from 'flowbite-react';
-import { HiDotsVertical, HiPencil, HiTrash } from 'react-icons/hi';
+import { HiDotsVertical, HiPencil, HiTrash, HiRefresh } from 'react-icons/hi';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import type { ClassroomResponse } from '../../models/Classroom';
@@ -8,9 +8,10 @@ interface ClassroomCardProps {
   classroom: ClassroomResponse;
   onEdit?: (c: ClassroomResponse) => void;
   onDelete?: (id: number) => void;
+  onRequestNewCode?: (id: number) => void;
 }
 
-function ClassroomCard({ classroom, onEdit, onDelete }: ClassroomCardProps) {
+function ClassroomCard({ classroom, onEdit, onDelete, onRequestNewCode }: ClassroomCardProps) {
   const { t } = useTranslation('classrooms');
   const navigate = useNavigate();
 
@@ -28,8 +29,8 @@ function ClassroomCard({ classroom, onEdit, onDelete }: ClassroomCardProps) {
   };
 
   return (
-    <div className="relative rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 hover:cursor-pointer" onClick={handleCardClick}>
-      <div className="p-4 sm:p-6">
+    <div className="relative rounded-lg overflow-visible shadow-lg hover:shadow-xl transition-shadow duration-300 hover:cursor-pointer flex h-full" onClick={handleCardClick}>
+      <div className="p-4 sm:p-6 flex flex-col flex-1">
         <div className="flex items-start justify-between mb-2">
           <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-1 line-clamp-2">
             {classroom.name}
@@ -51,6 +52,11 @@ function ClassroomCard({ classroom, onEdit, onDelete }: ClassroomCardProps) {
                     {t('card.edit')}
                   </DropdownItem>
                 )}
+                {classroom.permissions.canEdit && (
+                  <DropdownItem icon={HiRefresh} onClick={() => onRequestNewCode?.(classroom.id)}>
+                    {t('card.regenerateCode')}
+                  </DropdownItem>
+                )}
                 {classroom.permissions.canDelete && <DropdownDivider />}
                 {classroom.permissions.canDelete && (
                   <DropdownItem icon={HiTrash} onClick={() => onDelete?.(classroom.id)} className="text-red-600">
@@ -68,7 +74,7 @@ function ClassroomCard({ classroom, onEdit, onDelete }: ClassroomCardProps) {
           </p>
         )}
 
-        <div className="mt-3">
+        <div className="mt-auto">
           <Button size="sm" onClick={handleShow} className="w-full">{t('card.show')}</Button>
         </div>
       </div>
