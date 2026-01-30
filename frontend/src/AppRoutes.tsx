@@ -10,6 +10,7 @@ import { SignIn as SignInClerk } from '@clerk/clerk-react';
 import PrivateRoute from './shared/components/navigation/PrivateRoute';
 import { RoleGroups } from './models/User';
 import AdminDashboard from './pages/Admin/Dashboard/AdminDashboard';
+import QuickReview from '../src/pages/Review/Quickreview';
 import NotificationPage from './pages/Notification/Notification';
 import Loading from './shared/components/Loading';
 import FlashcardDetail from './pages/Flashcards/FlashcardDetail';
@@ -45,11 +46,10 @@ export default function AppRoutes() {
         }
       />
       <Route path="/" element={<Home />} />
-      <Route
-        path="/decks"
-        element={<PrivateRoute allowedRoles={RoleGroups.ALL_AUTHENTICATED} />}>
-        <Route index element={<Decks />} />
-        <Route path=":deckId/cards" element={<FlashcardDetail />} />
+      <Route path="/decks" element={<PrivateRoute allowedRoles={RoleGroups.ALL_AUTHENTICATED} />}>
+          <Route index element={<Decks />} />
+          <Route path=":deckId/cards" element={<FlashcardDetail />} />
+          <Route path=":deckId/review" element={<QuickReview />} />
       </Route>
       <Route path="/classrooms" element={<Placeholder title="Klassen" />} />
       <Route path="/history" element={<NoavaSidebar />} />

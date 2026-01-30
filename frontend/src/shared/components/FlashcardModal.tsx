@@ -53,22 +53,22 @@ function FlashcardModal({ isOpen, onClose, onSubmit, flashcard }: FlashcardModal
       
       // Load existing media previews
       if (flashcard.frontImage) {
-        azureBlobService.getBlobSasUrl(flashcard.frontImage)
+        azureBlobService.getSasUrl('card-images', flashcard.frontImage)
           .then(url => setFrontImagePreview(url))
           .catch(console.error);
       }
       if (flashcard.backImage) {
-        azureBlobService.getBlobSasUrl(flashcard.backImage)
+        azureBlobService.getSasUrl('card-images', flashcard.backImage)
           .then(url => setBackImagePreview(url))
           .catch(console.error);
       }
       if (flashcard.frontAudio) {
-        azureBlobService.getBlobSasUrl(flashcard.frontAudio)
+        azureBlobService.getSasUrl('card-audio', flashcard.frontAudio)
           .then(url => setFrontAudioPreview(url))
           .catch(console.error);
       }
       if (flashcard.backAudio) {
-        azureBlobService.getBlobSasUrl(flashcard.backAudio)
+        azureBlobService.getSasUrl('card-audio', flashcard.backAudio)
           .then(url => setBackAudioPreview(url))
           .catch(console.error);
       }
@@ -119,28 +119,30 @@ function FlashcardModal({ isOpen, onClose, onSubmit, flashcard }: FlashcardModal
   };
 
   const handleFrontAudioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setFrontAudioFile(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setFrontAudioPreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+  const file = e.target.files?.[0];
+  if (file) {
+    setFrontAudioFile(file);
 
-  const handleBackAudioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setBackAudioFile(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setBackAudioPreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+    const objectUrl = URL.createObjectURL(file);
+    setFrontAudioPreview(objectUrl);
+
+    return () => URL.revokeObjectURL(objectUrl);
+  }
+};
+
+ 
+const handleBackAudioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const file = e.target.files?.[0];
+  if (file) {
+    setBackAudioFile(file);
+
+    const objectUrl = URL.createObjectURL(file);
+    setBackAudioPreview(objectUrl);
+    
+
+    return () => URL.revokeObjectURL(objectUrl);
+  }
+};
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -151,25 +153,25 @@ function FlashcardModal({ isOpen, onClose, onSubmit, flashcard }: FlashcardModal
       // Upload front image if new file
       let finalFrontImage = frontImageBlobName;
       if (frontImageFile) {
-        finalFrontImage = await azureBlobService.uploadImage(frontImageFile);
+        finalFrontImage = await azureBlobService.upload('card-images', frontImageFile);
       }
 
       // Upload back image if new file
       let finalBackImage = backImageBlobName;
       if (backImageFile) {
-        finalBackImage = await azureBlobService.uploadImage(backImageFile);
+        finalBackImage = await azureBlobService.upload('card-images', backImageFile);
       }
 
       // Upload front audio if new file
       let finalFrontAudio = frontAudioBlobName;
       if (frontAudioFile) {
-        finalFrontAudio = await azureBlobService.uploadImage(frontAudioFile);
+        finalFrontAudio = await azureBlobService.upload('card-audio', frontAudioFile);
       }
 
       // Upload back audio if new file
       let finalBackAudio = backAudioBlobName;
       if (backAudioFile) {
-        finalBackAudio = await azureBlobService.uploadImage(backAudioFile);
+        finalBackAudio = await azureBlobService.upload('card-audio', backAudioFile);
       }
 
       const flashcardData: CreateFlashcardRequest = {
@@ -335,7 +337,7 @@ function FlashcardModal({ isOpen, onClose, onSubmit, flashcard }: FlashcardModal
                   </div>
                 </div>
 
-                {/* Front Image - COMMENTED OUT
+                {/* Front Image */}
                 <div>
                   <div className="flex items-center gap-2 mb-2">
                     <HiPhotograph className="h-5 w-5 text-gray-400" />
@@ -359,9 +361,9 @@ function FlashcardModal({ isOpen, onClose, onSubmit, flashcard }: FlashcardModal
                     disabled={uploading}
                   />
                 </div>
-                */}
+        
 
-                {/* Front Audio - COMMENTED OUT
+                {/* Front Audio */}
                 <div>
                   <div className="flex items-center gap-2 mb-2">
                     <HiVolumeUp className="h-5 w-5 text-gray-400" />
@@ -383,7 +385,7 @@ function FlashcardModal({ isOpen, onClose, onSubmit, flashcard }: FlashcardModal
                     disabled={uploading}
                   />
                 </div>
-                */}
+                
               </div>
             )}
 
@@ -428,7 +430,7 @@ function FlashcardModal({ isOpen, onClose, onSubmit, flashcard }: FlashcardModal
                   </div>
                 </div>
 
-                {/* Back Image - COMMENTED OUT
+                {/* Back Image */}
                 <div>
                   <div className="flex items-center gap-2 mb-2">
                     <HiPhotograph className="h-5 w-5 text-gray-400" />
@@ -452,9 +454,9 @@ function FlashcardModal({ isOpen, onClose, onSubmit, flashcard }: FlashcardModal
                     disabled={uploading}
                   />
                 </div>
-                */}
+               
 
-                {/* Back Audio - COMMENTED OUT
+                {/* Back Audio */}
                 <div>
                   <div className="flex items-center gap-2 mb-2">
                     <HiVolumeUp className="h-5 w-5 text-gray-400" />
@@ -476,7 +478,7 @@ function FlashcardModal({ isOpen, onClose, onSubmit, flashcard }: FlashcardModal
                     disabled={uploading}
                   />
                 </div>
-                */}
+              
               </div>
             )}
 

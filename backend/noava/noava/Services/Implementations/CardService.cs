@@ -1,9 +1,11 @@
-using noava.Models;
+﻿using noava.Models;
 using noava.DTOs.Request;
 using noava.DTOs.Response;
-using noava.Services.Interfaces;
-using noava.Repositories.Contracts;
 using noava.Repositories.Interfaces;
+using noava.Services.Interfaces;
+using noava.Shared;
+using noava.Models.BlobStorage;
+using noava.Repositories.Contracts;
 
 namespace noava.Services
 {
@@ -11,11 +13,15 @@ namespace noava.Services
     {
         private readonly ICardRepository _cardRepository;
         private readonly IDeckRepository _deckRepository;
-
-        public CardService(ICardRepository cardRepository, IDeckRepository deckRepository)
+        private readonly IBlobService _blobService;  
+        public CardService(
+            ICardRepository cardRepository,
+            IDeckRepository deckRepository,
+            IBlobService blobService)  
         {
             _cardRepository = cardRepository;
             _deckRepository = deckRepository;
+            _blobService = blobService;  
         }
 
         private CardResponse MapToResponse(Card card)
@@ -87,15 +93,33 @@ namespace noava.Services
             var deck = await _deckRepository.GetByIdAsync(existingCard.DeckId);
             if (deck == null || deck.UserId != userId) return null;
 
+            var oldFrontImage = existingCard.FrontImage;
+            var oldFrontAudio = existingCard.FrontAudio;
+            var oldBackImage = existingCard.BackImage;
+            var oldBackAudio = existingCard.BackAudio;
+
+            var newFrontImage = request.FrontImage;
+            var newFrontAudio = request.FrontAudio;
+            var newBackImage = request.BackImage;
+            var newBackAudio = request.BackAudio;
+
+            // Update card
             existingCard.FrontText = request.FrontText;
             existingCard.BackText = request.BackText;
-            existingCard.FrontImage = request.FrontImage;
-            existingCard.FrontAudio = request.FrontAudio;
-            existingCard.BackImage = request.BackImage;
-            existingCard.BackAudio = request.BackAudio;
+            existingCard.FrontImage = newFrontImage;
+            existingCard.FrontAudio = newFrontAudio;
+            existingCard.BackImage = newBackImage;
+            existingCard.BackAudio = newBackAudio;
             existingCard.Memo = request.Memo;
 
             var updatedCard = await _cardRepository.UpdateAsync(existingCard);
+
+
+            await CleanupOldBlobs(oldFrontImage, newFrontImage, "card-images");
+            await CleanupOldBlobs(oldFrontAudio, newFrontAudio, "card-audio");
+            await CleanupOldBlobs(oldBackImage, newBackImage, "card-images");
+            await CleanupOldBlobs(oldBackAudio, newBackAudio, "card-audio");
+
             return MapToResponse(updatedCard);
         }
 
@@ -107,7 +131,41 @@ namespace noava.Services
             var deck = await _deckRepository.GetByIdAsync(card.DeckId);
             if (deck == null || deck.UserId != userId) return false;
 
-            return await _cardRepository.DeleteAsync(id);
+            var result = await _cardRepository.DeleteAsync(id);
+
+            if (result)
+            {
+                await DeleteBlobIfExists(card.FrontImage, "card-images");
+                await DeleteBlobIfExists(card.FrontAudio, "card-audio");
+                await DeleteBlobIfExists(card.BackImage, "card-images");
+                await DeleteBlobIfExists(card.BackAudio, "card-audio");
+            }
+
+            return result;
         }
-    }
+
+
+        private async Task CleanupOldBlobs(string? oldBlobName, string? newBlobName, string containerName)
+        {
+            // Only delete if blob changed and old blob exists
+            if (!string.IsNullOrEmpty(oldBlobName) && oldBlobName != newBlobName)
+            {
+                await DeleteBlobIfExists(oldBlobName, containerName);
+            }
+        }
+
+
+        private async Task DeleteBlobIfExists(string? blobName, string containerName)
+        {
+            if (string.IsNullOrEmpty(blobName)) return;
+            await _blobService.DeleteFile(new DeleteFileRequest
+            {
+                ContainerName = containerName,
+                BlobName = blobName
+            });
+
+
+
+        }
+    } 
 }
