@@ -1,0 +1,40 @@
+{
+  "title": "Dashboard",
+  "subtitle": "Your personal Noava dashboard",
+  "yourDecks": "Your Decks",
+  "statcard": {
+    "cardsreviewed": {
+      "title": "Cards Reviewed",
+      "tooltip": "Total number of flashcard reviews you've completed across all decks"
+    },
+    "accuracyrate": {
+      "title": "Accuracy Rate",
+      "tooltip": "Percentage of cards you answered correctly on the first attempt"
+    },
+    "studytime": {
+      "title": "Study Time",
+      "tooltip": "Total time spent studying flashcards this week"
+    },
+    "cardsdue": {
+      "title": "Cards Due",
+      "tooltip": "Cards scheduled for review today based on spaced repetition algorithm"
+    }
+  },
+  "decks": {
+    "empty": "No decks yet",
+    "viewAll": "View all"
+  },
+  "toast": {
+    "loadError": "Failed to load decks",
+    "updateSuccess": "Deck updated successfully",
+    "updateError": "Failed to update deck",
+    "deleteSuccess": "Deck deleted successfully",
+    "deleteError": "Failed to delete deck"
+  },
+  "deleteModal": {
+    "title": "Confirm Deletion",
+    "message": "Are you sure you want to delete this deck? This action cannot be undone.",
+    "yes": "Yes, delete",
+    "no": "Cancel"
+  }
+}

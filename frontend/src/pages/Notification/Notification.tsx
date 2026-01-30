@@ -7,13 +7,14 @@ import { useTranslation } from 'react-i18next';
 import { useApi } from '../../hooks/useApi';
 import { formatDateToEuropean } from "../../services/DateService";
 import { useToast } from '../../contexts/ToastContext';
+import { useAuth } from "@clerk/clerk-react";
 
 const NotificationPage = () => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState(true);
   const [processingId, setProcessingId] = useState<number | null>(null);
 
-
+  const { getToken } = useAuth();
   const service = notificationService();
   const { t } = useTranslation('notification');
   const api = useApi();

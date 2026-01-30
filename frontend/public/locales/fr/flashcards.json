@@ -48,12 +48,36 @@
     "mastered": "Maîtrisé",
     "learning": "En Apprentissage",
     "new": "Nouveau",
-    "addCard": "Ajouter une Carte"
+    "addCard": "Ajouter une Carte",
+    "studyNow": "Étudier Maintenant",
+    "shuffle": "Mélanger",
+    "quickReview": "Révision Rapide"
   },
   "deleteConfirmModal": {
   "title": "Supprimer la Carte",
   "message": "Êtes-vous sûr de vouloir supprimer cette carte mémoire? Cette action ne peut pas être annulée.",
   "confirm": "Supprimer",
   "cancel": "Annuler"
-}
+},
+
+  "quickReview": {
+    "title": "Révision Rapide",
+    "mode": "Mode Révision Rapide",
+    "loading": "Chargement de la session de révision...",
+    "noCards": "Aucune carte disponible pour la révision",
+    "progress": "Progrès",
+    "front": "Recto",
+    "back": "Verso",
+    "clickToFlip": "Cliquez pour retourner",
+    "clickToFlipBack": "Cliquez pour revenir",
+    "skip": "Passer",
+    "next": "Carte Suivante",
+    "finish": "Terminer",
+    "complete": {
+      "title": "Session Terminée!",
+      "message": "Vous avez révisé {{count}} cartes",
+      "backToDeck": "Retour au Deck",
+      "restart": "Recommencer la Révision"
+    }
+  }
 }
