@@ -4,7 +4,6 @@ export const getVisibilityLabel = (
   visibility: DeckVisibility,
   t: (key: string) => string
 ): string => {
-  console.log(visibility);
   switch (visibility) {
     case DeckVisibility.Public:
       return t('visibility.public');

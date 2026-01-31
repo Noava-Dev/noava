@@ -1,15 +1,20 @@
-import { useMemo, useRef, useEffect } from "react";
-import axios, { type AxiosInstance } from "axios";
-import { useUser, useAuth } from "@clerk/clerk-react";
+import { useMemo, useRef, useEffect } from 'react';
+import axios, { AxiosInstance } from 'axios';
+import { useUser, useAuth } from '@clerk/clerk-react';
 
 export const useApi = (): AxiosInstance => {
   const { isLoaded } = useUser();
   const { getToken } = useAuth();
 
-  const clerkReadyRef = useRef<{ promise: Promise<void>; resolve: () => void } | null>(null);
+  const clerkReadyRef = useRef<{
+    promise: Promise<void>;
+    resolve: () => void;
+  } | null>(null);
   if (!clerkReadyRef.current) {
     let resolveFn!: () => void;
-    const promise = new Promise<void>((resolve) => { resolveFn = resolve; });
+    const promise = new Promise<void>((resolve) => {
+      resolveFn = resolve;
+    });
     clerkReadyRef.current = { promise, resolve: resolveFn };
   }
 
@@ -22,7 +27,7 @@ export const useApi = (): AxiosInstance => {
   const axiosWithAuth = useMemo<AxiosInstance>(() => {
     const instance = axios.create({
       baseURL: import.meta.env.VITE_API_BASE_URL,
-      headers: { "Content-Type": "application/json" },
+      headers: { 'Content-Type': 'application/json' },
     });
 
     instance.interceptors.request.use(
@@ -31,7 +36,6 @@ export const useApi = (): AxiosInstance => {
           await clerkReadyRef.current?.promise;
 
           const token = await getToken();
-          console.log(token);
           if (token) config.headers.Authorization = `Bearer ${token}`;
         } catch (err) {}
 
