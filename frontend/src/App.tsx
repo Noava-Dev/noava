@@ -10,7 +10,13 @@ import NoavaSidebar from './shared/components/navigation/NoavaSidebar';
 function App() {
   const location = useLocation();
 
-  const routesWithoutSidebar = ['/', '/home', '/faq', '/sign-up', '/sign-in'];
+  const routesWithoutSidebar = [
+    '/',
+    '/not-found',
+    '/faq',
+    '/sign-up',
+    '/sign-in',
+  ];
   const showSidebar = !routesWithoutSidebar.includes(location.pathname);
 
   //-------------- language ---------------------

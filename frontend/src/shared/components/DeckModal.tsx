@@ -1,8 +1,15 @@
-import { Label, TextInput, Textarea, Select, Button, FileInput } from 'flowbite-react';
+import {
+  Label,
+  TextInput,
+  Textarea,
+  Select,
+  Button,
+  FileInput,
+} from 'flowbite-react';
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { HiX, HiUpload } from 'react-icons/hi';
-import { DeckVisibility, type DeckVisibilityType, type Deck, type CreateDeckRequest } from '../../models/Deck';
+import { DeckVisibility, Deck, CreateDeckRequest } from '../../models/Deck';
 import { useAzureBlobService } from '../../services/AzureBlobService';
 import { useToast } from '../../contexts/ToastContext';
 interface DeckModalProps {
@@ -18,31 +25,33 @@ function DeckModal({ isOpen, onClose, onSubmit, deck }: DeckModalProps) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [language, setLanguage] = useState('');
-  const [visibility, setVisibility] = useState<DeckVisibilityType>(DeckVisibility.Private);
-  const [coverImageBlobName, setCoverImageBlobName] = useState<string | undefined>(undefined);
+  const [visibility, setVisibility] = useState<DeckVisibility>(
+    DeckVisibility.Private
+  );
+  const [coverImageBlobName, setCoverImageBlobName] = useState<
+    string | undefined
+  >(undefined);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
-  const {  showError } = useToast();
+  const { showError } = useToast();
 
   useEffect(() => {
     if (deck) {
-      
       setTitle(deck.title);
       setDescription(deck.description || '');
       setLanguage(deck.language || '');
       setVisibility(deck.visibility);
       setCoverImageBlobName(deck.coverImageBlobName);
-      
-      
+
       if (deck.coverImageBlobName) {
-        azureBlobService.getSasUrl('deck-images', deck.coverImageBlobName)
-          .then(url => setImagePreview(url))
+        azureBlobService
+          .getSasUrl('deck-images', deck.coverImageBlobName)
+          .then((url) => setImagePreview(url));
       } else {
         setImagePreview(null);
       }
     } else {
-      
       setTitle('');
       setDescription('');
       setLanguage('');
@@ -57,7 +66,7 @@ function DeckModal({ isOpen, onClose, onSubmit, deck }: DeckModalProps) {
     const file = e.target.files?.[0];
     if (file) {
       setImageFile(file);
-      
+
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result as string);
@@ -72,10 +81,9 @@ function DeckModal({ isOpen, onClose, onSubmit, deck }: DeckModalProps) {
     try {
       setUploading(true);
 
-      
       let finalBlobName = coverImageBlobName;
       if (imageFile) {
-        finalBlobName = await azureBlobService.upload('deck-images', imageFile);   
+        finalBlobName = await azureBlobService.upload('deck-images', imageFile);
       }
 
       onSubmit({
@@ -116,10 +124,9 @@ function DeckModal({ isOpen, onClose, onSubmit, deck }: DeckModalProps) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       {/* Backdrop */}
-      <div 
+      <div
         className="absolute inset-0 bg-black bg-opacity-50"
-        onClick={onClose}
-      ></div>
+        onClick={onClose}></div>
 
       {/* Modal Content */}
       <div className="relative bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
@@ -131,9 +138,8 @@ function DeckModal({ isOpen, onClose, onSubmit, deck }: DeckModalProps) {
           <button
             onClick={onClose}
             className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
-            disabled={uploading}
-          >
-            <HiX className="h-6 w-6" />
+            disabled={uploading}>
+            <HiX className="w-6 h-6" />
           </button>
         </div>
 
@@ -141,10 +147,8 @@ function DeckModal({ isOpen, onClose, onSubmit, deck }: DeckModalProps) {
         <div className="p-6">
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Title */}
-            <div className='flex flex-col gap-2'>
-              <Label htmlFor="title">
-                {t('modal.titleLabel')} *
-              </Label>
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="title">{t('modal.titleLabel')} *</Label>
               <TextInput
                 id="title"
                 type="text"
@@ -157,32 +161,39 @@ function DeckModal({ isOpen, onClose, onSubmit, deck }: DeckModalProps) {
             </div>
 
             {/* Language */}
-            <div className='flex flex-col gap-2'>
-              <Label htmlFor="language">
-                {t('modal.languageLabel')} *
-              </Label>
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="language">{t('modal.languageLabel')} *</Label>
               <Select
                 id="language"
                 value={language}
                 onChange={(e) => setLanguage(e.target.value)}
                 required
-                disabled={uploading}
-              >
+                disabled={uploading}>
                 <option value="">{t('languages.select')}</option>
-                <option value={t('languages.dutch')}>{t('languages.dutch')}</option>
-                <option value={t('languages.french')}>{t('languages.french')}</option>
-                <option value={t('languages.english')}>{t('languages.english')}</option>
-                <option value={t('languages.german')}>{t('languages.german')}</option>
-                <option value={t('languages.spanish')}>{t('languages.spanish')}</option>
-                <option value={t('languages.italian')}>{t('languages.italian')}</option>
+                <option value={t('languages.dutch')}>
+                  {t('languages.dutch')}
+                </option>
+                <option value={t('languages.french')}>
+                  {t('languages.french')}
+                </option>
+                <option value={t('languages.english')}>
+                  {t('languages.english')}
+                </option>
+                <option value={t('languages.german')}>
+                  {t('languages.german')}
+                </option>
+                <option value={t('languages.spanish')}>
+                  {t('languages.spanish')}
+                </option>
+                <option value={t('languages.italian')}>
+                  {t('languages.italian')}
+                </option>
               </Select>
             </div>
 
             {/* Description */}
-            <div className='flex flex-col gap-2'>
-              <Label htmlFor="description">
-                {t('modal.descriptionLabel')}
-              </Label>
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="description">{t('modal.descriptionLabel')}</Label>
               <Textarea
                 id="description"
                 placeholder={t('modal.descriptionPlaceholder')}
@@ -194,18 +205,16 @@ function DeckModal({ isOpen, onClose, onSubmit, deck }: DeckModalProps) {
             </div>
 
             {/* Image Upload */}
-            <div className='flex flex-col gap-2'>
-              <Label htmlFor="image">
-                {t('modal.imageLabel')}
-              </Label>
-              
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="image">{t('modal.imageLabel')}</Label>
+
               {/* Image Preview */}
               {imagePreview && (
                 <div className="mb-3">
                   <img
                     src={imagePreview}
                     alt="Preview"
-                    className="w-full h-48 object-cover rounded-lg"
+                    className="object-cover w-full h-48 rounded-lg"
                   />
                 </div>
               )}
@@ -216,27 +225,32 @@ function DeckModal({ isOpen, onClose, onSubmit, deck }: DeckModalProps) {
                 onChange={handleImageChange}
                 disabled={uploading}
               />
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+              <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
                 {t('modal.imageHelp')}
               </p>
             </div>
 
             {/* Visibility */}
-            <div className='flex flex-col gap-2'>
-              <Label htmlFor="visibility">
-                {t('modal.visibilityLabel')} *
-              </Label>
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="visibility">{t('modal.visibilityLabel')} *</Label>
               <Select
                 id="visibility"
                 value={visibility}
-                onChange={(e) => setVisibility(Number(e.target.value) as DeckVisibilityType)}
-                disabled={uploading}
-              >
-                <option value={DeckVisibility.Private}>{t('modal.visibilityPrivate')}</option>
-                <option value={DeckVisibility.Shared}>{t('modal.visibilityShared')}</option>
-                <option value={DeckVisibility.Public}>{t('modal.visibilityPublic')}</option>
+                onChange={(e) =>
+                  setVisibility(String(e.target.value) as DeckVisibility)
+                }
+                disabled={uploading}>
+                <option value={DeckVisibility.Private}>
+                  {t('modal.visibilityPrivate')}
+                </option>
+                <option value={DeckVisibility.Shared}>
+                  {t('modal.visibilityShared')}
+                </option>
+                <option value={DeckVisibility.Public}>
+                  {t('modal.visibilityPublic')}
+                </option>
               </Select>
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+              <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
                 {getVisibilityHelpText()}
               </p>
             </div>
@@ -246,14 +260,20 @@ function DeckModal({ isOpen, onClose, onSubmit, deck }: DeckModalProps) {
               <Button type="submit" className="flex-1" disabled={uploading}>
                 {uploading ? (
                   <>
-                    <HiUpload className="mr-2 h-5 w-5 animate-spin" />
+                    <HiUpload className="w-5 h-5 mr-2 animate-spin" />
                     {t('modal.uploading')}
                   </>
+                ) : deck ? (
+                  t('modal.updateButton')
                 ) : (
-                  deck ? t('modal.updateButton') : t('modal.createButton')
+                  t('modal.createButton')
                 )}
               </Button>
-              <Button color="gray" onClick={onClose} disabled={uploading} type="button">
+              <Button
+                color="gray"
+                onClick={onClose}
+                disabled={uploading}
+                type="button">
                 {t('modal.cancelButton')}
               </Button>
             </div>
