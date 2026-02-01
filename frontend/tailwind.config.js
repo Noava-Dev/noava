@@ -43,15 +43,15 @@ export default {
         // Backgrounds
         background: {
           app: {
-            light: '#F9FAFB',
+            light: '#FDFEFF',
             dark: '#111827',
           },
           surface: {
-            light: '#FFFFFF',
+            light: '#E6EFFB',
             dark: '#1F2937',
           },
           subtle: {
-            light: '#E5E7EB',
+            light: '#F5F8FC',
             dark: '#2A3441',
           },
         },

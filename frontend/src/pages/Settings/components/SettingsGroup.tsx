@@ -25,9 +25,9 @@ export function SettingsGroup({
   options,
 }: SettingsGroupType) {
   return (
-    <div className="flex flex-col w-1/2 p-6 m-5 border rounded-lg bg-background-surface-light dark:bg-background-surface-dark dark:text-text-title-dark text-text-title-light">
+    <div className="flex flex-col w-1/2 p-6 m-5 border rounded-lg border-border-strong dark:border-border-dark text-text-title-light bg-background-surface-light dark:bg-background-surface-dark dark:text-text-title-dark">
       <div className="flex items-center justify-items-start">
-        <div className="flex items-center justify-center border rounded-lg bg-primary-100 dark:bg-background-surface-dark size-10">
+        <div className="flex items-center justify-center text-white border rounded-lg size-10 bg-primary-700 dark:bg-primary-600 border-primary-500">
           {GroupIcon && <GroupIcon className="w-6 h-6" stroke="currentColor" />}
         </div>
         <div className="flex flex-col m-4">

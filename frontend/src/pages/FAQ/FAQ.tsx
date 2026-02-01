@@ -10,7 +10,7 @@ import type { FAQ } from '../../models/FAQ';
 import { faqService } from '../../services/FAQService';
 import Header from '../../shared/components/navigation/Header';
 import PageHeader from '../../shared/components/PageHeader';
-import NoavaFooter from '../../shared/components/NoavaFooter';
+import NoavaFooter from '../../shared/components/navigation/NoavaFooter';
 import Loading from '../../shared/components/Loading';
 import { useTranslation } from 'react-i18next';
 
@@ -69,16 +69,16 @@ function FAQPage() {
         <Header />
         <PageHeader>
           <div className="text-center">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+            <h1 className="mb-4 text-4xl font-bold text-text-title-light md:text-5xl dark:text-text-title-dark">
               {t('title')}
             </h1>
-            <p className="text-lg text-gray-700 dark:text-gray-300">
+            <p className="text-lg text-text-body-light dark:text-text-body-dark">
               {t('description')}
             </p>
           </div>
         </PageHeader>
-        <div className="bg-white dark:bg-gray-900 min-h-screen">
-          <div className="container mx-auto px-4 py-8">
+        <div className="min-h-screen bg-background-app-light dark:bg-background-app-dark">
+          <div className="container px-4 py-8 mx-auto">
             <div className="py-12">
               <Loading size="xl" color="info" center />
             </div>
@@ -96,23 +96,23 @@ function FAQPage() {
         <Header />
         <PageHeader>
           <div className="text-center">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+            <h1 className="mb-4 text-4xl font-bold text-text-title-light md:text-5xl dark:text-text-title-dark">
               {t('title')}
             </h1>
-            <p className="text-lg text-gray-700 dark:text-gray-300">
+            <p className="text-lg text-text-body-light dark:text-text-body-dark">
               {t('description')}
             </p>
           </div>
         </PageHeader>
-        <div className="bg-white dark:bg-gray-900 min-h-screen">
-          <div className="container mx-auto px-4 py-8">
-            <div className="text-center py-12">
-              <p className="text-red-500 dark:text-red-400 text-lg mb-4">
+        <div className="min-h-screen bg-background-app-light dark:bg-background-app-dark">
+          <div className="container px-4 py-8 mx-auto">
+            <div className="py-12 text-center">
+              <p className="mb-4 text-lg text-red-500 dark:text-red-400">
                 {error}
               </p>
               <button
                 onClick={() => window.location.reload()}
-                className="bg-primary-500 text-white px-6 py-3 rounded-lg hover:bg-primary-600 transition-colors shadow-md hover:shadow-lg">
+                className="px-6 py-3 text-white transition-colors rounded-lg shadow-md bg-primary-500 hover:bg-primary-600 hover:shadow-lg">
                 Retry
               </button>
             </div>
@@ -129,24 +129,24 @@ function FAQPage() {
 
       {/* PageHeader*/}
       <PageHeader>
-        <div className="text-center mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+        <div className="mb-8 text-center">
+          <h1 className="mb-6 text-4xl font-bold text-text-title-light md:text-5xl dark:text-text-title-dark">
             {t('title')}
           </h1>
-          <p className="text-lg text-gray-700 dark:text-gray-300">
+          <p className="text-lg text-text-body-light dark:text-text-body-dark">
             {t('description')}
           </p>
         </div>
 
         {/* Searchbar */}
-        <div className="max-w-2xl mx-auto mb-6">
+        <div className="max-w-md mx-auto mb-4">
           <Searchbar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         </div>
 
         {/* Results count */}
         {searchTerm && !loading && (
-          <div className="text-center mb-8">
-            <p className="text-sm text-gray-600 dark:text-gray-400 bg-primary-100 dark:bg-primary-900/40 inline-block px-4 py-2 rounded-full">
+          <div className="text-center">
+            <p className="inline-block px-4 py-2 text-sm rounded-full text-text-body-light dark:text-text-body-dark bg-primary-100 dark:bg-primary-900/40">
               {t('results.showing')}{' '}
               <span className="font-semibold">{filteredFaqs.length}</span>{' '}
               {t('results.of')}{' '}
@@ -158,13 +158,13 @@ function FAQPage() {
       </PageHeader>
 
       {/* Content Section */}
-      <section className="bg-gray-50 dark:bg-gray-900 py-8 min-h-screen">
-        <div className="container mx-auto px-4 max-w-4xl">
+      <section className="min-h-screen py-8 bg-background-app-light dark:bg-background-app-dark">
+        <div className="container max-w-4xl px-4 mx-auto">
           {/* Loading State */}
           {loading && (
-            <div className="text-center py-12">
-              <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-4 border-primary-500 mb-4"></div>
-              <p className="text-gray-700 dark:text-gray-300 text-lg">
+            <div className="py-12 text-center">
+              <div className="inline-block w-12 h-12 mb-4 border-b-4 rounded-full animate-spin border-primary-500"></div>
+              <p className="text-lg text-text-body-light dark:text-text-body-dark">
                 {t('loading')}
               </p>
             </div>
@@ -172,8 +172,8 @@ function FAQPage() {
 
           {/* Error State */}
           {error && !loading && (
-            <div className="text-center py-12">
-              <p className="text-red-500 dark:text-red-400 text-lg mb-4">
+            <div className="py-12 text-center">
+              <p className="mb-4 text-lg text-red-500 dark:text-red-400">
                 {error}
               </p>
             </div>
@@ -192,16 +192,16 @@ function FAQPage() {
                       animationFillMode: 'forwards',
                     }}>
                     <Accordion collapseAll className="border-0">
-                      <AccordionPanel className="bg-primary-100 dark:bg-gray-800 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden ">
-                        <AccordionTitle className="hover:bg-primary-50 light:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors duration-200 py-4 px-5 border border-gray-200 dark:border-gray-500 ">
+                      <AccordionPanel className="overflow-hidden transition-all duration-300 rounded-lg shadow-sm hover:shadow-md">
+                        <AccordionTitle className="px-5 py-4 transition-colors duration-200 border border-border hover:border-border bg-background-surface-light dark:bg-background-surface-dark hover:bg-background-app-light dark:hover:bg-background-app-dark dark:border-border-dark focus:outline-none focus:ring-0">
                           <div className="flex items-center justify-between w-full">
-                            <span className="text-lg font-semibold text-gray-900 dark:text-white pr-4">
+                            <span className="pr-4 text-lg font-semibold text-text-title-light dark:text-text-title-dark">
                               {getTranslatedQuestion(faq)}
                             </span>
                           </div>
                         </AccordionTitle>
-                        <AccordionContent className="px-5 py-4 bg-gray-50 dark:bg-gray-700/50">
-                          <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                        <AccordionContent className="px-5 py-4 bg-background-surface-light dark:bg-background-surface-dark">
+                          <p className="leading-relaxed text-text-body-light dark:text-text-body-dark">
                             {getTranslatedAnswer(faq)}
                           </p>
                         </AccordionContent>
@@ -210,10 +210,10 @@ function FAQPage() {
                   </div>
                 ))
               ) : (
-                <div className="text-center py-16 animate-fade-in">
+                <div className="py-16 text-center animate-fade-in">
                   <div className="mb-6">
                     <svg
-                      className="w-24 h-24 text-gray-400 dark:text-gray-500 mx-auto opacity-50"
+                      className="w-24 h-24 mx-auto text-gray-400 opacity-50 dark:text-gray-500"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24">
@@ -225,10 +225,10 @@ function FAQPage() {
                       />
                     </svg>
                   </div>
-                  <p className="text-gray-900 dark:text-white text-xl font-semibold mb-2">
+                  <p className="mb-2 text-xl font-semibold text-text-title-light dark:text-text-title-dark">
                     {t('empty.title')}
                   </p>
-                  <p className="text-gray-600 dark:text-gray-400 mb-6">
+                  <p className="mb-6 text-gray-600 dark:text-gray-400">
                     {t('empty.message')} "
                     <span className="font-semibold">{searchTerm}</span>"
                   </p>
@@ -244,11 +244,11 @@ function FAQPage() {
 
           {/* Footer CTA */}
           {!loading && !error && filteredFaqs.length > 0 && (
-            <div className="mt-16 text-center bg-primary-50 dark:bg-primary-900/20 rounded-2xl p-8 border border-gray-200 dark:border-gray-700">
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+            <div className="p-8 mt-16 text-center border border-border bg-background-surface-light dark:bg-background-surface-dark rounded-2xl dark:border-border-dark">
+              <h3 className="mb-2 text-2xl font-bold text-text-title-light dark:text-text-title-dark">
                 {t('contact.title')}
               </h3>
-              <p className="text-gray-700 dark:text-gray-300 mb-6">
+              <p className="mb-6 text-text-body-light dark:text-text-body-dark">
                 {t('contact.description')}
               </p>
               <button className="bg-primary-500 text-white px-8 py-3 rounded-lg hover:bg-primary-600 transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">

@@ -9,7 +9,7 @@ import {
 import { Modal } from 'flowbite-react';
 import { HiPlus } from 'react-icons/hi';
 import { useTranslation } from 'react-i18next';
-import NoavaFooter from '../../shared/components/NoavaFooter';
+import NoavaFooter from '../../shared/components/navigation/NoavaFooter';
 import PageHeader from '../../shared/components/PageHeader';
 import DeckCard from '../../shared/components/DeckCard';
 import DeckModal from '../../shared/components/DeckModal';

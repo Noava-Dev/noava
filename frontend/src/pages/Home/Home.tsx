@@ -1,6 +1,6 @@
 import Header from '../../shared/components/navigation/Header';
 import { Button, Card } from 'flowbite-react';
-import NoavaFooter from '../../shared/components/NoavaFooter';
+import NoavaFooter from '../../shared/components/navigation/NoavaFooter';
 import {
   HiCube,
   HiUserGroup,
@@ -23,12 +23,12 @@ function Home() {
       <Header />
 
       {/* Hero Section */}
-      <section className="py-16 bg-gray-900 dark:bg-gray-900">
+      <section className="py-16 bg-background-surface-light dark:bg-background-app-dark">
         <div className="container max-w-4xl px-4 py-16 mx-auto text-center">
-          <h1 className="mb-6 text-4xl font-bold tracking-tight text-white md:text-5xl">
+          <h1 className="mb-6 text-4xl font-bold tracking-tight md:text-5xl text-text-title-light dark:text-text-title-dark">
             {t('hero.title')}
           </h1>
-          <p className="max-w-2xl mx-auto mb-8 text-lg font-normal text-gray-300">
+          <p className="max-w-2xl mx-auto mb-8 text-lg font-normal text-text-body-light dark:text-text-body-dark">
             {t('hero.description')}
           </p>
         </div>
@@ -46,13 +46,13 @@ function Home() {
       </section>
 
       {/* Everything you need Section */}
-      <section className="py-16 bg-gray-900 dark:bg-gray-900">
+      <section className="py-16 bg-background-app-light dark:bg-background-surface-dark">
         <div className="container max-w-6xl px-4 py-16 mx-auto">
           <div className="mb-12 text-center">
-            <h2 className="mb-4 text-3xl font-bold tracking-tight text-white md:text-4xl">
+            <h2 className="mb-4 text-3xl font-bold tracking-tight md:text-4xl text-text-title-light dark:text-text-title-dark">
               {t('features.title')}
             </h2>
-            <p className="mb-4 text-lg font-normal text-gray-300">
+            <p className="text-lg font-normal text-text-body-light dark:text-text-body-dark">
               {t('features.description')}
             </p>
           </div>
@@ -130,10 +130,10 @@ function Home() {
       </section>
 
       {/* Available everywhere Section */}
-      <section className="bg-gray-50 dark:bg-gray-800 py-16">
-        <div className="container mx-auto px-4 max-w-6xl">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-text-title-light dark:text-text-title-dark mb-4">
+      <section className="py-16 bg-background-surface-light dark:bg-background-app-dark">
+        <div className="container max-w-6xl px-4 mx-auto">
+          <div className="mb-12 text-center">
+            <h2 className="mb-4 text-3xl font-bold tracking-tight md:text-4xl text-text-title-light dark:text-text-title-dark">
               {t('platforms.title')}
             </h2>
             <p className="text-lg font-normal text-text-body-light dark:text-text-body-dark">

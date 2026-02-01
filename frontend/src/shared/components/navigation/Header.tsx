@@ -13,7 +13,7 @@ import {
 } from '@clerk/clerk-react';
 import Logo from '../../../assets/noava-logo-blue-nobg.png';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import NavigationLink from './NavigationLink';
 
 function Header() {
   const { t } = useTranslation('common');
@@ -21,18 +21,25 @@ function Header() {
 
   return (
     <>
-      <Navbar fluid rounded>
-        <NavbarBrand href="/" className="mr-8">
+      <Navbar
+        fluid
+        className="border-b bg-background-app-light dark:bg-background-surface-dark border-border dark:border-border-dark">
+        <NavbarBrand href="/">
           <img
             src={Logo}
             className="object-cover w-12 h-auto mr-3"
             alt="Noava Logo"
           />
-          <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
+          <span className="self-center text-xl font-semibold whitespace-nowrap text-text-title-light dark:text-text-title-dark">
             Noava
           </span>
         </NavbarBrand>
-        <div className="flex items-center gap-2 md:order-2">
+        <NavbarCollapse>
+          <NavigationLink href="/docs" text="Docs" />
+          <NavigationLink href="/dashboard" text="Dashboard" />
+          <NavigationLink href="/faq" text="FAQ" />
+        </NavbarCollapse>
+        <div className="flex items-center gap-2">
           {!isSignedIn ? (
             <>
               <SignUpButton>
@@ -48,23 +55,6 @@ function Header() {
           )}
           <NavbarToggle />
         </div>
-        <NavbarCollapse>
-          <Link
-            to="/docs"
-            className="text-black hover:text-primary-500 dark:text-white dark:hover:text-primary-300">
-            Docs
-          </Link>
-          <Link
-            to="/dashboard"
-            className="text-black hover:text-primary-500 dark:text-white dark:hover:text-primary-300">
-            Dashboard
-          </Link>
-          <Link
-            to="/faq"
-            className="text-black hover:text-primary-500 dark:text-white dark:hover:text-primary-300">
-            FAQ
-          </Link>
-        </NavbarCollapse>
       </Navbar>
     </>
   );

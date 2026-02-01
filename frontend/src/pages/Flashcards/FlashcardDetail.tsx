@@ -1,25 +1,29 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from 'flowbite-react';
-import { 
-  HiArrowLeft, 
-  HiPlus, 
-  HiPlay, 
-  HiRefresh, 
-  HiUserGroup, 
+import {
+  HiArrowLeft,
+  HiPlus,
+  HiPlay,
+  HiRefresh,
+  HiUserGroup,
   HiCog,
   HiDocumentText,
   HiPencil,
-  HiTrash
+  HiTrash,
 } from 'react-icons/hi';
 import { useTranslation } from 'react-i18next';
 import { useDeckService } from '../../services/DeckService';
 import { useFlashcardService } from '../../services/FlashcardService';
 import { useToast } from '../../contexts/ToastContext';
-import NoavaFooter from '../../shared/components/NoavaFooter';
+import NoavaFooter from '../../shared/components/navigation/NoavaFooter';
 import FlashcardModal from '../../shared/components/FlashcardModal';
 import type { Deck } from '../../models/Deck';
-import type { Flashcard, CreateFlashcardRequest, UpdateFlashcardRequest } from '../../models/Flashcard';
+import type {
+  Flashcard,
+  CreateFlashcardRequest,
+  UpdateFlashcardRequest,
+} from '../../models/Flashcard';
 import Searchbar from '../../shared/components/Searchbar';
 import { useAzureBlobService } from '../../services/AzureBlobService';
 import { ManageOwnersModal } from '../../shared/components/ManageOwnersModal';
@@ -29,8 +33,6 @@ interface FlashcardWithImages extends Flashcard {
   backImageUrl?: string | null;
 }
 
-
-
 function FlashcardDetail() {
   const { deckId } = useParams<{ deckId: string }>();
   const navigate = useNavigate();
@@ -38,14 +40,16 @@ function FlashcardDetail() {
   const deckService = useDeckService();
   const flashcardService = useFlashcardService();
   const { showError, showSuccess } = useToast();
-  const azureBlobService = useAzureBlobService();  
+  const azureBlobService = useAzureBlobService();
 
   const [deck, setDeck] = useState<Deck | null>(null);
   const [flashcards, setFlashcards] = useState<FlashcardWithImages[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedFlashcard, setSelectedFlashcard] = useState<Flashcard | undefined>(undefined);
+  const [selectedFlashcard, setSelectedFlashcard] = useState<
+    Flashcard | undefined
+  >(undefined);
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const [cardToDelete, setCardToDelete] = useState<number | null>(null);
   const [manageOwnersOpened, setManageOwnersOpened] = useState(false);
@@ -73,7 +77,7 @@ function FlashcardDetail() {
   const fetchFlashcards = async () => {
     try {
       const cards = await flashcardService.getByDeckId(Number(deckId));
-      
+
       // Load images for all cards
       const cardsWithImages = await Promise.all(
         cards.map(async (card) => {
@@ -83,37 +87,47 @@ function FlashcardDetail() {
           // Load front image if exists
           if (card.frontImage) {
             try {
-              frontImageUrl = await azureBlobService.getSasUrl('card-images', card.frontImage);
+              frontImageUrl = await azureBlobService.getSasUrl(
+                'card-images',
+                card.frontImage
+              );
             } catch (error) {
-              console.error(`Failed to load front image for card ${card.cardId}:`, error);
+              console.error(
+                `Failed to load front image for card ${card.cardId}:`,
+                error
+              );
             }
           }
 
           // Load back image if exists
           if (card.backImage) {
-            
-              backImageUrl = await azureBlobService.getSasUrl('card-images', card.backImage);
-            
+            backImageUrl = await azureBlobService.getSasUrl(
+              'card-images',
+              card.backImage
+            );
           }
 
           return {
             ...card,
             frontImageUrl,
-            backImageUrl
+            backImageUrl,
           };
         })
       );
 
-    setFlashcards(cardsWithImages);
-        } catch (error) {
-          showError(t('flashcardDetail.error'), t('flashcardDetail.error'));
-        }
-      };
+      setFlashcards(cardsWithImages);
+    } catch (error) {
+      showError(t('flashcardDetail.error'), t('flashcardDetail.error'));
+    }
+  };
 
   const handleCreateFlashcard = async (flashcard: CreateFlashcardRequest) => {
     try {
       if (selectedFlashcard) {
-        await flashcardService.update(selectedFlashcard.cardId, flashcard as UpdateFlashcardRequest);
+        await flashcardService.update(
+          selectedFlashcard.cardId,
+          flashcard as UpdateFlashcardRequest
+        );
         showSuccess('Success', 'Flashcard updated successfully');
       } else {
         await flashcardService.create(Number(deckId), flashcard);
@@ -123,7 +137,12 @@ function FlashcardDetail() {
       setSelectedFlashcard(undefined);
       await fetchFlashcards();
     } catch (error) {
-      showError('Error', selectedFlashcard ? 'Failed to update flashcard' : 'Failed to create flashcard');
+      showError(
+        'Error',
+        selectedFlashcard
+          ? 'Failed to update flashcard'
+          : 'Failed to create flashcard'
+      );
     }
   };
 
@@ -139,7 +158,7 @@ function FlashcardDetail() {
 
   const confirmDelete = async () => {
     if (cardToDelete === null) return;
-    
+
     try {
       await flashcardService.delete(cardToDelete);
       showSuccess('Success', 'Flashcard deleted successfully');
@@ -170,7 +189,9 @@ function FlashcardDetail() {
               <div className="h-12 bg-gray-200 dark:bg-gray-800 rounded w-96 mb-8"></div>
               <div className="space-y-4">
                 {[1, 2, 3].map((i) => (
-                  <div key={i} className="h-32 bg-gray-200 dark:bg-gray-800 rounded"></div>
+                  <div
+                    key={i}
+                    className="h-32 bg-gray-200 dark:bg-gray-800 rounded"></div>
                 ))}
               </div>
             </div>
@@ -184,17 +205,22 @@ function FlashcardDetail() {
     return (
       <div className="flex min-h-screen items-center justify-center bg-white dark:bg-gray-900">
         <div className="text-center">
-          <p className="text-xl text-gray-600 dark:text-gray-400 mb-4">{t('flashcardDetail.notFound')}</p>
-          <Button onClick={() => navigate('/decks')}>{t('flashcardDetail.backToDeck')}</Button>
+          <p className="text-xl text-gray-600 dark:text-gray-400 mb-4">
+            {t('flashcardDetail.notFound')}
+          </p>
+          <Button onClick={() => navigate('/decks')}>
+            {t('flashcardDetail.backToDeck')}
+          </Button>
         </div>
       </div>
     );
   }
 
   // Filter flashcards based on search term
-  const filteredFlashcards = flashcards.filter(card => 
-    card.frontText.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    card.backText.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredFlashcards = flashcards.filter(
+    (card) =>
+      card.frontText.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      card.backText.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   // Stats
@@ -210,8 +236,7 @@ function FlashcardDetail() {
           {/* Back Button */}
           <button
             onClick={() => navigate('/decks')}
-            className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white mb-6 transition-colors"
-          >
+            className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white mb-6 transition-colors">
             <HiArrowLeft className="h-5 w-5" />
             <span>{t('flashcardDetail.backToDeck')}</span>
           </button>
@@ -231,24 +256,21 @@ function FlashcardDetail() {
                 {deck.description}
               </p>
             )}
-            
 
             {/* Action Buttons */}
             <div className="flex flex-wrap gap-3 mb-8">
               <Button
-                  size="lg"
-                  className="bg-cyan-500 hover:bg-cyan-600"
-                  disabled={flashcards.length === 0}
-                  onClick={() => navigate(`/decks/${deckId}/review`)} 
-                    >
-                    <HiPlay className="w-5 h-5 mr-2" />
-                    {t('flashcardDetail.quickReview')}
+                size="lg"
+                className="bg-cyan-500 hover:bg-cyan-600"
+                disabled={flashcards.length === 0}
+                onClick={() => navigate(`/decks/${deckId}/review`)}>
+                <HiPlay className="w-5 h-5 mr-2" />
+                {t('flashcardDetail.quickReview')}
               </Button>
               <Button
                 size="lg"
                 className="bg-cyan-500 hover:bg-cyan-600"
-                disabled={totalCards === 0}
-              >
+                disabled={totalCards === 0}>
                 <HiPlay className="w-5 h-5 mr-2" />
                 {t('flashcardDetail.studyNow')}
               </Button>
@@ -256,22 +278,18 @@ function FlashcardDetail() {
                 size="lg"
                 color="dark"
                 className="bg-gray-800 hover:bg-gray-700 border border-gray-700"
-                disabled={totalCards === 0}
-              >
+                disabled={totalCards === 0}>
                 <HiRefresh className="w-5 h-5 mr-2" />
                 {t('flashcardDetail.shuffle')}
               </Button>
-              <Button
-                  onClick={() => setManageOwnersOpened(true)}
-                >
-                  <HiUserGroup className="w-5 h-5 mr-2" />
-                  {t('ownership.manageAccess')}
-                </Button>
+              <Button onClick={() => setManageOwnersOpened(true)}>
+                <HiUserGroup className="w-5 h-5 mr-2" />
+                {t('ownership.manageAccess')}
+              </Button>
               <Button
                 size="lg"
                 color="dark"
-                className="bg-gray-800 hover:bg-gray-700 border border-gray-700"
-              >
+                className="bg-gray-800 hover:bg-gray-700 border border-gray-700">
                 <HiCog className="w-5 h-5" />
               </Button>
             </div>
@@ -282,32 +300,43 @@ function FlashcardDetail() {
                 <div className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-1">
                   {totalCards}
                 </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">{t('flashcardDetail.totalReviews')}</div>
+                <div className="text-sm text-gray-600 dark:text-gray-400">
+                  {t('flashcardDetail.totalReviews')}
+                </div>
               </div>
               <div className="text-center">
                 <div className="text-3xl md:text-4xl font-bold text-cyan-500 dark:text-cyan-400 mb-1">
                   {masteredCards}
                 </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">{t('flashcardDetail.mastered')}</div>
+                <div className="text-sm text-gray-600 dark:text-gray-400">
+                  {t('flashcardDetail.mastered')}
+                </div>
               </div>
               <div className="text-center">
                 <div className="text-3xl md:text-4xl font-bold text-yellow-500 dark:text-yellow-400 mb-1">
                   {learningCards}
                 </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">{t('flashcardDetail.learning')}</div>
+                <div className="text-sm text-gray-600 dark:text-gray-400">
+                  {t('flashcardDetail.learning')}
+                </div>
               </div>
               <div className="text-center">
                 <div className="text-3xl md:text-4xl font-bold text-blue-500 dark:text-blue-400 mb-1">
                   {newCards}
                 </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">{t('flashcardDetail.new')}</div>
+                <div className="text-sm text-gray-600 dark:text-gray-400">
+                  {t('flashcardDetail.new')}
+                </div>
               </div>
             </div>
 
             {/* Search & Add Card */}
             <div className="flex flex-col md:flex-row gap-3">
               <div className="flex-1">
-                <Searchbar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+                <Searchbar
+                  searchTerm={searchTerm}
+                  setSearchTerm={setSearchTerm}
+                />
               </div>
               <Button
                 size="lg"
@@ -315,8 +344,7 @@ function FlashcardDetail() {
                 onClick={() => {
                   setSelectedFlashcard(undefined);
                   setIsModalOpen(true);
-                }}
-              >
+                }}>
                 <HiPlus className="mr-2 h-5 w-5" />
                 {t('flashcardDetail.addCard')}
               </Button>
@@ -333,7 +361,9 @@ function FlashcardDetail() {
                 {searchTerm ? 'No flashcards found' : 'No flashcards yet'}
               </p>
               <p className="text-gray-600 dark:text-gray-500 mb-6">
-                {searchTerm ? 'Try adjusting your search' : 'Start learning by creating your first flashcard!'}
+                {searchTerm
+                  ? 'Try adjusting your search'
+                  : 'Start learning by creating your first flashcard!'}
               </p>
             </div>
           ) : (
@@ -341,22 +371,19 @@ function FlashcardDetail() {
               {filteredFlashcards.map((card) => (
                 <div
                   key={card.cardId}
-                  className="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow border border-gray-200 dark:border-gray-700 relative overflow-hidden"
-                >
+                  className="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow border border-gray-200 dark:border-gray-700 relative overflow-hidden">
                   {/* Action buttons */}
                   <div className="absolute top-4 right-4 flex gap-2 z-10">
                     <button
                       onClick={() => handleEditFlashcard(card)}
                       className="p-2 text-gray-400 hover:text-cyan-500 dark:hover:text-cyan-400 hover:bg-white dark:hover:bg-gray-700 rounded-lg transition-colors shadow-sm"
-                      title={t('flashcardDetail.editCard')}
-                    >
+                      title={t('flashcardDetail.editCard')}>
                       <HiPencil className="h-5 w-5" />
                     </button>
                     <button
                       onClick={() => handleDeleteFlashcard(card.cardId)}
                       className="p-2 text-gray-400 hover:text-red-500 dark:hover:text-red-400 hover:bg-white dark:hover:bg-gray-700 rounded-lg transition-colors shadow-sm"
-                      title={t('flashcardDetail.deleteCard')}
-                    >
+                      title={t('flashcardDetail.deleteCard')}>
                       <HiTrash className="h-5 w-5" />
                     </button>
                   </div>
@@ -365,14 +392,14 @@ function FlashcardDetail() {
                   <div className="p-6">
                     {/* Front Image */}
                     {card.frontImageUrl && (
-  <div className="mb-4 flex justify-center bg-gray-100 dark:bg-gray-700 rounded-lg p-2">
-    <img 
-      src={card.frontImageUrl} 
-      alt="Front" 
-      className="max-h-40 max-w-full object-contain rounded-lg"
-    />
-  </div>
-)}
+                      <div className="mb-4 flex justify-center bg-gray-100 dark:bg-gray-700 rounded-lg p-2">
+                        <img
+                          src={card.frontImageUrl}
+                          alt="Front"
+                          className="max-h-40 max-w-full object-contain rounded-lg"
+                        />
+                      </div>
+                    )}
                     <div className="mb-4 pr-12">
                       <div className="text-xs text-cyan-500 dark:text-cyan-400 font-semibold mb-2 uppercase tracking-wide">
                         {t('flashcardDetail.frontSide')}
@@ -386,14 +413,14 @@ function FlashcardDetail() {
                     <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
                       {/* Back Image */}
                       {card.backImageUrl && (
-                      <div className="mb-4 flex justify-center bg-gray-100 dark:bg-gray-700 rounded-lg p-2">
-                        <img 
-                          src={card.backImageUrl} 
-                          alt="Back" 
-                          className="max-h-40 max-w-full object-contain rounded-lg"
-                        />
-                      </div>
-                    )}
+                        <div className="mb-4 flex justify-center bg-gray-100 dark:bg-gray-700 rounded-lg p-2">
+                          <img
+                            src={card.backImageUrl}
+                            alt="Back"
+                            className="max-h-40 max-w-full object-contain rounded-lg"
+                          />
+                        </div>
+                      )}
 
                       <div className="text-xs text-gray-500 dark:text-gray-400 font-semibold mb-2 uppercase tracking-wide">
                         {t('flashcardDetail.backSide')}
@@ -421,7 +448,6 @@ function FlashcardDetail() {
           )}
         </div>
 
-
         {/* Flashcard Modal */}
         <FlashcardModal
           isOpen={isModalOpen}
@@ -434,10 +460,9 @@ function FlashcardDetail() {
         {deleteConfirmOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
             {/* Backdrop */}
-            <div 
+            <div
               className="absolute inset-0 bg-black bg-opacity-50"
-              onClick={cancelDelete}
-            ></div>
+              onClick={cancelDelete}></div>
 
             {/* Modal */}
             <div className="relative bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full p-6">
@@ -449,18 +474,10 @@ function FlashcardDetail() {
               </p>
               {/* Actions */}
               <div className="flex gap-3">
-                <Button
-                  color="red"
-                  onClick={confirmDelete}
-                  className="flex-1"
-                >
+                <Button color="red" onClick={confirmDelete} className="flex-1">
                   {t('deleteConfirmModal.confirm')}
                 </Button>
-                <Button
-                  color="gray"
-                  onClick={cancelDelete}
-                  className="flex-1"
-                >
+                <Button color="gray" onClick={cancelDelete} className="flex-1">
                   {t('deleteConfirmModal.cancel')}
                 </Button>
               </div>
@@ -468,11 +485,11 @@ function FlashcardDetail() {
           </div>
         )}
         <ManageOwnersModal
-  opened={manageOwnersOpened}
-  onClose={() => setManageOwnersOpened(false)}
-  deckId={parseInt(deckId!)}
-  deckTitle={deck?.title || ''}
-/>
+          opened={manageOwnersOpened}
+          onClose={() => setManageOwnersOpened(false)}
+          deckId={parseInt(deckId!)}
+          deckTitle={deck?.title || ''}
+        />
 
         <NoavaFooter />
       </div>
