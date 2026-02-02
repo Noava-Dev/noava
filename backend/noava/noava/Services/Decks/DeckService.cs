@@ -1,11 +1,10 @@
 ﻿using noava.Models;
-using noava.DTOs.Request;
-using noava.DTOs.Response;
-using noava.Services.Interfaces;
 using noava.Shared;
 using noava.Models.BlobStorage;
-using noava.Repositories.Contracts;
-using noava.Services.Contracts;
+using noava.DTOs.Decks;
+using noava.Repositories.Decks;
+using noava.Services.Decks;
+using noava.Mappers.Decks;
 
 namespace noava.Services
 {
@@ -22,40 +21,23 @@ namespace noava.Services
             _deckUserRepo = deckUserRepo;
         }
 
-        // Helper: Map Deck model to DeckResponse DTO
-        private DeckResponse MapToResponse(Deck deck)
-        {
-            return new DeckResponse
-            {
-                DeckId = deck.DeckId,
-                UserId = deck.UserId,
-                Title = deck.Title,
-                Description = deck.Description,
-                Language = deck.Language,
-                Visibility = deck.Visibility,
-                CoverImageBlobName = deck.CoverImageBlobName,
-                CreatedAt = deck.CreatedAt,
-                UpdatedAt = deck.UpdatedAt
-            };
-        }
-
         public async Task<List<DeckResponse>> GetAllDecksAsync()
         {
             var decks = await _repository.GetAllAsync();
-            return decks.Select(d => MapToResponse(d)).ToList();
+            return decks.Select(d => d.ToResponseDto()).ToList();
         }
 
         public async Task<List<DeckResponse>> GetUserDecksAsync(string userId, int? limit = null)
         {
             var decks = await _repository.GetByUserIdAsync(userId, limit);
-            return decks.Select(d => MapToResponse(d)).ToList();
+            return decks.Select(d => d.ToResponseDto()).ToList();
         }
 
         public async Task<DeckResponse?> GetDeckByIdAsync(int id)
         {
             var deck = await _repository.GetByIdAsync(id);
             if (deck == null) return null;
-            return MapToResponse(deck);
+            return deck.ToResponseDto();
         }
 
         public async Task<DeckResponse> CreateDeckAsync(DeckRequest request, string userId)
@@ -81,7 +63,7 @@ namespace noava.Services
 
             await _deckUserRepo.AddAsync(deckUser);
 
-            return MapToResponse(deck);
+            return deck.ToResponseDto();
         }
 
         public async Task<DeckResponse?> UpdateDeckAsync(int id, DeckRequest request, string userId)
@@ -123,7 +105,7 @@ namespace noava.Services
                 }
             }
 
-            return MapToResponse(result);
+            return result.ToResponseDto();
         }
 
         public async Task<bool> DeleteDeckAsync(int id, string userId)

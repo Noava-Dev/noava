@@ -16,7 +16,8 @@ import DeckModal from '../../shared/components/DeckModal';
 import Searchbar from '../../shared/components/Searchbar';
 import { useDeckService } from '../../services/DeckService';
 import { useToast } from '../../contexts/ToastContext';
-import type { Deck, CreateDeckRequest } from '../../models/Deck';
+import type { Deck, DeckRequest } from '../../models/Deck';
+import Skeleton from '../../shared/components/loading/Skeleton';
 
 function DecksPage() {
   const { t } = useTranslation('decks');
@@ -49,7 +50,7 @@ function DecksPage() {
     }
   };
 
-  const handleCreate = async (deckData: CreateDeckRequest) => {
+  const handleCreate = async (deckData: DeckRequest) => {
     try {
       await deckService.create(deckData);
       showSuccess(t('toast.createSuccess'), t('toast.createSuccess'));
@@ -60,7 +61,7 @@ function DecksPage() {
     }
   };
 
-  const handleUpdate = async (deckData: CreateDeckRequest) => {
+  const handleUpdate = async (deckData: DeckRequest) => {
     if (!editingDeck) return;
 
     try {
@@ -120,50 +121,25 @@ function DecksPage() {
   });
 
   if (loading) {
-    return (
-      <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
-        <div className="flex-1 w-full ml-0">
-          <PageHeader>
-            <div className="pt-4 md:pt-8">
-              <div className="animate-pulse">
-                <div className="w-32 h-8 mb-4 bg-gray-200 rounded md:h-12 dark:bg-gray-700 md:w-48"></div>
-                <div className="w-48 h-4 bg-gray-200 rounded md:h-6 dark:bg-gray-700 md:w-96"></div>
-              </div>
-            </div>
-          </PageHeader>
-          <div className="min-h-screen bg-white dark:bg-gray-900">
-            <div className="container px-4 py-8 mx-auto md:py-20 max-w-7xl">
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:gap-6">
-                {[1, 2, 3, 4].map((i) => (
-                  <div key={i} className="animate-pulse">
-                    <div className="h-64 bg-gray-200 rounded-lg dark:bg-gray-700"></div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-          <NoavaFooter />
-        </div>
-      </div>
-    );
+    return <Skeleton />;
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="flex min-h-screen bg-background-app-light dark:bg-background-app-dark">
       <div className="flex-1 w-full ml-0">
         <PageHeader>
           {/* Hero Section */}
           <div className="pt-4 mb-6 md:mb-8 md:pt-8">
             <div className="flex flex-col gap-4 md:gap-6">
               <div className="space-y-2">
-                <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 md:text-5xl dark:text-white">
+                <h1 className="text-3xl font-extrabold tracking-tight text-text-title-light md:text-5xl dark:text-text-title-dark">
                   {t('title')}
                 </h1>
-                <p className="text-base text-gray-500 md:text-xl dark:text-gray-400">
+                <p className="text-base text-text-body-light md:text-xl dark:text-text-body-dark">
                   {t('subtitle')}
                 </p>
                 {decks.length > 0 && !searchTerm && (
-                  <p className="text-sm text-gray-400 dark:text-gray-500">
+                  <p className="text-sm text-text-muted-light dark:text-text-muted-dark">
                     {decks.length} {decks.length === 1 ? 'deck' : 'decks'}
                   </p>
                 )}
@@ -172,7 +148,7 @@ function DecksPage() {
               <Button
                 onClick={() => setIsModalOpen(true)}
                 size="lg"
-                className="w-full md:w-fit bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800">
+                className="w-full border-none md:w-fit bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800">
                 <HiPlus className="w-5 h-5 mr-2" />
                 {t('createButton')}
               </Button>
@@ -180,10 +156,10 @@ function DecksPage() {
           </div>
 
           {/* Search & Filter Card */}
-          <div className="p-4 border border-gray-100 shadow-sm bg-gray-50 dark:bg-gray-800/50 rounded-2xl md:p-6 dark:border-gray-700">
+          <div className="p-4 border shadow-sm border-border bg-background-app-light dark:bg-background-surface-dark/50 rounded-2xl md:p-6 dark:border-border-dark">
             <div className="grid grid-cols-1 md:grid-cols-[1fr_280px] gap-4">
               <div className="space-y-2">
-                <label className="block text-sm font-semibold tracking-wide text-gray-700 uppercase dark:text-gray-300">
+                <label className="block text-sm font-semibold tracking-wide uppercase text-text-body-light dark:text-text-body-dark">
                   {t('search.label')}
                 </label>
                 <Searchbar
@@ -191,7 +167,7 @@ function DecksPage() {
                   setSearchTerm={setSearchTerm}
                 />
                 {searchTerm && (
-                  <p className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
+                  <p className="flex items-center gap-1 text-xs text-text-body-light dark:text-text-muted-dark">
                     <span className="inline-block w-2 h-2 rounded-full bg-primary-500"></span>
                     {sortedDecks.length} {t('results.found')}
                   </p>
@@ -199,7 +175,7 @@ function DecksPage() {
               </div>
 
               <div className="space-y-2">
-                <label className="block text-sm font-semibold tracking-wide text-gray-700 uppercase dark:text-gray-300">
+                <label className="block text-sm font-semibold tracking-wide uppercase text-text-body-light dark:text-text-body-dark">
                   {t('sort.label')}
                 </label>
                 <Select
@@ -216,7 +192,7 @@ function DecksPage() {
           </div>
         </PageHeader>
 
-        <section className="min-h-screen py-8 bg-white dark:bg-gray-900 md:py-12">
+        <section className="min-h-screen py-8 bg-background-app-light dark:bg-background-app-dark md:py-12">
           <div className="container px-4 mx-auto max-w-7xl">
             {sortedDecks.length > 0 ? (
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:gap-6">
@@ -230,10 +206,10 @@ function DecksPage() {
                 ))}
               </div>
             ) : searchTerm ? (
-              <div className="py-12 text-center md:py-20">
+              <div className="flex flex-col items-center">
                 <div className="mb-6">
                   <svg
-                    className="w-16 h-16 mx-auto text-gray-400 opacity-50 md:w-24 md:h-24 dark:text-gray-500"
+                    className="w-16 h-16 mx-auto opacity-50 text-text-muted-light md:w-24 md:h-24 dark:text-text-body-light"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24">
@@ -245,11 +221,11 @@ function DecksPage() {
                     />
                   </svg>
                 </div>
-                <p className="mb-3 text-xl font-semibold text-gray-900 dark:text-white md:text-2xl">
+                <p className="mb-3 text-xl font-semibold text-text-body-light dark:text-text-title-dark md:text-2xl">
                   {t('empty.noResults')}
                 </p>
-                <p className="mb-6 text-gray-600 dark:text-gray-400">
-                  Probeer een andere zoekterm
+                <p className="mb-6 text-text-body-light dark:text-text-muted-dark">
+                  {t('empty.otherSearchTerm')}
                 </p>
                 <Button onClick={() => setSearchTerm('')}>
                   {t('empty.clearSearch')}
@@ -257,7 +233,7 @@ function DecksPage() {
               </div>
             ) : (
               <div className="py-12 text-center md:py-20">
-                <p className="mb-6 text-xl text-gray-500 dark:text-gray-400 md:text-2xl">
+                <p className="mb-6 text-xl text-text-body-light dark:text-text-muted-dark md:text-2xl">
                   {t('empty.message')}
                 </p>
               </div>
@@ -277,7 +253,7 @@ function DecksPage() {
           <ModalHeader>{t('deleteModal.title')}</ModalHeader>
 
           <ModalBody>
-            <p className="text-gray-600 dark:text-gray-400">
+            <p className="text-text-body-light dark:text-text-muted-dark">
               {t('deleteModal.message')}
             </p>
           </ModalBody>

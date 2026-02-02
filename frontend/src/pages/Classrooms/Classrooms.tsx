@@ -7,7 +7,7 @@ import NoavaFooter from '../../shared/components/navigation/NoavaFooter';
 import PageHeader from '../../shared/components/PageHeader';
 import ClassroomCard from '../../shared/components/ClassroomCard';
 import ClassroomModal from '../../shared/components/ClassroomModal';
-import Loading from '../../shared/components/Loading';
+import Loading from '../../shared/components/loading/Loading';
 import Searchbar from '../../shared/components/Searchbar';
 import ConfirmModal from '../../shared/components/ConfirmModal';
 import RequestCodeModal from '../../shared/components/RequestCodeModal';

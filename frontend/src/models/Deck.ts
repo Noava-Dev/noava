@@ -15,15 +15,7 @@ export interface Deck {
   updatedAt: string;
 }
 
-export interface CreateDeckRequest {
-  title: string;
-  description?: string;
-  language: string;
-  visibility: DeckVisibility;
-  coverImageBlobName?: string;
-}
-
-export interface UpdateDeckRequest {
+export interface DeckRequest {
   title: string;
   description?: string;
   language: string;

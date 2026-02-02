@@ -1,22 +1,26 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using noava.Data;
 using noava.Repositories;
-using noava.Repositories.Contracts;
-using noava.Repositories.Implementations;
-using noava.Repositories.Interfaces;
 using noava.Services;
-using noava.Services.Contracts;
-using noava.Services.Implementations;
 using noava.Shared;
-using noava.Services.Interfaces;
-using noava.Shared;
-using noava.Shared.Contract;
-using noava.Shared.Implementation;
 using System.Security.Claims;
 using noava.Shared.Clerk;
+using noava.Repositories.FAQs;
+using noava.Services.FAQs;
+using noava.Repositories.Decks;
+using noava.Services.Decks;
+using noava.Repositories.Cards;
+using noava.Repositories.Classrooms;
+using noava.Repositories.Notifications;
+using noava.Repositories.Schools;
+using noava.Repositories.Users;
+using noava.Services.Cards;
+using noava.Services.Classrooms;
+using noava.Services.Notifications;
+using noava.Services.Schools;
+using noava.Services.Users;
 
 namespace noava
 {
@@ -128,7 +132,6 @@ namespace noava
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
-		        //app.UseHttpsRedirection();
             }
 
             app.UseCors("Frontend");

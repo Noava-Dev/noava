@@ -21,6 +21,7 @@
     "message": "Créez votre premier deck pour commencer !",
     "button": "Créer votre premier deck",
     "noResults": "Aucun deck trouvé",
+    "otherSearchTerm": "Essayez un autre terme de recherche",
     "clearSearch": "Effacer la recherche"
   },
   "card": {
@@ -50,7 +51,8 @@
     },
     "createButton": "Créer le deck",
     "updateButton": "Mettre à jour le deck",
-    "cancelButton": "Annuler"
+    "cancelButton": "Annuler",
+    "uploading": "Création du deck..."
   },
   "languages": {
     "select": "Sélectionner une langue",

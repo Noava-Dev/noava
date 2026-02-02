@@ -1,5 +1,4 @@
-﻿using noava.DTOs.Request.Classrooms;
-using noava.DTOs.Response.Classrooms;
+﻿using noava.DTOs.Classrooms;
 using noava.Models;
 
 namespace noava.Mappers.Classrooms

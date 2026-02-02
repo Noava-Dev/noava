@@ -1,12 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using noava.Services.Interfaces;
-using noava.DTOs.Request;
-using noava.DTOs.Response;
-using noava.Models;
-using noava.Services.Contracts;
-using noava.DTOs;
 using System.Security.Claims;
+using noava.DTOs.Decks;
+using noava.Services.Decks;
 
 namespace noava.Controllers
 {
@@ -22,6 +18,7 @@ namespace noava.Controllers
             _deckService = deckService;
         }
 
+        // TODO: Move to UserService
         private string GetUserId()
         {
             return User.FindFirstValue("sub")

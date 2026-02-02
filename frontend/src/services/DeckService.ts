@@ -1,9 +1,5 @@
 import { useApi } from '../hooks/useApi';
-import type {
-  Deck,
-  CreateDeckRequest,
-  UpdateDeckRequest,
-} from '../models/Deck';
+import type { Deck, DeckRequest } from '../models/Deck';
 
 export const useDeckService = () => {
   const api = useApi();
@@ -26,12 +22,12 @@ export const useDeckService = () => {
       return response.data;
     },
 
-    async create(deck: CreateDeckRequest): Promise<Deck> {
+    async create(deck: DeckRequest): Promise<Deck> {
       const response = await api.post<Deck>('/deck', deck);
       return response.data;
     },
 
-    async update(id: number, deck: UpdateDeckRequest): Promise<Deck> {
+    async update(id: number, deck: DeckRequest): Promise<Deck> {
       const response = await api.put<Deck>(`/deck/${id}`, deck);
       return response.data;
     },

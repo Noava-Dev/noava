@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using noava.Data;
 using noava.Models;
-using noava.Repositories.Contracts;
+using noava.Repositories.Decks;
 
 namespace noava.Repositories
 {

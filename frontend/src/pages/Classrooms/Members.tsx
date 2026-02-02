@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import PageHeader from '../../shared/components/PageHeader';
 import NoavaFooter from '../../shared/components/navigation/NoavaFooter';
-import Loading from '../../shared/components/Loading';
+import Loading from '../../shared/components/loading/Loading';
 import { HiArrowLeft } from 'react-icons/hi';
 import { Button } from 'flowbite-react';
 import { classroomService } from '../../services/ClassroomService';

@@ -21,6 +21,7 @@
     "message": "Maak je eerste deck om te beginnen!",
     "button": "Maak je eerste deck",
     "noResults": "Geen decks gevonden",
+    "otherSearchTerm": "Probeer een andere zoekterm",
     "clearSearch": "Zoekopdracht wissen"
   },
   "card": {
@@ -50,7 +51,8 @@
     },
     "createButton": "Deck aanmaken",
     "updateButton": "Deck bijwerken",
-    "cancelButton": "Annuleren"
+    "cancelButton": "Annuleren",
+    "uploading": "Deck aan het maken..."
   },
   "languages": {
     "select": "Selecteer een taal",

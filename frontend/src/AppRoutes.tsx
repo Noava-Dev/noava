@@ -16,7 +16,7 @@ import AdminDashboard from './pages/Admin/Dashboard/AdminDashboard';
 import SchoolsPage from './pages/Schools/Schools';
 import QuickReview from '../src/pages/Review/Quickreview';
 import NotificationPage from './pages/Notification/Notification';
-import Loading from './shared/components/Loading';
+import Loading from './shared/components/loading/Loading';
 import FlashcardDetail from './pages/Flashcards/FlashcardDetail';
 import Dashboard from './pages/Dashboard/Dashboard';
 

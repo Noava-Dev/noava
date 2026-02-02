@@ -1,5 +1,4 @@
-﻿using noava.DTOs.Request.ClerkUsers;
-using noava.DTOs.Response.Users;
+﻿using noava.DTOs.Clerk;
 
 namespace noava.Mappers.ClerkUsers
 {

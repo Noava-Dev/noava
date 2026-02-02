@@ -18,11 +18,11 @@ import {
 import { HiChevronRight } from 'react-icons/hi';
 import { useNavigate } from 'react-router-dom';
 import { useDeckService } from '../../services/DeckService';
-import type { CreateDeckRequest, Deck } from '../../models/Deck';
+import type { DeckRequest, Deck } from '../../models/Deck';
 import { useEffect, useState } from 'react';
 import { useToast } from '../../contexts/ToastContext';
 import DeckCard from '../../shared/components/DeckCard';
-import Loading from '../../shared/components/Loading';
+import Loading from '../../shared/components/loading/Loading';
 import DeckModal from '../../shared/components/DeckModal';
 
 function Dashboard() {
@@ -54,7 +54,12 @@ function Dashboard() {
     }
   };
 
-  const handleUpdate = async (deckData: CreateDeckRequest) => {
+  const handleEdit = (deck: Deck) => {
+    setEditingDeck(deck);
+    setIsModalOpen(true);
+  };
+
+  const handleUpdate = async (deckData: DeckRequest) => {
     if (!editingDeck) return;
 
     try {
@@ -88,11 +93,6 @@ function Dashboard() {
 
   const cancelDelete = () => {
     setDeleteDeckId(null);
-  };
-
-  const handleEdit = (deck: Deck) => {
-    setEditingDeck(deck);
-    setIsModalOpen(true);
   };
 
   const handleCloseModal = () => {

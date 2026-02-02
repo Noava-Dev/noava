@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using noava.Services.Contracts;
+using noava.Services.Users;
 using System.Security.Claims;
 
 namespace noava.Controllers

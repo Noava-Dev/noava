@@ -1,5 +1,4 @@
-﻿using noava.DTOs.Request.Notifications;
-using noava.DTOs.Response.Notifications;
+﻿using noava.DTOs.Notifications;
 using noava.Models;
 
 namespace noava.Mappers.Notifications

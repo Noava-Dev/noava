@@ -7,11 +7,11 @@ import {
 import { useState, useEffect } from 'react';
 import Searchbar from '../../shared/components/Searchbar';
 import type { FAQ } from '../../models/FAQ';
-import { faqService } from '../../services/FAQService';
+import { useFaqService } from '../../services/FAQService';
 import Header from '../../shared/components/navigation/Header';
 import PageHeader from '../../shared/components/PageHeader';
 import NoavaFooter from '../../shared/components/navigation/NoavaFooter';
-import Loading from '../../shared/components/Loading';
+import Loading from '../../shared/components/loading/Loading';
 import { useTranslation } from 'react-i18next';
 
 function FAQPage() {
@@ -20,7 +20,7 @@ function FAQPage() {
   const [allFaqs, setAllFaqs] = useState<FAQ[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const { getAll } = faqService();
+  const { getAll } = useFaqService();
 
   useEffect(() => {
     const fetchFaqs = async () => {

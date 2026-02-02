@@ -9,13 +9,13 @@ import {
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { HiX, HiUpload } from 'react-icons/hi';
-import { DeckVisibility, Deck, CreateDeckRequest } from '../../models/Deck';
+import { DeckVisibility, Deck, DeckRequest } from '../../models/Deck';
 import { useAzureBlobService } from '../../services/AzureBlobService';
 import { useToast } from '../../contexts/ToastContext';
 interface DeckModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (deck: CreateDeckRequest) => void;
+  onSubmit: (deck: DeckRequest) => void;
   deck?: Deck;
 }
 
@@ -129,15 +129,15 @@ function DeckModal({ isOpen, onClose, onSubmit, deck }: DeckModalProps) {
         onClick={onClose}></div>
 
       {/* Modal Content */}
-      <div className="relative bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+      <div className="relative bg-background-app-light dark:bg-background-surface-dark rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+        <div className="flex items-center justify-between p-6 border-b border-border dark:border-border-dark">
+          <h2 className="text-2xl font-bold text-text-title-light dark:text-text-title-dark">
             {deck ? t('modal.editTitle') : t('modal.createTitle')}
           </h2>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+            className="text-text-muted-light hover:text-text-body-light dark:text-text-muted-dark dark:hover:text-text-body-dark"
             disabled={uploading}>
             <HiX className="w-6 h-6" />
           </button>
@@ -225,7 +225,7 @@ function DeckModal({ isOpen, onClose, onSubmit, deck }: DeckModalProps) {
                 onChange={handleImageChange}
                 disabled={uploading}
               />
-              <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+              <p className="mt-1 text-xs text-text-body-light dark:text-text-body-dark">
                 {t('modal.imageHelp')}
               </p>
             </div>
@@ -250,7 +250,7 @@ function DeckModal({ isOpen, onClose, onSubmit, deck }: DeckModalProps) {
                   {t('modal.visibilityPublic')}
                 </option>
               </Select>
-              <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+              <p className="mt-1 text-xs text-text-body-light dark:text-text-body-dark">
                 {getVisibilityHelpText()}
               </p>
             </div>
