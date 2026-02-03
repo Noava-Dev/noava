@@ -5,7 +5,7 @@ import NoavaFooter from '../../shared/components/navigation/NoavaFooter';
 import Loading from '../../shared/components/loading/Loading';
 import { HiArrowLeft } from 'react-icons/hi';
 import { Button } from 'flowbite-react';
-import { classroomService } from '../../services/ClassroomService';
+import { useClassroomService } from '../../services/ClassroomService';
 import MembersTable from './components/MembersTable';
 import EditMemberModal from './components/EditMemberModal';
 import ConfirmModal from '../../shared/components/ConfirmModal';
@@ -13,11 +13,12 @@ import InviteMemberModal from './components/InviteMemberModal';
 import { useToast } from '../../contexts/ToastContext';
 import { useTranslation } from 'react-i18next';
 import type { ClerkUserResponse } from '../../models/User';
+import BackButton from '../../shared/components/navigation/BackButton';
 
 export default function MembersPage() {
   const { classroomId } = useParams();
   const id = Number(classroomId);
-  const svc = classroomService();
+  const svc = useClassroomService();
   const { showSuccess, showError } = useToast();
   const { t } = useTranslation('classrooms');
   const navigate = useNavigate();
@@ -77,12 +78,12 @@ export default function MembersPage() {
   // Only allow users who have edit permission (teachers) to access this page
   if (!classroom.permissions?.canEdit) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
           <h2 className="text-xl font-semibold">
             {t('members.notAuthorized', 'Not authorized')}
           </h2>
-          <p className="text-gray-500">
+          <p className="text-text-muted-light dark:text-text-muted-dark">
             {t('members.onlyTeachers', 'Only teachers may access this page')}
           </p>
         </div>
@@ -152,16 +153,16 @@ export default function MembersPage() {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
-      <div className="ml-0 flex-1 w-full">
+    <div className="flex min-h-screen bg-background-app-light dark:bg-background-app-dark">
+      <div className="flex-1 w-full ml-0">
         <PageHeader>
           <div className="pt-4 md:pt-8">
             <div className="flex items-start justify-between gap-4">
-              <div className="min-w-0 flex-1">
-                <h1 className="text-3xl md:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight">
+              <div className="flex-1 min-w-0">
+                <h1 className="text-3xl font-extrabold tracking-tight text-text-title-light md:text-5xl dark:text-text-title-dark">
                   {classroom.name} - {t('members.title', 'Members')}
                 </h1>
-                <p className="text-base text-gray-600 dark:text-gray-300 mt-2 max-w-3xl">
+                <p className="max-w-3xl mt-2 text-base text-text-muted-light dark:text-text-muted-dark">
                   {t('members.subtitle', 'Manage classroom members')}
                 </p>
               </div>
@@ -180,18 +181,10 @@ export default function MembersPage() {
           </div>
         </PageHeader>
 
-        <div className="mt-6">
-          <Button
-            color="gray"
-            size="sm"
-            onClick={() => navigate(`/classrooms/${id}`)}
-            className="inline-flex items-center gap-2 shadow-sm">
-            <HiArrowLeft className="w-4 h-4" />
-          </Button>
-        </div>
+        <section className="min-h-screen py-8 bg-background-app-light dark:bg-background-app-dark md:py-12">
+          <div className="container max-w-5xl px-4 mx-auto">
+            <BackButton text="Back to Classroom" href={`/classrooms/${id}`} />
 
-        <section className="bg-white dark:bg-gray-900 py-8 md:py-12 min-h-screen">
-          <div className="container mx-auto px-4 max-w-5xl">
             {loadingMembers ? (
               <div className="py-20">
                 <Loading center size="lg" />

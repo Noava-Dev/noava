@@ -11,13 +11,15 @@ import Loading from '../../shared/components/loading/Loading';
 import Searchbar from '../../shared/components/Searchbar';
 import ConfirmModal from '../../shared/components/ConfirmModal';
 import RequestCodeModal from '../../shared/components/RequestCodeModal';
-import { classroomService } from '../../services/ClassroomService';
+import { useClassroomService } from '../../services/ClassroomService';
 import { useToast } from '../../contexts/ToastContext';
 import type { ClassroomResponse } from '../../models/Classroom';
+import { TbDoorEnter } from 'react-icons/tb';
+import EmptyState from '../../shared/components/EmptyState';
 
 function ClassroomsPage() {
   const { t } = useTranslation('classrooms');
-  const classroomSvc = classroomService();
+  const classroomSvc = useClassroomService();
   const [classrooms, setClassrooms] = useState<ClassroomResponse[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -142,16 +144,16 @@ function ClassroomsPage() {
 
   return (
     <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
-      <div className="ml-0 flex-1 w-full">
+      <div className="flex-1 w-full ml-0">
         <PageHeader>
-          <div className="mb-6 md:mb-8 pt-4 md:pt-8">
+          <div className="pt-4 mb-6 md:mb-8 md:pt-8">
             <div className="flex items-start justify-between gap-4">
-              <div className="min-w-0 flex-1">
+              <div className="flex-1 min-w-0">
                 <div className="space-y-2">
-                  <h1 className="text-3xl md:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight">
+                  <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 md:text-5xl dark:text-white">
                     {t('title')}
                   </h1>
-                  <p className="text-base md:text-xl text-gray-500 dark:text-gray-400">
+                  <p className="text-base text-gray-500 md:text-xl dark:text-gray-400">
                     {t('subtitle')}
                   </p>
                   {classrooms.length > 0 && !searchTerm && (
@@ -162,33 +164,31 @@ function ClassroomsPage() {
                   )}
                 </div>
 
-                <div className="mt-4 md:mt-6">
+                <div className="flex items-center justify-between gap-4 mt-4 md:mt-6">
                   <Button
                     onClick={() => setIsModalOpen(true)}
                     size="lg"
-                    className="md:w-fit w-full bg-gradient-to-r from-primary-600 to-primary-700">
-                    <HiPlus className="mr-2 h-5 w-5" />
+                    className="w-full md:w-fit bg-gradient-to-r from-primary-600 to-primary-700">
+                    <HiPlus className="mr-2 size-5" />
                     {t('createButton')}
                   </Button>
-                </div>
-              </div>
 
-              <div className="flex items-start">
-                <Button
-                  onClick={() => navigate('/classrooms/join')}
-                  size="md"
-                  color="gray"
-                  className="w-full sm:w-auto">
-                  {t('joinButton', 'Join classroom')}
-                </Button>
+                  <Button
+                    onClick={() => navigate('/classrooms/join')}
+                    size="lg"
+                    className="w-full md:w-fit bg-gradient-to-r from-secondary-600 to-secondary-700 hover:shadow-sm hover:border-border">
+                    <TbDoorEnter className="mr-2 size-5" />
+                    {t('joinButton')}
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
 
-          <div className="bg-gray-50 dark:bg-gray-800/50 rounded-2xl p-4 md:p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+          <div className="p-4 border border-gray-100 shadow-sm bg-gray-50 dark:bg-gray-800/50 rounded-2xl md:p-6 dark:border-gray-700">
             <div className="grid grid-cols-1 md:grid-cols-[1fr_280px] gap-4">
               <div className="space-y-2">
-                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide">
+                <label className="block text-sm font-semibold tracking-wide text-gray-700 uppercase dark:text-gray-300">
                   {t('search.label')}
                 </label>
                 <Searchbar
@@ -196,15 +196,15 @@ function ClassroomsPage() {
                   setSearchTerm={setSearchTerm}
                 />
                 {searchTerm && (
-                  <p className="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1">
-                    <span className="inline-block w-2 h-2 bg-primary-500 rounded-full"></span>
+                  <p className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
+                    <span className="inline-block w-2 h-2 rounded-full bg-primary-500"></span>
                     {sorted.length} {t('results.found')}
                   </p>
                 )}
               </div>
 
               <div className="space-y-2">
-                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide">
+                <label className="block text-sm font-semibold tracking-wide text-gray-700 uppercase dark:text-gray-300">
                   {t('sort.label')}
                 </label>
                 <Select
@@ -225,14 +225,14 @@ function ClassroomsPage() {
           </div>
         </PageHeader>
 
-        <section className="bg-white dark:bg-gray-900 py-8 md:py-12 min-h-screen">
-          <div className="container mx-auto px-4 max-w-7xl">
+        <section className="min-h-screen py-8 bg-white dark:bg-gray-900 md:py-12">
+          <div className="container px-4 mx-auto max-w-7xl">
             {loading ? (
               <div className="py-20">
                 <Loading center size="lg" className="mx-auto" />
               </div>
             ) : sorted.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:gap-6">
                 {sorted.map((c) => (
                   <ClassroomCard
                     key={c.id}
@@ -244,34 +244,15 @@ function ClassroomsPage() {
                 ))}
               </div>
             ) : searchTerm ? (
-              <div className="text-center py-12 md:py-20">
-                <div className="mb-6">
-                  <svg
-                    className="w-16 h-16 md:w-24 md:h-24 text-gray-400 dark:text-gray-500 mx-auto opacity-50"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-                </div>
-                <p className="text-gray-900 dark:text-white text-xl md:text-2xl font-semibold mb-3">
-                  {t('empty.noResults')}
-                </p>
-                <p className="text-gray-600 dark:text-gray-400 mb-6">
-                  {t('empty.tryAnother')}
-                </p>
-                <Button onClick={() => setSearchTerm('')}>
-                  {t('empty.clearSearch')}
-                </Button>
-              </div>
+              <EmptyState
+                title={t('empty.noResults')}
+                description={t('empty.tryAnother')}
+                buttonOnClick={() => setSearchTerm('')}
+                clearButtonText={t('empty.clearSearch')}
+              />
             ) : (
-              <div className="text-center py-12 md:py-20">
-                <p className="text-gray-500 dark:text-gray-400 text-xl md:text-2xl mb-6">
+              <div className="py-12 text-center md:py-20">
+                <p className="mb-6 text-xl text-text-body-light dark:text-text-muted-dark md:text-2xl">
                   {t('empty.message')}
                 </p>
               </div>

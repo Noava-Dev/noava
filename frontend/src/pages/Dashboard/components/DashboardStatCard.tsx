@@ -1,7 +1,6 @@
 import { Card, Tooltip } from 'flowbite-react';
 import type { ComponentType } from 'react';
-import { useTranslation } from 'react-i18next';
-import { LuBrain, LuMessageCircleQuestion } from 'react-icons/lu';
+import { LuMessageCircleQuestion } from 'react-icons/lu';
 
 type DashboardStatCardProps = {
   title: string;
@@ -16,8 +15,6 @@ function DashboardStatCard({
   tooltip,
   icon: Icon,
 }: DashboardStatCardProps) {
-  const { t } = useTranslation('dashboard');
-
   return (
     <>
       <Card className="rounded-xl">

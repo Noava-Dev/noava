@@ -4,14 +4,14 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import PageHeader from '../../shared/components/PageHeader';
 import NoavaFooter from '../../shared/components/navigation/NoavaFooter';
-import { classroomService } from '../../services/ClassroomService';
+import { useClassroomService } from '../../services/ClassroomService';
 import { useToast } from '../../contexts/ToastContext';
 
 export default function JoinClassroom() {
   const { t } = useTranslation('classrooms');
   const [code, setCode] = useState('');
   const [loading, setLoading] = useState(false);
-  const classroomSvc = classroomService();
+  const classroomSvc = useClassroomService();
   const navigate = useNavigate();
   const { showSuccess, showError } = useToast();
 
@@ -35,16 +35,16 @@ export default function JoinClassroom() {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
-      <div className="ml-0 flex-1 w-full">
+    <div className="flex min-h-screen bg-background-app-light dark:bg-background-app-dark">
+      <div className="flex-1 w-full ml-0">
         <PageHeader>
-          <div className="mb-6 md:mb-8 pt-4 md:pt-8">
+          <div className="pt-4 mb-6 md:mb-8 md:pt-8">
             <div className="flex flex-col gap-4 md:gap-6">
               <div className="space-y-2">
-                <h1 className="text-3xl md:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight">
+                <h1 className="text-3xl font-extrabold tracking-tight md:text-5xl text-text-title-light dark:text-text-title-dark">
                   {t('join.title')}
                 </h1>
-                <p className="text-base md:text-xl text-gray-500 dark:text-gray-400">
+                <p className="text-base text-text-muted-light md:text-xl dark:text-text-muted-dark">
                   {t('join.subtitle')}
                 </p>
               </div>
@@ -52,17 +52,17 @@ export default function JoinClassroom() {
           </div>
         </PageHeader>
 
-        <section className="bg-white dark:bg-gray-900 py-8 md:py-12 min-h-screen">
-          <div className="container mx-auto px-4 max-w-3xl">
+        <section className="min-h-screen py-8 bg-background-app-light dark:bg-background-app-dark md:py-12">
+          <div className="container max-w-3xl px-4 mx-auto">
             <Card>
               <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                 <div>
-                  <div className="mb-2 block">
+                  <div className="block mb-2">
                     <Label htmlFor="joinCode" />
                   </div>
                   <TextInput
                     id="joinCode"
-                    placeholder={t('join.form.placeholder', 'Bijv. ABC123')}
+                    placeholder={t('join.form.placeholder', 'e.g. ABC123')}
                     value={code}
                     onChange={(e) => setCode(e.target.value)}
                     required

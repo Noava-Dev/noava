@@ -1,27 +1,27 @@
-import type { ClassroomRequest, ClassroomResponse } from "../models/Classroom";
-import type { ClerkUserResponse } from "../models/User";
-import { useApi } from "../hooks/useApi";
+import type { ClassroomRequest, ClassroomResponse } from '../models/Classroom';
+import type { ClerkUserResponse } from '../models/User';
+import { useApi } from '../hooks/useApi';
 
-export const classroomService = () => {
+export const useClassroomService = () => {
   const api = useApi();
 
   const create = async (data: ClassroomRequest): Promise<ClassroomResponse> => {
     try {
-      const response = await api.post<ClassroomResponse>("/classrooms", data);
+      const response = await api.post<ClassroomResponse>('/classrooms', data);
       return response.data;
     } catch (err) {
-      console.error("Failed to create classroom:", err);
-      throw new Error("Failed to create classroom");
+      console.error('Failed to create classroom:', err);
+      throw new Error('Failed to create classroom');
     }
   };
 
   const getAllForUser = async (): Promise<ClassroomResponse[]> => {
     try {
-      const response = await api.get<ClassroomResponse[]>("/classrooms");
+      const response = await api.get<ClassroomResponse[]>('/classrooms');
       return response.data;
     } catch (err) {
-      console.error("Failed to fetch classrooms:", err);
-      throw new Error("Failed to fetch classrooms");
+      console.error('Failed to fetch classrooms:', err);
+      throw new Error('Failed to fetch classrooms');
     }
   };
 
@@ -31,27 +31,35 @@ export const classroomService = () => {
       return response.data;
     } catch (err) {
       console.error(`Failed to fetch classroom with id ${id}:`, err);
-      throw new Error("Failed to fetch classroom");
+      throw new Error('Failed to fetch classroom');
     }
   };
 
   const joinByCode = async (joinCode: string): Promise<ClassroomResponse> => {
     try {
-      const response = await api.post<ClassroomResponse>(`/classrooms/join/${joinCode}`);
+      const response = await api.post<ClassroomResponse>(
+        `/classrooms/join/${joinCode}`
+      );
       return response.data;
     } catch (err) {
       console.error(`Failed to join classroom with code ${joinCode}:`, err);
-      throw new Error("Failed to join classroom");
+      throw new Error('Failed to join classroom');
     }
   };
 
-  const update = async (id: number, data: ClassroomRequest): Promise<ClassroomResponse> => {
+  const update = async (
+    id: number,
+    data: ClassroomRequest
+  ): Promise<ClassroomResponse> => {
     try {
-      const response = await api.put<ClassroomResponse>(`/classrooms/${id}`, data);
+      const response = await api.put<ClassroomResponse>(
+        `/classrooms/${id}`,
+        data
+      );
       return response.data;
     } catch (err) {
       console.error(`Failed to update classroom with id ${id}:`, err);
-      throw new Error("Failed to update classroom");
+      throw new Error('Failed to update classroom');
     }
   };
 
@@ -61,23 +69,35 @@ export const classroomService = () => {
       return response.data;
     } catch (err) {
       console.error(`Failed to delete classroom with id ${id}:`, err);
-      throw new Error("Failed to delete classroom");
+      throw new Error('Failed to delete classroom');
     }
   };
 
   const updateJoinCode = async (id: number): Promise<ClassroomResponse> => {
     try {
-      const response = await api.put<ClassroomResponse>(`/classrooms/${id}/joincode`);
+      const response = await api.put<ClassroomResponse>(
+        `/classrooms/${id}/joincode`
+      );
       return response.data;
     } catch (err) {
-      console.error(`Failed to update join code for classroom with id ${id}:`, err);
-      throw new Error("Failed to update join code");
+      console.error(
+        `Failed to update join code for classroom with id ${id}:`,
+        err
+      );
+      throw new Error('Failed to update join code');
     }
   };
 
-  const getUsersByClassroom = async (id: number, page = 1, pageSize = 50): Promise<ClerkUserResponse[]> => {
+  const getUsersByClassroom = async (
+    id: number,
+    page = 1,
+    pageSize = 50
+  ): Promise<ClerkUserResponse[]> => {
     try {
-      const response = await api.get<ClerkUserResponse[]>(`/classrooms/${id}/users`, { params: { page, pageSize } });
+      const response = await api.get<ClerkUserResponse[]>(
+        `/classrooms/${id}/users`,
+        { params: { page, pageSize } }
+      );
       return response.data;
     } catch (err) {
       console.error(`Failed to fetch users for classroom with id ${id}:`, err);
@@ -85,32 +105,61 @@ export const classroomService = () => {
     }
   };
 
-  const removeUser = async (classroomId: number, targetUserId: string): Promise<ClassroomResponse> => {
+  const removeUser = async (
+    classroomId: number,
+    targetUserId: string
+  ): Promise<ClassroomResponse> => {
     try {
-      const response = await api.delete<ClassroomResponse>(`/classrooms/${classroomId}/users/${targetUserId}`);
+      const response = await api.delete<ClassroomResponse>(
+        `/classrooms/${classroomId}/users/${targetUserId}`
+      );
       return response.data;
     } catch (err) {
-      console.error(`Failed to remove user ${targetUserId} from classroom ${classroomId}:`, err);
+      console.error(
+        `Failed to remove user ${targetUserId} from classroom ${classroomId}:`,
+        err
+      );
       throw new Error('Failed to remove user from classroom');
     }
   };
 
-  const setUserRole = async (classroomId: number, targetUserId: string, isTeacher: boolean): Promise<ClassroomResponse> => {
+  const setUserRole = async (
+    classroomId: number,
+    targetUserId: string,
+    isTeacher: boolean
+  ): Promise<ClassroomResponse> => {
     try {
-      const response = await api.put<ClassroomResponse>(`/classrooms/${classroomId}/users/${targetUserId}/role`, null, { params: { isTeacher } });
+      const response = await api.put<ClassroomResponse>(
+        `/classrooms/${classroomId}/users/${targetUserId}/role`,
+        null,
+        { params: { isTeacher } }
+      );
       return response.data;
     } catch (err) {
-      console.error(`Failed to set role for user ${targetUserId} in classroom ${classroomId}:`, err);
+      console.error(
+        `Failed to set role for user ${targetUserId} in classroom ${classroomId}:`,
+        err
+      );
       throw new Error('Failed to set user role');
     }
   };
 
-  const inviteByEmail = async (classroomId: number, email: string): Promise<ClassroomResponse> => {
+  const inviteByEmail = async (
+    classroomId: number,
+    email: string
+  ): Promise<ClassroomResponse> => {
     try {
-      const response = await api.post<ClassroomResponse>(`/classrooms/${classroomId}/invite`, null, { params: { email } });
+      const response = await api.post<ClassroomResponse>(
+        `/classrooms/${classroomId}/invite`,
+        null,
+        { params: { email } }
+      );
       return response.data;
     } catch (err) {
-      console.error(`Failed to invite user ${email} to classroom ${classroomId}:`, err);
+      console.error(
+        `Failed to invite user ${email} to classroom ${classroomId}:`,
+        err
+      );
       throw new Error('Failed to invite user to classroom');
     }
   };

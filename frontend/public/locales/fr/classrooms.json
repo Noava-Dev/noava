@@ -9,8 +9,8 @@
     "label": "Trier",
     "newest": "Les plus récentes",
     "oldest": "Les plus anciennes",
-    "az": "Alphabétique",
-    "za": "Inverse alphabétique"
+    "az": "Alphabétique (A-Z)",
+    "za": "Alphabétique (Z-A)"
   },
   "results": {
     "found": "résultats trouvés"
@@ -70,10 +70,10 @@
     "delete": "Supprimer",
     "back": "Retour"
   },
-    "actions": {
-      "cancel": "Annuler",
-      "invite": "Inviter"
-    },
+  "actions": {
+    "cancel": "Annuler",
+    "invite": "Inviter"
+  },
   "members": {
     "title": "Membres",
     "subtitle": "Gérer les membres de la classe",
@@ -108,7 +108,7 @@
     },
     "member": "Membre"
   },
-  "joinButton": "Rejoindre",
+  "joinButton": "Rejoindre Classe",
   "join": {
     "title": "Rejoindre une classe",
     "subtitle": "Saisissez un code pour rejoindre une classe",

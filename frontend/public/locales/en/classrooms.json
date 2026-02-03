@@ -7,8 +7,8 @@
     "label": "Sort by",
     "newest": "Newest",
     "oldest": "Oldest",
-    "az": "Alphabetical",
-    "za": "Reverse alphabetical"
+    "az": "Alphabetical (A-Z)",
+    "za": "Alphabetical (Z-A)"
   },
   "results": { "found": "results found" },
   "empty": {
@@ -100,7 +100,7 @@
     "cancel": "Cancel",
     "invite": "Invite"
   },
-  "joinButton": "Join",
+  "joinButton": "Join Classroom",
   "join": {
     "title": "Join classroom",
     "subtitle": "Enter a join code to join a classroom",

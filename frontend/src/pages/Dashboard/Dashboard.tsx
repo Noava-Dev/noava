@@ -109,10 +109,10 @@ function Dashboard() {
             <div className="pt-4 mb-6 md:mb-8 md:pt-8">
               <div className="flex flex-col gap-4 md:gap-6">
                 <div className="space-y-2">
-                  <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 md:text-5xl dark:text-white">
+                  <h1 className="text-3xl font-extrabold tracking-tight text-text-title-light md:text-5xl dark:text-text-title-dark">
                     {t('title')}
                   </h1>
-                  <p className="text-base text-gray-500 md:text-xl dark:text-gray-400">
+                  <p className="text-base text-text-body-light md:text-xl dark:text-text-body-dark">
                     {t('subtitle')}
                   </p>
                 </div>
@@ -120,7 +120,7 @@ function Dashboard() {
             </div>
           </PageHeader>
 
-          <section className="min-h-screen py-8 bg-white dark:bg-gray-900 md:py-12">
+          <section className="min-h-screen py-8 bg-background-app-light dark:bg-background-app-dark md:py-12">
             {loading ? (
               <Loading size="xl" color="info" center />
             ) : (
@@ -183,8 +183,8 @@ function Dashboard() {
                   ) : (
                     // No decks yet
                     <div className="flex flex-col items-center justify-center gap-2 mt-4">
-                      <LuLayers className="w-10 h-10 text-gray-400 dark:text-gray-600" />
-                      <p className="mb-3 text-xl font-semibold text-gray-700 dark:text-gray-400">
+                      <LuLayers className="w-10 h-10 text-text-muted-light dark:text-text-muted-dark" />
+                      <p className="mb-3 text-xl font-semibold text-text-body-light dark:text-text-body-dark">
                         {t('decks.empty')}
                       </p>
                     </div>
@@ -207,7 +207,7 @@ function Dashboard() {
             <ModalHeader>{t('deleteModal.title')}</ModalHeader>
 
             <ModalBody>
-              <p className="text-gray-600 dark:text-gray-400">
+              <p className="text-text-body-light dark:text-text-body-dark">
                 {t('deleteModal.message')}
               </p>
             </ModalBody>

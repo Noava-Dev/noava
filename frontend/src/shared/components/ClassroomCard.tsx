@@ -1,4 +1,9 @@
-import { Dropdown, DropdownItem, DropdownDivider, Button } from 'flowbite-react';
+import {
+  Dropdown,
+  DropdownItem,
+  DropdownDivider,
+  Button,
+} from 'flowbite-react';
 import { HiDotsVertical, HiPencil, HiTrash, HiRefresh } from 'react-icons/hi';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -11,7 +16,12 @@ interface ClassroomCardProps {
   onRequestNewCode?: (id: number) => void;
 }
 
-function ClassroomCard({ classroom, onEdit, onDelete, onRequestNewCode }: ClassroomCardProps) {
+function ClassroomCard({
+  classroom,
+  onEdit,
+  onDelete,
+  onRequestNewCode,
+}: ClassroomCardProps) {
   const { t } = useTranslation('classrooms');
   const navigate = useNavigate();
 
@@ -29,37 +39,47 @@ function ClassroomCard({ classroom, onEdit, onDelete, onRequestNewCode }: Classr
   };
 
   return (
-    <div className="relative rounded-lg overflow-visible shadow-lg hover:shadow-xl transition-shadow duration-300 hover:cursor-pointer flex h-full bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700" onClick={handleCardClick}>
-      <div className="p-4 sm:p-6 flex flex-col flex-1">
+    <div
+      className="relative flex h-full overflow-visible transition-shadow duration-300 bg-white border border-gray-100 rounded-lg shadow-lg hover:shadow-xl hover:cursor-pointer dark:bg-gray-800 dark:border-gray-700"
+      onClick={handleCardClick}>
+      <div className="flex flex-col flex-1 p-4 sm:p-6">
         <div className="flex items-start justify-between mb-2">
-          <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-1 line-clamp-2">
+          <h3 className="mb-1 text-lg font-bold text-gray-900 sm:text-xl md:text-2xl dark:text-white line-clamp-2">
             {classroom.name}
           </h3>
 
-          {(classroom.permissions.canEdit || classroom.permissions.canDelete) && (
+          {(classroom.permissions.canEdit ||
+            classroom.permissions.canDelete) && (
             <div className="ml-2" onClick={handleStopPropagation}>
               <Dropdown
                 label=""
                 dismissOnClick={true}
                 renderTrigger={() => (
                   <button className="p-1.5 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all">
-                    <HiDotsVertical className="h-5 w-5 text-gray-600 dark:text-gray-300" />
+                    <HiDotsVertical className="w-5 h-5 text-gray-600 dark:text-gray-300" />
                   </button>
-                )}
-              >
+                )}>
                 {classroom.permissions.canEdit && (
-                  <DropdownItem icon={HiPencil} onClick={() => onEdit?.(classroom)}>
+                  <DropdownItem
+                    icon={HiPencil}
+                    onClick={() => onEdit?.(classroom)}>
                     {t('card.edit')}
                   </DropdownItem>
                 )}
                 {classroom.permissions.canEdit && (
-                  <DropdownItem icon={HiRefresh} onClick={() => onRequestNewCode?.(classroom.id)}>
+                  <DropdownItem
+                    icon={HiRefresh}
+                    onClick={() => onRequestNewCode?.(classroom.id)}>
                     {t('card.regenerateCode')}
                   </DropdownItem>
                 )}
                 {classroom.permissions.canDelete && <DropdownDivider />}
                 {classroom.permissions.canDelete && (
-                  <DropdownItem icon={HiTrash} onClick={() => onDelete?.(classroom.id)} className="text-red-600">
+                  <DropdownItem
+                    icon={HiTrash}
+                    onClick={() => onDelete?.(classroom.id)}
+                    className="text-red-600 dark:text-red-600 hover:text-red-600 dark:hover:text-red-600 hover:border-red-600"
+                    color="red">
                     {t('card.delete')}
                   </DropdownItem>
                 )}
@@ -69,13 +89,15 @@ function ClassroomCard({ classroom, onEdit, onDelete, onRequestNewCode }: Classr
         </div>
 
         {classroom.description && (
-          <p className="text-gray-600 dark:text-gray-400 text-sm mb-3 line-clamp-2">
+          <p className="mb-3 text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
             {classroom.description}
           </p>
         )}
 
         <div className="mt-auto">
-          <Button size="sm" onClick={handleShow} className="w-full">{t('card.show')}</Button>
+          <Button size="sm" onClick={handleShow} className="w-full">
+            {t('card.show')}
+          </Button>
         </div>
       </div>
     </div>

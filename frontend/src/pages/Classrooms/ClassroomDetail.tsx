@@ -4,7 +4,7 @@ import { Button } from 'flowbite-react';
 import { useTranslation } from 'react-i18next';
 import PageHeader from '../../shared/components/PageHeader';
 import Loading from '../../shared/components/loading/Loading';
-import { classroomService } from '../../services/ClassroomService';
+import { useClassroomService } from '../../services/ClassroomService';
 import { useToast } from '../../contexts/ToastContext';
 import type { ClassroomResponse } from '../../models/Classroom';
 
@@ -12,7 +12,7 @@ function ClassroomDetailPage() {
   const { classroomId } = useParams();
   const id = Number(classroomId);
   const { t } = useTranslation('classrooms');
-  const classroomSvc = classroomService();
+  const classroomSvc = useClassroomService();
   const navigate = useNavigate();
   const { showError } = useToast();
 
@@ -38,17 +38,17 @@ function ClassroomDetailPage() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
-        <div className="ml-0 flex-1 w-full">
+      <div className="flex min-h-screen bg-background-app-light dark:bg-background-app-dark">
+        <div className="flex-1 w-full ml-0">
           <PageHeader>
             <div className="pt-4 md:pt-8">
-              <h1 className="text-3xl md:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight">
+              <h1 className="text-3xl font-extrabold tracking-tight text-text-title-light md:text-5xl dark:text-text-title-dark">
                 {t('title')}
               </h1>
             </div>
           </PageHeader>
-          <section className="bg-white dark:bg-gray-900 py-8 md:py-12 min-h-screen">
-            <div className="container mx-auto px-4 max-w-7xl">
+          <section className="min-h-screen py-8 bg-background-app-light dark:bg-background-app-dark md:py-12">
+            <div className="container px-4 mx-auto max-w-7xl">
               <div className="py-20">
                 <Loading center size="lg" />
               </div>
@@ -61,27 +61,29 @@ function ClassroomDetailPage() {
 
   if (!classroom)
     return (
-      <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900 items-center justify-center">
-        <div className="text-gray-900 dark:text-white">{t('notFound')}</div>
+      <div className="flex items-center justify-center min-h-screen bg-background-app-light dark:bg-background-app-dark">
+        <div className="text-text-title-light dark:text-text-title-dark">
+          {t('notFound')}
+        </div>
       </div>
     );
 
   return (
-    <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
-      <div className="ml-0 flex-1 w-full">
+    <div className="flex min-h-screen bg-background-app-light dark:bg-background-app-dark">
+      <div className="flex-1 w-full ml-0">
         <PageHeader>
           <div className="pt-4 md:pt-8">
             <div className="flex items-start justify-between gap-4">
-              <div className="min-w-0 flex-1">
-                <h1 className="text-3xl md:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight">
+              <div className="flex-1 min-w-0">
+                <h1 className="text-3xl font-extrabold tracking-tight text-text-title-light md:text-5xl dark:text-text-title-dark">
                   {classroom.name}
                 </h1>
-                <p className="text-base text-gray-600 dark:text-gray-300 mt-2 max-w-3xl">
+                <p className="max-w-3xl mt-2 text-base text-text-muted-light dark:text-text-muted-dark">
                   {classroom.description}
                 </p>
 
                 <div className="mt-4">
-                  <div className="inline-block bg-gray-100 dark:bg-gray-700 rounded-lg px-3 py-2 font-mono text-sm text-gray-800 dark:text-gray-100">
+                  <div className="inline-block px-3 py-2 font-mono text-sm rounded-lg text-text-body-light bg-background-surface-light dark:bg-background-surface-dark dark:text-text-body-dark">
                     {t('detail.joinCode')}:{' '}
                     <span className="ml-2 font-semibold">
                       {classroom.joinCode}
@@ -100,7 +102,7 @@ function ClassroomDetailPage() {
             </div>
           </div>
         </PageHeader>
-        <div className="mt-6 flex items-center gap-3">
+        <div className="flex items-center gap-3 mt-6">
           <Button color="gray" onClick={() => navigate('/classrooms')}>
             {t('detail.back')}
           </Button>

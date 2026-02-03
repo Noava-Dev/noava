@@ -18,6 +18,7 @@ import { useDeckService } from '../../services/DeckService';
 import { useToast } from '../../contexts/ToastContext';
 import type { Deck, DeckRequest } from '../../models/Deck';
 import Skeleton from '../../shared/components/loading/Skeleton';
+import EmptyState from '../../shared/components/EmptyState';
 
 function DecksPage() {
   const { t } = useTranslation('decks');
@@ -206,31 +207,12 @@ function DecksPage() {
                 ))}
               </div>
             ) : searchTerm ? (
-              <div className="flex flex-col items-center">
-                <div className="mb-6">
-                  <svg
-                    className="w-16 h-16 mx-auto opacity-50 text-text-muted-light md:w-24 md:h-24 dark:text-text-body-light"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-                </div>
-                <p className="mb-3 text-xl font-semibold text-text-body-light dark:text-text-title-dark md:text-2xl">
-                  {t('empty.noResults')}
-                </p>
-                <p className="mb-6 text-text-body-light dark:text-text-muted-dark">
-                  {t('empty.otherSearchTerm')}
-                </p>
-                <Button onClick={() => setSearchTerm('')}>
-                  {t('empty.clearSearch')}
-                </Button>
-              </div>
+              <EmptyState
+                title={t('empty.noResults')}
+                description={t('empty.otherSearchTerm')}
+                buttonOnClick={() => setSearchTerm('')}
+                clearButtonText={t('empty.clearSearch')}
+              />
             ) : (
               <div className="py-12 text-center md:py-20">
                 <p className="mb-6 text-xl text-text-body-light dark:text-text-muted-dark md:text-2xl">

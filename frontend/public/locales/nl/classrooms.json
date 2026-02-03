@@ -9,8 +9,8 @@
     "label": "Sorteren",
     "newest": "Nieuwste",
     "oldest": "Oudste",
-    "az": "Alfabetisch",
-    "za": "Omgekeerd alfabetisch"
+    "az": "Alfabetisch (A-Z)",
+    "za": "Alfabetisch (Z-A)"
   },
   "results": {
     "found": "resultaten gevonden"
@@ -108,8 +108,8 @@
     },
     "member": "Lid"
   },
-  
-  "joinButton": "Deelnemen",
+
+  "joinButton": "Deelnemen aan Classroom",
   "join": {
     "title": "Deelnemen aan klas",
     "subtitle": "Voer een join-code in om aan een klas deel te nemen",
