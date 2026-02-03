@@ -40,11 +40,11 @@ function ClassroomCard({
 
   return (
     <div
-      className="relative flex h-full overflow-visible transition-shadow duration-300 bg-white border border-gray-100 rounded-lg shadow-lg hover:shadow-xl hover:cursor-pointer dark:bg-gray-800 dark:border-gray-700"
+      className="relative flex h-full overflow-visible transition-shadow duration-300 border rounded-lg shadow-lg bg-background-surface-light border-border hover:shadow-xl hover:cursor-pointer dark:bg-background-surface-dark dark:border-border-dark"
       onClick={handleCardClick}>
       <div className="flex flex-col flex-1 p-4 sm:p-6">
         <div className="flex items-start justify-between mb-2">
-          <h3 className="mb-1 text-lg font-bold text-gray-900 sm:text-xl md:text-2xl dark:text-white line-clamp-2">
+          <h3 className="mb-1 text-lg font-bold text-text-title-light sm:text-xl md:text-2xl dark:text-text-title-dark line-clamp-2">
             {classroom.name}
           </h3>
 
@@ -55,8 +55,8 @@ function ClassroomCard({
                 label=""
                 dismissOnClick={true}
                 renderTrigger={() => (
-                  <button className="p-1.5 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all">
-                    <HiDotsVertical className="w-5 h-5 text-gray-600 dark:text-gray-300" />
+                  <button className="p-1.5 rounded-lg bg-background-surface-light dark:bg-background-surface-dark hover:bg-background-app-light dark:hover:bg-background-app-dark transition-all">
+                    <HiDotsVertical className="w-5 h-5 text-text-muted-light dark:text-text-muted-dark" />
                   </button>
                 )}>
                 {classroom.permissions.canEdit && (

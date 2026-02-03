@@ -143,21 +143,21 @@ function ClassroomsPage() {
   });
 
   return (
-    <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="flex min-h-screen bg-background-app-light dark:bg-background-app-dark">
       <div className="flex-1 w-full ml-0">
         <PageHeader>
           <div className="pt-4 mb-6 md:mb-8 md:pt-8">
             <div className="flex items-start justify-between gap-4">
               <div className="flex-1 min-w-0">
                 <div className="space-y-2">
-                  <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 md:text-5xl dark:text-white">
+                  <h1 className="text-3xl font-extrabold tracking-tight text-text-title-light md:text-5xl dark:text-text-title-dark">
                     {t('title')}
                   </h1>
-                  <p className="text-base text-gray-500 md:text-xl dark:text-gray-400">
+                  <p className="text-base text-text-body-light md:text-xl dark:text-text-body-dark">
                     {t('subtitle')}
                   </p>
                   {classrooms.length > 0 && !searchTerm && (
-                    <p className="text-sm text-gray-400 dark:text-gray-500">
+                    <p className="text-sm text-text-muted-light dark:text-text-muted-dark">
                       {classrooms.length}{' '}
                       {classrooms.length === 1 ? 'classroom' : 'classrooms'}
                     </p>
@@ -185,10 +185,10 @@ function ClassroomsPage() {
             </div>
           </div>
 
-          <div className="p-4 border border-gray-100 shadow-sm bg-gray-50 dark:bg-gray-800/50 rounded-2xl md:p-6 dark:border-gray-700">
+          <div className="p-4 border shadow-sm border-border bg-background-app-light dark:bg-background-surface-dark rounded-2xl md:p-6 dark:border-border-dark">
             <div className="grid grid-cols-1 md:grid-cols-[1fr_280px] gap-4">
               <div className="space-y-2">
-                <label className="block text-sm font-semibold tracking-wide text-gray-700 uppercase dark:text-gray-300">
+                <label className="block text-sm font-semibold tracking-wide uppercase text-text-muted-light dark:text-text-muted-dark">
                   {t('search.label')}
                 </label>
                 <Searchbar
@@ -196,7 +196,7 @@ function ClassroomsPage() {
                   setSearchTerm={setSearchTerm}
                 />
                 {searchTerm && (
-                  <p className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
+                  <p className="flex items-center gap-1 text-xs text-text-body-light dark:text-text-body-dark">
                     <span className="inline-block w-2 h-2 rounded-full bg-primary-500"></span>
                     {sorted.length} {t('results.found')}
                   </p>
@@ -225,7 +225,7 @@ function ClassroomsPage() {
           </div>
         </PageHeader>
 
-        <section className="min-h-screen py-8 bg-white dark:bg-gray-900 md:py-12">
+        <section className="min-h-screen py-8 bg-background-app-light dark:bg-background-app-dark md:py-12">
           <div className="container px-4 mx-auto max-w-7xl">
             {loading ? (
               <div className="py-20">

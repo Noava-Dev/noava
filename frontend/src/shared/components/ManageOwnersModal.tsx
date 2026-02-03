@@ -6,7 +6,10 @@ import { HiUserGroup, HiTrash, HiX, HiUserAdd, HiClock } from 'react-icons/hi';
 import { deckOwnershipService } from '../../services/DeckOwnershipService';
 import { deckInvitationService } from '../../services/DeckInvitationService';
 import type { DeckOwner } from '../../models/DeckOwner';
-import { InvitationStatus, type DeckInvitation } from '../../models/DeckInvitation';
+import {
+  InvitationStatus,
+  type DeckInvitation,
+} from '../../models/DeckInvitation';
 import { InviteUserModal } from './InviteUserModal';
 
 interface ManageOwnersModalProps {
@@ -20,12 +23,12 @@ export const ManageOwnersModal: React.FC<ManageOwnersModalProps> = ({
   opened,
   onClose,
   deckId,
-  deckTitle
+  deckTitle,
 }) => {
   const { t } = useTranslation('decks');
   const { getToken } = useAuth();
   const { user } = useUser();
-  
+
   const [owners, setOwners] = useState<DeckOwner[]>([]);
   const [invitations, setInvitations] = useState<DeckInvitation[]>([]);
   const [loading, setLoading] = useState(false);
@@ -45,11 +48,15 @@ export const ManageOwnersModal: React.FC<ManageOwnersModalProps> = ({
 
       const [ownersData, invitationsData] = await Promise.all([
         deckOwnershipService.getOwners(deckId, token),
-        deckInvitationService.getInvitationsForDeck(deckId, token)
+        deckInvitationService.getInvitationsForDeck(deckId, token),
       ]);
 
       setOwners(Array.isArray(ownersData) ? ownersData : []);
-      setInvitations(Array.isArray(invitationsData) ? invitationsData.filter(i => i.status === InvitationStatus.Pending) : []);
+      setInvitations(
+        Array.isArray(invitationsData)
+          ? invitationsData.filter((i) => i.status === InvitationStatus.Pending)
+          : []
+      );
     } catch (err) {
       console.error('Error loading owners:', err);
     } finally {
@@ -92,14 +99,14 @@ export const ManageOwnersModal: React.FC<ManageOwnersModalProps> = ({
       [InvitationStatus.Pending]: 'yellow',
       [InvitationStatus.Accepted]: 'green',
       [InvitationStatus.Declined]: 'red',
-      [InvitationStatus.Cancelled]: 'gray'
+      [InvitationStatus.Cancelled]: 'gray',
     };
 
     const statusNames: Record<InvitationStatus, string> = {
       [InvitationStatus.Pending]: 'pending',
       [InvitationStatus.Accepted]: 'accepted',
       [InvitationStatus.Declined]: 'declined',
-      [InvitationStatus.Cancelled]: 'cancelled'
+      [InvitationStatus.Cancelled]: 'cancelled',
     };
 
     return (
@@ -115,11 +122,12 @@ export const ManageOwnersModal: React.FC<ManageOwnersModalProps> = ({
         show={opened}
         onClose={onClose}
         title={t('ownership.modalTitle')}
-        size="lg"
-      >
+        size="lg">
         <div className="flex items-center gap-2 mb-4">
           <HiUserGroup className="w-5 h-5" />
-          <span className="text-lg font-semibold">{t('ownership.modalTitle')}</span>
+          <span className="text-lg font-semibold">
+            {t('ownership.modalTitle')}
+          </span>
         </div>
         {loading ? (
           <div className="flex justify-center py-8">
@@ -133,28 +141,24 @@ export const ManageOwnersModal: React.FC<ManageOwnersModalProps> = ({
                 <h3 className="text-lg font-semibold">
                   {t('ownership.currentOwners')} ({owners.length})
                 </h3>
-                <Button
-                  size="sm"
-                  onClick={() => setInviteModalOpened(true)}
-                >
-                  <HiUserAdd className="mr-2 h-4 w-4" />
+                <Button size="sm" onClick={() => setInviteModalOpened(true)}>
+                  <HiUserAdd className="w-4 h-4 mr-2" />
                   {t('ownership.inviteUser')}
                 </Button>
               </div>
 
               <div className="space-y-2">
                 {owners.length === 0 ? (
-                  <div className="text-center py-4 text-gray-500 dark:text-gray-400">
+                  <div className="py-4 text-center text-text-muted-light dark:text-text-muted-dark">
                     {t('ownership.noOwners')}
                   </div>
                 ) : (
                   owners.map((owner) => (
                     <div
                       key={owner.clerkId}
-                      className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg"
-                    >
+                      className="flex items-center justify-between p-3 rounded-lg bg-background-app-light dark:bg-background-app-dark">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center font-semibold">
+                        <div className="flex items-center justify-center w-10 h-10 font-semibold text-white bg-blue-500 rounded-full">
                           {owner.userEmail.charAt(0).toUpperCase()}
                         </div>
                         <div>
@@ -166,9 +170,11 @@ export const ManageOwnersModal: React.FC<ManageOwnersModalProps> = ({
                               </Badge>
                             )}
                           </div>
-                          <div className="text-sm text-gray-500 dark:text-gray-400">
+                          <div className="text-sm text-text-muted-light dark:text-text-muted-dark">
                             {t('ownership.addedAt', {
-                              date: new Date(owner.addedAt).toLocaleDateString()
+                              date: new Date(
+                                owner.addedAt
+                              ).toLocaleDateString(),
                             })}
                           </div>
                         </div>
@@ -176,9 +182,8 @@ export const ManageOwnersModal: React.FC<ManageOwnersModalProps> = ({
 
                       {owner.clerkId !== user?.id && (
                         <button
-                          className="p-2 text-red-600 hover:bg-red-100 dark:hover:bg-red-900/20 rounded-lg transition"
-                          onClick={() => handleRemoveOwner(owner.clerkId)}
-                        >
+                          className="p-2 text-red-600 transition rounded-lg hover:bg-red-100 dark:hover:bg-red-900/20"
+                          onClick={() => handleRemoveOwner(owner.clerkId)}>
                           <HiTrash className="w-5 h-5" />
                         </button>
                       )}
@@ -202,17 +207,20 @@ export const ManageOwnersModal: React.FC<ManageOwnersModalProps> = ({
                   {invitations.map((invitation) => (
                     <div
                       key={invitation.invitationId}
-                      className="flex items-center justify-between p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg"
-                    >
+                      className="flex items-center justify-between p-3 border border-yellow-200 rounded-lg bg-yellow-50 dark:bg-yellow-900/20 dark:border-yellow-800">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-yellow-500 text-white rounded-full flex items-center justify-center font-semibold">
+                        <div className="flex items-center justify-center w-10 h-10 font-semibold text-white bg-yellow-500 rounded-full">
                           {invitation.invitedUserEmail.charAt(0).toUpperCase()}
                         </div>
                         <div>
-                          <div className="font-medium">{invitation.invitedUserEmail}</div>
-                          <div className="text-sm text-gray-500 dark:text-gray-400">
+                          <div className="font-medium">
+                            {invitation.invitedUserEmail}
+                          </div>
+                          <div className="text-sm text-text-muted-light dark:text-text-muted-dark">
                             {t('ownership.invitedAt', {
-                              date: new Date(invitation.invitedAt).toLocaleDateString()
+                              date: new Date(
+                                invitation.invitedAt
+                              ).toLocaleDateString(),
                             })}
                           </div>
                         </div>
@@ -221,9 +229,10 @@ export const ManageOwnersModal: React.FC<ManageOwnersModalProps> = ({
                       <div className="flex items-center gap-2">
                         {getStatusBadge(invitation.status)}
                         <button
-                          className="p-2 text-red-600 hover:bg-red-100 dark:hover:bg-red-900/20 rounded-lg transition"
-                          onClick={() => handleCancelInvitation(invitation.invitationId)}
-                        >
+                          className="p-2 text-red-600 transition rounded-lg hover:bg-red-100 dark:hover:bg-red-900/20"
+                          onClick={() =>
+                            handleCancelInvitation(invitation.invitationId)
+                          }>
                           <HiX className="w-5 h-5" />
                         </button>
                       </div>
@@ -236,9 +245,7 @@ export const ManageOwnersModal: React.FC<ManageOwnersModalProps> = ({
         )}
 
         <div className="flex justify-end mt-6">
-          <Button onClick={onClose}>
-            {t('common.close')}
-          </Button>
+          <Button onClick={onClose}>{t('common.close')}</Button>
         </div>
       </Modal>
 

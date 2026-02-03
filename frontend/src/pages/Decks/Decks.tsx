@@ -157,7 +157,7 @@ function DecksPage() {
           </div>
 
           {/* Search & Filter Card */}
-          <div className="p-4 border shadow-sm border-border bg-background-app-light dark:bg-background-surface-dark/50 rounded-2xl md:p-6 dark:border-border-dark">
+          <div className="p-4 border shadow-sm border-border bg-background-app-light dark:bg-background-surface-dark rounded-2xl md:p-6 dark:border-border-dark">
             <div className="grid grid-cols-1 md:grid-cols-[1fr_280px] gap-4">
               <div className="space-y-2">
                 <label className="block text-sm font-semibold tracking-wide uppercase text-text-body-light dark:text-text-body-dark">
