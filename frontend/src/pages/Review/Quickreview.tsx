@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button, Progress, Badge } from 'flowbite-react';
-import { HiArrowLeft, HiRefresh, HiX, HiVolumeUp } from 'react-icons/hi';  // ← ADD HiVolumeUp
+import { HiArrowLeft, HiRefresh, HiX, HiVolumeUp } from 'react-icons/hi'; // ← ADD HiVolumeUp
 import { useTranslation } from 'react-i18next';
 import { useDeckService } from '../../services/DeckService';
 import { useFlashcardService } from '../../services/FlashcardService';
@@ -25,8 +25,8 @@ function QuickReview() {
   const [loading, setLoading] = useState(true);
   const [frontImageUrl, setFrontImageUrl] = useState<string | null>(null);
   const [backImageUrl, setBackImageUrl] = useState<string | null>(null);
-  const [frontAudioUrl, setFrontAudioUrl] = useState<string | null>(null);  // ← ADD
-  const [backAudioUrl, setBackAudioUrl] = useState<string | null>(null);    // ← ADD
+  const [frontAudioUrl, setFrontAudioUrl] = useState<string | null>(null); // ← ADD
+  const [backAudioUrl, setBackAudioUrl] = useState<string | null>(null); // ← ADD
 
   useEffect(() => {
     if (deckId) {
@@ -38,11 +38,12 @@ function QuickReview() {
   useEffect(() => {
     if (session && session.cards.length > 0) {
       const currentCard = session.cards[session.currentIndex];
-      
+
       // Load front image
       if (currentCard.frontImage) {
-        azureBlobService.getSasUrl('card-images', currentCard.frontImage)
-          .then(url => setFrontImageUrl(url))
+        azureBlobService
+          .getSasUrl('card-images', currentCard.frontImage)
+          .then((url) => setFrontImageUrl(url))
           .catch(() => setFrontImageUrl(null));
       } else {
         setFrontImageUrl(null);
@@ -50,8 +51,9 @@ function QuickReview() {
 
       // Load back image
       if (currentCard.backImage) {
-        azureBlobService.getSasUrl('card-images', currentCard.backImage)
-          .then(url => setBackImageUrl(url))
+        azureBlobService
+          .getSasUrl('card-images', currentCard.backImage)
+          .then((url) => setBackImageUrl(url))
           .catch(() => setBackImageUrl(null));
       } else {
         setBackImageUrl(null);
@@ -59,8 +61,9 @@ function QuickReview() {
 
       // ← ADD: Load front audio
       if (currentCard.frontAudio) {
-        azureBlobService.getSasUrl('card-audio', currentCard.frontAudio)
-          .then(url => setFrontAudioUrl(url))
+        azureBlobService
+          .getSasUrl('card-audio', currentCard.frontAudio)
+          .then((url) => setFrontAudioUrl(url))
           .catch(() => setFrontAudioUrl(null));
       } else {
         setFrontAudioUrl(null);
@@ -68,8 +71,9 @@ function QuickReview() {
 
       // ← ADD: Load back audio
       if (currentCard.backAudio) {
-        azureBlobService.getSasUrl('card-audio', currentCard.backAudio)
-          .then(url => setBackAudioUrl(url))
+        azureBlobService
+          .getSasUrl('card-audio', currentCard.backAudio)
+          .then((url) => setBackAudioUrl(url))
           .catch(() => setBackAudioUrl(null));
       } else {
         setBackAudioUrl(null);
@@ -80,10 +84,10 @@ function QuickReview() {
   const initializeSession = async () => {
     try {
       setLoading(true);
-      
+
       const [deckData, cardsData] = await Promise.all([
         deckService.getById(Number(deckId)),
-        flashcardService.getByDeckId(Number(deckId))
+        flashcardService.getByDeckId(Number(deckId)),
       ]);
 
       if (!deckData || cardsData.length === 0) {
@@ -101,7 +105,7 @@ function QuickReview() {
         cards: shuffledCards,
         currentIndex: 0,
         isFlipped: false,
-        completedCards: 0
+        completedCards: 0,
       });
     } catch (error) {
       showError(t('quickReview.noCards'), t('quickReview.error'));
@@ -122,27 +126,27 @@ function QuickReview() {
       setSession({
         ...session,
         currentIndex: session.currentIndex + 1,
-        completedCards: session.completedCards + 1
+        completedCards: session.completedCards + 1,
       });
       setIsFlipped(false);
     } else {
       setSession({
         ...session,
-        completedCards: session.cards.length
+        completedCards: session.cards.length,
       });
     }
   };
 
   const handleRestart = () => {
     if (!session) return;
-    
+
     const shuffledCards = [...session.cards].sort(() => Math.random() - 0.5);
-    
+
     setSession({
       ...session,
       cards: shuffledCards,
       currentIndex: 0,
-      completedCards: 0
+      completedCards: 0,
     });
     setIsFlipped(false);
   };
@@ -151,19 +155,20 @@ function QuickReview() {
     navigate(`/decks/${deckId}/cards`);
   };
 
-
   const handlePlayAudio = (audioUrl: string, e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent card flip
     const audio = new Audio(audioUrl);
-    audio.play().catch(err => console.error('Failed to play audio:', err));
+    audio.play().catch((err) => console.error('Failed to play audio:', err));
   };
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-gray-900">
+      <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-500 mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-400">{t('quickReview.loading')}</p>
+          <div className="w-12 h-12 mx-auto mb-4 border-b-2 rounded-full animate-spin border-cyan-500"></div>
+          <p className="text-gray-600 dark:text-gray-400">
+            {t('common:app.loading')}
+          </p>
         </div>
       </div>
     );
@@ -174,21 +179,20 @@ function QuickReview() {
   }
 
   const currentCard = session.cards[session.currentIndex];
-  const progress = ((session.completedCards) / session.cards.length) * 100;
+  const progress = (session.completedCards / session.cards.length) * 100;
   const isComplete = session.completedCards === session.cards.length;
 
   return (
     <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
-      <main className="ml-0 md:ml-64 flex-1 w-full">
-        <div className="container mx-auto px-4 py-6 md:py-8 max-w-4xl">
+      <main className="flex-1 w-full ml-0 md:ml-64">
+        <div className="container max-w-4xl px-4 py-6 mx-auto md:py-8">
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-4">
               <button
                 onClick={handleExit}
-                className="p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors"
-              >
-                <HiX className="h-6 w-6 text-gray-600 dark:text-gray-400" />
+                className="p-2 transition-colors rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800">
+                <HiX className="w-6 h-6 text-gray-600 dark:text-gray-400" />
               </button>
               <div>
                 <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
@@ -203,9 +207,11 @@ function QuickReview() {
 
           {/* Progress */}
           <div className="mb-6">
-            <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400 mb-2">
+            <div className="flex justify-between mb-2 text-sm text-gray-600 dark:text-gray-400">
               <span>{t('quickReview.progress')}</span>
-              <span>{session.completedCards} / {session.cards.length}</span>
+              <span>
+                {session.completedCards} / {session.cards.length}
+              </span>
             </div>
             <Progress progress={progress} color="cyan" size="lg" />
           </div>
@@ -214,102 +220,99 @@ function QuickReview() {
           {!isComplete ? (
             <>
               {/* Card */}
-              <div className="perspective-1000 mb-6">
+              <div className="mb-6 perspective-1000">
                 <div
                   className={`relative w-full h-96 transition-transform duration-500 transform-style-3d cursor-pointer ${
                     isFlipped ? 'rotate-y-180' : ''
                   }`}
-                  onClick={handleFlip}
-                >
+                  onClick={handleFlip}>
                   {/* Front */}
                   <div className="absolute inset-0 backface-hidden">
-                    <div className="w-full h-full bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 flex flex-col items-center justify-center border-2 border-gray-200 dark:border-gray-700">
+                    <div className="flex flex-col items-center justify-center w-full h-full p-8 bg-white border-2 border-gray-200 shadow-xl dark:bg-gray-800 rounded-2xl dark:border-gray-700">
                       {/* Audio button - top right */}
                       {frontAudioUrl && (
                         <button
                           onClick={(e) => handlePlayAudio(frontAudioUrl, e)}
-                          className="absolute top-4 right-4 p-3 bg-cyan-500 hover:bg-cyan-600 text-white rounded-full shadow-lg transition-colors z-10"
-                          title="Play audio"
-                        >
-                          <HiVolumeUp className="h-5 w-5" />
+                          className="absolute z-10 p-3 text-white transition-colors rounded-full shadow-lg top-4 right-4 bg-cyan-500 hover:bg-cyan-600"
+                          title="Play audio">
+                          <HiVolumeUp className="w-5 h-5" />
                         </button>
                       )}
 
-                      <div className="text-sm font-semibold text-cyan-500 uppercase tracking-wide mb-4">
-                        {t('quickReview.front')}
+                      <div className="mb-4 text-sm font-semibold tracking-wide uppercase text-cyan-500">
+                        {t('flashcardModal.front')}
                       </div>
 
                       {/* Image */}
                       {frontImageUrl && (
-                        <div className="mb-4 flex justify-center w-full">
+                        <div className="flex justify-center w-full mb-4">
                           <img
                             src={frontImageUrl}
                             alt="Front"
-                            className="max-h-40 max-w-full object-contain rounded-lg"
+                            className="object-contain max-w-full rounded-lg max-h-40"
                           />
                         </div>
                       )}
 
                       {/* Text */}
-                      <div className="text-center flex-1 flex items-center justify-center w-full px-4">
-                        <p className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white break-words">
+                      <div className="flex items-center justify-center flex-1 w-full px-4 text-center">
+                        <p className="text-2xl font-bold text-gray-900 break-words md:text-3xl dark:text-white">
                           {currentCard.frontText}
                         </p>
                       </div>
 
                       {/* Memo */}
                       {currentCard.memo && (
-                        <div className="mt-4 p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-800 w-full">
+                        <div className="w-full p-3 mt-4 border border-yellow-200 rounded-lg bg-yellow-50 dark:bg-yellow-900/20 dark:border-yellow-800">
                           <p className="text-sm text-yellow-800 dark:text-yellow-200">
-                             {currentCard.memo}
+                            {currentCard.memo}
                           </p>
                         </div>
                       )}
 
                       <div className="mt-6 text-sm text-gray-500 dark:text-gray-400">
-                        {t('quickReview.clickToFlip')}
+                        {t('flashcardModal.clickToFlip')}
                       </div>
                     </div>
                   </div>
 
                   {/* Back */}
                   <div className="absolute inset-0 backface-hidden rotate-y-180">
-                    <div className="w-full h-full bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 flex flex-col items-center justify-center border-2 border-gray-200 dark:border-gray-700">
+                    <div className="flex flex-col items-center justify-center w-full h-full p-8 bg-white border-2 border-gray-200 shadow-xl dark:bg-gray-800 rounded-2xl dark:border-gray-700">
                       {/* Audio button - top right */}
                       {backAudioUrl && (
                         <button
                           onClick={(e) => handlePlayAudio(backAudioUrl, e)}
-                          className="absolute top-4 right-4 p-3 bg-yellow-500 hover:bg-yellow-600 text-white rounded-full shadow-lg transition-colors z-10"
-                          title="Play audio"
-                        >
-                          <HiVolumeUp className="h-5 w-5" />
+                          className="absolute z-10 p-3 text-white transition-colors bg-yellow-500 rounded-full shadow-lg top-4 right-4 hover:bg-yellow-600"
+                          title="Play audio">
+                          <HiVolumeUp className="w-5 h-5" />
                         </button>
                       )}
 
-                      <div className="text-sm font-semibold text-yellow-500 uppercase tracking-wide mb-4">
-                        {t('quickReview.back')}
+                      <div className="mb-4 text-sm font-semibold tracking-wide text-yellow-500 uppercase">
+                        {t('flashcardModal.back')}
                       </div>
 
                       {/* Image */}
                       {backImageUrl && (
-                        <div className="mb-4 flex justify-center w-full">
+                        <div className="flex justify-center w-full mb-4">
                           <img
                             src={backImageUrl}
                             alt="Back"
-                            className="max-h-40 max-w-full object-contain rounded-lg"
+                            className="object-contain max-w-full rounded-lg max-h-40"
                           />
                         </div>
                       )}
 
                       {/* Text */}
-                      <div className="text-center flex-1 flex items-center justify-center w-full px-4">
-                        <p className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white break-words">
+                      <div className="flex items-center justify-center flex-1 w-full px-4 text-center">
+                        <p className="text-2xl font-bold text-gray-900 break-words md:text-3xl dark:text-white">
                           {currentCard.backText}
                         </p>
                       </div>
 
                       <div className="mt-6 text-sm text-gray-500 dark:text-gray-400">
-                        {t('quickReview.clickToFlipBack')}
+                        {t('flashcardModal.clickToFlip')}
                       </div>
                     </div>
                   </div>
@@ -318,52 +321,44 @@ function QuickReview() {
 
               {/* Actions */}
               <div className="flex justify-center gap-4">
-                <Button
-                  size="lg"
-                  color="gray"
-                  onClick={handleNext}
-                >
-                  {t('quickReview.skip')}
+                <Button size="lg" color="gray" onClick={handleNext}>
+                  {t('common:actions.skip')}
                 </Button>
                 <Button
                   size="lg"
                   className="bg-cyan-500 hover:bg-cyan-600"
                   onClick={handleNext}
-                  disabled={!isFlipped}
-                >
-                  {session.currentIndex === session.cards.length - 1 
-                    ? t('quickReview.finish') 
+                  disabled={!isFlipped}>
+                  {session.currentIndex === session.cards.length - 1
+                    ? t('common:actions.skip')
                     : t('quickReview.next')}
                 </Button>
               </div>
             </>
           ) : (
             /* Complete Screen */
-            <div className="text-center py-12">
+            <div className="py-12 text-center">
               <div className="mb-6">
-                <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+                <h2 className="mb-2 text-3xl font-bold text-gray-900 dark:text-white">
                   {t('quickReview.complete.title')}
                 </h2>
-                <p className="text-gray-600 dark:text-gray-400 text-lg">
-                  {t('quickReview.complete.message', { count: session.cards.length })}
+                <p className="text-lg text-gray-600 dark:text-gray-400">
+                  {t('quickReview.complete.message', {
+                    count: session.cards.length,
+                  })}
                 </p>
               </div>
 
               <div className="flex justify-center gap-4">
-                <Button
-                  size="lg"
-                  color="gray"
-                  onClick={handleExit}
-                >
-                  <HiArrowLeft className="mr-2 h-5 w-5" />
+                <Button size="lg" color="gray" onClick={handleExit}>
+                  <HiArrowLeft className="w-5 h-5 mr-2" />
                   {t('quickReview.complete.backToDeck')}
                 </Button>
                 <Button
                   size="lg"
                   className="bg-cyan-500 hover:bg-cyan-600"
-                  onClick={handleRestart}
-                >
-                  <HiRefresh className="mr-2 h-5 w-5" />
+                  onClick={handleRestart}>
+                  <HiRefresh className="w-5 h-5 mr-2" />
                   {t('quickReview.complete.restart')}
                 </Button>
               </div>

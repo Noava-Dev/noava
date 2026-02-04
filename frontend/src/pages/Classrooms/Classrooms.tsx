@@ -151,7 +151,7 @@ function ClassroomsPage() {
               <div className="flex-1 min-w-0">
                 <div className="space-y-2">
                   <h1 className="text-3xl font-extrabold tracking-tight text-text-title-light md:text-5xl dark:text-text-title-dark">
-                    {t('title')}
+                    {t('common:navigation.classrooms')}
                   </h1>
                   <p className="text-base text-text-body-light md:text-xl dark:text-text-body-dark">
                     {t('subtitle')}
@@ -189,7 +189,7 @@ function ClassroomsPage() {
             <div className="grid grid-cols-1 md:grid-cols-[1fr_280px] gap-4">
               <div className="space-y-2">
                 <label className="block text-sm font-semibold tracking-wide uppercase text-text-muted-light dark:text-text-muted-dark">
-                  {t('search.label')}
+                  {t('common:actions.search')}
                 </label>
                 <Searchbar
                   searchTerm={searchTerm}
@@ -198,14 +198,14 @@ function ClassroomsPage() {
                 {searchTerm && (
                   <p className="flex items-center gap-1 text-xs text-text-body-light dark:text-text-body-dark">
                     <span className="inline-block w-2 h-2 rounded-full bg-primary-500"></span>
-                    {sorted.length} {t('results.found')}
+                    {sorted.length} {t('common:search.found')}
                   </p>
                 )}
               </div>
 
               <div className="space-y-2">
                 <label className="block text-sm font-semibold tracking-wide text-gray-700 uppercase dark:text-gray-300">
-                  {t('sort.label')}
+                  {t('common:sort.label')}
                 </label>
                 <Select
                   value={sortOrder}
@@ -215,10 +215,10 @@ function ClassroomsPage() {
                     )
                   }
                   className="cursor-pointer">
-                  <option value="newest">{t('sort.newest')}</option>
-                  <option value="oldest">{t('sort.oldest')}</option>
-                  <option value="az">{t('sort.az')}</option>
-                  <option value="za">{t('sort.za')}</option>
+                  <option value="newest">{t('common:sort.newest')}</option>
+                  <option value="oldest">{t('common:sort.oldest')}</option>
+                  <option value="az">{t('common:sort.az')}</option>
+                  <option value="za">{t('common:sort.za')}</option>
                 </Select>
               </div>
             </div>
@@ -246,9 +246,9 @@ function ClassroomsPage() {
             ) : searchTerm ? (
               <EmptyState
                 title={t('empty.noResults')}
-                description={t('empty.tryAnother')}
+                description={t('common:search.otherSearchTerm')}
                 buttonOnClick={() => setSearchTerm('')}
-                clearButtonText={t('empty.clearSearch')}
+                clearButtonText={t('common:search.clearSearch')}
               />
             ) : (
               <div className="py-12 text-center md:py-20">
@@ -269,10 +269,10 @@ function ClassroomsPage() {
 
         <ConfirmModal
           show={deleteId !== null}
-          title={t('deleteModal.title')}
-          message={t('deleteModal.message')}
-          confirmLabel={t('deleteModal.yes')}
-          cancelLabel={t('deleteModal.no')}
+          title={t('common:modals.deleteModal.title')}
+          message={t('common:modals.deleteModal.message')}
+          confirmLabel={t('common:modals.deleteModal.yes')}
+          cancelLabel={t('common:actions.cancel')}
           onConfirm={confirmDelete}
           onCancel={cancelDelete}
           size="md"

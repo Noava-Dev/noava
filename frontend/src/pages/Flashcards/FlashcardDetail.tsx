@@ -288,7 +288,7 @@ function FlashcardDetail() {
               <div className="grid grid-cols-1 md:grid-cols-[1fr_280px] gap-4">
                 <div className="space-y-2">
                   <label className="block text-sm font-semibold tracking-wide uppercase text-text-muted-light dark:text-text-muted-dark">
-                    {t('search.label')}
+                    {t('common:actions.search')}
                   </label>
                   <Searchbar
                     searchTerm={searchTerm}
@@ -297,14 +297,14 @@ function FlashcardDetail() {
                   {/* {searchTerm && (
                   <p className="flex items-center gap-1 text-xs text-text-body-light dark:text-text-body-dark">
                     <span className="inline-block w-2 h-2 rounded-full bg-primary-500"></span>
-                    {sorted.length} {t('results.found')}
+                    {sorted.length} {t('common:search.found')}
                   </p>
                 )} */}
                 </div>
 
                 {/* <div className="space-y-2">
                 <label className="block text-sm font-semibold tracking-wide text-gray-700 uppercase dark:text-gray-300">
-                  {t('sort.label')}
+                  {t('common:sort.label')}
                 </label>
                 <Select
                   value={sortOrder}
@@ -314,10 +314,10 @@ function FlashcardDetail() {
                     )
                   }
                   className="cursor-pointer">
-                  <option value="newest">{t('sort.newest')}</option>
-                  <option value="oldest">{t('sort.oldest')}</option>
-                  <option value="az">{t('sort.az')}</option>
-                  <option value="za">{t('sort.za')}</option>
+                  <option value="newest">{t('common:sort.newest')}</option>
+                  <option value="oldest">{t('common:sort.oldest')}</option>
+                  <option value="az">{t('common:sort.az')}</option>
+                  <option value="za">{t('common:sort.za')}</option>
                 </Select>
               </div> */}
               </div>
@@ -390,13 +390,13 @@ function FlashcardDetail() {
                     <button
                       onClick={() => handleEditFlashcard(card)}
                       className="p-2 transition-colors rounded-lg text-text-muted-light dark:text-text-muted-dark hover:shadow-md hover:text-cyan-500 dark:hover:text-cyan-400 hover:bg-background-app-light dark:hover:bg-background-surface-dark"
-                      title={t('flashcardDetail.editCard')}>
+                      title={t('common:actions.edit')}>
                       <HiPencil className="w-5 h-5" />
                     </button>
                     <button
                       onClick={() => handleDeleteFlashcard(card.cardId)}
                       className="p-2 transition-colors rounded-lg text-text-muted-light dark:text-text-muted-dark hover:shadow-md hover:text-red-500 dark:hover:text-red-400 hover:bg-background-app-light dark:hover:bg-background-surface-dark"
-                      title={t('flashcardDetail.deleteCard')}>
+                      title={t('common:actions.delete')}>
                       <HiTrash className="w-5 h-5" />
                     </button>
                   </div>
@@ -483,18 +483,18 @@ function FlashcardDetail() {
             {/* Modal */}
             <div className="relative w-full max-w-md p-6 rounded-lg shadow-xl bg-background-app-light dark:bg-background-surface-dark">
               <h2 className="mb-3 text-xl font-bold text-text-title-light dark:text-text-title-dark">
-                {t('deleteConfirmModal.title')}
+                {t('common:modals.deleteModal.title')}
               </h2>
               <p className="mb-6 text-text-body-light dark:text-text-body-dark">
-                {t('deleteConfirmModal.message')}
+                {t('common:modals.deleteModal.message')}
               </p>
               {/* Actions */}
               <div className="flex gap-3">
                 <Button color="red" onClick={confirmDelete} className="flex-1">
-                  {t('deleteConfirmModal.confirm')}
+                  {t('common:actions.cancel')}
                 </Button>
                 <Button color="gray" onClick={cancelDelete} className="flex-1">
-                  {t('deleteConfirmModal.cancel')}
+                  {t('common:actions.cancel')}
                 </Button>
               </div>
             </div>

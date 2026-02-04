@@ -77,11 +77,11 @@ export default function JoinClassroom() {
                         {t('join.form.joining')}
                       </>
                     ) : (
-                      t('join.form.submit')
+                      t('common:actions.join')
                     )}
                   </Button>
                   <Button color="gray" onClick={() => navigate('/classrooms')}>
-                    {t('join.form.cancel')}
+                    {t('common:actions.cancel')}
                   </Button>
                 </div>
               </form>

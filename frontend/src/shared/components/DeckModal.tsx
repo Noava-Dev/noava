@@ -114,11 +114,11 @@ function DeckModal({ isOpen, onClose, onSubmit, deck }: DeckModalProps) {
   const getVisibilityHelpText = () => {
     switch (visibility) {
       case DeckVisibility.Private:
-        return t('modal.visibilityHelp.private');
+        return t('common:visibility.visibilityHelp.private');
       case DeckVisibility.Shared:
-        return t('modal.visibilityHelp.shared');
+        return t('common:visibility.visibilityHelp.shared');
       case DeckVisibility.Public:
-        return t('modal.visibilityHelp.public');
+        return t('common:visibility.visibilityHelp.public');
     }
   };
 
@@ -226,7 +226,9 @@ function DeckModal({ isOpen, onClose, onSubmit, deck }: DeckModalProps) {
 
             {/* Visibility */}
             <div className="flex flex-col gap-2">
-              <Label htmlFor="visibility">{t('modal.visibilityLabel')} *</Label>
+              <Label htmlFor="visibility">
+                {t('common:visibility.label')} *
+              </Label>
               <Select
                 id="visibility"
                 value={visibility}
@@ -235,13 +237,13 @@ function DeckModal({ isOpen, onClose, onSubmit, deck }: DeckModalProps) {
                 }
                 disabled={uploading}>
                 <option value={DeckVisibility.Private}>
-                  {t('modal.visibilityPrivate')}
+                  {t('common:visibility.private')}
                 </option>
                 <option value={DeckVisibility.Shared}>
-                  {t('modal.visibilityShared')}
+                  {t('common:visibility.shared')}
                 </option>
                 <option value={DeckVisibility.Public}>
-                  {t('modal.visibilityPublic')}
+                  {t('common:visibility.public')}
                 </option>
               </Select>
               <p className="mt-1 text-xs text-text-body-light dark:text-text-body-dark">
@@ -268,7 +270,7 @@ function DeckModal({ isOpen, onClose, onSubmit, deck }: DeckModalProps) {
                 onClick={onClose}
                 disabled={uploading}
                 type="button">
-                {t('modal.cancelButton')}
+                {t('common:actions.cancel')}
               </Button>
             </div>
           </form>

@@ -63,7 +63,7 @@ function ClassroomCard({
                   <DropdownItem
                     icon={HiPencil}
                     onClick={() => onEdit?.(classroom)}>
-                    {t('card.edit')}
+                    {t('common:actions.edit')}
                   </DropdownItem>
                 )}
                 {classroom.permissions.canEdit && (
@@ -80,7 +80,7 @@ function ClassroomCard({
                     onClick={() => onDelete?.(classroom.id)}
                     className="text-red-600 dark:text-red-600 hover:text-red-600 dark:hover:text-red-600 hover:border-red-600"
                     color="red">
-                    {t('card.delete')}
+                    {t('common:actions.delete')}
                   </DropdownItem>
                 )}
               </Dropdown>
@@ -96,7 +96,7 @@ function ClassroomCard({
 
         <div className="mt-auto">
           <Button size="sm" onClick={handleShow} className="w-full">
-            {t('card.show')}
+            {t('common:actions.show')}
           </Button>
         </div>
       </div>

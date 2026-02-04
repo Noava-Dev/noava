@@ -33,18 +33,7 @@
       "answer": "Yes, we offer a 14-day free trial with full access to all features. No credit card required."
     }
   },
-  "title": "Frequently Asked Questions",
   "description": "Find answers to frequently asked questions about Noava",
-  "search": {
-    "placeholder": "Search FAQs..."
-  },
-  "results": {
-    "showing": "Showing",
-    "of": "of",
-    "results": "results"
-  },
-  "loading": "Loading FAQs...",
-  "error": "Could not load FAQs. Please try again later.",
   "empty": {
     "title": "No results found",
     "message": "We couldn't find any FAQs matching",

@@ -86,10 +86,10 @@ export default function EditMemberModal({
             disabled={!canEdit || saving}>
             {saving
               ? t('members.saving', 'Saving...')
-              : t('modal.updateButton', 'Update')}
+              : t('common:actions.update', 'Update')}
           </Button>
           <Button color="gray" onClick={onClose} size="sm">
-            {t('modal.cancelButton', 'Cancel')}
+            {t('common:actions.cancel')}
           </Button>
         </div>
       </ModalFooter>

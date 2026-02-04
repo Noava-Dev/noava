@@ -35,11 +35,11 @@ function Home() {
         <div className="flex justify-center">
           {isSignedIn ? (
             <Button onClick={() => navigate('/dashboard')}>
-              {t('hero.cta')}
+              {t('common:actions.getStarted')}
             </Button>
           ) : (
             <SignUpButton>
-              <Button>{t('hero.cta')}</Button>
+              <Button>{t('common:actions.getStarted')}</Button>
             </SignUpButton>
           )}
         </div>

@@ -552,7 +552,7 @@ function FlashcardModal({
                 onClick={onClose}
                 disabled={uploading}
                 type="button">
-                {t('flashcardModal.cancel')}
+                {t('common:actions.cancel')}
               </Button>
             </div>
           </form>

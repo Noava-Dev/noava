@@ -43,7 +43,7 @@ function SettingsPage() {
           <PageHeader>
             <div className="flex flex-col gap-2 p-3 text-center">
               <h1 className="text-4xl font-bold text-text-title-light dark:text-text-title-dark">
-                {t('header.title')}
+                {t('common:navigation.settings')}
               </h1>
               <p className="text-text-body-light dark:text-text-body-dark">
                 {t('header.subtitle')}

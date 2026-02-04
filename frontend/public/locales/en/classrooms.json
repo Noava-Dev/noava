@@ -1,20 +1,9 @@
 {
-  "title": "Classrooms",
   "subtitle": "Manage and join your classrooms.",
   "createButton": "Create Classroom",
-  "search": { "label": "Search" },
-  "sort": {
-    "label": "Sort by",
-    "newest": "Newest",
-    "oldest": "Oldest",
-    "az": "Alphabetical (A-Z)",
-    "za": "Alphabetical (Z-A)"
-  },
   "results": { "found": "results found" },
   "empty": {
     "noResults": "No classrooms found",
-    "tryAnother": "Try a different search term",
-    "clearSearch": "Clear search",
     "message": "You have no classrooms yet."
   },
   "modal": {
@@ -29,7 +18,6 @@
   "members": {
     "title": "Members",
     "subtitle": "Manage classroom members",
-    "invite": "Invite",
     "inviteTitle": "Invite user",
     "inviteHelp": "Enter the email of the user you want to invite to this classroom.",
     "invitePlaceholder": "user@example.com",
@@ -69,36 +57,18 @@
     "requestCodeSuccess": "New code requested",
     "requestCodeError": "Failed to request new code"
   },
-  "deleteModal": {
-    "title": "Delete Classroom",
-    "message": "Are you sure you want to delete this classroom? This action cannot be undone.",
-    "yes": "Yes",
-    "no": "No"
-  },
   "card": {
-    "edit": "Edit",
-    "regenerateCode": "Request new code",
-    "delete": "Delete",
-    "show": "Show"
+    "regenerateCode": "Request new code"
   },
   "requestCodeModal": {
     "title": "Request new classroom code",
-    "message": "Are you sure you want to request a new join code? This will invalidate the previous code.",
-    "yes": "Request",
-    "no": "Cancel"
+    "message": "Are you sure you want to request a new join code? This will invalidate the previous code."
   },
   "detail": {
     "description": "Description",
     "info": "Information",
     "membersPlaceholder": "Class members and settings will appear here.",
-    "joinCode": "Join code",
-    "edit": "Edit",
-    "delete": "Delete",
-    "back": "Back"
-  },
-  "actions": {
-    "cancel": "Cancel",
-    "invite": "Invite"
+    "joinCode": "Join code"
   },
   "joinButton": "Join Classroom",
   "join": {
@@ -108,8 +78,6 @@
       "label": "Join code",
       "placeholder": "e.g. ABC123",
       "empty": "Please enter a join code",
-      "submit": "Join",
-      "cancel": "Cancel",
       "joining": "Joining..."
     },
     "success": "You were added to the classroom",

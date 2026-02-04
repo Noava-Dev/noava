@@ -84,14 +84,14 @@ function DeckCard({ deck, onEdit, onDelete }: DeckCardProps) {
               </button>
             )}>
             <DropdownItem icon={HiPencil} onClick={() => onEdit?.(deck)}>
-              {t('card.edit')}
+              {t('common:actions.edit')}
             </DropdownItem>
             <DropdownDivider />
             <DropdownItem
               icon={HiTrash}
               onClick={() => onDelete?.(deck.deckId)}
               className="text-red-600 dark:text-red-400">
-              {t('card.delete')}
+              {t('common:actions.delete')}
             </DropdownItem>
           </Dropdown>
         </div>

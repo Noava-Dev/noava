@@ -43,7 +43,7 @@ function ClassroomDetailPage() {
           <PageHeader>
             <div className="pt-4 md:pt-8">
               <h1 className="text-3xl font-extrabold tracking-tight text-text-title-light md:text-5xl dark:text-text-title-dark">
-                {t('title')}
+                {t('common:navigation.classrooms')}
               </h1>
             </div>
           </PageHeader>
@@ -104,7 +104,7 @@ function ClassroomDetailPage() {
         </PageHeader>
         <div className="flex items-center gap-3 mt-6">
           <Button color="gray" onClick={() => navigate('/classrooms')}>
-            {t('detail.back')}
+            {t('common:actions.back')}
           </Button>
         </div>
       </div>

@@ -95,10 +95,12 @@ function ClassroomModal({
 
             <div className="flex gap-3 pt-4">
               <Button type="submit" className="flex-1">
-                {classroom ? t('modal.updateButton') : t('modal.createButton')}
+                {classroom
+                  ? t('common:actions.update')
+                  : t('common:actions.create')}
               </Button>
               <Button color="gray" onClick={onClose} type="button">
-                {t('modal.cancelButton')}
+                {t('common:actions.cancel')}
               </Button>
             </div>
           </form>

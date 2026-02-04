@@ -110,7 +110,7 @@ function Dashboard() {
               <div className="flex flex-col gap-4 md:gap-6">
                 <div className="space-y-2">
                   <h1 className="text-3xl font-extrabold tracking-tight text-text-title-light md:text-5xl dark:text-text-title-dark">
-                    {t('title')}
+                    {t('common:navigation.dashboard')}
                   </h1>
                   <p className="text-base text-text-body-light md:text-xl dark:text-text-body-dark">
                     {t('subtitle')}
@@ -163,7 +163,7 @@ function Dashboard() {
                       className="p-0 text-sm border-0 outline-none text-text-muted-light dark:text-text-muted-dark focus:outline-none active:outline-none focus:ring-0 active:ring-0 hover:text-text-body-light dark:hover:text-text-body-dark"
                       onClick={() => navigate('/decks')}
                       outline>
-                      {t('decks.viewAll')}
+                      {t('common:actions.viewAll')}
                       <HiChevronRight className="size-4" />
                     </Button>
                   </div>
@@ -204,21 +204,21 @@ function Dashboard() {
 
           {/* Delete Confirmation Modal */}
           <Modal show={deleteDeckId !== null} onClose={cancelDelete} size="md">
-            <ModalHeader>{t('deleteModal.title')}</ModalHeader>
+            <ModalHeader>{t('common:modals.deleteModal.title')}</ModalHeader>
 
             <ModalBody>
               <p className="text-text-body-light dark:text-text-body-dark">
-                {t('deleteModal.message')}
+                {t('common:modals.deleteModal.message')}
               </p>
             </ModalBody>
 
             <ModalFooter>
               <div className="flex justify-end w-full gap-3">
                 <Button color="gray" onClick={cancelDelete} size="sm">
-                  {t('deleteModal.no')}
+                  {t('common:actions.cancel')}
                 </Button>
                 <Button color="red" onClick={confirmDelete} size="sm">
-                  {t('deleteModal.yes')}
+                  {t('common:modals.deleteModal.yes')}
                 </Button>
               </div>
             </ModalFooter>

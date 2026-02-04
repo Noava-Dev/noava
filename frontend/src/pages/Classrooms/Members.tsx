@@ -173,7 +173,7 @@ export default function MembersPage() {
                     size="sm"
                     onClick={() => setShowInvite(true)}
                     className="inline-flex items-center gap-2">
-                    {t('members.invite', 'Invite')}
+                    {t('common:actions.invite', 'Invite')}
                   </Button>
                 </div>
               )}

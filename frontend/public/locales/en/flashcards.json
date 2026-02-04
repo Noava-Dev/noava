@@ -23,13 +23,10 @@
     "uploading": "Uploading...",
     "updateButton": "Update Card",
     "createButton": "Create Card",
-    "cancel": "Cancel",
     "uploadError": "Failed to upload media. Please try again."
   },
   "flashcardDetail": {
     "backToDeck": "Back to Deck",
-    "editCard": "Edit Card",
-    "deleteCard": "Delete Card",
     "confirmDelete": "Are you sure you want to delete this flashcard?",
     "cardDetails": "Card Details",
     "frontSide": "Front Side",
@@ -42,7 +39,6 @@
     "lastReviewed": "Last Reviewed",
     "nextReview": "Next Review",
     "never": "Never",
-    "loading": "Loading...",
     "notFound": "Flashcard not found",
     "error": "Error loading flashcard",
     "mastered": "Mastered",
@@ -53,25 +49,12 @@
     "shuffle": "Shuffle",
     "quickReview": "Quick Review"
   },
-  "deleteConfirmModal": {
-    "title": "Delete Flashcard",
-    "message": "Are you sure you want to delete this flashcard? This action cannot be undone.",
-    "confirm": "Delete",
-    "cancel": "Cancel"
-  },
   "quickReview": {
     "title": "Quick Review",
     "mode": "Quick Review Mode",
-    "loading": "Loading review session...",
     "noCards": "No cards available for review",
     "progress": "Progress",
-    "front": "Front",
-    "back": "Back",
-    "clickToFlip": "Click to flip",
-    "clickToFlipBack": "Click to flip back",
-    "skip": "Skip",
     "next": "Next Card",
-    "finish": "Finish",
     "complete": {
       "title": "Session Complete!",
       "message": "You reviewed {{count}} cards",

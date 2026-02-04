@@ -16,8 +16,8 @@ const RequestCodeModal: React.FC<Props> = ({ show, onConfirm, onCancel }) => {
       show={show}
       title={t('requestCodeModal.title')}
       message={t('requestCodeModal.message')}
-      confirmLabel={t('requestCodeModal.yes')}
-      cancelLabel={t('requestCodeModal.no')}
+      confirmLabel={t('common:actions.request')}
+      cancelLabel={t('common:actions.cancel')}
       confirmColor="primary"
       onConfirm={onConfirm}
       onCancel={onCancel}

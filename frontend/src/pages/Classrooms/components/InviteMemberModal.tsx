@@ -1,5 +1,12 @@
 import React, { useState } from 'react';
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button, TextInput } from 'flowbite-react';
+import {
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Button,
+  TextInput,
+} from 'flowbite-react';
 import { useTranslation } from 'react-i18next';
 
 interface InviteMemberModalProps {
@@ -9,7 +16,12 @@ interface InviteMemberModalProps {
   canInvite?: boolean;
 }
 
-const InviteMemberModal: React.FC<InviteMemberModalProps> = ({ show, onClose, onInvite, canInvite = true }) => {
+const InviteMemberModal: React.FC<InviteMemberModalProps> = ({
+  show,
+  onClose,
+  onInvite,
+  canInvite = true,
+}) => {
   const { t } = useTranslation('classrooms');
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
@@ -31,7 +43,9 @@ const InviteMemberModal: React.FC<InviteMemberModalProps> = ({ show, onClose, on
       <ModalHeader>{t('members.inviteTitle')}</ModalHeader>
       <ModalBody>
         <div className="space-y-4">
-          <p className="text-gray-600 dark:text-gray-400">{t('members.inviteHelp')}</p>
+          <p className="text-gray-600 dark:text-gray-400">
+            {t('members.inviteHelp')}
+          </p>
           <TextInput
             id="invite-email"
             placeholder={t('members.invitePlaceholder')}
@@ -41,9 +55,16 @@ const InviteMemberModal: React.FC<InviteMemberModalProps> = ({ show, onClose, on
         </div>
       </ModalBody>
       <ModalFooter>
-        <div className="flex justify-end gap-3 w-full">
-          <Button color="gray" onClick={onClose} size="sm">{t('actions.cancel')}</Button>
-          <Button onClick={handleInvite} disabled={!canInvite || loading || !email.trim()} size="sm">{t('actions.invite')}</Button>
+        <div className="flex justify-end w-full gap-3">
+          <Button color="gray" onClick={onClose} size="sm">
+            {t('common:actions.cancel')}
+          </Button>
+          <Button
+            onClick={handleInvite}
+            disabled={!canInvite || loading || !email.trim()}
+            size="sm">
+            {t('common:actions.invite')}
+          </Button>
         </div>
       </ModalFooter>
     </Modal>

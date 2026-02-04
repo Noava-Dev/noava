@@ -1,5 +1,4 @@
 {
-  "title": "Dashboard",
   "subtitle": "Your personal Noava dashboard",
   "yourDecks": "Your Decks",
   "statcard": {
@@ -21,8 +20,7 @@
     }
   },
   "decks": {
-    "empty": "No decks yet",
-    "viewAll": "View all"
+    "empty": "No decks yet"
   },
   "toast": {
     "loadError": "Failed to load decks",
@@ -30,11 +28,5 @@
     "updateError": "Failed to update deck",
     "deleteSuccess": "Deck deleted successfully",
     "deleteError": "Failed to delete deck"
-  },
-  "deleteModal": {
-    "title": "Confirm Deletion",
-    "message": "Are you sure you want to delete this deck? This action cannot be undone.",
-    "yes": "Yes, delete",
-    "no": "Cancel"
   }
 }

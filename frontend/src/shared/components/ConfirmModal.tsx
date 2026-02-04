@@ -35,8 +35,8 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
 }) => {
   const { t } = useTranslation();
 
-  const confirmText = confirmLabel ?? t('actions.confirm');
-  const cancelText = cancelLabel ?? t('actions.cancel');
+  const confirmText = confirmLabel ?? t('common:actions.confirm');
+  const cancelText = cancelLabel ?? t('common:actions.cancel');
 
   return (
     <Modal show={show} onClose={onCancel} size={size}>

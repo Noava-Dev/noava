@@ -30,7 +30,7 @@ function FAQPage() {
         setAllFaqs(data);
         setError(null);
       } catch (err) {
-        setError(t('error'));
+        setError(t('common:app.error'));
         console.error('Error fetching FAQs:', err);
       } finally {
         setLoading(false);
@@ -70,7 +70,7 @@ function FAQPage() {
         <PageHeader>
           <div className="text-center">
             <h1 className="mb-4 text-4xl font-bold text-text-title-light md:text-5xl dark:text-text-title-dark">
-              {t('title')}
+              {t('common:navigation.faqFull')}
             </h1>
             <p className="text-lg text-text-body-light dark:text-text-body-dark">
               {t('description')}
@@ -97,7 +97,7 @@ function FAQPage() {
         <PageHeader>
           <div className="text-center">
             <h1 className="mb-4 text-4xl font-bold text-text-title-light md:text-5xl dark:text-text-title-dark">
-              {t('title')}
+              {t('common:navigation.faqFull')}
             </h1>
             <p className="text-lg text-text-body-light dark:text-text-body-dark">
               {t('description')}
@@ -131,7 +131,7 @@ function FAQPage() {
       <PageHeader>
         <div className="mb-8 text-center">
           <h1 className="mb-6 text-4xl font-bold text-text-title-light md:text-5xl dark:text-text-title-dark">
-            {t('title')}
+            {t('common:navigation.faqFull')}
           </h1>
           <p className="text-lg text-text-body-light dark:text-text-body-dark">
             {t('description')}
@@ -147,11 +147,11 @@ function FAQPage() {
         {searchTerm && !loading && (
           <div className="text-center">
             <p className="inline-block px-4 py-2 text-sm rounded-full text-text-body-light dark:text-text-body-dark bg-primary-100 dark:bg-primary-900/40">
-              {t('results.showing')}{' '}
+              {t('common:search.showing')}{' '}
               <span className="font-semibold">{filteredFaqs.length}</span>{' '}
-              {t('results.of')}{' '}
+              {t('common:search.of')}{' '}
               <span className="font-semibold">{allFaqs.length}</span>{' '}
-              {t('results.results')}
+              {t('common:search.results')}
             </p>
           </div>
         )}
@@ -165,7 +165,7 @@ function FAQPage() {
             <div className="py-12 text-center">
               <div className="inline-block w-12 h-12 mb-4 border-b-4 rounded-full animate-spin border-primary-500"></div>
               <p className="text-lg text-text-body-light dark:text-text-body-dark">
-                {t('loading')}
+                {t('common:app.loading')}
               </p>
             </div>
           )}
@@ -235,7 +235,7 @@ function FAQPage() {
                   <button
                     onClick={() => setSearchTerm('')}
                     className="bg-primary-500 text-white px-6 py-3 rounded-lg hover:bg-primary-600 transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
-                    {t('empty.cta')}
+                    {t('common:search.clearSearch')}
                   </button>
                 </div>
               )}

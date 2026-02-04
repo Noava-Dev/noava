@@ -134,7 +134,7 @@ function DecksPage() {
             <div className="flex flex-col gap-4 md:gap-6">
               <div className="space-y-2">
                 <h1 className="text-3xl font-extrabold tracking-tight text-text-title-light md:text-5xl dark:text-text-title-dark">
-                  {t('title')}
+                  {t('common:navigation.decks')}
                 </h1>
                 <p className="text-base text-text-body-light md:text-xl dark:text-text-body-dark">
                   {t('subtitle')}
@@ -161,7 +161,7 @@ function DecksPage() {
             <div className="grid grid-cols-1 md:grid-cols-[1fr_280px] gap-4">
               <div className="space-y-2">
                 <label className="block text-sm font-semibold tracking-wide uppercase text-text-muted-light dark:text-text-muted-dark">
-                  {t('search.label')}
+                  {t('common:actions.search')}
                 </label>
                 <Searchbar
                   searchTerm={searchTerm}
@@ -170,14 +170,14 @@ function DecksPage() {
                 {searchTerm && (
                   <p className="flex items-center gap-1 text-xs text-text-muted-light dark:text-text-muted-dark">
                     <span className="inline-block w-2 h-2 rounded-full bg-primary-500"></span>
-                    {sortedDecks.length} {t('results.found')}
+                    {sortedDecks.length} {t('common:search.found')}
                   </p>
                 )}
               </div>
 
               <div className="space-y-2">
                 <label className="block text-sm font-semibold tracking-wide uppercase text-text-muted-light dark:text-text-muted-dark">
-                  {t('sort.label')}
+                  {t('common:sort.label')}
                 </label>
                 <Select
                   value={sortOrder}
@@ -185,8 +185,8 @@ function DecksPage() {
                     setSortOrder(e.target.value as 'newest' | 'oldest')
                   }
                   className="cursor-pointer">
-                  <option value="newest">{t('sort.newest')}</option>
-                  <option value="oldest">{t('sort.oldest')}</option>
+                  <option value="newest">{t('common:sort.newest')}</option>
+                  <option value="oldest">{t('common:sort.oldest')}</option>
                 </Select>
               </div>
             </div>
@@ -209,9 +209,9 @@ function DecksPage() {
             ) : searchTerm ? (
               <EmptyState
                 title={t('empty.noResults')}
-                description={t('empty.otherSearchTerm')}
+                description={t('common:search.otherSearchTerm')}
                 buttonOnClick={() => setSearchTerm('')}
-                clearButtonText={t('empty.clearSearch')}
+                clearButtonText={t('common:search.clearSearch')}
               />
             ) : (
               <div className="py-12 text-center md:py-20">
@@ -232,21 +232,21 @@ function DecksPage() {
 
         {/* Delete Confirmation Modal */}
         <Modal show={deleteDeckId !== null} onClose={cancelDelete} size="md">
-          <ModalHeader>{t('deleteModal.title')}</ModalHeader>
+          <ModalHeader>{t('common:modals.deleteModal.title')}</ModalHeader>
 
           <ModalBody>
             <p className="text-text-body-light dark:text-text-muted-dark">
-              {t('deleteModal.message')}
+              {t('common:modals.deleteModal.message')}
             </p>
           </ModalBody>
 
           <ModalFooter>
             <div className="flex justify-end w-full gap-3">
               <Button color="gray" onClick={cancelDelete} size="sm">
-                {t('deleteModal.no')}
+                {t('common:actions.cancel')}
               </Button>
               <Button color="red" onClick={confirmDelete} size="sm">
-                {t('deleteModal.yes')}
+                {t('common:modals.deleteModal.yes')}
               </Button>
             </div>
           </ModalFooter>
