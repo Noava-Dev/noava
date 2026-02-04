@@ -27,6 +27,8 @@ import type {
 import Searchbar from '../../shared/components/Searchbar';
 import { useAzureBlobService } from '../../services/AzureBlobService';
 import { ManageOwnersModal } from '../../shared/components/ManageOwnersModal';
+import BackButton from '../../shared/components/navigation/BackButton';
+import PageHeader from '../../shared/components/PageHeader';
 
 interface FlashcardWithImages extends Flashcard {
   frontImageUrl?: string | null;
@@ -182,16 +184,16 @@ function FlashcardDetail() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen bg-white dark:bg-gray-900">
-        <main className="ml-0 md:ml-64 flex-1 w-full">
-          <div className="container mx-auto px-4 py-8 max-w-6xl">
+      <div className="flex min-h-screen bg-background-app-light dark:bg-background-app-dark">
+        <main className="flex-1 w-full ml-0 md:ml-64">
+          <div className="container max-w-6xl px-4 py-8 mx-auto">
             <div className="animate-pulse">
-              <div className="h-12 bg-gray-200 dark:bg-gray-800 rounded w-96 mb-8"></div>
+              <div className="h-12 mb-8 rounded bg-background-surface-light dark:bg-background-surface-dark w-96"></div>
               <div className="space-y-4">
                 {[1, 2, 3].map((i) => (
                   <div
                     key={i}
-                    className="h-32 bg-gray-200 dark:bg-gray-800 rounded"></div>
+                    className="h-32 rounded bg-background-surface-light dark:bg-background-surface-dark"></div>
                 ))}
               </div>
             </div>
@@ -202,18 +204,8 @@ function FlashcardDetail() {
   }
 
   if (!deck) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-white dark:bg-gray-900">
-        <div className="text-center">
-          <p className="text-xl text-gray-600 dark:text-gray-400 mb-4">
-            {t('flashcardDetail.notFound')}
-          </p>
-          <Button onClick={() => navigate('/decks')}>
-            {t('flashcardDetail.backToDeck')}
-          </Button>
-        </div>
-      </div>
-    );
+    navigate('/not-found', { replace: true });
+    return;
   }
 
   // Filter flashcards based on search term
@@ -230,215 +222,239 @@ function FlashcardDetail() {
   const newCards = totalCards;
 
   return (
-    <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
-      <div className="ml-0 flex-1 w-full">
-        <div className="container mx-auto px-4 py-6 md:py-8 max-w-6xl">
-          {/* Back Button */}
-          <button
-            onClick={() => navigate('/decks')}
-            className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white mb-6 transition-colors">
-            <HiArrowLeft className="h-5 w-5" />
-            <span>{t('flashcardDetail.backToDeck')}</span>
-          </button>
-
-          {/* Header */}
-          <div className="mb-8">
-            <div className="flex items-center gap-3 mb-2">
-              <span className="text-xs font-bold text-cyan-500 dark:text-cyan-400 uppercase tracking-wider">
+    <div className="flex min-h-screen bg-background-app-light dark:bg-background-app-dark">
+      <div className="flex-1 w-full ml-0">
+        <PageHeader>
+          <div className="flex flex-col gap-4 md:gap-6">
+            {/* Back Button */}
+            <BackButton text={t('flashcardDetail.backToDeck')} href="/decks" />
+            <div className="space-y-2">
+              <span className="text-xs font-bold tracking-wider uppercase text-cyan-500 dark:text-cyan-400">
                 {deck.language}
               </span>
+              <h1 className="text-3xl font-extrabold tracking-tight text-text-title-light md:text-5xl dark:text-text-title-dark">
+                {deck.title}
+              </h1>
+              {deck.description && (
+                <p className="text-base text-text-body-light md:text-xl dark:text-text-body-dark">
+                  {deck.description}
+                </p>
+              )}
+              {flashcards.length > 0 && !searchTerm && (
+                <p className="text-sm text-text-muted-light dark:text-text-muted-dark">
+                  {flashcards.length}
+                  {flashcards.length === 1 ? ' card' : ' cards'}
+                </p>
+              )}
             </div>
-            <h1 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
-              {deck.title}
-            </h1>
-            {deck.description && (
-              <p className="text-gray-600 dark:text-gray-400 text-lg mb-6">
-                {deck.description}
-              </p>
-            )}
 
             {/* Action Buttons */}
-            <div className="flex flex-wrap gap-3 mb-8">
-              <Button
-                size="lg"
-                className="bg-cyan-500 hover:bg-cyan-600"
-                disabled={flashcards.length === 0}
-                onClick={() => navigate(`/decks/${deckId}/review`)}>
-                <HiPlay className="w-5 h-5 mr-2" />
-                {t('flashcardDetail.quickReview')}
-              </Button>
-              <Button
-                size="lg"
-                className="bg-cyan-500 hover:bg-cyan-600"
-                disabled={totalCards === 0}>
-                <HiPlay className="w-5 h-5 mr-2" />
-                {t('flashcardDetail.studyNow')}
-              </Button>
-              <Button
-                size="lg"
-                color="dark"
-                className="bg-gray-800 hover:bg-gray-700 border border-gray-700"
-                disabled={totalCards === 0}>
-                <HiRefresh className="w-5 h-5 mr-2" />
-                {t('flashcardDetail.shuffle')}
-              </Button>
-              <Button onClick={() => setManageOwnersOpened(true)}>
-                <HiUserGroup className="w-5 h-5 mr-2" />
-                {t('ownership.manageAccess')}
-              </Button>
-              <Button
-                size="lg"
-                color="dark"
-                className="bg-gray-800 hover:bg-gray-700 border border-gray-700">
-                <HiCog className="w-5 h-5" />
-              </Button>
+            <div className="flex justify-between mb-8">
+              <div className="flex gap-3">
+                <Button
+                  size="lg"
+                  onClick={() => {
+                    setSelectedFlashcard(undefined);
+                    setIsModalOpen(true);
+                  }}>
+                  <HiPlus className="mr-2 size-5" />
+                  {t('flashcardDetail.addCard')}
+                </Button>
+                <Button size="lg" disabled={totalCards === 0}>
+                  <HiPlay className="mr-2 size-5" />
+                  {t('flashcardDetail.studyNow')}
+                </Button>
+                <Button
+                  size="lg"
+                  disabled={flashcards.length === 0}
+                  onClick={() => navigate(`/decks/${deckId}/review`)}>
+                  <HiPlay className="mr-2 size-5" />
+                  {t('flashcardDetail.quickReview')}
+                </Button>
+              </div>
+              <div className="flex gap-3">
+                <Button
+                  size="lg"
+                  className="bg-gradient-to-r from-secondary-600 to-secondary-700 hover:shadow-sm hover:border-border"
+                  onClick={() => setManageOwnersOpened(true)}>
+                  <HiUserGroup className="mr-2 size-5" />
+                  {t('decks:ownership.manageAccess')}
+                </Button>
+              </div>
             </div>
 
+            {/* Search */}
+            <div className="p-4 border shadow-sm border-border bg-background-app-light dark:bg-background-surface-dark rounded-2xl md:p-6 dark:border-border-dark">
+              <div className="grid grid-cols-1 md:grid-cols-[1fr_280px] gap-4">
+                <div className="space-y-2">
+                  <label className="block text-sm font-semibold tracking-wide uppercase text-text-muted-light dark:text-text-muted-dark">
+                    {t('search.label')}
+                  </label>
+                  <Searchbar
+                    searchTerm={searchTerm}
+                    setSearchTerm={setSearchTerm}
+                  />
+                  {/* {searchTerm && (
+                  <p className="flex items-center gap-1 text-xs text-text-body-light dark:text-text-body-dark">
+                    <span className="inline-block w-2 h-2 rounded-full bg-primary-500"></span>
+                    {sorted.length} {t('results.found')}
+                  </p>
+                )} */}
+                </div>
+
+                {/* <div className="space-y-2">
+                <label className="block text-sm font-semibold tracking-wide text-gray-700 uppercase dark:text-gray-300">
+                  {t('sort.label')}
+                </label>
+                <Select
+                  value={sortOrder}
+                  onChange={(e) =>
+                    setSortOrder(
+                      e.target.value as 'newest' | 'oldest' | 'az' | 'za'
+                    )
+                  }
+                  className="cursor-pointer">
+                  <option value="newest">{t('sort.newest')}</option>
+                  <option value="oldest">{t('sort.oldest')}</option>
+                  <option value="az">{t('sort.az')}</option>
+                  <option value="za">{t('sort.za')}</option>
+                </Select>
+              </div> */}
+              </div>
+            </div>
+          </div>
+        </PageHeader>
+        <div className="container max-w-6xl px-4 py-6 mx-auto md:py-8">
+          {/* Header */}
+          <div className="mb-8">
             {/* Stats */}
             <div className="grid grid-cols-4 gap-4 mb-8">
               <div className="text-center">
-                <div className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-1">
+                <div className="mb-1 text-3xl font-bold text-text-title-light md:text-4xl dark:text-text-title-dark">
                   {totalCards}
                 </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">
+                <div className="text-sm text-text-muted-light dark:text-text-muted-dark">
                   {t('flashcardDetail.totalReviews')}
                 </div>
               </div>
               <div className="text-center">
-                <div className="text-3xl md:text-4xl font-bold text-cyan-500 dark:text-cyan-400 mb-1">
+                <div className="mb-1 text-3xl font-bold md:text-4xl text-cyan-500 dark:text-cyan-400">
                   {masteredCards}
                 </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">
+                <div className="text-sm text-text-muted-light dark:text-text-muted-dark">
                   {t('flashcardDetail.mastered')}
                 </div>
               </div>
               <div className="text-center">
-                <div className="text-3xl md:text-4xl font-bold text-yellow-500 dark:text-yellow-400 mb-1">
+                <div className="mb-1 text-3xl font-bold text-yellow-500 md:text-4xl dark:text-yellow-400">
                   {learningCards}
                 </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">
+                <div className="text-sm text-text-muted-light dark:text-text-muted-dark">
                   {t('flashcardDetail.learning')}
                 </div>
               </div>
               <div className="text-center">
-                <div className="text-3xl md:text-4xl font-bold text-blue-500 dark:text-blue-400 mb-1">
+                <div className="mb-1 text-3xl font-bold text-blue-500 md:text-4xl dark:text-blue-400">
                   {newCards}
                 </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">
+                <div className="text-sm text-text-muted-light dark:text-text-muted-dark">
                   {t('flashcardDetail.new')}
                 </div>
               </div>
-            </div>
-
-            {/* Search & Add Card */}
-            <div className="flex flex-col md:flex-row gap-3">
-              <div className="flex-1">
-                <Searchbar
-                  searchTerm={searchTerm}
-                  setSearchTerm={setSearchTerm}
-                />
-              </div>
-              <Button
-                size="lg"
-                className="bg-cyan-500 hover:bg-cyan-600 whitespace-nowrap"
-                onClick={() => {
-                  setSelectedFlashcard(undefined);
-                  setIsModalOpen(true);
-                }}>
-                <HiPlus className="mr-2 h-5 w-5" />
-                {t('flashcardDetail.addCard')}
-              </Button>
             </div>
           </div>
 
           {/* Flashcards List or Empty State */}
           {filteredFlashcards.length === 0 ? (
-            <div className="text-center py-20">
+            <div className="py-20 text-center">
               <div className="mb-6">
-                <HiDocumentText className="w-24 h-24 text-gray-400 dark:text-gray-600 mx-auto" />
+                <HiDocumentText className="mx-auto size-24 text-text-muted-light dark:text-text-muted-dark" />
               </div>
-              <p className="text-gray-700 dark:text-gray-400 text-xl font-semibold mb-3">
+              <p className="mb-3 text-xl font-semibold text-text-body-light dark:text-text-body-dark">
                 {searchTerm ? 'No flashcards found' : 'No flashcards yet'}
               </p>
-              <p className="text-gray-600 dark:text-gray-500 mb-6">
+              <p className="mb-6 text-text-muted-light dark:text-text-muted-dark">
                 {searchTerm
                   ? 'Try adjusting your search'
                   : 'Start learning by creating your first flashcard!'}
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 b">
               {filteredFlashcards.map((card) => (
                 <div
                   key={card.cardId}
-                  className="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow border border-gray-200 dark:border-gray-700 relative overflow-hidden">
+                  className="relative overflow-hidden transition-shadow border rounded-lg shadow-md bg-background-app-light border-border dark:bg-background-surface-dark hover:shadow-lg dark:border-border-dark">
                   {/* Action buttons */}
-                  <div className="absolute top-4 right-4 flex gap-2 z-10">
+                  <div className="absolute z-10 flex gap-2 top-4 right-4">
                     <button
                       onClick={() => handleEditFlashcard(card)}
-                      className="p-2 text-gray-400 hover:text-cyan-500 dark:hover:text-cyan-400 hover:bg-white dark:hover:bg-gray-700 rounded-lg transition-colors shadow-sm"
+                      className="p-2 transition-colors rounded-lg text-text-muted-light dark:text-text-muted-dark hover:shadow-md hover:text-cyan-500 dark:hover:text-cyan-400 hover:bg-background-app-light dark:hover:bg-background-surface-dark"
                       title={t('flashcardDetail.editCard')}>
-                      <HiPencil className="h-5 w-5" />
+                      <HiPencil className="w-5 h-5" />
                     </button>
                     <button
                       onClick={() => handleDeleteFlashcard(card.cardId)}
-                      className="p-2 text-gray-400 hover:text-red-500 dark:hover:text-red-400 hover:bg-white dark:hover:bg-gray-700 rounded-lg transition-colors shadow-sm"
+                      className="p-2 transition-colors rounded-lg text-text-muted-light dark:text-text-muted-dark hover:shadow-md hover:text-red-500 dark:hover:text-red-400 hover:bg-background-app-light dark:hover:bg-background-surface-dark"
                       title={t('flashcardDetail.deleteCard')}>
-                      <HiTrash className="h-5 w-5" />
+                      <HiTrash className="w-5 h-5" />
                     </button>
                   </div>
 
                   {/* Front Side */}
-                  <div className="p-6">
-                    {/* Front Image */}
-                    {card.frontImageUrl && (
-                      <div className="mb-4 flex justify-center bg-gray-100 dark:bg-gray-700 rounded-lg p-2">
-                        <img
-                          src={card.frontImageUrl}
-                          alt="Front"
-                          className="max-h-40 max-w-full object-contain rounded-lg"
-                        />
-                      </div>
-                    )}
-                    <div className="mb-4 pr-12">
-                      <div className="text-xs text-cyan-500 dark:text-cyan-400 font-semibold mb-2 uppercase tracking-wide">
+                  <div className="p-6 mt-2">
+                    <div className="flex flex-col gap-2 mb-4">
+                      <div className="mb-2 text-xs font-semibold tracking-wide uppercase text-cyan-500 dark:text-cyan-400">
                         {t('flashcardDetail.frontSide')}
                       </div>
-                      <p className="text-gray-900 dark:text-white text-lg font-semibold line-clamp-2">
+
+                      {/* Front Image */}
+                      {card.frontImageUrl && (
+                        <div className="flex justify-center p-2 rounded-lg bg-background-subtle-light dark:bg-background-subtle-dark">
+                          <img
+                            src={card.frontImageUrl}
+                            alt="Front"
+                            className="object-contain max-w-full rounded-lg max-h-40"
+                          />
+                        </div>
+                      )}
+
+                      {/* Front Text */}
+                      <p className="text-lg font-semibold text-text-title-light dark:text-text-title-dark line-clamp-2">
                         {card.frontText}
                       </p>
                     </div>
 
                     {/* Divider */}
-                    <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
+                    <div className="flex flex-col gap-2 pt-4 border-t border-border dark:border-border-dark">
+                      <div className="mb-2 text-xs font-semibold tracking-wide uppercase text-text-muted-light dark:text-text-muted-dark">
+                        {t('flashcardDetail.backSide')}
+                      </div>
+
                       {/* Back Image */}
                       {card.backImageUrl && (
-                        <div className="mb-4 flex justify-center bg-gray-100 dark:bg-gray-700 rounded-lg p-2">
+                        <div className="flex justify-center p-2 rounded-lg bg-background-subtle-light dark:bg-background-subtle-dark">
                           <img
                             src={card.backImageUrl}
                             alt="Back"
-                            className="max-h-40 max-w-full object-contain rounded-lg"
+                            className="object-contain max-w-full rounded-lg max-h-40"
                           />
                         </div>
                       )}
 
-                      <div className="text-xs text-gray-500 dark:text-gray-400 font-semibold mb-2 uppercase tracking-wide">
-                        {t('flashcardDetail.backSide')}
-                      </div>
-                      <p className="text-gray-700 dark:text-gray-300 line-clamp-2">
+                      {/* Back Text */}
+                      <p className="text-text-body-light dark:text-text-body-dark line-clamp-2">
                         {card.backText}
                       </p>
                     </div>
 
                     {/* Memo */}
                     {card.memo && (
-                      <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-                        <div className="flex items-start gap-2">
-                          <span className="text-yellow-500 dark:text-yellow-400 flex-shrink-0"></span>
-                          <p className="text-xs text-gray-600 dark:text-gray-400 italic line-clamp-2">
-                            {card.memo}
-                          </p>
-                        </div>
+                      <div>
+                        <span className="flex-shrink-0 text-yellow-500 dark:text-yellow-400"></span>
+                        <p className="text-xs italic text-text-muted-light dark:text-text-muted-dark line-clamp-2">
+                          {card.memo}
+                        </p>
                       </div>
                     )}
                   </div>
@@ -465,11 +481,11 @@ function FlashcardDetail() {
               onClick={cancelDelete}></div>
 
             {/* Modal */}
-            <div className="relative bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full p-6">
-              <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
+            <div className="relative w-full max-w-md p-6 rounded-lg shadow-xl bg-background-app-light dark:bg-background-surface-dark">
+              <h2 className="mb-3 text-xl font-bold text-text-title-light dark:text-text-title-dark">
                 {t('deleteConfirmModal.title')}
               </h2>
-              <p className="text-gray-600 dark:text-gray-400 mb-6">
+              <p className="mb-6 text-text-body-light dark:text-text-body-dark">
                 {t('deleteConfirmModal.message')}
               </p>
               {/* Actions */}
@@ -484,6 +500,7 @@ function FlashcardDetail() {
             </div>
           </div>
         )}
+
         <ManageOwnersModal
           opened={manageOwnersOpened}
           onClose={() => setManageOwnersOpened(false)}

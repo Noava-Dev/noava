@@ -1,6 +1,15 @@
-import { Label, TextInput, Textarea, Button, FileInput } from 'flowbite-react';
+import {
+  Label,
+  TextInput,
+  Textarea,
+  Button,
+  FileInput,
+  ModalHeader,
+  ModalBody,
+  Modal,
+} from 'flowbite-react';
 import { useState, useEffect } from 'react';
-import { HiX, HiUpload, HiVolumeUp, HiPhotograph } from 'react-icons/hi';
+import { HiUpload, HiVolumeUp, HiPhotograph } from 'react-icons/hi';
 import type { Flashcard, CreateFlashcardRequest } from '../../models/Flashcard';
 import { useAzureBlobService } from '../../services/AzureBlobService';
 import { useTranslation } from 'react-i18next';
@@ -12,33 +21,50 @@ interface FlashcardModalProps {
   flashcard?: Flashcard;
 }
 
-function FlashcardModal({ isOpen, onClose, onSubmit, flashcard }: FlashcardModalProps) {
+function FlashcardModal({
+  isOpen,
+  onClose,
+  onSubmit,
+  flashcard,
+}: FlashcardModalProps) {
   const { t } = useTranslation('flashcards');
   const azureBlobService = useAzureBlobService();
-  
+
   // State for form fields
   const [frontText, setFrontText] = useState('');
   const [backText, setBackText] = useState('');
   const [memo, setMemo] = useState('');
   const [activeTab, setActiveTab] = useState<'front' | 'back'>('front');
   const [isFlipped, setIsFlipped] = useState(false);
-  
+
   // Front side media
   const [frontImageFile, setFrontImageFile] = useState<File | null>(null);
-  const [frontImagePreview, setFrontImagePreview] = useState<string | null>(null);
-  const [frontImageBlobName, setFrontImageBlobName] = useState<string | undefined>(undefined);
+  const [frontImagePreview, setFrontImagePreview] = useState<string | null>(
+    null
+  );
+  const [frontImageBlobName, setFrontImageBlobName] = useState<
+    string | undefined
+  >(undefined);
   const [frontAudioFile, setFrontAudioFile] = useState<File | null>(null);
-  const [frontAudioPreview, setFrontAudioPreview] = useState<string | null>(null);
-  const [frontAudioBlobName, setFrontAudioBlobName] = useState<string | undefined>(undefined);
-  
+  const [frontAudioPreview, setFrontAudioPreview] = useState<string | null>(
+    null
+  );
+  const [frontAudioBlobName, setFrontAudioBlobName] = useState<
+    string | undefined
+  >(undefined);
+
   // Back side media
   const [backImageFile, setBackImageFile] = useState<File | null>(null);
   const [backImagePreview, setBackImagePreview] = useState<string | null>(null);
-  const [backImageBlobName, setBackImageBlobName] = useState<string | undefined>(undefined);
+  const [backImageBlobName, setBackImageBlobName] = useState<
+    string | undefined
+  >(undefined);
   const [backAudioFile, setBackAudioFile] = useState<File | null>(null);
   const [backAudioPreview, setBackAudioPreview] = useState<string | null>(null);
-  const [backAudioBlobName, setBackAudioBlobName] = useState<string | undefined>(undefined);
-  
+  const [backAudioBlobName, setBackAudioBlobName] = useState<
+    string | undefined
+  >(undefined);
+
   const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
@@ -50,26 +76,30 @@ function FlashcardModal({ isOpen, onClose, onSubmit, flashcard }: FlashcardModal
       setFrontAudioBlobName(flashcard.frontAudio);
       setBackImageBlobName(flashcard.backImage);
       setBackAudioBlobName(flashcard.backAudio);
-      
+
       // Load existing media previews
       if (flashcard.frontImage) {
-        azureBlobService.getSasUrl('card-images', flashcard.frontImage)
-          .then(url => setFrontImagePreview(url))
+        azureBlobService
+          .getSasUrl('card-images', flashcard.frontImage)
+          .then((url) => setFrontImagePreview(url))
           .catch(console.error);
       }
       if (flashcard.backImage) {
-        azureBlobService.getSasUrl('card-images', flashcard.backImage)
-          .then(url => setBackImagePreview(url))
+        azureBlobService
+          .getSasUrl('card-images', flashcard.backImage)
+          .then((url) => setBackImagePreview(url))
           .catch(console.error);
       }
       if (flashcard.frontAudio) {
-        azureBlobService.getSasUrl('card-audio', flashcard.frontAudio)
-          .then(url => setFrontAudioPreview(url))
+        azureBlobService
+          .getSasUrl('card-audio', flashcard.frontAudio)
+          .then((url) => setFrontAudioPreview(url))
           .catch(console.error);
       }
       if (flashcard.backAudio) {
-        azureBlobService.getSasUrl('card-audio', flashcard.backAudio)
-          .then(url => setBackAudioPreview(url))
+        azureBlobService
+          .getSasUrl('card-audio', flashcard.backAudio)
+          .then((url) => setBackAudioPreview(url))
           .catch(console.error);
       }
     } else {
@@ -119,30 +149,28 @@ function FlashcardModal({ isOpen, onClose, onSubmit, flashcard }: FlashcardModal
   };
 
   const handleFrontAudioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  const file = e.target.files?.[0];
-  if (file) {
-    setFrontAudioFile(file);
+    const file = e.target.files?.[0];
+    if (file) {
+      setFrontAudioFile(file);
 
-    const objectUrl = URL.createObjectURL(file);
-    setFrontAudioPreview(objectUrl);
+      const objectUrl = URL.createObjectURL(file);
+      setFrontAudioPreview(objectUrl);
 
-    return () => URL.revokeObjectURL(objectUrl);
-  }
-};
+      return () => URL.revokeObjectURL(objectUrl);
+    }
+  };
 
- 
-const handleBackAudioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  const file = e.target.files?.[0];
-  if (file) {
-    setBackAudioFile(file);
+  const handleBackAudioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setBackAudioFile(file);
 
-    const objectUrl = URL.createObjectURL(file);
-    setBackAudioPreview(objectUrl);
-    
+      const objectUrl = URL.createObjectURL(file);
+      setBackAudioPreview(objectUrl);
 
-    return () => URL.revokeObjectURL(objectUrl);
-  }
-};
+      return () => URL.revokeObjectURL(objectUrl);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -153,25 +181,37 @@ const handleBackAudioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       // Upload front image if new file
       let finalFrontImage = frontImageBlobName;
       if (frontImageFile) {
-        finalFrontImage = await azureBlobService.upload('card-images', frontImageFile);
+        finalFrontImage = await azureBlobService.upload(
+          'card-images',
+          frontImageFile
+        );
       }
 
       // Upload back image if new file
       let finalBackImage = backImageBlobName;
       if (backImageFile) {
-        finalBackImage = await azureBlobService.upload('card-images', backImageFile);
+        finalBackImage = await azureBlobService.upload(
+          'card-images',
+          backImageFile
+        );
       }
 
       // Upload front audio if new file
       let finalFrontAudio = frontAudioBlobName;
       if (frontAudioFile) {
-        finalFrontAudio = await azureBlobService.upload('card-audio', frontAudioFile);
+        finalFrontAudio = await azureBlobService.upload(
+          'card-audio',
+          frontAudioFile
+        );
       }
 
       // Upload back audio if new file
       let finalBackAudio = backAudioBlobName;
       if (backAudioFile) {
-        finalBackAudio = await azureBlobService.upload('card-audio', backAudioFile);
+        finalBackAudio = await azureBlobService.upload(
+          'card-audio',
+          backAudioFile
+        );
       }
 
       const flashcardData: CreateFlashcardRequest = {
@@ -218,110 +258,113 @@ const handleBackAudioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   const currentImage = isFlipped ? backImagePreview : frontImagePreview;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      {/* Backdrop */}
-      <div 
-        className="absolute inset-0 bg-black bg-opacity-50"
-        onClick={onClose}
-      ></div>
-
+    <Modal
+      show={isOpen}
+      onClose={onClose}
+      size="5xl"
+      position="center"
+      dismissible>
       {/* Modal Content */}
-      <div className="relative bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-5xl w-full max-h-[90vh] overflow-y-auto">
+      <div className="relative bg-background-app-light dark:bg-background-surface-dark rounded-lg shadow-xl w-full max-h-[90vh] overflow-y-auto">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
-          <div>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-              {flashcard ? t('flashcardModal.editTitle') : t('flashcardModal.createTitle')}
-            </h2>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-              {t('flashcardModal.subtitle')}
-            </p>
-          </div>
-          <button
-            onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
-            disabled={uploading}
-          >
-            <HiX className="h-6 w-6" />
-          </button>
-        </div>
+        <ModalHeader>
+          {flashcard
+            ? t('flashcardModal.editTitle')
+            : t('flashcardModal.createTitle')}
+        </ModalHeader>
 
         {/* Body */}
-        <div className="p-6">
+        <ModalBody>
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Preview Section */}
-            <div className="bg-gray-900 rounded-lg p-6">
-              <div className="text-sm text-gray-400 mb-4">{t('flashcardModal.preview')}</div>
-              <div 
-                className="relative bg-gray-800 rounded-lg p-8 min-h-[300px] flex flex-col items-center justify-center cursor-pointer hover:bg-gray-750 transition-colors"
-                onClick={() => setIsFlipped(!isFlipped)}
-              >
+            <div className="p-6 rounded-lg bg-background-subtle-light dark:bg-background-app-dark">
+              <div className="mb-4 text-sm text-text-muted-light dark:text-text-muted-dark">
+                {t('flashcardModal.preview')}
+              </div>
+              <div
+                className="relative bg-background-app-light dark:bg-background-surface-dark rounded-lg p-8 min-h-[300px] flex flex-col items-center justify-center cursor-pointer transition-colors"
+                onClick={() => setIsFlipped(!isFlipped)}>
                 {/* Flip indicator */}
-                <div className="absolute top-4 left-4">
-                  <span className="inline-block px-3 py-1 text-xs font-semibold text-cyan-400 bg-cyan-500 bg-opacity-20 rounded">
-                    {isFlipped ? t('flashcardModal.back') : t('flashcardModal.front')}
+                <div className="absolute select-none top-4 left-4">
+                  <span className="inline-block px-3 py-1 text-xs font-semibold rounded bg-opacity-30 text-cyan-500 bg-cyan-600 dark:text-cyan-400 dark:bg-cyan-500 dark:bg-opacity-30">
+                    {isFlipped
+                      ? t('flashcardModal.back')
+                      : t('flashcardModal.front')}
                   </span>
                 </div>
 
                 {/* Image preview */}
                 {currentImage && (
-                  <img 
-                    src={currentImage} 
-                    alt={isFlipped ? t('flashcardModal.back') : t('flashcardModal.front')}
-                    className="max-h-32 object-contain mb-4"
+                  <img
+                    src={currentImage}
+                    alt={
+                      isFlipped
+                        ? t('flashcardModal.back')
+                        : t('flashcardModal.front')
+                    }
+                    className="object-contain mb-4 select-none max-h-32"
                   />
                 )}
 
                 {/* Text preview */}
-                <h3 className="text-2xl md:text-3xl font-bold text-white text-center mb-2">
-                  {currentText || (isFlipped ? t('flashcardModal.backTextPlaceholder') : t('flashcardModal.frontTextPlaceholder'))}
+                <h3 className="mb-2 text-2xl font-bold text-center select-none text-text-title-light dark:text-text-title-dark md:text-3xl">
+                  {currentText ||
+                    (isFlipped
+                      ? t('flashcardModal.backTextPlaceholder')
+                      : t('flashcardModal.frontTextPlaceholder'))}
                 </h3>
 
                 {/* Memo preview (only on back) */}
                 {isFlipped && memo && (
-                  <p className="text-gray-400 text-sm text-center italic">
+                  <p className="text-sm italic text-center select-none text-text-muted-light dark:text-text-muted-dark">
                     {memo}
                   </p>
                 )}
 
                 {/* Flip instruction */}
-                <div className="absolute bottom-4 text-gray-500 text-sm">
+                <div className="absolute text-sm select-none text-text-muted-light dark:text-text-muted-dark bottom-4">
                   {t('flashcardModal.clickToFlip')}
                 </div>
               </div>
             </div>
 
             {/* Tabs */}
-            <div className="flex border-b border-gray-700">
+            <div className="flex border-b border-border dark:border-border-dark">
               <button
                 type="button"
-                className={`px-6 py-3 font-semibold transition-colors ${
+                className={`px-6 py-3 font-semibold select-none focus:outline-none focus:ring-0 hover:border-cyan-400 transition-colors ${
                   activeTab === 'front'
                     ? 'text-cyan-400 border-b-2 border-cyan-400'
-                    : 'text-gray-400 hover:text-gray-300'
+                    : 'text-text-muted-light dark:text-text-muted-dark'
                 }`}
-                onClick={() => setActiveTab('front')}
-              >
+                onClick={() => {
+                  setActiveTab('front');
+                  setIsFlipped(false);
+                }}>
                 {t('flashcardModal.frontSide')}
               </button>
               <button
                 type="button"
-                className={`px-6 py-3 font-semibold transition-colors ${
+                className={`px-6 py-3 font-semibold select-none focus:outline-none focus:ring-0 hover:border-cyan-400 transition-colors ${
                   activeTab === 'back'
                     ? 'text-cyan-400 border-b-2 border-cyan-400'
-                    : 'text-gray-400 hover:text-gray-300'
+                    : 'text-text-muted-light dark:text-text-muted-dark'
                 }`}
-                onClick={() => setActiveTab('back')}
-              >
+                onClick={() => {
+                  setActiveTab('back');
+                  setIsFlipped(true);
+                }}>
                 {t('flashcardModal.backSide')}
               </button>
             </div>
 
             {/* Front Side Content */}
             {activeTab === 'front' && (
-              <div className="space-y-4">
+              <div className="space-y-4 select-none">
                 <div>
-                  <Label htmlFor="frontText" className="text-gray-900 dark:text-white">
+                  <Label
+                    htmlFor="frontText"
+                    className="text-text-title-light dark:text-text-title-dark">
                     {t('flashcardModal.frontOfCard')}
                   </Label>
                   <div className="mt-2">
@@ -340,8 +383,10 @@ const handleBackAudioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
                 {/* Front Image */}
                 <div>
                   <div className="flex items-center gap-2 mb-2">
-                    <HiPhotograph className="h-5 w-5 text-gray-400" />
-                    <Label htmlFor="frontImage" className="text-gray-900 dark:text-white">
+                    <HiPhotograph className="size-5 text-text-muted-light dark:text-text-muted-dark" />
+                    <Label
+                      htmlFor="frontImage"
+                      className="text-text-title-light dark:text-text-title-dark">
                       {t('flashcardModal.image')}
                     </Label>
                   </div>
@@ -350,7 +395,7 @@ const handleBackAudioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
                       <img
                         src={frontImagePreview}
                         alt="Front preview"
-                        className="w-full h-32 object-contain bg-gray-100 dark:bg-gray-700 rounded-lg"
+                        className="object-contain w-full h-32 rounded-lg bg-background-subtle-light dark:bg-background-subtle-dark"
                       />
                     </div>
                   )}
@@ -361,13 +406,14 @@ const handleBackAudioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
                     disabled={uploading}
                   />
                 </div>
-        
 
                 {/* Front Audio */}
                 <div>
                   <div className="flex items-center gap-2 mb-2">
-                    <HiVolumeUp className="h-5 w-5 text-gray-400" />
-                    <Label htmlFor="frontAudio" className="text-gray-900 dark:text-white">
+                    <HiVolumeUp className="size-5 text-text-muted-light dark:text-text-muted-dark" />
+                    <Label
+                      htmlFor="frontAudio"
+                      className="text-text-title-light dark:text-text-title-dark">
                       {t('flashcardModal.audio')}
                     </Label>
                   </div>
@@ -385,7 +431,6 @@ const handleBackAudioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
                     disabled={uploading}
                   />
                 </div>
-                
               </div>
             )}
 
@@ -393,7 +438,9 @@ const handleBackAudioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
             {activeTab === 'back' && (
               <div className="space-y-4">
                 <div>
-                  <Label htmlFor="backText" className="text-gray-900 dark:text-white">
+                  <Label
+                    htmlFor="backText"
+                    className="text-text-title-light dark:text-text-title-dark">
                     {t('flashcardModal.backOfCard')}
                   </Label>
                   <div className="mt-2">
@@ -411,7 +458,9 @@ const handleBackAudioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 
                 {/* Memo */}
                 <div>
-                  <Label htmlFor="memo" className="text-gray-900 dark:text-white">
+                  <Label
+                    htmlFor="memo"
+                    className="text-text-title-light dark:text-text-title-dark">
                     {t('flashcardModal.memo')}
                   </Label>
                   <div className="mt-2">
@@ -424,7 +473,7 @@ const handleBackAudioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
                       disabled={uploading}
                       maxLength={100}
                     />
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                    <p className="mt-1 text-xs text-text-muted-light dark:text-text-muted-dark">
                       {memo.length}/100 {t('flashcardModal.characters')}
                     </p>
                   </div>
@@ -433,8 +482,10 @@ const handleBackAudioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
                 {/* Back Image */}
                 <div>
                   <div className="flex items-center gap-2 mb-2">
-                    <HiPhotograph className="h-5 w-5 text-gray-400" />
-                    <Label htmlFor="backImage" className="text-gray-900 dark:text-white">
+                    <HiPhotograph className="size-5 text-text-muted-light dark:text-text-muted-dark" />
+                    <Label
+                      htmlFor="backImage"
+                      className="text-text-title-light dark:text-text-title-dark">
                       {t('flashcardModal.image')}
                     </Label>
                   </div>
@@ -443,7 +494,7 @@ const handleBackAudioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
                       <img
                         src={backImagePreview}
                         alt="Back preview"
-                        className="w-full h-32 object-contain bg-gray-100 dark:bg-gray-700 rounded-lg"
+                        className="object-contain w-full h-32 bg-background-subtle-light dark:bg-background-subtle-dark"
                       />
                     </div>
                   )}
@@ -454,13 +505,14 @@ const handleBackAudioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
                     disabled={uploading}
                   />
                 </div>
-               
 
                 {/* Back Audio */}
                 <div>
                   <div className="flex items-center gap-2 mb-2">
-                    <HiVolumeUp className="h-5 w-5 text-gray-400" />
-                    <Label htmlFor="backAudio" className="text-gray-900 dark:text-white">
+                    <HiVolumeUp className="size-5 text-text-muted-light dark:text-text-muted-dark" />
+                    <Label
+                      htmlFor="backAudio"
+                      className="text-text-title-light dark:text-text-title-dark">
                       {t('flashcardModal.audio')}
                     </Label>
                   </div>
@@ -478,39 +530,35 @@ const handleBackAudioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
                     disabled={uploading}
                   />
                 </div>
-              
               </div>
             )}
 
             {/* Actions */}
-            <div className="flex gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
-              <Button 
-                type="submit" 
-                className="flex-1 bg-cyan-500 hover:bg-cyan-600" 
-                disabled={uploading}
-              >
+            <div className="flex gap-3 pt-4">
+              <Button type="submit" className="flex-1" disabled={uploading}>
                 {uploading ? (
                   <>
-                    <HiUpload className="mr-2 h-5 w-5 animate-spin" />
+                    <HiUpload className="mr-2 size-5 animate-spin" />
                     {t('flashcardModal.uploading')}
                   </>
+                ) : flashcard ? (
+                  t('flashcardModal.updateButton')
                 ) : (
-                  flashcard ? t('flashcardModal.updateButton') : t('flashcardModal.createButton')
+                  t('flashcardModal.createButton')
                 )}
               </Button>
-              <Button 
-                color="gray" 
-                onClick={onClose} 
-                disabled={uploading} 
-                type="button"
-              >
+              <Button
+                color="gray"
+                onClick={onClose}
+                disabled={uploading}
+                type="button">
                 {t('flashcardModal.cancel')}
               </Button>
             </div>
           </form>
-        </div>
+        </ModalBody>
       </div>
-    </div>
+    </Modal>
   );
 }
 

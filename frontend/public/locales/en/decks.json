@@ -84,5 +84,12 @@
     "yes": "Yes, delete",
     "no": "Cancel"
   },
-  "loading": "Loading decks..."
+  "loading": "Loading decks...",
+  "ownership": {
+    "manageAccess": "Manage Ownership",
+    "modalTitle": "Deck Ownership",
+    "currentOwners": "Current owners",
+    "inviteUser": "Invite User",
+    "noOwners": "You have not invited any co-owners yet."
+  }
 }

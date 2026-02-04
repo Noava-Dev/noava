@@ -54,11 +54,11 @@
     "quickReview": "Révision Rapide"
   },
   "deleteConfirmModal": {
-  "title": "Supprimer la Carte",
-  "message": "Êtes-vous sûr de vouloir supprimer cette carte mémoire? Cette action ne peut pas être annulée.",
-  "confirm": "Supprimer",
-  "cancel": "Annuler"
-},
+    "title": "Supprimer la Carte",
+    "message": "Êtes-vous sûr de vouloir supprimer cette carte mémoire? Cette action ne peut pas être annulée.",
+    "confirm": "Supprimer",
+    "cancel": "Annuler"
+  },
 
   "quickReview": {
     "title": "Révision Rapide",
@@ -79,5 +79,8 @@
       "backToDeck": "Retour au Deck",
       "restart": "Recommencer la Révision"
     }
+  },
+  "search": {
+    "label": "Rechercher"
   }
 }

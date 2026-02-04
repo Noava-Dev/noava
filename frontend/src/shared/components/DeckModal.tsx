@@ -5,10 +5,13 @@ import {
   Select,
   Button,
   FileInput,
+  Modal,
+  ModalBody,
+  ModalHeader,
 } from 'flowbite-react';
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { HiX, HiUpload } from 'react-icons/hi';
+import { HiUpload } from 'react-icons/hi';
 import { DeckVisibility, Deck, DeckRequest } from '../../models/Deck';
 import { useAzureBlobService } from '../../services/AzureBlobService';
 import { useToast } from '../../contexts/ToastContext';
@@ -122,29 +125,20 @@ function DeckModal({ isOpen, onClose, onSubmit, deck }: DeckModalProps) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
-      {/* Backdrop */}
-      <div
-        className="absolute inset-0 bg-black bg-opacity-50"
-        onClick={onClose}></div>
-
+    <Modal
+      show={isOpen}
+      onClose={onClose}
+      size="2xl"
+      position="center"
+      dismissible>
       {/* Modal Content */}
-      <div className="relative bg-background-app-light dark:bg-background-surface-dark rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+      <div className="relative bg-background-app-light dark:bg-background-surface-dark rounded-lg shadow-xl w-full max-h-[90vh] overflow-y-auto">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-border dark:border-border-dark">
-          <h2 className="text-2xl font-bold text-text-title-light dark:text-text-title-dark">
-            {deck ? t('modal.editTitle') : t('modal.createTitle')}
-          </h2>
-          <button
-            onClick={onClose}
-            className="text-text-muted-light hover:text-text-body-light dark:text-text-muted-dark dark:hover:text-text-body-dark"
-            disabled={uploading}>
-            <HiX className="w-6 h-6" />
-          </button>
-        </div>
-
+        <ModalHeader>
+          {deck ? t('modal.editTitle') : t('modal.createTitle')}
+        </ModalHeader>
         {/* Body */}
-        <div className="p-6">
+        <ModalBody>
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Title */}
             <div className="flex flex-col gap-2">
@@ -260,7 +254,7 @@ function DeckModal({ isOpen, onClose, onSubmit, deck }: DeckModalProps) {
               <Button type="submit" className="flex-1" disabled={uploading}>
                 {uploading ? (
                   <>
-                    <HiUpload className="w-5 h-5 mr-2 animate-spin" />
+                    <HiUpload className="mr-2 size-5 animate-spin" />
                     {t('modal.uploading')}
                   </>
                 ) : deck ? (
@@ -278,9 +272,9 @@ function DeckModal({ isOpen, onClose, onSubmit, deck }: DeckModalProps) {
               </Button>
             </div>
           </form>
-        </div>
+        </ModalBody>
       </div>
-    </div>
+    </Modal>
   );
 }
 

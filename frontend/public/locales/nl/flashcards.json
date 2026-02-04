@@ -54,12 +54,12 @@
     "quickReview": "Snelle Review"
   },
   "deleteConfirmModal": {
-  "title": "Flashcard Verwijderen",
-  "message": "Weet je zeker dat je deze flashcard wilt verwijderen? Deze actie kan niet ongedaan gemaakt worden.",
-  "confirm": "Verwijderen",
-  "cancel": "Annuleren"
-},
-"quickReview": {
+    "title": "Flashcard Verwijderen",
+    "message": "Weet je zeker dat je deze flashcard wilt verwijderen? Deze actie kan niet ongedaan gemaakt worden.",
+    "confirm": "Verwijderen",
+    "cancel": "Annuleren"
+  },
+  "quickReview": {
     "title": "Snelle Herhaling",
     "mode": "Snelle Herhalingsmodus",
     "loading": "Herhaling laden...",
@@ -78,5 +78,8 @@
       "backToDeck": "Terug naar Deck",
       "restart": "Herhaling Opnieuw Starten"
     }
+  },
+  "search": {
+    "label": "Zoeken"
   }
 }

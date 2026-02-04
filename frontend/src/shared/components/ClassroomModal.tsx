@@ -1,7 +1,14 @@
-import { Label, TextInput, Textarea, Button } from 'flowbite-react';
+import {
+  Label,
+  TextInput,
+  Textarea,
+  Button,
+  Modal,
+  ModalHeader,
+  ModalBody,
+} from 'flowbite-react';
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { HiX } from 'react-icons/hi';
 import type {
   ClassroomResponse,
   ClassroomRequest,
@@ -50,24 +57,21 @@ function ClassroomModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div
-        className="absolute inset-0 bg-black bg-opacity-50"
-        onClick={onClose}></div>
+    <Modal
+      show={isOpen}
+      onClose={onClose}
+      size="xl"
+      position="center"
+      dismissible>
+      {/* Modal Content */}
+      <div className="relative w-full rounded-lg shadow-xl bg-background-app-light dark:bg-background-surface-dark">
+        {/* Header */}
+        <ModalHeader>
+          {classroom ? t('modal.editTitle') : t('modal.createTitle')}
+        </ModalHeader>
 
-      <div className="relative w-full max-w-xl mx-4 rounded-lg shadow-xl bg-background-app-light dark:bg-background-surface-dark">
-        <div className="flex items-center justify-between p-6 border-b border-border dark:border-border-dark">
-          <h2 className="text-2xl font-bold text-text-title-light dark:text-text-title-dark">
-            {classroom ? t('modal.editTitle') : t('modal.createTitle')}
-          </h2>
-          <button
-            onClick={onClose}
-            className="text-gray-400 hover:text-text-muted-light dark:hover:text-text-muted-dark">
-            <HiX className="w-6 h-6" />
-          </button>
-        </div>
-
-        <div className="p-6">
+        {/* Body */}
+        <ModalBody>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="flex flex-col gap-2">
               <Label htmlFor="name">{t('modal.nameLabel')} *</Label>
@@ -98,9 +102,9 @@ function ClassroomModal({
               </Button>
             </div>
           </form>
-        </div>
+        </ModalBody>
       </div>
-    </div>
+    </Modal>
   );
 }
 

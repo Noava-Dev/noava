@@ -160,7 +160,7 @@ function DecksPage() {
           <div className="p-4 border shadow-sm border-border bg-background-app-light dark:bg-background-surface-dark rounded-2xl md:p-6 dark:border-border-dark">
             <div className="grid grid-cols-1 md:grid-cols-[1fr_280px] gap-4">
               <div className="space-y-2">
-                <label className="block text-sm font-semibold tracking-wide uppercase text-text-body-light dark:text-text-body-dark">
+                <label className="block text-sm font-semibold tracking-wide uppercase text-text-muted-light dark:text-text-muted-dark">
                   {t('search.label')}
                 </label>
                 <Searchbar
@@ -168,7 +168,7 @@ function DecksPage() {
                   setSearchTerm={setSearchTerm}
                 />
                 {searchTerm && (
-                  <p className="flex items-center gap-1 text-xs text-text-body-light dark:text-text-muted-dark">
+                  <p className="flex items-center gap-1 text-xs text-text-muted-light dark:text-text-muted-dark">
                     <span className="inline-block w-2 h-2 rounded-full bg-primary-500"></span>
                     {sortedDecks.length} {t('results.found')}
                   </p>
@@ -176,7 +176,7 @@ function DecksPage() {
               </div>
 
               <div className="space-y-2">
-                <label className="block text-sm font-semibold tracking-wide uppercase text-text-body-light dark:text-text-body-dark">
+                <label className="block text-sm font-semibold tracking-wide uppercase text-text-muted-light dark:text-text-muted-dark">
                   {t('sort.label')}
                 </label>
                 <Select
