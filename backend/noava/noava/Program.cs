@@ -6,7 +6,6 @@ using noava.Repositories;
 using noava.Services;
 using noava.Shared;
 using System.Security.Claims;
-using noava.Shared.Clerk;
 using noava.Repositories.FAQs;
 using noava.Services.FAQs;
 using noava.Repositories.Decks;
@@ -44,7 +43,6 @@ namespace noava
             builder.Services.AddScoped<IDeckUserRepository, DeckUserRepository>();
             builder.Services.AddScoped<IDeckInvitationRepository, DeckInvitationRepository>();
             builder.Services.AddScoped<ISchoolRepository, SchoolRepository>();
-            builder.Services.AddScoped<ISchoolAdminRepository, SchoolAdminRepository>();
 
             // Service Registrations
             builder.Services.AddScoped<IFaqService, FaqService>();
@@ -61,10 +59,7 @@ namespace noava
 
             // External Service Registrations
             builder.Services.AddHttpClient();
-            // Classrooms (Youmni)
             builder.Services.AddScoped<IClerkService, ClerkService>();
-            // Schools (Luna)
-            builder.Services.AddScoped<IClerkSchoolService, ClerkSchoolsService>();
 
             // Add services to the container.
             builder.Services.AddCors(options =>

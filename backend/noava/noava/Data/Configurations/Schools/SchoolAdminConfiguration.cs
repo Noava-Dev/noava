@@ -8,16 +8,20 @@ namespace noava.Data.Configurations.Schools
     {
         public void Configure(EntityTypeBuilder<SchoolAdmin> builder)
         {
-            builder.HasKey(sa => new { sa.SchoolId, sa.UserId });
+            builder.HasKey(sa => new { sa.SchoolId, sa.ClerkId });
 
-            // Relationships
+            builder.Property(sa => sa.ClerkId)
+                   .IsRequired();
+
             builder.HasOne(sa => sa.School)
                    .WithMany(s => s.SchoolAdmins)
-                   .HasForeignKey(sa => sa.SchoolId);
+                   .HasForeignKey(sa => sa.SchoolId)
+                   .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(sa => sa.User)
                    .WithMany()
-                   .HasForeignKey(sa => sa.UserId);
+                   .HasForeignKey(sa => sa.ClerkId)
+                   .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

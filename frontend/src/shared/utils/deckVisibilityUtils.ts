@@ -6,11 +6,11 @@ export const getVisibilityLabel = (
 ): string => {
   switch (visibility) {
     case DeckVisibility.Public:
-      return t('visibility.public');
+      return t('common:visibility.public');
     case DeckVisibility.Shared:
-      return t('visibility.shared');
+      return t('common:visibility.shared');
     case DeckVisibility.Private:
-      return t('visibility.private');
+      return t('common:visibility.private');
     default:
       return 'Unknown';
   }

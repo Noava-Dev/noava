@@ -14,19 +14,18 @@ namespace noava.Data.Configurations.Schools
                    .IsRequired()
                    .HasMaxLength(200);
 
-            builder.HasIndex(s => s.Name)
-                   .IsUnique();
-
-            builder.Property(s => s.CreatedByUserId)
+            builder.Property(s => s.CreatedBy)
                    .IsRequired();
 
-            builder.HasOne(s => s.CreatedBy)
-                   .WithMany()
-                   .HasForeignKey(s => s.CreatedByUserId);
+            builder.HasOne(s => s.CreatedByUser)
+                .WithMany()
+                .HasForeignKey(s => s.CreatedBy)
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasMany(s => s.SchoolAdmins)
                    .WithOne(sa => sa.School)
-                   .HasForeignKey(sa => sa.SchoolId);
+                   .HasForeignKey(sa => sa.SchoolId)
+                   .OnDelete(DeleteBehavior.Cascade);
 
             builder.Property(s => s.CreatedAt)
                    .IsRequired();

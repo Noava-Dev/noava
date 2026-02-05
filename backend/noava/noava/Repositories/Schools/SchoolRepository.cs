@@ -13,29 +13,22 @@ namespace noava.Repositories.Schools
             _context = context;
         }
 
-        //Get all schools
         public async Task<List<School>> GetAllSchoolsAsync()
         {
             return await _context.Schools
                .Include(s => s.SchoolAdmins)
-               .Include(s => s.CreatedBy)
+               .Include(s => s.CreatedByUser)
                .ToListAsync();
-
         }
 
-        //Get schools by Id
-        public async Task<School?> GetSchoolByIdAsync(int id)
+        public async Task<School> GetSchoolByIdAsync(int id)
         {
             return await _context.Schools
                 .Include(s => s.SchoolAdmins)
-                .Include(s => s.CreatedBy)
-                .FirstOrDefaultAsync(s => s.Id == id);
-
-            //TODO: if school = null there should be a catch
-
+                .Include(s => s.CreatedByUser)
+                .FirstAsync(s => s.Id == id);
         }
 
-        //Create
         public async Task<School> CreateSchoolAsync(School school)
         {
             _context.Schools.Add(school);
@@ -43,7 +36,6 @@ namespace noava.Repositories.Schools
             return school;
         }
 
-        //Update
         public async Task<School> UpdateSchoolAsync(School school)
         {
             _context.Schools.Update(school);
@@ -51,16 +43,35 @@ namespace noava.Repositories.Schools
             return school;
         }
 
-        //Delete
         public async Task DeleteSchoolAsync(int id)
         {
             var school = await _context.Schools.FindAsync(id);
 
-            if(school != null){
-                _context.Schools.Remove(school);
-                await _context.SaveChangesAsync();
+            if (school == null)
+            {
+                throw new KeyNotFoundException();
             }
+
+            _context.Schools.Remove(school);
+            await _context.SaveChangesAsync();
         }
 
+        public async Task<SchoolAdmin> GetSchoolAdminAsync(int schoolId, string clerkId)
+        {
+            return await _context.SchoolAdmins
+                .FirstAsync(sa => sa.SchoolId == schoolId && sa.ClerkId == clerkId);
+        }
+
+        public async Task AddAdminAsync(SchoolAdmin schoolAdmin)
+        {
+            _context.SchoolAdmins.Add(schoolAdmin);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task RemoveAdminAsync(SchoolAdmin schoolAdmin)
+        {
+            _context.SchoolAdmins.Remove(schoolAdmin);
+            await _context.SaveChangesAsync();
+        }
     }
 }

@@ -1,122 +1,118 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using noava.DTOs.Schools;
-using noava.Mappers.Schools;
-using noava.Models.Enums;
 using noava.Services.Schools;
 using noava.Services.Users;
-using noava.Shared.Clerk;
 using System.Security.Claims;
 
 namespace noava.Controllers.Schools
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize]
+    [Authorize(Roles = "ADMIN")]
     public class SchoolsController : ControllerBase
     {
         private readonly ISchoolService _schoolService;
-        private readonly IClerkSchoolService _clerkservice;
-        private readonly IUserService _userService;
         private string GetCurrentUserId()
         {
-            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-            if (string.IsNullOrEmpty(userId))
-                throw new UnauthorizedAccessException("User not logged in.");
-            return userId;
+            return User.FindFirstValue("sub")
+                   ?? User.FindFirstValue(ClaimTypes.NameIdentifier)
+                   ?? throw new UnauthorizedAccessException("User ID not found");
         }
 
-        public SchoolsController(ISchoolService schoolService, IClerkSchoolService clerkService, IUserService userService)
+        public SchoolsController(ISchoolService schoolService)
         {
             _schoolService = schoolService;
-            _clerkservice = clerkService;
-            _userService = userService;
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<SchoolDetailsDto>>> GetAll()
+        public async Task<ActionResult<List<SchoolResponseDto>>> GetAll()
         {
             var schools = await _schoolService.GetAllSchoolsAsync();
-            var result = new List<SchoolDetailsDto>();
-            foreach(var school in schools)
-            {
-                var clerkIds = school.SchoolAdmins.Select(sa => sa.UserId).ToList();
-                var schoolAdmins = await _clerkservice.GetUsersByClerkIdsAsync(clerkIds);
-                result.Add(SchoolMapper.ToDetailsDto(school, schoolAdmins));
-            }
-
-            return Ok(result);
+            return Ok(schools);
         }
 
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<SchoolDetailsDto>> GetById(int id)
+        public async Task<ActionResult<SchoolResponseDto>> GetById(int id)
         {
-            var school = await _schoolService.GetSchoolByIdAsync(id);
-            var clerkIds = school.SchoolAdmins.Select(sa => sa.UserId).ToList();
-            var schoolAdmins = await _clerkservice.GetUsersByClerkIdsAsync(clerkIds);
-            return Ok(SchoolMapper.ToDetailsDto(school, schoolAdmins));
+            try
+            {
+                var school = await _schoolService.GetSchoolByIdAsync(id);
+                return Ok(school);
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
         }
 
-        [Authorize(Roles = "ADMIN")]
         [HttpPost]
-        public async Task<ActionResult<SchoolDetailsDto>> Create(
-            [FromBody] CreateSchoolRequestDto request)
+        public async Task<IActionResult> CreateSchool([FromBody] SchoolRequestDto request)
         {
-            var createdByUserId = GetCurrentUserId();
-            var school = await _schoolService.CreateSchoolAsync(
-                request.Name,
-                createdByUserId,
-                request.SchoolAdminEmails
-            );
-            var clerkIds = school.SchoolAdmins.Select(sa => sa.UserId).ToList();
-            var schoolAdmins = await _clerkservice.GetUsersByClerkIdsAsync(clerkIds);
+            try
+            {
+                var createdByUserId = GetCurrentUserId();
+                request.CreatedBy = createdByUserId;
 
-            return CreatedAtAction(
-                nameof(GetById),
-                new { id = school.Id },
-                SchoolMapper.ToDetailsDto(school, schoolAdmins)
-    );
+                await _schoolService.CreateSchoolAsync(request);
+
+                return Ok();
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+
         }
 
-        [Authorize(Roles = "ADMIN")]
         [HttpPut("{id:int}")]
-        public async Task<ActionResult<SchoolDetailsDto>> UpdateSchool(
-            int id,
-            [FromBody] UpdateSchoolDetailsRequestDto request)
+        public async Task<IActionResult> UpdateSchool(int id, [FromBody] SchoolRequestDto request)
         {
-            // Update the name
-            var school = await _schoolService.UpdateSchoolAsync(id, request.SchoolName);
-
-            var exisitingAdmins = school.SchoolAdmins.Select(sa => sa.UserId).ToList();
-            var incomingAdmins =
-                    await _clerkservice.GetClerkUserIdByEmailsAsync(request.SchoolAdminEmails);
-
-            var schoolAdminsToAdd = incomingAdmins.Except(exisitingAdmins); 
-            if (schoolAdminsToAdd.Any())
-            {
-                await _schoolService.AddSchoolAdminsAsync(id, schoolAdminsToAdd);
-            }
-
-            var schoolAdminsToRemove = exisitingAdmins.Except(incomingAdmins);
-            if (schoolAdminsToRemove.Any())
-            {
-                await _schoolService.RemoveSchoolAdminsAsync(id, schoolAdminsToRemove);
-            }
-
-            var schoolAdmins = await _clerkservice.GetUsersByClerkIdsAsync(incomingAdmins.ToList());
-
-            return Ok(SchoolMapper.ToDetailsDto(school, schoolAdmins));
+            await _schoolService.UpdateSchoolAsync(id, request);
+            return Ok();
         }
 
 
-        [Authorize(Roles = "ADMIN")]
         [HttpDelete("{id:int}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> DeleteSchool(int id)
         {
-            await _schoolService.DeleteSchoolAsync(id);
-            return NoContent();
+            try
+            {
+                await _schoolService.DeleteSchoolAsync(id);
+                return Ok();
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
+        }
+
+        [HttpPut("{id:int}/admins/{userEmail}")]
+        public async Task<IActionResult> AddSchoolAdmin(int id, string userEmail)
+        {
+            try
+            {
+                await _schoolService.AddSchoolAdminAsync(id, userEmail);
+                return Ok();
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
+        }
+
+        [HttpDelete("{id:int}/admins/{clerkId}")]
+        public async Task<IActionResult> RemoveSchoolAdmin(int id, string clerkId)
+        {
+            try
+            {
+                await _schoolService.RemoveSchoolAdminAsync(id, clerkId);
+                return Ok();
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
         }
     }
 }
