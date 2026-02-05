@@ -3,43 +3,91 @@
     "title": "NOAVA",
     "success": "Succès",
     "loading": "Chargement...",
-    "error": "Une erreur s'est produite",
+    "error": "Une erreur est survenue",
     "retry": "Réessayer",
-    "clearSearch": "Effacer la recherche",
     "noResults": "Aucun résultat trouvé pour \"{{searchTerm}}\"",
-    "welcome": "Bienvenue chez Noava"
+    "welcome": "Bienvenue sur Noava"
   },
   "navigation": {
     "home": "Accueil",
     "faq": "FAQ",
+    "faqFull": "Foire aux questions",
+    "settings": "Paramètres",
     "login": "Connexion",
     "register": "Inscription",
     "logout": "Déconnexion",
-    "dashboard": "Tableau de bord"
+    "dashboard": "Tableau de bord",
+    "notifications": "Notifications",
+    "decks": "Paquets",
+    "classrooms": "Classes"
   },
   "actions": {
     "save": "Enregistrer",
     "cancel": "Annuler",
     "delete": "Supprimer",
     "edit": "Modifier",
+    "update": "Mettre à jour",
     "create": "Créer",
     "invite": "Inviter",
     "search": "Rechercher",
     "searchPlaceholder": "Rechercher...",
-    "submit": "Soumettre",
+    "submit": "Envoyer",
     "confirm": "Confirmer",
     "close": "Fermer",
-    "getStarted": "Commencer"
+    "getStarted": "Commencer",
+    "viewAll": "Tout voir",
+    "viewMore": "Voir plus",
+    "skip": "Passer",
+    "finish": "Terminer",
+    "join": "Rejoindre",
+    "request": "Demander",
+    "show": "Afficher",
+    "back": "Retour"
   },
   "validation": {
-    "required": "Ce champ est obligatoire",
+    "required": "Ce champ est requis",
     "email": "Adresse e-mail invalide",
     "minLength": "Minimum {{count}} caractères requis",
-    "maxLength": "Maximum {{count}} caractères autorisés"  },
+    "maxLength": "Maximum {{count}} caractères autorisés"
+  },
   "notFound": {
     "title": "404",
-    "heading": "Oups! Page introuvable",
-    "description": "La page que vous recherchez a peut-être été supprimée, son nom a changé ou est temporairement indisponible.",
-    "backHome": "Retour à l'accueil",
-    "suggestion": "Voici quelques liens utiles à la place:"  }
+    "heading": "Oups ! Page introuvable",
+    "description": "La page que vous recherchez a peut-être été supprimée, renommée ou est temporairement indisponible.",
+    "backHome": "Retour à l’accueil",
+    "suggestion": "Voici quelques liens utiles :"
+  },
+  "search": {
+    "clearSearch": "Effacer la recherche",
+    "otherSearchTerm": "Essayez un autre terme de recherche",
+    "showing": "Affichage",
+    "of": "sur",
+    "results": "résultats",
+    "found": "résultats trouvés"
+  },
+  "sort": {
+    "label": "Trier par",
+    "newest": "Les plus récents",
+    "oldest": "Les plus anciens",
+    "az": "Alphabétique (A-Z)",
+    "za": "Alphabétique (Z-A)"
+  },
+  "modals": {
+    "deleteModal": {
+      "title": "Confirmer la suppression",
+      "message": "Êtes-vous sûr de vouloir supprimer ceci ? Cette action est irréversible.",
+      "yes": "Oui, supprimer"
+    }
+  },
+  "visibility": {
+    "label": "Visibilité",
+    "public": "Public",
+    "shared": "Partagé",
+    "private": "Privé",
+    "visibilityHelp": {
+      "private": "Vous seul pouvez voir ce paquet",
+      "shared": "Toute personne disposant du lien peut voir ce paquet",
+      "public": "Tout le monde peut voir ce paquet"
+    }
+  }
 }

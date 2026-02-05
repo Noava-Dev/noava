@@ -1,58 +1,26 @@
 {
-  "title": "Decks",
-  "subtitle": "Organiseer je flashcards in vakgebonden decks",
+  "subtitle": "Organiseer je flashcards in vakgerichte Decks",
   "createButton": "Deck aanmaken",
-  "search": {
-    "label": "Zoeken"
-  },
-  "sort": {
-    "label": "Sorteren op",
-    "newest": "Nieuwste eerst",
-    "oldest": "Oudste eerst"
-  },
-  "results": {
-    "showing": "Tonen",
-    "of": "van",
-    "decks": "decks",
-    "found": "resultaten gevonden"
-  },
   "empty": {
-    "title": "Nog geen decks",
-    "message": "Maak je eerste deck om te beginnen!",
-    "button": "Maak je eerste deck",
-    "noResults": "Geen decks gevonden",
-    "otherSearchTerm": "Probeer een andere zoekterm",
-    "clearSearch": "Zoekopdracht wissen"
-  },
-  "card": {
-    "edit": "Bewerken",
-    "delete": "Verwijderen"
+    "title": "Nog geen Decks",
+    "message": "Maak je eerste Deck aan om te beginnen!",
+    "button": "Maak je eerste Deck aan",
+    "noResults": "Geen Decks gevonden"
   },
   "modal": {
-    "loading": "Deck laden...",
-    "createTitle": "Nieuw Deck Aanmaken",
-    "editTitle": "Deck Bewerken",
+    "createTitle": "Nieuw Deck aanmaken",
+    "editTitle": "Deck bewerken",
     "titleLabel": "Titel",
-    "titlePlaceholder": "bijv. Franse Woordenlijst",
+    "titlePlaceholder": "bv. Franse woordenschat",
     "descriptionLabel": "Beschrijving",
-    "descriptionPlaceholder": "Beschrijf je deck...",
+    "descriptionPlaceholder": "Beschrijf je Deck...",
     "imageLabel": "Omslagafbeelding",
-    "imageHelp": "Aanbevolen grootte: 300x200 pixels. Maximale grootte: 2 MB.",
+    "imageHelp": "Aanbevolen formaat: 300x200 pixels. Max. grootte: 2 MB.",
     "languageLabel": "Taal",
     "languageSelect": "Selecteer een taal",
-    "visibilityLabel": "Zichtbaarheid",
-    "visibilityPrivate": "Privé",
-    "visibilityShared": "Gedeeld",
-    "visibilityPublic": "Publiek",
-    "visibilityHelp": {
-      "private": "Alleen jij kunt dit deck zien",
-      "shared": "Iedereen met de link kan dit deck zien",
-      "public": "Iedereen kan dit deck zien"
-    },
     "createButton": "Deck aanmaken",
     "updateButton": "Deck bijwerken",
-    "cancelButton": "Annuleren",
-    "uploading": "Deck aan het maken..."
+    "uploading": "Deck wordt aangemaakt..."
   },
   "languages": {
     "select": "Selecteer een taal",
@@ -63,25 +31,21 @@
     "spanish": "Spaans",
     "italian": "Italiaans"
   },
-  "visibility": {
-    "public": "Publiek",
-    "shared": "Gedeeld",
-    "private": "Privé"
-  },
   "toast": {
     "createSuccess": "Deck succesvol aangemaakt!",
     "updateSuccess": "Deck succesvol bijgewerkt!",
     "deleteSuccess": "Deck succesvol verwijderd!",
-    "createError": "Deck kon niet worden aangemaakt",
-    "updateError": "Deck kon niet worden bijgewerkt",
-    "deleteError": "Deck kon niet worden verwijderd",
-    "loadError": "Decks konden niet geladen worden"
+    "createError": "Aanmaken van Deck mislukt",
+    "updateError": "Bijwerken van Deck mislukt",
+    "deleteError": "Verwijderen van Deck mislukt",
+    "loadError": "Laden van Decks mislukt",
+    "uploadError": "Uploaden van afbeelding mislukt"
   },
-  "deleteModal": {
-    "title": "Bevestig Verwijdering",
-    "message": "Weet je zeker dat je dit deck wilt verwijderen?",
-    "yes": "Ja, verwijderen",
-    "no": "Annuleren"
-  },
-  "loading": "Decks laden..."
+  "ownership": {
+    "manageAccess": "Eigenaarschap beheren",
+    "modalTitle": "Deck-eigenaarschap",
+    "currentOwners": "Huidige eigenaars",
+    "inviteUser": "Gebruiker uitnodigen",
+    "noOwners": "Je hebt nog geen mede-eigenaars uitgenodigd."
+  }
 }

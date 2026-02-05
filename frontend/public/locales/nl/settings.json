@@ -1,18 +1,17 @@
 {
   "header": {
-    "title": "Instellingen",
-    "subtitle": "Pas je applicatie-ervaring aan."
+    "subtitle": "Personaliseer je app-ervaring."
   },
   "theme": {
     "title": "Thema",
-    "description": "Kies je favoriete kleurenschema",
-    "tooltip": "Kies tussen lichte en donkere modus om het uiterlijk van de applicatie aan te passen.",
+    "description": "Kies je favoriete kleurenpalet",
+    "tooltip": "Kies tussen lichte en donkere modus om het uiterlijk van de app aan te passen.",
     "light": "Licht",
     "dark": "Donker"
   },
   "language": {
     "title": "Taal",
     "description": "Kies je voorkeurstaal",
-    "tooltip": "Selecteer de taal voor de interface van de applicatie."
+    "tooltip": "Selecteer de taal van de app-interface."
   }
 }

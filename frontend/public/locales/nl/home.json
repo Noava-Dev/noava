@@ -1,32 +1,31 @@
 {
   "hero": {
-    "title": "Flashcards gemaakt voor school en klaslokalen",
-    "description": "De eenvoudige, krachtige manier voor leraren om studiemateriaal te maken en voor leerlingen om te leren. Speciaal ontworpen voor educatieve omgevingen.",
-    "cta": "Aan de slag"
+    "title": "Flashcards ontworpen voor scholen en klaslokalen",
+    "description": "De eenvoudige en krachtige manier voor leerkrachten om studiemateriaal te maken en voor leerlingen om te leren. Speciaal ontworpen voor onderwijsomgevingen."
   },
   "features": {
     "title": "Alles wat je nodig hebt",
-    "description": "Eenvoudige tools die echt het verschil maken in het klaslokaal",
+    "description": "Eenvoudige tools die echt het verschil maken in de klas",
     "decks": {
-      "title": "Stapels",
-      "description": "Organiseer flashcards in vakoverschrijdende stapels. Maak, deel en hergebruik in alle klassen."
+      "title": "Decks",
+      "description": "Organiseer flashcards in vakgerichte Decks. Maak ze aan, deel ze en hergebruik ze in meerdere klassen."
     },
     "classrooms": {
-      "title": "Klaslokalen",
-      "description": "Nodig studenten uit, wijs stapels toe en volg de voortgang. Alles in één samenwerkingsruimte."
+      "title": "Klassen",
+      "description": "Nodig leerlingen uit, wijs Decks toe en volg de voortgang. Alles in één samenwerkingsruimte."
     },
     "dashboards": {
       "title": "Dashboards",
-      "description": "Leraren krijgen een overzicht van klasactiviteiten, voltooiingspercentages en studentenbetrokkenheid."
+      "description": "Leerkrachten krijgen een overzicht van klasactiviteit, voltooiingspercentages en betrokkenheid van leerlingen."
     },
     "analytics": {
-      "title": "Analytics",
-      "description": "Gedetailleerde inzichten in individuele en klasprestaties. Identificeer wie extra hulp nodig heeft."
+      "title": "Analyses",
+      "description": "Gedetailleerde inzichten in individuele en klasprestaties. Zie snel wie extra ondersteuning nodig heeft."
     }
   },
   "platforms": {
     "title": "Overal beschikbaar",
-    "description": "Studeer op school, thuis of in de bus. Je flashcards synchroniseren op al je apparaten.",
+    "description": "Studeren op school, thuis of onderweg. Je flashcards synchroniseren automatisch op al je apparaten.",
     "mobile": "Mobiel",
     "desktop": "Desktop"
   }

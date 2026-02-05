@@ -2,57 +2,46 @@
   "faq": {
     "what_is_noava": {
       "question": "Wat is Noava?",
-      "answer": "Noava is een modern platform dat je helpt je bedrijf efficiënt te beheren met geavanceerde technologie en gebruiksvriendelijke interfaces."
+      "answer": "Noava is een modern platform dat je helpt om je activiteiten efficiënt te beheren met geavanceerde technologie en een gebruiksvriendelijke interface."
     },
     "how_does_it_work": {
       "question": "Hoe werkt het?",
-      "answer": "Meld je eenvoudig aan, configureer je voorkeuren en begin met ons intuïtieve dashboard om al je operaties op één plek te beheren."
+      "answer": "Registreer je, stel je voorkeuren in en gebruik het intuïtieve dashboard om al je activiteiten op één plek te beheren."
     },
     "what_are_the_costs": {
       "question": "Wat zijn de kosten?",
-      "answer": "We bieden flexibele abonnementsplannen vanaf €9,99 per maand. Bezoek onze prijspagina voor details over de inbegrepen functies."
+      "answer": "We bieden flexibele abonnementen vanaf € 9,99 per maand. Bezoek onze prijspagina voor details over de inbegrepen functies."
     },
     "can_i_cancel_anytime": {
-      "question": "Kan ik op elk moment annuleren?",
-      "answer": "Ja, je kunt je abonnement op elk moment annuleren zonder boetes of verborgen kosten. Je gegevens blijven 30 dagen na annulering toegankelijk."
+      "question": "Kan ik op elk moment opzeggen?",
+      "answer": "Ja, je kunt je abonnement op elk moment opzeggen zonder boetes of verborgen kosten. Je gegevens blijven nog 30 dagen toegankelijk na opzegging."
     },
     "is_my_data_secure": {
       "question": "Zijn mijn gegevens veilig?",
-      "answer": "Absoluut. We gebruiken encryptie volgens industriestandaard, regelmatige veiligheidsaudits en voldoen aan GDPR."
+      "answer": "Zeker. We gebruiken encryptie volgens industriestandaarden, voeren regelmatige beveiligingsaudits uit en voldoen aan de AVG."
     },
     "support_options_available": {
       "question": "Welke supportopties zijn beschikbaar?",
-      "answer": "We bieden 24/7 e-mailondersteuning, live chat tijdens kantooruren en uitgebreide documentatie. Premiumplannen hebben prioriteitsondersteuning en toegewijde accountmanagers."
+      "answer": "We bieden 24/7 e-mailondersteuning, live chat tijdens kantooruren en uitgebreide documentatie. Premium abonnementen bevatten prioriteitsondersteuning en een vaste accountmanager."
     },
     "integration_with_other_tools": {
-      "question": "Kan ik integreren met andere tools?",
-      "answer": "Ja, Noava integreert met populaire tools zoals Slack, Google Workspace, Microsoft 365, en vele anderen via onze API en vooraf gebouwde connectors."
+      "question": "Kan ik Noava integreren met andere tools?",
+      "answer": "Ja, Noava integreert met populaire tools zoals Slack, Google Workspace en Microsoft 365 via onze API en vooraf gebouwde koppelingen."
     },
     "free_trial": {
-      "question": "Biedt u een gratis proefperiode aan?",
-      "answer": "Ja, we bieden een gratis proefperiode van 14 dagen met volledige toegang tot alle functies. Geen creditcard nodig."
+      "question": "Bieden jullie een gratis proefperiode aan?",
+      "answer": "Ja, we bieden een gratis proefperiode van 14 dagen met volledige toegang tot alle functies. Geen creditcard vereist."
     }
   },
-  "title": "Veelgestelde Vragen",
   "description": "Vind antwoorden op veelgestelde vragen over Noava",
-  "search": {
-    "placeholder": "Zoek in veelgestelde vragen..."
-  },
-  "results": {
-    "showing": "Weergave van",
-    "of": "van",
-    "results": "resultaten"
-  },
-  "loading": "Veelgestelde vragen worden geladen...",
-  "error": "Kan veelgestelde vragen niet laden. Probeer het later opnieuw.",
   "empty": {
     "title": "Geen resultaten gevonden",
-    "message": "We konden geen veelgestelde vragen vinden die overeenkomen met",
+    "message": "We konden geen overeenkomende FAQ’s vinden",
     "cta": "Zoekopdracht wissen"
   },
   "contact": {
-    "title": "Heeft u nog vragen?",
-    "description": "Kunt u het antwoord dat u zoekt niet vinden? Ons team helpt u graag.",
-    "cta": "Contact opnemen met Support"
+    "title": "Nog vragen?",
+    "description": "Kun je het antwoord dat je zoekt niet vinden? Ons team staat klaar om te helpen.",
+    "cta": "Contact opnemen"
   }
 }

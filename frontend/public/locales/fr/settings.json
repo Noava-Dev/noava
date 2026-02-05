@@ -1,18 +1,17 @@
 {
   "header": {
-    "title": "Paramètres",
-    "subtitle": "Personnalisez votre expérience d'application."
+    "subtitle": "Personnalisez votre expérience de l'application."
   },
   "theme": {
     "title": "Thème",
-    "description": "Choisissez votre palette de couleurs préférée",
+    "description": "Sélectionnez votre palette de couleurs préférée",
     "tooltip": "Choisissez entre le mode clair et sombre pour personnaliser l'apparence de l'application.",
     "light": "Clair",
-    "dark": "Obscur"
+    "dark": "Sombre"
   },
   "language": {
     "title": "Langue",
-    "description": "Choisissez la langue que vous préférée",
+    "description": "Choisissez votre langue préférée",
     "tooltip": "Sélectionnez la langue de l'interface de l'application."
   }
 }

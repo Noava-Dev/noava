@@ -5,41 +5,89 @@
     "loading": "Laden...",
     "error": "Er is iets misgegaan",
     "retry": "Opnieuw proberen",
-    "clearSearch": "Zoekopdracht wissen",
     "noResults": "Geen resultaten gevonden voor \"{{searchTerm}}\"",
     "welcome": "Welkom bij Noava"
   },
   "navigation": {
     "home": "Home",
-    "faq": "Veelgestelde Vragen",
+    "faq": "FAQ",
+    "faqFull": "Veelgestelde vragen",
+    "settings": "Instellingen",
     "login": "Inloggen",
     "register": "Registreren",
     "logout": "Uitloggen",
-    "dashboard": "Dashboard"
+    "dashboard": "Dashboard",
+    "notifications": "Meldingen",
+    "decks": "Decks",
+    "classrooms": "Klassen"
   },
   "actions": {
     "save": "Opslaan",
     "cancel": "Annuleren",
     "delete": "Verwijderen",
     "edit": "Bewerken",
+    "update": "Bijwerken",
     "create": "Aanmaken",
-    "invite": "Nodig uit",
+    "invite": "Uitnodigen",
     "search": "Zoeken",
     "searchPlaceholder": "Zoeken...",
-    "submit": "Versturen",
+    "submit": "Verzenden",
     "confirm": "Bevestigen",
     "close": "Sluiten",
-    "getStarted": "Aan de slag"
+    "getStarted": "Aan de slag",
+    "viewAll": "Alles bekijken",
+    "viewMore": "Meer bekijken",
+    "skip": "Overslaan",
+    "finish": "Voltooien",
+    "join": "Deelnemen",
+    "request": "Aanvragen",
+    "show": "Tonen",
+    "back": "Terug"
   },
   "validation": {
     "required": "Dit veld is verplicht",
     "email": "Ongeldig e-mailadres",
-    "minLength": "Minimaal {{count}} karakters vereist",
-    "maxLength": "Maximaal {{count}} karakters toegestaan"  },
+    "minLength": "Minimaal {{count}} tekens vereist",
+    "maxLength": "Maximaal {{count}} tekens toegestaan"
+  },
   "notFound": {
     "title": "404",
     "heading": "Oeps! Pagina niet gevonden",
-    "description": "De pagina die u zoekt is mogelijk verwijderd, heeft een andere naam gekregen of is tijdelijk niet beschikbaar.",
-    "backHome": "Terug naar home",
-    "suggestion": "Hier zijn wat handige links:"  }
+    "description": "De pagina die je zoekt is mogelijk verwijderd, hernoemd of tijdelijk niet beschikbaar.",
+    "backHome": "Terug naar de startpagina",
+    "suggestion": "Hier zijn enkele handige links:"
+  },
+  "search": {
+    "clearSearch": "Zoekopdracht wissen",
+    "otherSearchTerm": "Probeer een andere zoekterm",
+    "showing": "Weergave",
+    "of": "van",
+    "results": "resultaten",
+    "found": "resultaten gevonden"
+  },
+  "sort": {
+    "label": "Sorteren op",
+    "newest": "Nieuwste",
+    "oldest": "Oudste",
+    "az": "Alfabetisch (A-Z)",
+    "za": "Alfabetisch (Z-A)"
+  },
+  "modals": {
+    "deleteModal": {
+      "title": "Verwijderen bevestigen",
+      "message": "Weet je zeker dat je dit wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.",
+      "yes": "Ja, verwijderen"
+    }
+  },
+  "visibility": {
+    "label": "Zichtbaarheid",
+    "public": "Openbaar",
+    "shared": "Gedeeld",
+    "private": "Privé",
+    "visibilityHelp": {
+      "private": "Alleen jij kunt dit deck zien",
+      "shared": "Iedereen met de link kan dit deck zien",
+      "public": "Iedereen kan dit deck zien"
+    }
+  }
 }

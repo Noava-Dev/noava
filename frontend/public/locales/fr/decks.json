@@ -1,61 +1,29 @@
 {
-  "title": "Decks",
-  "subtitle": "Organisez vos flashcards en decks spécifiques à chaque matière",
-  "createButton": "Créer un deck",
-  "search": {
-    "label": "Rechercher"
-  },
-  "sort": {
-    "label": "Trier par",
-    "newest": "Les plus récents d'abord",
-    "oldest": "Les plus anciens d'abord"
-  },
-  "results": {
-    "showing": "Affichage",
-    "of": "de",
-    "decks": "decks",
-    "found": "résultats trouvés"
-  },
+  "subtitle": "Organisez vos flashcards en Decks par matière",
+  "createButton": "Créer un Deck",
   "empty": {
-    "title": "Pas encore de decks",
-    "message": "Créez votre premier deck pour commencer !",
-    "button": "Créer votre premier deck",
-    "noResults": "Aucun deck trouvé",
-    "otherSearchTerm": "Essayez un autre terme de recherche",
-    "clearSearch": "Effacer la recherche"
-  },
-  "card": {
-    "edit": "Modifier",
-    "delete": "Supprimer"
+    "title": "Aucun Deck pour le moment",
+    "message": "Créez votre premier Deck pour commencer !",
+    "button": "Créer votre premier Deck",
+    "noResults": "Aucun Deck trouvé"
   },
   "modal": {
-    "loading": "Chargement du deck...",
-    "createTitle": "Créer un nouveau deck",
-    "editTitle": "Modifier le deck",
+    "createTitle": "Créer un nouveau Deck",
+    "editTitle": "Modifier le Deck",
     "titleLabel": "Titre",
-    "titlePlaceholder": "ex. Vocabulaire Français",
+    "titlePlaceholder": "ex. Vocabulaire français",
     "descriptionLabel": "Description",
-    "descriptionPlaceholder": "Décrivez votre deck...",
+    "descriptionPlaceholder": "Décrivez votre Deck...",
     "imageLabel": "Image de couverture",
-    "imageHelp": "Taille recommandée : 300x200 pixels. Taille maximale : 2 Mo.",
+    "imageHelp": "Taille recommandée : 300x200 pixels. Taille max : 2 Mo.",
     "languageLabel": "Langue",
-    "languageSelect": "Sélectionner une langue",
-    "visibilityLabel": "Visibilité",
-    "visibilityPrivate": "Privé",
-    "visibilityShared": "Partagé",
-    "visibilityPublic": "Public",
-    "visibilityHelp": {
-      "private": "Vous seul pouvez voir ce deck",
-      "shared": "Toute personne ayant le lien peut voir ce deck",
-      "public": "Tout le monde peut voir ce deck"
-    },
-    "createButton": "Créer le deck",
-    "updateButton": "Mettre à jour le deck",
-    "cancelButton": "Annuler",
-    "uploading": "Création du deck..."
+    "languageSelect": "Sélectionnez une langue",
+    "createButton": "Créer le Deck",
+    "updateButton": "Mettre à jour le Deck",
+    "uploading": "Création du Deck..."
   },
   "languages": {
-    "select": "Sélectionner une langue",
+    "select": "Sélectionnez une langue",
     "dutch": "Néerlandais",
     "french": "Français",
     "english": "Anglais",
@@ -63,25 +31,21 @@
     "spanish": "Espagnol",
     "italian": "Italien"
   },
-  "visibility": {
-    "public": "Public",
-    "shared": "Partagé",
-    "private": "Privé"
-  },
   "toast": {
     "createSuccess": "Deck créé avec succès !",
     "updateSuccess": "Deck mis à jour avec succès !",
     "deleteSuccess": "Deck supprimé avec succès !",
-    "createError": "Échec de la création du deck",
-    "updateError": "Échec de la mise à jour du deck",
-    "deleteError": "Échec de la suppression du deck",
-    "loadError": "Échec du chargement des decks"
+    "createError": "Échec de la création du Deck",
+    "updateError": "Échec de la mise à jour du Deck",
+    "deleteError": "Échec de la suppression du Deck",
+    "loadError": "Échec du chargement des Decks",
+    "uploadError": "Échec de l’envoi de l’image"
   },
-  "deleteModal": {
-    "title": "Confirmer la suppression",
-    "message": "Êtes-vous sûr de vouloir supprimer ce deck ?",
-    "yes": "Oui, supprimer",
-    "no": "Annuler"
-  },
-  "loading": "Chargement des decks..."
+  "ownership": {
+    "manageAccess": "Gérer la propriété",
+    "modalTitle": "Propriété du Deck",
+    "currentOwners": "Propriétaires actuels",
+    "inviteUser": "Inviter un utilisateur",
+    "noOwners": "Vous n’avez pas encore invité de copropriétaires."
+  }
 }

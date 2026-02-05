@@ -1,33 +1,32 @@
 {
   "hero": {
-    "title": "Cartes mémoire conçues pour l'école et les salles de classe",
-    "description": "Le moyen simple et puissant pour les enseignants de créer du matériel d'étude et pour les élèves d'apprendre. Conçu spécifiquement pour les environnements éducatifs.",
-    "cta": "Commencer"
+    "title": "Des flashcards conçues pour les écoles et les classes",
+    "description": "Une solution simple et puissante pour permettre aux enseignants de créer des supports d’étude et aux élèves d’apprendre. Conçue spécifiquement pour les environnements éducatifs."
   },
   "features": {
     "title": "Tout ce dont vous avez besoin",
-    "description": "Des outils simples qui font vraiment la différence en classe",
+    "description": "Des outils simples qui font une vraie différence en classe",
     "decks": {
-      "title": "Paquets",
-      "description": "Organisez les cartes mémoire en paquets spécifiques à chaque matière. Créez, partagez et réutilisez dans toutes les classes."
+      "title": "Decks",
+      "description": "Organisez les flashcards en Decks par matière. Créez, partagez et réutilisez-les entre plusieurs classes."
     },
     "classrooms": {
-      "title": "Salles de classe",
-      "description": "Invitez des élèves, attribuez des paquets et suivez les progrès. Le tout dans un espace collaboratif."
+      "title": "Classes",
+      "description": "Invitez des élèves, assignez des Decks et suivez les progrès. Le tout dans un espace collaboratif unique."
     },
     "dashboards": {
       "title": "Tableaux de bord",
-      "description": "Les enseignants ont une vue d'ensemble de l'activité de la classe, des taux d'achèvement et de l'engagement des élèves."
+      "description": "Les enseignants disposent d’une vue d’ensemble sur l’activité de la classe, les taux de complétion et l’engagement des élèves."
     },
     "analytics": {
-      "title": "Analytique",
-      "description": "Aperçus détaillés des performances individuelles et de classe. Identifiez qui a besoin d'aide supplémentaire."
+      "title": "Analyses",
+      "description": "Des informations détaillées sur les performances individuelles et collectives. Identifiez facilement les élèves qui ont besoin d’aide."
     }
   },
   "platforms": {
     "title": "Disponible partout",
-    "description": "Étudiez à l'école, à la maison ou dans le bus. Vos cartes mémoire se synchronisent sur tous vos appareils.",
+    "description": "Étudiez à l’école, à la maison ou dans les transports. Vos flashcards se synchronisent sur tous vos appareils.",
     "mobile": "Mobile",
-    "desktop": "Bureau"
+    "desktop": "Ordinateur"
   }
 }

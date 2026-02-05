@@ -1,25 +1,10 @@
 {
-  "title": "Classes",
   "subtitle": "Gérez et rejoignez vos classes.",
   "createButton": "Créer une classe",
-  "search": {
-    "label": "Rechercher"
-  },
-  "sort": {
-    "label": "Trier",
-    "newest": "Les plus récentes",
-    "oldest": "Les plus anciennes",
-    "az": "Alphabétique (A-Z)",
-    "za": "Alphabétique (Z-A)"
-  },
-  "results": {
-    "found": "résultats trouvés"
-  },
+  "results": { "found": "résultats trouvés" },
   "empty": {
     "noResults": "Aucune classe trouvée",
-    "tryAnother": "Essayez un autre terme de recherche",
-    "clearSearch": "Effacer la recherche",
-    "message": "Vous n'avez pas encore de classes."
+    "message": "Vous n’avez pas encore de classes."
   },
   "modal": {
     "createTitle": "Créer une classe",
@@ -30,59 +15,14 @@
     "updateButton": "Mettre à jour",
     "cancelButton": "Annuler"
   },
-  "toast": {
-    "loadError": "Impossible de charger les classes",
-    "createSuccess": "Classe créée",
-    "createError": "Échec de la création de la classe",
-    "updateSuccess": "Classe mise à jour",
-    "updateError": "Échec de la mise à jour",
-    "deleteSuccess": "Classe supprimée",
-    "deleteError": "Échec de la suppression",
-    "nameAndDescriptionRequired": "Le nom et la description sont requis",
-    "requestCodeSuccess": "Nouveau code demandé",
-    "requestCodeError": "Échec de la demande du nouveau code"
-  },
-  "deleteModal": {
-    "title": "Supprimer la classe",
-    "message": "Voulez-vous vraiment supprimer cette classe ? Cette action est irréversible.",
-    "yes": "Oui",
-    "no": "Non"
-  },
-  "card": {
-    "edit": "Modifier",
-    "regenerateCode": "Demander un nouveau code",
-    "delete": "Supprimer",
-    "show": "Voir"
-  },
-
-  "requestCodeModal": {
-    "title": "Demander un nouveau code de classe",
-    "message": "Souhaitez-vous demander un nouveau code d'accès ? L'ancien code sera invalidé.",
-    "yes": "Demander",
-    "no": "Annuler"
-  },
-  "detail": {
-    "description": "Description",
-    "info": "Informations",
-    "membersPlaceholder": "Les membres et les réglages de la classe apparaîtront ici.",
-    "joinCode": "Code d'accès",
-    "edit": "Modifier",
-    "delete": "Supprimer",
-    "back": "Retour"
-  },
-  "actions": {
-    "cancel": "Annuler",
-    "invite": "Inviter"
-  },
   "members": {
     "title": "Membres",
     "subtitle": "Gérer les membres de la classe",
-    "invite": "Inviter",
     "inviteTitle": "Inviter un utilisateur",
-    "inviteHelp": "Saisissez l'e-mail de l'utilisateur que vous souhaitez inviter dans cette classe.",
+    "inviteHelp": "Entrez l’adresse e-mail de l’utilisateur que vous souhaitez inviter dans cette classe.",
     "invitePlaceholder": "utilisateur@exemple.com",
     "inviteSuccess": "Invitation envoyée",
-    "inviteError": "Échec de l'envoi de l'invitation, cet utilisateur pourrait ne pas exister",
+    "inviteError": "Échec de l’envoi de l’invitation, cet utilisateur n’existe peut-être pas",
     "notAuthorized": "Non autorisé",
     "onlyTeachers": "Seuls les enseignants peuvent accéder à cette page",
     "editTitle": "Modifier le membre",
@@ -93,7 +33,7 @@
     "deleteSuccess": "Membre supprimé",
     "deleteError": "Échec de la suppression du membre",
     "deleteConfirmTitle": "Supprimer le membre",
-    "deleteConfirmMessage": "Voulez-vous vraiment supprimer ce membre ?",
+    "deleteConfirmMessage": "Êtes-vous sûr de vouloir supprimer ce membre ?",
     "noMembers": "Aucun membre trouvé",
     "searchPlaceholder": "Rechercher par nom ou e-mail",
     "columns": {
@@ -102,26 +42,46 @@
       "role": "Rôle",
       "actions": "Actions"
     },
-    "role": {
-      "teacher": "Enseignant",
-      "student": "Étudiant"
-    },
+    "role": { "teacher": "Enseignant", "student": "Élève" },
     "member": "Membre"
   },
-  "joinButton": "Rejoindre Classe",
+  "toast": {
+    "loadError": "Échec du chargement des classes",
+    "createSuccess": "Classe créée",
+    "createError": "Échec de la création de la classe",
+    "updateSuccess": "Classe mise à jour",
+    "updateError": "Échec de la mise à jour de la classe",
+    "deleteSuccess": "Classe supprimée",
+    "deleteError": "Échec de la suppression de la classe",
+    "nameAndDescriptionRequired": "Le nom et la description sont requis",
+    "requestCodeSuccess": "Nouveau code demandé",
+    "requestCodeError": "Échec de la demande d’un nouveau code"
+  },
+  "card": {
+    "regenerateCode": "Demander un nouveau code"
+  },
+  "requestCodeModal": {
+    "title": "Demander un nouveau code de classe",
+    "message": "Êtes-vous sûr de vouloir demander un nouveau code d’inscription ? Cela invalidera le code précédent."
+  },
+  "detail": {
+    "description": "Description",
+    "info": "Informations",
+    "membersPlaceholder": "Les membres et les paramètres de la classe apparaîtront ici.",
+    "joinCode": "Code d’inscription"
+  },
+  "joinButton": "Rejoindre la classe",
   "join": {
     "title": "Rejoindre une classe",
-    "subtitle": "Saisissez un code pour rejoindre une classe",
+    "subtitle": "Entrez un code pour rejoindre une classe",
     "form": {
-      "label": "Code d'accès",
+      "label": "Code d’inscription",
       "placeholder": "ex. ABC123",
-      "empty": "Veuillez saisir un code d'accès",
-      "submit": "Rejoindre",
-      "cancel": "Annuler",
-      "joining": "Rejoindre..."
+      "empty": "Veuillez entrer un code d’inscription",
+      "joining": "Connexion..."
     },
     "success": "Vous avez été ajouté à la classe",
-    "error": "Échec de la jonction avec ce code"
+    "error": "Échec de la connexion avec ce code"
   },
   "notFound": "Classe introuvable"
 }

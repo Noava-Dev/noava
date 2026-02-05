@@ -1,40 +1,32 @@
 {
-  "title": "Tableau de bord",
   "subtitle": "Votre tableau de bord personnel Noava",
   "yourDecks": "Vos Decks",
   "statcard": {
     "cardsreviewed": {
-      "title": "Cartes Révisées",
-      "tooltip": "Nombre total de révisions de flashcards que vous avez effectuées dans tous les decks"
+      "title": "Cartes révisées",
+      "tooltip": "Nombre total de révisions de cartes que vous avez effectuées sur l’ensemble des paquets"
     },
     "accuracyrate": {
-      "title": "Taux de Précision",
-      "tooltip": "Pourcentage de cartes auxquelles vous avez répondu correctement dès la première fois"
+      "title": "Taux de réussite",
+      "tooltip": "Pourcentage de cartes auxquelles vous avez répondu correctement dès la première tentative"
     },
     "studytime": {
-      "title": "Temps d'Étude",
-      "tooltip": "Temps total passé à étudier les flashcards cette semaine"
+      "title": "Temps d’étude",
+      "tooltip": "Temps total consacré à l’étude des cartes cette semaine"
     },
     "cardsdue": {
-      "title": "Cartes à Réviser",
-      "tooltip": "Cartes prévues pour révision aujourd'hui selon l'algorithme de répétition espacée"
+      "title": "Cartes à réviser",
+      "tooltip": "Cartes prévues pour révision aujourd’hui selon l’algorithme de répétition espacée"
     }
   },
   "decks": {
-    "empty": "Pas encore de decks",
-    "viewAll": "Voir tout"
+    "empty": "Aucun paquet pour le moment"
   },
   "toast": {
-    "loadError": "Impossible de charger les decks",
-    "updateSuccess": "Deck mis à jour avec succès",
-    "updateError": "Échec de la mise à jour du deck",
-    "deleteSuccess": "Deck supprimé avec succès",
-    "deleteError": "Échec de la suppression du deck"
-  },
-  "deleteModal": {
-    "title": "Confirmer la Suppression",
-    "message": "Êtes-vous sûr de vouloir supprimer ce deck? Cette action est irréversible.",
-    "yes": "Oui, supprimer",
-    "no": "Annuler"
+    "loadError": "Échec du chargement des paquets",
+    "updateSuccess": "Paquet mis à jour avec succès",
+    "updateError": "Échec de la mise à jour du paquet",
+    "deleteSuccess": "Paquet supprimé avec succès",
+    "deleteError": "Échec de la suppression du paquet"
   }
 }

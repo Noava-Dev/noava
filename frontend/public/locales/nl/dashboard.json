@@ -1,40 +1,32 @@
 {
-  "title": "Dashboard",
   "subtitle": "Je persoonlijke Noava-dashboard",
-  "yourDecks": "Jouw Decks",
+  "yourDecks": "Jouw decks",
   "statcard": {
     "cardsreviewed": {
-      "title": "Beoordeelde Kaarten",
-      "tooltip": "Totaal aantal flashcard-beoordelingen dat je hebt voltooid in alle decks"
+      "title": "Kaarten herhaald",
+      "tooltip": "Totaal aantal flashcard-herhalingen dat je hebt voltooid over alle decks heen"
     },
     "accuracyrate": {
-      "title": "Nauwkeurigheid",
-      "tooltip": "Percentage kaarten dat je correct beantwoordde bij de eerste poging"
+      "title": "Nauwkeurigheidspercentage",
+      "tooltip": "Percentage kaarten dat je bij de eerste poging correct hebt beantwoord"
     },
     "studytime": {
       "title": "Studietijd",
-      "tooltip": "Totale tijd besteed aan het bestuderen van flashcards deze week"
+      "tooltip": "Totale tijd die je deze week aan het studeren van flashcards hebt besteed"
     },
     "cardsdue": {
-      "title": "Te Beoordelen Kaarten",
-      "tooltip": "Kaarten gepland voor beoordeling vandaag volgens het spaced repetition-algoritme"
+      "title": "Te herhalen kaarten",
+      "tooltip": "Kaarten die vandaag gepland staan voor herhaling op basis van het spaced repetition-algoritme"
     }
   },
   "decks": {
-    "empty": "Nog geen decks",
-    "viewAll": "Alles bekijken"
+    "empty": "Nog geen decks"
   },
   "toast": {
-    "loadError": "Kan decks niet laden",
+    "loadError": "Laden van decks mislukt",
     "updateSuccess": "Deck succesvol bijgewerkt",
-    "updateError": "Deck kon niet worden bijgewerkt",
+    "updateError": "Bijwerken van deck mislukt",
     "deleteSuccess": "Deck succesvol verwijderd",
-    "deleteError": "Deck kon niet worden verwijderd"
-  },
-  "deleteModal": {
-    "title": "Verwijderen Bevestigen",
-    "message": "Weet je zeker dat je dit deck wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.",
-    "yes": "Ja, verwijderen",
-    "no": "Annuleren"
+    "deleteError": "Verwijderen van deck mislukt"
   }
 }

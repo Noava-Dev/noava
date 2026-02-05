@@ -1,33 +1,24 @@
 {
-    "title": "Notifications",
-    "empty": "Aucune notification",
-    "view": "En savoir plus",
-    "tooltip": {
-        "delete": "Supprimer la notification"
-    },
-    "aria": {
-        "deleteNotification": "Supprimer la notification"
-    },
-    "errors": {
-        "title": "Erreur",
-        "fetch": "Impossible de récupérer les notifications",
-        "delete": "Échec de la suppression de la notification",
-        "action": "Échec de l'exécution de l'action",
-        "params": "Paramètres de notification invalides"
-    },
-    "notifications": {
-        "genericTitle": "Notification",
-        "received": "Vous avez une nouvelle notification",
-        "items": {
-            "classroom": {
-                "invite": {
-                    "received": "Vous avez été invité à {{classroomName}} par {{teacherName}}",
-                    "actions": {
-                        "accept": "Accepter l'invitation",
-                        "deny": "Refuser l'invitation"
-                    }
-                }
-            }
+  "empty": "Aucune notification",
+  "errors": {
+    "fetch": "Échec du chargement des notifications",
+    "delete": "Échec de la suppression de la notification",
+    "action": "Échec de l'exécution de l'action",
+    "params": "Paramètres de notification invalides"
+  },
+  "notifications": {
+    "genericTitle": "Notification",
+    "received": "Vous avez une nouvelle notification",
+    "items": {
+      "classroom": {
+        "invite": {
+          "received": "Vous avez été invité à {{classroomName}} par {{teacherName}}",
+          "actions": {
+            "accept": "Accepter l'invitation",
+            "deny": "Refuser l'invitation"
+          }
         }
+      }
     }
+  }
 }
