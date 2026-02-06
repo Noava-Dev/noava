@@ -22,7 +22,12 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { notificationService } from '../../../services/NotificationService';
 
-function NoavaSidebar() {
+type NoavaSidebarProps = {
+  onNavigate?: () => void;
+  className?: string;
+};
+
+function NoavaSidebar({ className, onNavigate }: NoavaSidebarProps) {
   const { userRole } = useUserRole();
   const { user } = useUser();
   const { openUserProfile } = useClerk();
@@ -51,9 +56,9 @@ function NoavaSidebar() {
   return (
     <Sidebar
       aria-label="Noava Sidebar"
-      className="h-full border-r dark:border-border-dark border-border">
+      className={`h-full border-r dark:border-border-dark border-border ${className ?? ''}`}>
       {/* Logo */}
-      <SidebarItemGroup className="mb-14">
+      <SidebarItemGroup className="mb-14 w-fit">
         <SidebarLogo
           href="#"
           img="/src/assets/noava-logo-blue-nobg.png"
@@ -69,7 +74,10 @@ function NoavaSidebar() {
           <SidebarItem
             icon={LuLayoutDashboard}
             active={location.pathname === '/dashboard'}
-            onClick={() => navigate('/dashboard')}
+            onClick={() => {
+              navigate('/dashboard');
+              onNavigate?.();
+            }}
             className="font-semibold cursor-pointer">
             Dashboard
           </SidebarItem>
@@ -77,7 +85,10 @@ function NoavaSidebar() {
           <SidebarItem
             icon={LuLayers}
             active={location.pathname === '/decks'}
-            onClick={() => navigate('/decks')}
+            onClick={() => {
+              navigate('/decks');
+              onNavigate?.();
+            }}
             className="font-semibold cursor-pointer">
             Decks
           </SidebarItem>
@@ -85,7 +96,10 @@ function NoavaSidebar() {
           <SidebarItem
             icon={LuUsers}
             active={location.pathname === '/classrooms'}
-            onClick={() => navigate('/classrooms')}
+            onClick={() => {
+              navigate('/classrooms');
+              onNavigate?.();
+            }}
             className="font-semibold cursor-pointer">
             Classrooms
           </SidebarItem>
@@ -93,7 +107,10 @@ function NoavaSidebar() {
           <SidebarItem
             icon={LuCircleHelp}
             active={location.pathname === '/faq'}
-            onClick={() => navigate('/faq')}
+            onClick={() => {
+              navigate('/faq');
+              onNavigate?.();
+            }}
             className="font-semibold cursor-pointer">
             FAQ
           </SidebarItem>
@@ -106,7 +123,10 @@ function NoavaSidebar() {
             label={notificationCount.toString()}
             labelColor="blue"
             active={location.pathname === '/notifications'}
-            onClick={() => navigate('/notifications')}
+            onClick={() => {
+              navigate('/notifications');
+              onNavigate?.();
+            }}
             className="font-semibold cursor-pointer">
             Notifications
           </SidebarItem>
@@ -114,7 +134,10 @@ function NoavaSidebar() {
           <SidebarItem
             icon={LuSettings}
             active={location.pathname === '/settings'}
-            onClick={() => navigate('/settings')}
+            onClick={() => {
+              navigate('/settings');
+              onNavigate?.();
+            }}
             className="font-semibold cursor-pointer">
             Settings
           </SidebarItem>
@@ -123,7 +146,10 @@ function NoavaSidebar() {
             <SidebarItem
               icon={RiShieldUserLine}
               active={location.pathname.startsWith('/admin')}
-              onClick={() => navigate('/admin/dashboard')}
+              onClick={() => {
+                navigate('/admin/dashboard');
+                onNavigate?.();
+              }}
               className="font-semibold cursor-pointer">
               Admin
             </SidebarItem>

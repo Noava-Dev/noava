@@ -30,16 +30,47 @@ function Header() {
             className="object-cover w-12 h-auto mr-3"
             alt="Noava Logo"
           />
-          <span className="self-center text-xl font-semibold whitespace-nowrap text-text-title-light dark:text-text-title-dark">
+          <span className="self-center text-2xl font-semibold sm:text-xl whitespace-nowrap text-text-title-light dark:text-text-title-dark">
             Noava
           </span>
         </NavbarBrand>
+
+        <div className="flex items-center gap-2 sm:hidden">
+          {isSignedIn && <UserButton />}
+          <NavbarToggle />
+        </div>
+
         <NavbarCollapse>
-          <NavigationLink href="/docs" text="Docs" />
-          <NavigationLink href="/dashboard" text="Dashboard" />
-          <NavigationLink href="/faq" text="FAQ" />
+          <div className="flex flex-col justify-center gap-2 text-lg sm:flex-row sm:text-base sm:gap-4">
+            <NavigationLink
+              href="/docs"
+              text="Docs"
+              className="py-2 border-b border-border dark:border-border-dark hover:border-primary-500 dark:hover:border-primary-300"
+            />
+            <NavigationLink
+              href="/dashboard"
+              text="Dashboard"
+              className="py-2 border-b border-border dark:border-border-dark hover:border-primary-500 dark:hover:border-primary-300"
+            />
+            <NavigationLink
+              href="/faq"
+              text="FAQ"
+              className="py-2 border-b border-border dark:border-border-dark hover:border-primary-500 dark:hover:border-primary-300"
+            />
+          </div>
+          {!isSignedIn && (
+            <div className="flex flex-col gap-2 mt-8 sm:hidden">
+              <SignUpButton>
+                <Button>{t('navigation.register')}</Button>
+              </SignUpButton>
+
+              <SignInButton>
+                <Button>{t('navigation.login')}</Button>
+              </SignInButton>
+            </div>
+          )}
         </NavbarCollapse>
-        <div className="flex items-center gap-2">
+        <div className="hidden sm:flex sm:items-center sm:gap-2">
           {!isSignedIn ? (
             <>
               <SignUpButton>
@@ -53,7 +84,6 @@ function Header() {
           ) : (
             <UserButton />
           )}
-          <NavbarToggle />
         </div>
       </Navbar>
     </>
