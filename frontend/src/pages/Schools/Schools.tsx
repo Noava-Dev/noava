@@ -9,7 +9,7 @@ import CreateSchoolModal from './components/CreateSchoolModal'
 
 export default function SchoolsPage() {
   const schoolService = useSchoolService();
-  const { showError } = useToast();
+  const { showError, showSuccess } = useToast();
 
   const [schools, setSchools] = useState<SchoolDto[]>([]);
   const [loading, setLoading] = useState(true);
@@ -27,25 +27,38 @@ export default function SchoolsPage() {
     }
   };
 
-  const handleCreateSchool = async (data: {
-    name: string;
-    adminEmail: string;
-  }) => {
-    
-  }
-
+  //waarom moet dees opgeroepe worde hier?
   useEffect(() => {
     fetchSchools();
   }, []);
-  if (loading) {
+
+const handleCreateSchool = async (data: {
+    name: string;
+    adminEmail: string;
+  }) => {
+    try {
+      await schoolService.create({
+        schoolName: data.name,
+        schoolAdminEmails: [data.adminEmail],
+      });
+
+      showSuccess('School created', `${data.name} was added successfully.`);
+
+      setIsModalOpen(false);
+      await fetchSchools();
+    } catch (error) {
+      showError('Create failed', 'Could not create school.');
+    }
+  };
+
+if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-background-app-light dark:bg-background-app-dark">
         <div className="border-4 rounded-full size-10 animate-spin border-primary-100 border-t-primary-500" />
       </div>
     );
   }
-
-  return (
+return (
     <div className="min-h-screen bg-background-app-light dark:bg-background-app-dark">
       <PageHeader>
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -57,9 +70,11 @@ export default function SchoolsPage() {
               Overview of all registered educational institutions.
             </p>
           </div>
+
           <button
-          onClick={() => setIsModalOpen(true)} 
-          className="flex items-center justify-center gap-2 rounded-lg bg-primary-500 px-5 py-2.5 text-sm font-semibold text-white hover:bg-primary-600 transition-colors shadow-md">
+            onClick={() => setIsModalOpen(true)}
+            className="flex items-center justify-center gap-2 rounded-lg bg-primary-500 px-5 py-2.5 text-sm font-semibold text-white hover:bg-primary-600 transition-colors shadow-md"
+          >
             <Plus className="size-5" />
             Add School
           </button>
@@ -80,7 +95,7 @@ export default function SchoolsPage() {
           ) : (
             schools.map((school) => (
               <SchoolCard
-                key={school.schoolId}
+                key={school.id} // ✅ fixed
                 name={school.schoolName}
                 createdAt={new Date(school.createdAt)}
                 admins={school.admins.map((a) => ({
@@ -93,11 +108,12 @@ export default function SchoolsPage() {
           )}
         </div>
       </main>
-      <CreateSchoolModal
-  open={isModalOpen}
-  onClose={() => setIsModalOpen(false)}
-/>
 
+      <CreateSchoolModal
+        open={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onCreate={handleCreateSchool} // ✅ wired
+      />
     </div>
   );
 }
