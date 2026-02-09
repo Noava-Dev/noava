@@ -1,17 +1,19 @@
-export interface SchoolAdminDto {
+export interface ClerkUserDto {
   clerkId: string;
-  username: string;
   email: string;
+  username: string;
 }
 
 export interface SchoolDto {
-  schoolId: number;
+  id: number;
   schoolName: string;
-  admins: SchoolAdminDto[];
+  createdBy: ClerkUserDto;
+  admins: ClerkUserDto[];
   createdAt: string;
+  updatedAt: string;
 }
 
-export interface CreateSchoolRequest {
-  name: string;
+export interface SchoolRequest {
+  schoolName: string;
   schoolAdminEmails: string[];
 }

@@ -5,6 +5,7 @@ import type { SchoolDto } from '../../models/School';
 import { useToast } from '../../contexts/ToastContext';
 import { useSchoolService } from '../../services/SchoolService';
 import { LuPlus as Plus } from 'react-icons/lu';
+import CreateSchoolModal from './components/CreateSchoolModal'
 
 export default function SchoolsPage() {
   const schoolService = useSchoolService();
@@ -12,6 +13,7 @@ export default function SchoolsPage() {
 
   const [schools, setSchools] = useState<SchoolDto[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const fetchSchools = async () => {
     try {
@@ -24,6 +26,13 @@ export default function SchoolsPage() {
       setLoading(false);
     }
   };
+
+  const handleCreateSchool = async (data: {
+    name: string;
+    adminEmail: string;
+  }) => {
+    
+  }
 
   useEffect(() => {
     fetchSchools();
@@ -48,7 +57,9 @@ export default function SchoolsPage() {
               Overview of all registered educational institutions.
             </p>
           </div>
-          <button className="flex items-center justify-center gap-2 rounded-lg bg-primary-500 px-5 py-2.5 text-sm font-semibold text-white hover:bg-primary-600 transition-colors shadow-md">
+          <button
+          onClick={() => setIsModalOpen(true)} 
+          className="flex items-center justify-center gap-2 rounded-lg bg-primary-500 px-5 py-2.5 text-sm font-semibold text-white hover:bg-primary-600 transition-colors shadow-md">
             <Plus className="size-5" />
             Add School
           </button>
@@ -82,6 +93,11 @@ export default function SchoolsPage() {
           )}
         </div>
       </main>
+      <CreateSchoolModal
+  open={isModalOpen}
+  onClose={() => setIsModalOpen(false)}
+/>
+
     </div>
   );
 }
