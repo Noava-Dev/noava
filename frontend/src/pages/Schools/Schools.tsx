@@ -27,7 +27,6 @@ export default function SchoolsPage() {
     }
   };
 
-  //waarom moet dees opgeroepe worde hier?
   useEffect(() => {
     fetchSchools();
   }, []);

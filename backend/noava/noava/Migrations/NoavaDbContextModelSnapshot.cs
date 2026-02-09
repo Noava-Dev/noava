@@ -70,7 +70,7 @@ namespace noava.Migrations
 
                     b.HasIndex("DeckId");
 
-                    b.ToTable("Cards");
+                    b.ToTable("Cards", (string)null);
                 });
 
             modelBuilder.Entity("noava.Models.CardInteractions", b =>
@@ -133,7 +133,7 @@ namespace noava.Migrations
 
                     b.HasIndex("StudySessionId");
 
-                    b.ToTable("CardInteractions", t =>
+                    b.ToTable("CardInteractions", null, t =>
                         {
                             t.HasCheckConstraint("CK_CardInteractions_DueAtBefore_DueAtAfter", "\"DueAtAfter\" >= \"DueAtBefore\"");
 
@@ -188,7 +188,7 @@ namespace noava.Migrations
 
                     b.HasIndex("ClerkId");
 
-                    b.ToTable("CardProgress", t =>
+                    b.ToTable("CardProgress", null, t =>
                         {
                             t.HasCheckConstraint("CK_CardProgress_BoxNumber_NonNegative", "\"BoxNumber\" >= 1 AND \"BoxNumber\" <= 5");
 
@@ -229,7 +229,7 @@ namespace noava.Migrations
                     b.HasIndex("JoinCode")
                         .IsUnique();
 
-                    b.ToTable("Classrooms");
+                    b.ToTable("Classrooms", (string)null);
                 });
 
             modelBuilder.Entity("noava.Models.ClassroomUser", b =>
@@ -247,7 +247,7 @@ namespace noava.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ClassroomUsers");
+                    b.ToTable("ClassroomUsers", (string)null);
                 });
 
             modelBuilder.Entity("noava.Models.Deck", b =>
@@ -298,7 +298,7 @@ namespace noava.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Decks");
+                    b.ToTable("Decks", (string)null);
 
                     b.HasData(
                         new
@@ -434,7 +434,7 @@ namespace noava.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("FAQs");
+                    b.ToTable("FAQs", (string)null);
 
                     b.HasData(
                         new
@@ -528,7 +528,7 @@ namespace noava.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Notifications");
+                    b.ToTable("Notifications", (string)null);
                 });
 
             modelBuilder.Entity("noava.Models.NotificationAction", b =>
@@ -558,7 +558,7 @@ namespace noava.Migrations
 
                     b.HasIndex("NotificationId");
 
-                    b.ToTable("NotificationActions");
+                    b.ToTable("NotificationActions", (string)null);
                 });
 
             modelBuilder.Entity("noava.Models.School", b =>
@@ -588,7 +588,7 @@ namespace noava.Migrations
 
                     b.HasIndex("CreatedBy");
 
-                    b.ToTable("Schools");
+                    b.ToTable("Schools", (string)null);
                 });
 
             modelBuilder.Entity("noava.Models.SchoolAdmin", b =>
@@ -603,7 +603,7 @@ namespace noava.Migrations
 
                     b.HasIndex("ClerkId");
 
-                    b.ToTable("SchoolAdmins");
+                    b.ToTable("SchoolAdmins", (string)null);
                 });
 
             modelBuilder.Entity("noava.Models.StudySessions", b =>
@@ -641,7 +641,7 @@ namespace noava.Migrations
 
                     b.HasIndex("DeckId");
 
-                    b.ToTable("StudySessions", t =>
+                    b.ToTable("StudySessions", null, t =>
                         {
                             t.HasCheckConstraint("CK_StartTime_EndTime", "\"EndTime\" >= \"StartTime\"");
 
@@ -660,7 +660,7 @@ namespace noava.Migrations
 
                     b.HasKey("ClerkId");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("noava.Models.Card", b =>
