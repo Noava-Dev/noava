@@ -5,7 +5,8 @@ import type { SchoolDto } from '../../models/School';
 import { useToast } from '../../contexts/ToastContext';
 import { useSchoolService } from '../../services/SchoolService';
 import { LuPlus as Plus } from 'react-icons/lu';
-import CreateSchoolModal from './components/CreateSchoolModal'
+import CreateSchoolModal from './components/CreateSchoolModal';
+import Loading from '../../shared/components/loading/Loading';
 
 export default function SchoolsPage() {
   const schoolService = useSchoolService();
@@ -50,13 +51,14 @@ const handleCreateSchool = async (data: {
     }
   };
 
-if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-background-app-light dark:bg-background-app-dark">
-        <div className="border-4 rounded-full size-10 animate-spin border-primary-100 border-t-primary-500" />
-      </div>
-    );
-  }
+if (loading) { 
+  return ( 
+  <div className="flex items-center justify-center min-h-screen bg-background-app-light dark:bg-background-app-dark">
+    <Loading size="lg" center text="Loading schools..." /> 
+  </div> 
+  ); 
+}
+
 return (
     <div className="min-h-screen bg-background-app-light dark:bg-background-app-dark">
       <PageHeader>
