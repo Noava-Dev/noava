@@ -105,6 +105,8 @@ namespace noava.Services.Cards
                 IgnoreBlankLines = true,
                 MissingFieldFound = null,
                 BadDataFound = null,
+                HeaderValidated = null,
+                PrepareHeaderForMatch = args => args.Header.Trim().ToLowerInvariant(),
             });
 
             var rows = csv.GetRecords<CardCsvImportDto>();

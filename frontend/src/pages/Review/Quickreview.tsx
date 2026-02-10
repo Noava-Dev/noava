@@ -54,6 +54,13 @@ function QuickReview() {
     };
   }, [session?.currentIndex]);
 
+  // Stop speech when component unmounts or card changes
+  useEffect(() => {
+    return () => {
+      window.speechSynthesis.cancel();
+    };
+  }, [session?.currentIndex]);
+
   // Load images and audio for current card
   useEffect(() => {
     if (session && session.cards.length > 0) {
@@ -474,7 +481,7 @@ function QuickReview() {
                   onClick={handleNext}
                   disabled={!isFlipped}>
                   {session.currentIndex === session.cards.length - 1
-                    ? t('quickReview.finish')
+                    ? t('common:actions.finish')
                     : t('quickReview.next')}
                 </Button>
               </div>

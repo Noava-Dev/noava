@@ -1,6 +1,10 @@
 import { useApi } from '../hooks/useApi';
-import type { Flashcard, CreateFlashcardRequest, UpdateFlashcardRequest } from '../models/Flashcard';
 import { BulkReviewMode } from '../models/Flashcard';
+import type {
+  Flashcard,
+  CreateFlashcardRequest,
+  UpdateFlashcardRequest,
+} from '../models/Flashcard';
 
 export const useFlashcardService = () => {
   const api = useApi();
