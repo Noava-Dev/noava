@@ -147,7 +147,7 @@ export const AddDeckModal: React.FC<AddDeckModalProps> = ({
       </ModalBody>
       <ModalFooter>
         <Button color="gray" onClick={handleClose}>
-          {t('addDeck.done')}
+          {t('common:actions.done')}
         </Button>
       </ModalFooter>
     </Modal>

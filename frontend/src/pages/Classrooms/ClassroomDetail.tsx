@@ -9,6 +9,7 @@ import DeckCard from '../../shared/components/DeckCard';
 import { AddDeckModal } from '../../shared/components/AddDeckModal';
 import { BulkReviewModal } from '../../shared/components/BulkReviewModal';
 import ConfirmModal from '../../shared/components/ConfirmModal';
+import BackButton from '../../shared/components/navigation/BackButton';
 import { useClassroomService } from '../../services/ClassroomService';
 import { useToast } from '../../contexts/ToastContext';
 import type { ClassroomResponse } from '../../models/Classroom';
@@ -86,7 +87,7 @@ function ClassroomDetailPage() {
 
     try {
       await classroomSvc.removeDeck(id, deckToDelete);
-      showSuccess(t('common:toast.success'), t('decks.removeSuccess'));
+      showSuccess(t('decks.removeSuccess'), t('common:toast.success'));
       await fetchDecks();
     } catch (error) {
       console.error('Error removing deck:', error);
@@ -151,6 +152,7 @@ return (
     <div className="flex-1 w-full ml-0">
       <PageHeader>
         <div className="pt-4 md:pt-8">
+          <BackButton text={t('common:actions.back')} href="/classrooms" />
           <div className="flex items-start justify-between gap-4">
             <div className="flex-1 min-w-0">
               <h1 className="text-3xl font-extrabold tracking-tight text-text-title-light md:text-5xl dark:text-text-title-dark">
@@ -169,35 +171,39 @@ return (
                 </div>
               </div>
 
-              <div className="flex items-center gap-3 mt-6">
-                <Button color="gray" onClick={() => navigate('/classrooms')}>
-                  {t('common:actions.back')}
-                </Button>
+              <div className="flex flex-col gap-3 mt-6 sm:flex-row">
+                {decks.length > 0 && (
+                  <Button
+                    color="cyan"
+                    size="lg"
+                    className="w-full border-none md:w-fit"
+                    onClick={() => setBulkReviewModalOpened(true)}
+                  >
+                    {t('bulkReview.button')}
+                  </Button>
+                )}
+                {classroom.permissions?.canEdit && (
+                  <>
+                    <Button
+                      size="lg"
+                      className="w-full md:w-fit"
+                      onClick={() => navigate(`/classrooms/${id}/members`)}
+                    >
+                      {t('members.title')}
+                    </Button>
+                    <Button
+                      size="lg"
+                      className="w-full md:w-fit"
+                      onClick={() => setAddDeckModalOpened(true)}
+                    >
+                      <HiPlus className="w-5 h-5 mr-2" />
+                      {t('decks.addDeck')}
+                    </Button>
+                  </>
+                )}
               </div>
             </div>
 
-            {/* Right side buttons */}
-            <div className="flex flex-col gap-3 flex-shrink-0">
-              {decks.length > 0 && (
-                <Button
-                  color="cyan"
-                  onClick={() => setBulkReviewModalOpened(true)}
-                >
-                  {t('bulkReview.button')}
-                </Button>
-              )}
-              {classroom.permissions?.canEdit && (
-                <>
-                  <Button onClick={() => navigate(`/classrooms/${id}/members`)}>
-                    {t('members.title')}
-                  </Button>
-                  <Button onClick={() => setAddDeckModalOpened(true)}>
-                    <HiPlus className="w-5 h-5 mr-2" />
-                    {t('decks.addDeck')}
-                  </Button>
-                </>
-              )}
-            </div>
           </div>
         </div>
       </PageHeader>
@@ -233,7 +239,7 @@ return (
               <div className="text-center max-w-md">
                 {/* Icon */}
                 <div className="flex justify-center mb-6">
-                  <div className="w-24 h-24 rounded-full bg-primary-100 dark:bg-primary-900/20 flex items-center justify-center">
+                  <div className="w-24 h-24 rounded-full bg-background-surface-light dark:bg-background-surface-dark flex items-center justify-center">
                     <HiPlus className="w-12 h-12 text-primary-600 dark:text-primary-400" />
                   </div>
                 </div>
@@ -250,7 +256,11 @@ return (
 
                 {/* CTA Button */}
                 {classroom.permissions?.canEdit && (
-                  <Button size="lg" onClick={() => setAddDeckModalOpened(true)}>
+                  <Button
+                    size="lg"
+                    className="justify-self-center"
+                    onClick={() => setAddDeckModalOpened(true)}
+                  >
                     <HiPlus className="w-5 h-5 mr-2" />
                     {t('decks.addFirstDeck')}
                   </Button>
