@@ -28,5 +28,17 @@ namespace noava.Mappers.Schools
                 SchoolAdmins = schoolAdmins,
             };
         }
+
+        public static SchoolClassroomResponseDto ToClassroomSummaryDto(this Classroom classroom)
+        {
+            return new SchoolClassroomResponseDto
+            {
+                Name = classroom.Name,
+                Description = classroom.Description,
+                StudentCount = classroom.ClassroomUsers?.Count ?? 0,
+                // Placeholder for now since logic for the decks isn't fully setup yet (i need to wait for brent and youmni)
+                DeckCount = 0
+            };
+        }
     }
 }

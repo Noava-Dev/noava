@@ -159,8 +159,19 @@ namespace noava.Services.Schools
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
             };
+
+            await _classroomRepository.AddAsync(classroom);
+            await _classroomRepository.SaveChangesAsync();
         }
-        private string GenerateJoinCode()
+
+        public async Task<List<SchoolClassroomResponseDto>> GetClassroomsForSchoolAsync(int schoolId)
+        {
+            var classrooms = await _schoolRepository.GetClassroomsBySchoolIdAsync(schoolId);
+            return classrooms.Select(c => c.ToClassroomSummaryDto()).ToList();
+        }
+
+        //TODO: check to see if this properly works with the backend logic already set in place
+        private static string GenerateJoinCode()
         {
             return Guid.NewGuid().ToString().Substring(0, 8).ToUpper();
         }

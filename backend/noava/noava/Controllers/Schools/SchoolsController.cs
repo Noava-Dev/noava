@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using noava.DTOs.Classrooms;
 using noava.DTOs.Schools;
 using noava.Services.Schools;
 using noava.Services.Users;
@@ -114,5 +115,37 @@ namespace noava.Controllers.Schools
                 return NotFound();
             }
         }
+
+        //CLASSROOMS
+        [HttpGet("{id:int}/classrooms")]
+        public async Task<ActionResult<List<SchoolClassroomResponseDto>>> GetClassrooms(int id)
+        {
+            try
+            {
+                var classrooms = await _schoolService.GetClassroomsForSchoolAsync(id);
+                return Ok(classrooms);
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
+        }
+
+        [HttpPost("{id:int}/classrooms")]
+        public async Task<IActionResult> CreateClassroom(int id, [FromBody] ClassroomRequestDto request)
+        {
+            try
+            {
+                //TODO: to enforce that the current user is an admin i should add some extra logic here
+
+                await _schoolService.CreateClassroomForSchool(id, request);
+                return Ok();
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
+        }
+
     }
 }

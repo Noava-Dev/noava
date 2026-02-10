@@ -18,5 +18,6 @@ namespace noava.Services.Schools
 
         //SCHOOLS
         Task CreateClassroomForSchool(int schoolId, ClassroomRequestDto request);
+        Task<List<SchoolClassroomResponseDto>> GetClassroomsForSchoolAsync(int schoolId);
     }
 }
