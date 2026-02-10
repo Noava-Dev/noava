@@ -64,7 +64,7 @@
     "complete": {
       "title": "Session Complete!",
       "message": "You reviewed {{count}} cards",
-      "bulkMessage": "You reviewed {{count}} cards from multiple decks",
+      "bulkMessage": "You reviewed {{count}} cards in bulk review",
       "backToDeck": "Back to Deck",
       "backToClassroom": "Back to Classroom",
       "restart": "Restart Review"

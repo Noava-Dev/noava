@@ -64,7 +64,7 @@
     "complete": {
       "title": "Session terminée !",
       "message": "Vous avez révisé {{count}} cartes",
-      "bulkMessage": "Vous avez révisé {{count}} cartes de plusieurs decks",
+      "bulkMessage": "Vous avez révisé {{count}} cartes en révision groupée",
       "backToDeck": "Retour au Deck",
       "backToClassroom": "Retour à la classe",
       "restart": "Recommencer la révision"

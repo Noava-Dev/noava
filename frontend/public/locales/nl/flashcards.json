@@ -64,7 +64,7 @@
     "complete": {
       "title": "Sessie voltooid!",
       "message": "Je hebt {{count}} kaarten herhaald",
-      "bulkMessage": "Je hebt {{count}} kaarten uit meerdere decks herhaald",
+      "bulkMessage": "Je hebt {{count}} kaarten in groepsherhaling herhaald",
       "backToDeck": "Terug naar Deck",
       "backToClassroom": "Terug naar klas",
       "restart": "Herhaling opnieuw starten"
