@@ -53,8 +53,9 @@
     "studyNow": "Étudier maintenant",
     "shuffle": "Mélanger",
     "quickReview": "Révision rapide",
-    "writeReview": "Écrire une révision",
-    "flipMode": "Mode retournement"
+    "writeReview": "Mode Écriture",
+    "flipMode": "Mode Retournement",
+    "reverseReview": "Mode Inversé"
   },
    "quickReview": {
     "startReview": "Révision Rapide",
@@ -78,7 +79,8 @@
       "message": "Vous avez révisé toutes les cartes",
       "backToDeck": "Retour au Deck",
       "restart": "Recommencer"
-    }
+    },
+    "reverseMode": "Mode Inversé"
   },
   "search": { "label": "Rechercher" }
 }

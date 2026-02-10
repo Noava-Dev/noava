@@ -53,8 +53,9 @@
     "studyNow": "Study Now",
     "shuffle": "Shuffle",
     "quickReview": "Quick Review",
-    "writeReview": "Write Review",
-    "flipMode": "Flip Mode"
+    "writeReview": "Write Mode",
+    "flipMode": "Flip Mode",
+    "reverseReview": "Reverse Mode"
   },
   "quickReview": {
     "startReview": "Quick Review",
@@ -78,7 +79,8 @@
       "message": "You've reviewed all cards",
       "backToDeck": "Back to Deck",
       "restart": "Restart"
-    }
+    },
+    "reverseMode": "Reverse Mode"
   },
   "search": { "label": "Search" }
 }

@@ -20,6 +20,7 @@ import Loading from './shared/components/loading/Loading';
 import FlashcardDetail from './pages/Flashcards/FlashcardDetail';
 import Dashboard from './pages/Dashboard/Dashboard';
 import WriteReview from './pages/Review/WriteReview';
+import ReverseReview from './pages/Review/ReverseReview';
 
 export default function AppRoutes() {
   return (
@@ -59,6 +60,7 @@ export default function AppRoutes() {
         <Route path="/decks/:deckId/cards" element={<FlashcardDetail />} />
         <Route path="/decks/:deckId/quickReview" element={<QuickReview />} />
         <Route path="/decks/:deckId/writeReview" element={<WriteReview />} />
+        <Route path="/decks/:deckId/reverseReview" element={<ReverseReview />} />
 
         {/* Classrooms */}
         <Route path="/classrooms" element={<Classrooms />} />

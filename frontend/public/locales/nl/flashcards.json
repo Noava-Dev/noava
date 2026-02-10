@@ -53,8 +53,9 @@
     "studyNow": "Nu studeren",
     "shuffle": "Schudden",
     "quickReview": "Snelle herhaling",
-    "writeReview": "Schrijf herhaling",
-    "flipMode": "Draai modus"
+    "writeReview": "Schrijf Modus",
+    "flipMode": "Draai Modus",
+    "reverseReview": "Omgekeerde Modus"
   },
   "quickReview": {
     "startReview": "Quick Review",
@@ -78,7 +79,9 @@
       "message": "Je hebt alle kaarten doorgenomen",
       "backToDeck": "Terug naar Deck",
       "restart": "Opnieuw Starten"
-    }
+    },
+    "reverseMode": "Omgekeerde Modus"
+    
   },
   "search": { "label": "Zoeken" }
 }

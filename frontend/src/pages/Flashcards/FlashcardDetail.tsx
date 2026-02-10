@@ -11,6 +11,7 @@ import {
   HiDocumentText,
   HiPencil,
   HiTrash,
+  HiChevronDown,
 } from 'react-icons/hi';
 import { useTranslation } from 'react-i18next';
 import { useDeckService } from '../../services/DeckService';
@@ -268,9 +269,10 @@ function FlashcardDetail() {
                     label=""
                     dismissOnClick={true}
                     renderTrigger={() => (
-                      <Button className="bg-cyan-500 hover:bg-cyan-600">
+                      <Button size="lg" className="bg-cyan-500 hover:bg-cyan-600">
                         <HiPlay className="w-5 h-5 mr-2" />
                         {t('flashcardDetail.quickReview')}
+                        <HiChevronDown className="w-4 h-4 ml-1" />
                       </Button>
                     )}
                   >
@@ -285,6 +287,12 @@ function FlashcardDetail() {
                       onClick={() => navigate(`/decks/${deckId}/writeReview`)}
                     >
                       {t('flashcardDetail.writeReview')}
+                    </DropdownItem>
+                    <DropdownItem
+                      icon={HiRefresh}
+                      onClick={() => navigate(`/decks/${deckId}/reverseReview`)}
+                    >
+                      {t('flashcardDetail.reverseReview')}
                     </DropdownItem>
                   </Dropdown>
               </div>
