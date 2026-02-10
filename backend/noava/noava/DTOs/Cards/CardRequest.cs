@@ -9,5 +9,6 @@ namespace noava.DTOs.Cards
         public string? BackImage { get; set; }
         public string? BackAudio { get; set; }
         public string? Memo { get; set; }
+        public bool HasVoiceAssistant { get; set; }
     }
 }

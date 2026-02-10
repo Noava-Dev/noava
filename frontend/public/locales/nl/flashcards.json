@@ -23,7 +23,9 @@
     "uploading": "Uploaden...",
     "updateButton": "Kaart bijwerken",
     "createButton": "Kaart aanmaken",
-    "uploadError": "Uploaden van media mislukt. Probeer het opnieuw."
+    "uploadError": "Uploaden van media mislukt. Probeer het opnieuw.",
+    "enableVoiceAssistant": "Spraakassistent inschakelen",
+    "voiceAssistantHelp": "Kaart tekst wordt voorgelezen als er geen audiobestand is geüpload"
   },
   "flashcardDetail": {
     "backToDeck": "Terug naar Deck",

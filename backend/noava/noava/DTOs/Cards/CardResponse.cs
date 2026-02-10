@@ -13,5 +13,6 @@ namespace noava.DTOs.Cards
         public string? Memo { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
+        public bool HasVoiceAssistant { get; set; }
     }
 }
