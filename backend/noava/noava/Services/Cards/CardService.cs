@@ -112,6 +112,7 @@ namespace noava.Services.Cards
             existingCard.BackImage = newBackImage;
             existingCard.BackAudio = newBackAudio;
             existingCard.Memo = request.Memo;
+            existingCard.HasVoiceAssistant = request.HasVoiceAssistant;
 
             var updatedCard = await _cardRepository.UpdateAsync(existingCard);
 
