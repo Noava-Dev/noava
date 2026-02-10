@@ -4,6 +4,7 @@ import {
   Textarea,
   Button,
   FileInput,
+  Checkbox,
   ModalHeader,
   ModalBody,
   Modal,
@@ -79,6 +80,7 @@ function FlashcardModal({
       setFrontAudioBlobName(flashcard.frontAudio);
       setBackImageBlobName(flashcard.backImage);
       setBackAudioBlobName(flashcard.backAudio);
+      setHasVoiceAssistant(flashcard.hasVoiceAssistant || false);
 
       // Load existing media previews
       if (flashcard.frontImage) {
@@ -122,6 +124,7 @@ function FlashcardModal({
       setBackAudioFile(null);
       setBackAudioPreview(null);
       setBackAudioBlobName(undefined);
+      setHasVoiceAssistant(false);
     }
     setActiveTab('front');
     setIsFlipped(false);
@@ -436,7 +439,32 @@ function FlashcardModal({
                     disabled={uploading}
                   />
                 </div>
+
+               {/* Voice Assistant Toggle */}
+                <div className="p-4 rounded-lg border border-border dark:border-border-dark bg-background-subtle-light dark:bg-background-subtle-dark">
+                  <label className="flex items-start gap-3 cursor-pointer">
+                    <Checkbox
+                      id="voiceAssistant"
+                      checked={hasVoiceAssistant}
+                      onChange={(e) => setHasVoiceAssistant(e.target.checked)}
+                      disabled={uploading}
+                      className="mt-1"
+                    />
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2">
+                        <HiVolumeUp className="w-4 h-4 text-primary-600 dark:text-primary-400" />
+                        <span className="text-sm font-medium text-text-title-light dark:text-text-title-dark">
+                          {t('flashcardModal.enableVoiceAssistant')}
+                        </span>
+                      </div>
+                      <p className="mt-1 text-xs text-text-muted-light dark:text-text-muted-dark">
+                        {t('flashcardModal.voiceAssistantHelp')}
+                      </p>
+                    </div>
+                  </label>
+                </div>
               </div>
+
             )}
 
             {/* Back Side Content */}
@@ -539,12 +567,12 @@ function FlashcardModal({
                   {/* Voice Assistant Toggle */}
                   <div className="p-4 rounded-lg border border-border dark:border-border-dark bg-background-subtle-light dark:bg-background-subtle-dark">
                     <label className="flex items-start gap-3 cursor-pointer">
-                      <input
-                        type="checkbox"
+                      <Checkbox
+                        id="voiceAssistant"
                         checked={hasVoiceAssistant}
                         onChange={(e) => setHasVoiceAssistant(e.target.checked)}
                         disabled={uploading}
-                        className="mt-1 w-4 h-4 text-primary-600 rounded focus:ring-primary-500 focus:ring-2"
+                        className="mt-1"
                       />
                       <div className="flex-1">
                         <div className="flex items-center gap-2">
