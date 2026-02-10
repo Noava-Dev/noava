@@ -49,7 +49,8 @@
     "addCard": "Ajouter une carte",
     "studyNow": "Étudier maintenant",
     "shuffle": "Mélanger",
-    "quickReview": "Révision rapide"
+    "quickReview": "Révision rapide",
+    "importFromFile": "Importer depuis un fichier"
   },
   "quickReview": {
     "title": "Révision rapide",
@@ -63,6 +64,13 @@
       "backToDeck": "Retour au Deck",
       "restart": "Recommencer la révision"
     }
+  },
+  "importCardsModal": {
+    "header": "Importer cartes",
+    "title": "Importer vos cartes mémoire",
+    "subtitle": "Importez vos données depuis n'importe quelle source. Nous supportons CSV et Excel. Consultez notre documentation pour plus d'informations sur les formats.",
+    "upload": "Téléverser le fichier",
+    "supported": "Fichiers pris en charge: "
   },
   "search": { "label": "Rechercher" }
 }

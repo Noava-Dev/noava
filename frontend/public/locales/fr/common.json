@@ -42,7 +42,8 @@
     "join": "Rejoindre",
     "request": "Demander",
     "show": "Afficher",
-    "back": "Retour"
+    "back": "Retour",
+    "uploading": "Téléchargement en cours..."
   },
   "validation": {
     "required": "Ce champ est requis",

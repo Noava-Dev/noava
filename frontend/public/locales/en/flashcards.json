@@ -49,7 +49,8 @@
     "addCard": "Add Card",
     "studyNow": "Study Now",
     "shuffle": "Shuffle",
-    "quickReview": "Quick Review"
+    "quickReview": "Quick Review",
+    "importFromFile": "Import from File"
   },
   "quickReview": {
     "title": "Quick Review",
@@ -63,6 +64,13 @@
       "backToDeck": "Back to Deck",
       "restart": "Restart Review"
     }
+  },
+  "importCardsModal": {
+    "header": "Import Flashcards",
+    "title": "Import your flashcards",
+    "subtitle": "Bring your data from any source. We support CSV and Excel. Read our Docs for more information about formats.",
+    "upload": "Upload file",
+    "supported": "Supported Files: "
   },
   "search": { "label": "Search" }
 }
