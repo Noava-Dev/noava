@@ -31,3 +31,9 @@ export interface UpdateFlashcardRequest {
   backAudio?: string;
   memo?: string;
 }
+
+export enum BulkReviewMode {
+  None,
+  ShufflePerDeck,
+  ShuffleAll
+}
