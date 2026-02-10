@@ -68,10 +68,12 @@ namespace noava.Repositories
         public async Task<bool> IsUserLinkedToDeckAsync(int deckId, string userId)
         {
             return await _context.ClassroomDecks
-                .AnyAsync(du =>
-                    du.DeckId == deckId &&
-                    du.Classroom != null &&
-                    du.Classroom.ClassroomUsers.Any(u => u.UserId == userId)
+                .AnyAsync(cd =>
+                    cd.DeckId == deckId &&
+                    (
+                        (cd.Deck != null && cd.Deck.DeckUsers.Any(u => u.ClerkId == userId)) ||
+                        (cd.Classroom != null && cd.Classroom.ClassroomUsers.Any(u => u.UserId == userId))
+                    )
                 );
         }
     }
