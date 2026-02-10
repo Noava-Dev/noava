@@ -7,6 +7,7 @@ import PageHeader from '../../shared/components/PageHeader';
 import Loading from '../../shared/components/loading/Loading';
 import DeckCard from '../../shared/components/DeckCard';
 import { AddDeckModal } from '../../shared/components/AddDeckModal';
+import { BulkReviewModal } from '../../shared/components/BulkReviewModal';
 import ConfirmModal from '../../shared/components/ConfirmModal';
 import { useClassroomService } from '../../services/ClassroomService';
 import { useToast } from '../../contexts/ToastContext';
@@ -26,6 +27,7 @@ function ClassroomDetailPage() {
   const [loading, setLoading] = useState(true);
   const [decksLoading, setDecksLoading] = useState(false);
   const [addDeckModalOpened, setAddDeckModalOpened] = useState(false);
+  const [bulkReviewModalOpened, setBulkReviewModalOpened] = useState(false);
   const [deleteModalOpened, setDeleteModalOpened] = useState(false);
   const [deckToDelete, setDeckToDelete] = useState<number | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -175,17 +177,27 @@ return (
             </div>
 
             {/* Right side buttons */}
-            {classroom.permissions?.canEdit && (
-              <div className="flex flex-col gap-3 flex-shrink-0">
-                <Button onClick={() => navigate(`/classrooms/${id}/members`)}>
-                  {t('members.title')}
+            <div className="flex flex-col gap-3 flex-shrink-0">
+              {decks.length > 0 && (
+                <Button
+                  color="cyan"
+                  onClick={() => setBulkReviewModalOpened(true)}
+                >
+                  {t('bulkReview.button')}
                 </Button>
-                <Button onClick={() => setAddDeckModalOpened(true)}>
-                  <HiPlus className="w-5 h-5 mr-2" />
-                  {t('decks.addDeck')}
-                </Button>
-              </div>
-            )}
+              )}
+              {classroom.permissions?.canEdit && (
+                <>
+                  <Button onClick={() => navigate(`/classrooms/${id}/members`)}>
+                    {t('members.title')}
+                  </Button>
+                  <Button onClick={() => setAddDeckModalOpened(true)}>
+                    <HiPlus className="w-5 h-5 mr-2" />
+                    {t('decks.addDeck')}
+                  </Button>
+                </>
+              )}
+            </div>
           </div>
         </div>
       </PageHeader>
@@ -259,6 +271,14 @@ return (
           fetchDecks();
         }}
         onAddDeck={handleAddDeckToClassroom}
+      />
+
+      {/* Bulk Review Modal */}
+      <BulkReviewModal
+        opened={bulkReviewModalOpened}
+        onClose={() => setBulkReviewModalOpened(false)}
+        decks={decks}
+        classroomId={id}
       />
 
       {/* Confirm Delete Modal */}

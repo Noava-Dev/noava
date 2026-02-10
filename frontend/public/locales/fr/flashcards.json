@@ -23,7 +23,9 @@
     "uploading": "Téléversement...",
     "updateButton": "Mettre à jour la carte",
     "createButton": "Créer la carte",
-    "uploadError": "Échec du téléversement du média. Veuillez réessayer."
+    "uploadError": "Échec du téléversement du média. Veuillez réessayer.",
+    "enableVoiceAssistant": "Activer l'assistant vocal",
+    "voiceAssistantHelp": "Le texte de la carte sera lu à voix haute si aucun fichier audio n'est téléchargé"
   },
   "flashcardDetail": {
     "backToDeck": "Retour au Deck",
@@ -48,20 +50,36 @@
     "studyNow": "Étudier maintenant",
     "shuffle": "Mélanger",
     "quickReview": "Révision rapide",
-    "backToClassroom": "Retour à {{name}}"
+    "backToClassroom": "Retour à {{name}}",
+    "importFromFile": "Importer depuis un fichier"
   },
   "quickReview": {
     "title": "Révision rapide",
+    "bulkTitle": "Révision groupée",
     "mode": "Mode révision rapide",
+    "bulkMode": "Mode révision groupée",
     "noCards": "Aucune carte disponible pour la révision",
+    "loading": "Chargement des cartes...",
+    "error": "Échec du chargement des cartes",
     "progress": "Progression",
     "next": "Carte suivante",
+    "finish": "Terminer",
     "complete": {
       "title": "Session terminée !",
       "message": "Vous avez révisé {{count}} cartes",
+      "bulkMessage": "Vous avez révisé {{count}} cartes en révision groupée",
       "backToDeck": "Retour au Deck",
+      "backToDecks": "Retour aux Decks",
+      "backToClassroom": "Retour à la classe",
       "restart": "Recommencer la révision"
     }
+  },
+  "importCardsModal": {
+    "header": "Importer cartes",
+    "title": "Importer vos cartes mémoire",
+    "subtitle": "Importez vos données depuis n'importe quelle source. Nous supportons CSV et Excel. Consultez notre documentation pour plus d'informations sur les formats.",
+    "upload": "Téléverser le fichier",
+    "supported": "Fichiers pris en charge: "
   },
   "search": { "label": "Rechercher" }
 }

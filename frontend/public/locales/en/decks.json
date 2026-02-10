@@ -1,6 +1,24 @@
 {
   "subtitle": "Organize your flashcards into subject-specific decks",
   "createButton": "Create Deck",
+  "bulkReview": {
+    "button": "Bulk Review",
+    "title": "Bulk Review",
+    "description": "Select the decks you want to review together.",
+    "selectAll": "Select All",
+    "deselectAll": "Deselect All",
+    "selectedCount": "{{selected}} of {{total}} selected",
+    "cards": "cards",
+    "noDecks": "No decks available",
+    "shuffleMode": {
+      "label": "Shuffle Mode",
+      "none": "No Shuffle - Keep original order",
+      "perDeck": "Shuffle Per Deck - Shuffle cards within each deck",
+      "all": "Shuffle All - Shuffle all cards together"
+    },
+    "summaryDecks": "Ready to review {{count}} deck(s)",
+    "startReview": "Start Review"
+  },
   "empty": {
     "title": "No decks yet",
     "message": "Create your first deck to get started!",

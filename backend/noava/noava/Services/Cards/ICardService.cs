@@ -1,4 +1,5 @@
 using noava.DTOs.Cards;
+using noava.Models.Enums;
 
 namespace noava.Services.Cards
 {
@@ -9,5 +10,6 @@ namespace noava.Services.Cards
         Task<CardResponse> CreateCardAsync(int deckId, CardRequest request, string userId);
         Task<CardResponse?> UpdateCardAsync(int id, CardRequest request, string userId);
         Task<bool> DeleteCardAsync(int id, string userId);
+        Task<List<CardResponse>> GetBulkReviewCardsAsync(List<int> deckIds, string userId, BulkReviewMode mode);
     }
 }

@@ -1,6 +1,24 @@
 {
   "subtitle": "Organiseer je flashcards in vakgerichte Decks",
   "createButton": "Deck aanmaken",
+  "bulkReview": {
+    "button": "Groepsherhaling",
+    "title": "Groepsherhaling",
+    "description": "Selecteer de decks die je samen wilt herhalen.",
+    "selectAll": "Alles selecteren",
+    "deselectAll": "Alles deselecteren",
+    "selectedCount": "{{selected}} van {{total}} geselecteerd",
+    "cards": "kaarten",
+    "noDecks": "Geen decks beschikbaar",
+    "shuffleMode": {
+      "label": "Shuffle modus",
+      "none": "Niet shuffelen - Behoud originele volgorde",
+      "perDeck": "Shuffle per deck - Shuffle kaarten binnen elk deck",
+      "all": "Alles shuffelen - Shuffle alle kaarten samen"
+    },
+    "summaryDecks": "Klaar om {{count}} deck(s) te herhalen",
+    "startReview": "Start herhaling"
+  },
   "empty": {
     "title": "Nog geen Decks",
     "message": "Maak je eerste Deck aan om te beginnen!",

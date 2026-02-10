@@ -23,7 +23,9 @@
     "uploading": "Uploading...",
     "updateButton": "Update Card",
     "createButton": "Create Card",
-    "uploadError": "Failed to upload media. Please try again."
+    "uploadError": "Failed to upload media. Please try again.",
+     "enableVoiceAssistant": "Enable voice assistant",
+    "voiceAssistantHelp": "Card text will be read aloud if no audio file is uploaded"
   },
   "flashcardDetail": {
     "backToDeck": "Back to Deck",
@@ -48,20 +50,36 @@
     "studyNow": "Study Now",
     "shuffle": "Shuffle",
     "quickReview": "Quick Review",
-    "backToClassroom": "Back to {{name}}"
+    "backToClassroom": "Back to {{name}}",
+    "importFromFile": "Import from File"
   },
   "quickReview": {
     "title": "Quick Review",
+    "bulkTitle": "Bulk Review",
     "mode": "Quick Review Mode",
+    "bulkMode": "Bulk Review Mode",
     "noCards": "No cards available for review",
+    "loading": "Loading cards...",
+    "error": "Failed to load cards",
     "progress": "Progress",
     "next": "Next Card",
+    "finish": "Finish",
     "complete": {
       "title": "Session Complete!",
       "message": "You reviewed {{count}} cards",
+      "bulkMessage": "You reviewed {{count}} cards in bulk review",
       "backToDeck": "Back to Deck",
+      "backToDecks": "Back to Decks",
+      "backToClassroom": "Back to Classroom",
       "restart": "Restart Review"
     }
+  },
+  "importCardsModal": {
+    "header": "Import Flashcards",
+    "title": "Import your flashcards",
+    "subtitle": "Bring your data from any source. We support CSV and Excel. Read our Docs for more information about formats.",
+    "upload": "Upload file",
+    "supported": "Supported Files: "
   },
   "search": { "label": "Search" }
 }
