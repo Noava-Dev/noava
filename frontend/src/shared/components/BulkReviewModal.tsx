@@ -73,10 +73,6 @@ export const BulkReviewModal: React.FC<BulkReviewModalProps> = ({
     onClose();
   };
 
-  const totalCards = decks
-    .filter((d) => selectedDeckIds.includes(d.deckId))
-    .length;
-
   return (
     <Modal show={opened} onClose={handleClose} size="lg" dismissible>
       <ModalHeader>{t('bulkReview.title')}</ModalHeader>
@@ -186,9 +182,8 @@ export const BulkReviewModal: React.FC<BulkReviewModalProps> = ({
           {selectedDeckIds.length > 0 && (
             <div className="p-4 rounded-lg bg-primary-50 dark:bg-primary-900/20">
               <p className="text-sm font-medium text-primary-700 dark:text-primary-300">
-                {t('bulkReview.summary', {
-                  decks: selectedDeckIds.length,
-                  cards: totalCards,
+                {t('bulkReview.summaryDecks', {
+                  count: selectedDeckIds.length,
                 })}
               </p>
             </div>

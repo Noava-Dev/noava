@@ -115,6 +115,7 @@
       "all": "Alles schudden - Schud alle kaarten door elkaar"
     },
     "summary": "Klaar om {{decks}} deck(s) met {{cards}} kaart(en) te herhalen",
+    "summaryDecks": "Klaar om {{count}} deck(s) te herhalen",
     "startReview": "Start herhaling"
   },
   "addDeck": {

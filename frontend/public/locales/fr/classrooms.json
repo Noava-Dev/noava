@@ -115,6 +115,7 @@
       "all": "Tout mélanger - Mélanger toutes les cartes ensemble"
     },
     "summary": "Prêt à réviser {{decks}} deck(s) avec {{cards}} carte(s)",
+    "summaryDecks": "Prêt à réviser {{count}} deck(s)",
     "startReview": "Commencer la révision"
   },
   "addDeck": {

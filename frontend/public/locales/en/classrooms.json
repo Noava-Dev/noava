@@ -115,6 +115,7 @@
       "all": "Shuffle All - Shuffle all cards together"
     },
     "summary": "Ready to review {{decks}} deck(s) with {{cards}} card(s)",
+    "summaryDecks": "Ready to review {{count}} deck(s)",
     "startReview": "Start Review"
   },
   "addDeck": {
