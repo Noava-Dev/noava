@@ -68,7 +68,7 @@ namespace noava.Services.Cards
 
             if (frontCol == 0 || backCol == 0)
             {
-                throw new Exception("Excel must have 'FrontText' and 'BackText' columns.");
+                throw new InvalidOperationException("Excel must have 'FrontText' and 'BackText' columns.");
             }
 
             // iterate rows
@@ -115,7 +115,7 @@ namespace noava.Services.Cards
             {
                 if (string.IsNullOrWhiteSpace(row.FrontText) || string.IsNullOrWhiteSpace(row.BackText))
                 {
-                    throw new InvalidOperationException("FrontText and BackText are required.");
+                    throw new InvalidOperationException("CSV must have 'FrontText' and 'BackText' headers.");
                 }
 
                 cards.Add(new Card

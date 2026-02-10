@@ -255,14 +255,18 @@ function FlashcardDetail() {
             <div className="flex justify-between mb-8">
               <div className="flex gap-3">
                 {/* Create/Import cards button */}
-                <DropdownButton size="lg" onClickMain={() => {
+                <DropdownButton
+                  size="lg"
+                  onClickMain={() => {
                     setSelectedFlashcard(undefined);
                     setIsModalOpen(true);
                   }}
                   icon={HiPlus}
                   text={t('flashcardDetail.addCard')}>
-                    <DropdownItem onClick={() => setShowImportModal(true)}>Import from File</DropdownItem>
-                  </DropdownButton>
+                  <DropdownItem onClick={() => setShowImportModal(true)}>
+                    Import from File
+                  </DropdownItem>
+                </DropdownButton>
                 <Button size="lg" disabled={totalCards === 0}>
                   <HiPlay className="mr-2 size-5" />
                   {t('flashcardDetail.studyNow')}
@@ -476,8 +480,10 @@ function FlashcardDetail() {
         />
 
         <ImportCardsModal
-        isOpen={showImportModal}
-        onClose={() => setShowImportModal(false)} />
+          isOpen={showImportModal}
+          onClose={() => setShowImportModal(false)}
+          onSubmit={async () => await fetchFlashcards()}
+        />
 
         {/* Delete Confirmation Modal */}
         {deleteConfirmOpen && (

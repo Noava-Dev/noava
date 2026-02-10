@@ -4,6 +4,7 @@ using System.Security.Claims;
 using noava.DTOs.Cards;
 using noava.Services.Cards;
 using Azure.Core;
+using noava.Models;
 
 namespace noava.Controllers.Cards
 {
@@ -92,20 +93,20 @@ namespace noava.Controllers.Cards
 
             try
             {
-                int count = await _cardImportService.ImportCardsAsync(deckId, file, userId);
+                var count = await _cardImportService.ImportCardsAsync(deckId, file, userId);
                 return Ok(count);
             }
-            catch (UnauthorizedAccessException)
+            catch (UnauthorizedAccessException ex)
             {
-                return Forbid();
+                return Forbid(ex.Message);
             }
-            catch (InvalidOperationException)
+            catch (InvalidOperationException ex)
             {
-                return BadRequest("File type is not supported");
+                return BadRequest(ex.Message);
             }
-            catch
+            catch (Exception ex)
             {
-                return StatusCode(500, "Failed to import cards");
+                return StatusCode(500, ex.Message);
             }
 
         }
