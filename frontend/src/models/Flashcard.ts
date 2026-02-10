@@ -34,3 +34,9 @@ export interface UpdateFlashcardRequest {
   memo?: string;
   hasVoiceAssistant: boolean;
 }
+
+export enum BulkReviewMode {
+  None,
+  ShufflePerDeck,
+  ShuffleAll
+}

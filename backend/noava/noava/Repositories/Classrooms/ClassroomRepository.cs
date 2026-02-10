@@ -34,11 +34,13 @@ namespace noava.Repositories.Classrooms
                                  .ToListAsync();
         }
 
-        public async Task<Classroom?> GetByIdAsync(int id)
+        public async Task<Classroom?> GetByIdAsync(int classroomId)
         {
             return await _context.Classrooms
                 .Include(c => c.ClassroomUsers)
-                .FirstOrDefaultAsync(c => c.Id == id);
+                .Include(c => c.ClassroomDecks)
+                    .ThenInclude(cd => cd.Deck)
+                .FirstOrDefaultAsync(c => c.Id == classroomId);
         }
 
         public Task UpdateAsync(Classroom classroom)

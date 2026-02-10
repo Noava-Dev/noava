@@ -83,5 +83,51 @@
     "success": "Je bent toegevoegd aan de klas",
     "error": "Deelnemen met deze code is mislukt"
   },
+  "decks": {
+    "title": "Decks",
+    "addDeck": "Deck Toevoegen",
+    "addFirstDeck": "Voeg Je Eerste Deck Toe",
+    "emptyTitle": "Nog Geen Decks",
+    "emptyDescription": "Deze classroom heeft nog geen decks. Voeg je eerste deck toe om te beginnen!",
+    "loadError": "Kon decks niet laden",
+    "removeFromClassroom": "Verwijderen uit Classroom",
+    "confirmRemoveTitle": "Deck Verwijderen uit Classroom",
+    "confirmRemoveMessage": "Weet je zeker dat je deze deck uit de classroom wilt verwijderen? De deck zelf wordt niet verwijderd, alleen uit deze classroom gehaald.",
+    "confirmRemoveButton": "Verwijderen uit Classroom",
+    "removeSuccess": "Deck verwijderd uit classroom",
+    "removeError": "Kon deck niet verwijderen uit classroom",
+    "addSuccess": "Deck toegevoegd aan classroom",
+    "addError": "Kon deck niet toevoegen aan classroom"
+  },
+  "bulkReview": {
+    "button": "Groepsherhaling",
+    "title": "Groepsherhaling",
+    "description": "Selecteer de decks die je samen wilt herhalen.",
+    "selectAll": "Alles selecteren",
+    "deselectAll": "Alles deselecteren",
+    "selectedCount": "{{selected}} van {{total}} geselecteerd",
+    "cards": "kaarten",
+    "noDecks": "Geen decks beschikbaar",
+    "shuffleMode": {
+      "label": "Schudmodus",
+      "none": "Niet schudden - Behoud originele volgorde",
+      "perDeck": "Per deck schudden - Schud kaarten binnen elk deck",
+      "all": "Alles schudden - Schud alle kaarten door elkaar"
+    },
+    "summary": "Klaar om {{decks}} deck(s) met {{cards}} kaart(en) te herhalen",
+    "summaryDecks": "Klaar om {{count}} deck(s) te herhalen",
+    "startReview": "Start herhaling"
+  },
+  "addDeck": {
+     "title": "Deck Toevoegen aan Classroom",
+    "description": "Voeg een van je bestaande decks toe aan deze classroom.",
+    "searchPlaceholder": "Zoek je decks...",
+    "noResults": "Geen decks gevonden die overeenkomen met je zoekopdracht",
+    "noDecks": "Je hebt nog geen decks",
+    "loadError": "Kon je decks niet laden",
+    "cards": "kaarten",
+    "addButton": "Toevoegen",
+    "done": "Klaar"
+  },
   "notFound": "Klas niet gevonden"
 }

@@ -43,7 +43,8 @@
     "request": "Request",
     "show": "Show",
     "back": "Back",
-    "uploading": "Uploading..."
+    "uploading": "Uploading...",
+    "done": "Done"
   },
   "validation": {
     "required": "This field is required",
@@ -79,6 +80,10 @@
       "message": "Are you sure you want to delete this? This action cannot be undone.",
       "yes": "Yes, delete"
     }
+  },
+  "toast": {
+    "success": "Success",
+    "error": "Error"
   },
   "visibility": {
     "label": "Visibility",

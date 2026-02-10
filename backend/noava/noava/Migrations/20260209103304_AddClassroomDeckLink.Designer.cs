@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using noava.Data;
@@ -11,9 +12,11 @@ using noava.Data;
 namespace noava.Migrations
 {
     [DbContext(typeof(NoavaDbContext))]
-    partial class NoavaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260209103304_AddClassroomDeckLink")]
+    partial class AddClassroomDeckLink
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -57,9 +60,6 @@ namespace noava.Migrations
                     b.Property<string>("FrontText")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<bool>("HasVoiceAssistant")
-                        .HasColumnType("boolean");
 
                     b.Property<string>("Memo")
                         .HasColumnType("text");
@@ -325,33 +325,33 @@ namespace noava.Migrations
                         new
                         {
                             DeckId = 1,
-                            CreatedAt = new DateTime(2026, 2, 10, 9, 7, 10, 443, DateTimeKind.Utc).AddTicks(7129),
+                            CreatedAt = new DateTime(2026, 2, 9, 10, 33, 3, 494, DateTimeKind.Utc).AddTicks(2897),
                             Description = "Franse woorden voor beginners",
                             Language = "Frans",
                             Title = "Frans Woordenschat",
-                            UpdatedAt = new DateTime(2026, 2, 10, 9, 7, 10, 443, DateTimeKind.Utc).AddTicks(7130),
+                            UpdatedAt = new DateTime(2026, 2, 9, 10, 33, 3, 494, DateTimeKind.Utc).AddTicks(2898),
                             UserId = "user_38TGbnbcmzK7uZAbaABqTtzQtvz",
                             Visibility = 0
                         },
                         new
                         {
                             DeckId = 2,
-                            CreatedAt = new DateTime(2026, 2, 10, 9, 7, 10, 443, DateTimeKind.Utc).AddTicks(7133),
+                            CreatedAt = new DateTime(2026, 2, 9, 10, 33, 3, 494, DateTimeKind.Utc).AddTicks(2906),
                             Description = "Engelse grammatica oefeningen",
                             Language = "Engels",
                             Title = "Engels Grammatica",
-                            UpdatedAt = new DateTime(2026, 2, 10, 9, 7, 10, 443, DateTimeKind.Utc).AddTicks(7133),
+                            UpdatedAt = new DateTime(2026, 2, 9, 10, 33, 3, 494, DateTimeKind.Utc).AddTicks(2907),
                             UserId = "user_38TGbnbcmzK7uZAbaABqTtzQtvz",
                             Visibility = 2
                         },
                         new
                         {
                             DeckId = 3,
-                            CreatedAt = new DateTime(2026, 2, 10, 9, 7, 10, 443, DateTimeKind.Utc).AddTicks(7135),
+                            CreatedAt = new DateTime(2026, 2, 9, 10, 33, 3, 494, DateTimeKind.Utc).AddTicks(2914),
                             Description = "Spaanse zinnen voor dagelijks gebruik",
                             Language = "Spaans",
                             Title = "Spaans Conversatie",
-                            UpdatedAt = new DateTime(2026, 2, 10, 9, 7, 10, 443, DateTimeKind.Utc).AddTicks(7136),
+                            UpdatedAt = new DateTime(2026, 2, 9, 10, 33, 3, 494, DateTimeKind.Utc).AddTicks(2915),
                             UserId = "user_38TGbnbcmzK7uZAbaABqTtzQtvz",
                             Visibility = 1
                         });

@@ -50,18 +50,27 @@
     "studyNow": "Étudier maintenant",
     "shuffle": "Mélanger",
     "quickReview": "Révision rapide",
+    "backToClassroom": "Retour à {{name}}",
     "importFromFile": "Importer depuis un fichier"
   },
   "quickReview": {
     "title": "Révision rapide",
+    "bulkTitle": "Révision groupée",
     "mode": "Mode révision rapide",
+    "bulkMode": "Mode révision groupée",
     "noCards": "Aucune carte disponible pour la révision",
+    "loading": "Chargement des cartes...",
+    "error": "Échec du chargement des cartes",
     "progress": "Progression",
     "next": "Carte suivante",
+    "finish": "Terminer",
     "complete": {
       "title": "Session terminée !",
       "message": "Vous avez révisé {{count}} cartes",
+      "bulkMessage": "Vous avez révisé {{count}} cartes en révision groupée",
       "backToDeck": "Retour au Deck",
+      "backToDecks": "Retour aux Decks",
+      "backToClassroom": "Retour à la classe",
       "restart": "Recommencer la révision"
     }
   },

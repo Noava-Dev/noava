@@ -90,3 +90,5 @@ storybook-static/
 # Temporary
 tmp/
 temp/
+
+.vs/*

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { Button, DropdownItem } from 'flowbite-react';
 import {
   HiArrowLeft,
@@ -40,6 +40,7 @@ interface FlashcardWithImages extends Flashcard {
 function FlashcardDetail() {
   const { deckId } = useParams<{ deckId: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
   const { t } = useTranslation('flashcards');
   const deckService = useDeckService();
   const flashcardService = useFlashcardService();
@@ -58,6 +59,9 @@ function FlashcardDetail() {
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const [cardToDelete, setCardToDelete] = useState<number | null>(null);
   const [manageOwnersOpened, setManageOwnersOpened] = useState(false);
+  const fromClassroom = location.state?.from === 'classroom';
+  const classroomId = location.state?.classroomId;
+  const classroomName = location.state?.classroomName;
 
   useEffect(() => {
     if (deckId) {
@@ -151,6 +155,14 @@ function FlashcardDetail() {
     }
   };
 
+  const backUrl = fromClassroom && classroomId 
+    ? `/classrooms/${classroomId}` 
+    : '/decks';
+  
+  const backText = fromClassroom && classroomName
+    ? t('flashcardDetail.backToClassroom', { name: classroomName })
+    : t('flashcardDetail.backToDeck');
+
   const handleEditFlashcard = (flashcard: Flashcard) => {
     setSelectedFlashcard(flashcard);
     setIsModalOpen(true);
@@ -184,7 +196,7 @@ function FlashcardDetail() {
     setIsModalOpen(false);
     setSelectedFlashcard(undefined);
   };
-
+  
   if (loading) {
     return (
       <div className="flex min-h-screen bg-background-app-light dark:bg-background-app-dark">
@@ -230,7 +242,7 @@ function FlashcardDetail() {
         <PageHeader>
           <div className="flex flex-col gap-4 md:gap-6">
             {/* Back Button */}
-            <BackButton text={t('flashcardDetail.backToDeck')} href="/decks" />
+            <BackButton text={backText} href={backUrl} />
             <div className="space-y-2">
               <span className="text-xs font-bold tracking-wider uppercase text-cyan-500 dark:text-cyan-400">
                 {deck.language}
