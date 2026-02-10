@@ -83,5 +83,32 @@
     "success": "Vous avez été ajouté à la classe",
     "error": "Échec de la connexion avec ce code"
   },
+  "decks": {
+    "title": "Decks",
+    "addDeck": "Ajouter un Deck",
+    "addFirstDeck": "Ajouter Votre Premier Deck",
+    "emptyTitle": "Aucun Deck Pour Le Moment",
+    "emptyDescription": "Cette classe n'a pas encore de decks. Ajoutez votre premier deck pour commencer!",
+    "loadError": "Échec du chargement des decks",
+    "removeFromClassroom": "Retirer de la Classe",
+    "confirmRemoveTitle": "Retirer le Deck de la Classe",
+    "confirmRemoveMessage": "Êtes-vous sûr de vouloir retirer ce deck de la classe? Le deck lui-même ne sera pas supprimé, il sera seulement retiré de cette classe.",
+    "confirmRemoveButton": "Retirer de la Classe",
+    "removeSuccess": "Deck retiré de la classe",
+    "removeError": "Échec du retrait du deck",
+    "addSuccess": "Deck ajouté à la classe",
+    "addError": "Échec de l'ajout du deck"
+  },
+  "addDeck": {
+    "title": "Ajouter un Deck à la Classe",
+    "description": "Ajoutez un de vos decks existants à cette classe.",
+    "searchPlaceholder": "Rechercher vos decks...",
+    "noResults": "Aucun deck trouvé correspondant à votre recherche",
+    "noDecks": "Vous n'avez pas encore de decks",
+    "loadError": "Échec du chargement de vos decks",
+    "cards": "cartes",
+    "addButton": "Ajouter",
+    "done": "Terminé"
+  },
   "notFound": "Classe introuvable"
 }

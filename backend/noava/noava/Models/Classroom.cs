@@ -18,5 +18,6 @@ namespace noava.Models
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
         public ICollection<ClassroomUser> ClassroomUsers { get; set; } = new List<ClassroomUser>();
+        public ICollection<ClassroomDeck> ClassroomDecks { get; set; } = new List<ClassroomDeck>();
     }
 }

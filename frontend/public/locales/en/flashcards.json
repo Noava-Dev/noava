@@ -47,7 +47,8 @@
     "addCard": "Add Card",
     "studyNow": "Study Now",
     "shuffle": "Shuffle",
-    "quickReview": "Quick Review"
+    "quickReview": "Quick Review",
+    "backToClassroom": "Back to {{name}}"
   },
   "quickReview": {
     "title": "Quick Review",

@@ -47,7 +47,8 @@
     "addCard": "Kaart toevoegen",
     "studyNow": "Nu studeren",
     "shuffle": "Schudden",
-    "quickReview": "Snelle herhaling"
+    "quickReview": "Snelle herhaling",
+    "backToClassroom": "Terug naar {{name}}"
   },
   "quickReview": {
     "title": "Snelle herhaling",

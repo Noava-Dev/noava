@@ -14,9 +14,17 @@ interface DeckCardProps {
   deck: Deck;
   onEdit?: (deck: Deck) => void;
   onDelete?: (deckId: number) => void;
+  onView?: (deckId: number) => void;  
+  showEdit?: boolean;  
 }
 
-function DeckCard({ deck, onEdit, onDelete }: DeckCardProps) {
+function DeckCard({ 
+  deck, 
+  onEdit, 
+  onDelete, 
+  onView,  
+  showEdit = true  
+}: DeckCardProps) {
   const { t } = useTranslation('decks');
   const navigate = useNavigate();
   const azureBlobService = useAzureBlobService();
@@ -38,10 +46,14 @@ function DeckCard({ deck, onEdit, onDelete }: DeckCardProps) {
   }, [deck.coverImageBlobName]);
 
   const handleCardClick = () => {
-    navigate(`/decks/${deck.deckId}/cards`);
+    if (onView) {
+      onView(deck.deckId);
+    } else {
+      navigate(`/decks/${deck.deckId}/cards`);
+    }
   };
 
-  // Prevent navigation when clicking dropdown or Study button
+
   const handleStopPropagation = (e: React.MouseEvent) => {
     e.stopPropagation();
   };
@@ -83,16 +95,25 @@ function DeckCard({ deck, onEdit, onDelete }: DeckCardProps) {
                 <HiDotsVertical className="w-4 h-4 text-white sm:h-5 sm:w-5" />
               </button>
             )}>
-            <DropdownItem icon={HiPencil} onClick={() => onEdit?.(deck)}>
-              {t('common:actions.edit')}
-            </DropdownItem>
-            <DropdownDivider />
-            <DropdownItem
-              icon={HiTrash}
-              onClick={() => onDelete?.(deck.deckId)}
-              className="text-red-600 dark:text-red-400">
-              {t('common:actions.delete')}
-            </DropdownItem>
+            {/* Only show edit if showEdit is true */}
+            {showEdit && onEdit && (
+              <>
+                <DropdownItem icon={HiPencil} onClick={() => onEdit(deck)}>
+                  {t('common:actions.edit')}
+                </DropdownItem>
+                <DropdownDivider />
+              </>
+            )}
+            
+            {/* Always show delete if onDelete is provided */}
+            {onDelete && (
+              <DropdownItem
+                icon={HiTrash}
+                onClick={() => onDelete(deck.deckId)}
+                className="text-red-600 dark:text-red-400">
+                {t('common:actions.delete')}
+              </DropdownItem>
+            )}
           </Dropdown>
         </div>
 
@@ -115,18 +136,6 @@ function DeckCard({ deck, onEdit, onDelete }: DeckCardProps) {
               {deck.description}
             </p>
           )}
-
-          <button
-            onClick={handleStopPropagation}
-            className="flex items-center justify-center w-full gap-2 py-2 text-sm font-semibold text-white transition-all rounded-lg shadow-lg bg-gradient-to-r from-cyan-500 to-cyan-600 hover:from-cyan-600 hover:to-cyan-700 sm:py-3 sm:text-base">
-            <svg
-              className="w-4 h-4 sm:w-5 sm:h-5"
-              fill="currentColor"
-              viewBox="0 0 20 20">
-              <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z" />
-            </svg>
-            Study Now
-          </button>
         </div>
       </div>
     </div>

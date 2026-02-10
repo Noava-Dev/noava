@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using noava.DTOs.Classrooms;
 using noava.DTOs.Clerk;
+using noava.DTOs.Decks;
 using noava.Services.Classrooms;
 using System.Security.Claims;
 
@@ -58,6 +59,27 @@ namespace noava.Controllers.Classrooms
             if (result == null) return NotFound();
 
             return Ok(result);
+        }
+
+        [HttpGet("{classroomId:int}/decks")]
+        public async Task<ActionResult<List<DeckResponse>>> GetDecksByClassroom(int classroomId)
+        {
+            var userId = GetUserId();
+            if (userId == null) return Unauthorized();
+
+            try
+            {
+                var decks = await _classroomService.GetDecksForClassroomAsync(classroomId, userId);
+                return Ok(decks);
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Forbid();
+            }
         }
 
         [HttpPost("{id:int}/invite")]
@@ -126,6 +148,27 @@ namespace noava.Controllers.Classrooms
             return Ok(result);
         }
 
+        [HttpPost("{classroomId:int}/decks/{deckId:int}")]
+        public async Task<ActionResult<ClassroomResponseDto>> AddDeck(int classroomId, int deckId)
+        {
+            var userId = GetUserId();
+            if (userId == null) return Unauthorized();
+
+            try
+            {
+                var result = await _classroomService.AddDeckAsync(classroomId, deckId, userId);
+                return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Forbid();
+            }
+        }
+
         [HttpPut("{id:int}")]
         public async Task<ActionResult<ClassroomResponseDto>> Update(int id, [FromBody] ClassroomRequestDto request)
         {
@@ -187,6 +230,27 @@ namespace noava.Controllers.Classrooms
             catch (UnauthorizedAccessException ex)
             {
                 return Forbid(ex.Message);
+            }
+        }
+
+        [HttpDelete("{classroomId:int}/decks/{deckId:int}")]
+        public async Task<ActionResult<ClassroomResponseDto>> RemoveDeck(int classroomId, int deckId)
+        {
+            var userId = GetUserId();
+            if (userId == null) return Unauthorized();
+
+            try
+            {
+                var result = await _classroomService.RemoveDeckAsync(classroomId, deckId, userId);
+                return Ok(result);
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Forbid();
             }
         }
 

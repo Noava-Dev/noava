@@ -47,7 +47,8 @@
     "addCard": "Ajouter une carte",
     "studyNow": "Étudier maintenant",
     "shuffle": "Mélanger",
-    "quickReview": "Révision rapide"
+    "quickReview": "Révision rapide",
+    "backToClassroom": "Retour à {{name}}"
   },
   "quickReview": {
     "title": "Révision rapide",
