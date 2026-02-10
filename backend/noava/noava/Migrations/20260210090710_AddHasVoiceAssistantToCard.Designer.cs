@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using noava.Data;
@@ -11,9 +12,11 @@ using noava.Data;
 namespace noava.Migrations
 {
     [DbContext(typeof(NoavaDbContext))]
-    partial class NoavaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260210090710_AddHasVoiceAssistantToCard")]
+    partial class AddHasVoiceAssistantToCard
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -233,24 +236,6 @@ namespace noava.Migrations
                         .IsUnique();
 
                     b.ToTable("Classrooms");
-                });
-
-            modelBuilder.Entity("noava.Models.ClassroomDeck", b =>
-                {
-                    b.Property<int>("ClassroomId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("DeckId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("AddedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("ClassroomId", "DeckId");
-
-                    b.HasIndex("DeckId");
-
-                    b.ToTable("ClassroomDecks");
                 });
 
             modelBuilder.Entity("noava.Models.ClassroomUser", b =>
@@ -735,25 +720,6 @@ namespace noava.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("noava.Models.ClassroomDeck", b =>
-                {
-                    b.HasOne("noava.Models.Classroom", "Classroom")
-                        .WithMany("ClassroomDecks")
-                        .HasForeignKey("ClassroomId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("noava.Models.Deck", "Deck")
-                        .WithMany("ClassroomDecks")
-                        .HasForeignKey("DeckId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Classroom");
-
-                    b.Navigation("Deck");
-                });
-
             modelBuilder.Entity("noava.Models.ClassroomUser", b =>
                 {
                     b.HasOne("noava.Models.Classroom", "Classroom")
@@ -887,15 +853,11 @@ namespace noava.Migrations
 
             modelBuilder.Entity("noava.Models.Classroom", b =>
                 {
-                    b.Navigation("ClassroomDecks");
-
                     b.Navigation("ClassroomUsers");
                 });
 
             modelBuilder.Entity("noava.Models.Deck", b =>
                 {
-                    b.Navigation("ClassroomDecks");
-
                     b.Navigation("DeckUsers");
                 });
 

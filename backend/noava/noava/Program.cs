@@ -56,6 +56,7 @@ namespace noava
             builder.Services.AddScoped<ILeitnerBoxService, LeitnerBoxService>();
             builder.Services.AddScoped<IClassroomService, ClassroomService>();
             builder.Services.AddScoped<IBlobService, BlobService>();
+            builder.Services.AddScoped<ICardImportService, CardImportService>();
 
             // External Service Registrations
             builder.Services.AddHttpClient();

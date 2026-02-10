@@ -23,7 +23,9 @@
     "uploading": "Uploaden...",
     "updateButton": "Kaart bijwerken",
     "createButton": "Kaart aanmaken",
-    "uploadError": "Uploaden van media mislukt. Probeer het opnieuw."
+    "uploadError": "Uploaden van media mislukt. Probeer het opnieuw.",
+    "enableVoiceAssistant": "Spraakassistent inschakelen",
+    "voiceAssistantHelp": "Kaart tekst wordt voorgelezen als er geen audiobestand is geüpload"
   },
   "flashcardDetail": {
     "backToDeck": "Terug naar Deck",
@@ -49,6 +51,7 @@
     "shuffle": "Schudden",
     "quickReview": "Snelle herhaling",
     "backToClassroom": "Terug naar {{name}}"
+    "importFromFile": "Importeren via bestand"
   },
   "quickReview": {
     "title": "Snelle herhaling",
@@ -70,6 +73,13 @@
       "backToClassroom": "Terug naar klas",
       "restart": "Herhaling opnieuw starten"
     }
+  },
+  "importCardsModal": {
+    "header": "Flashcards Importeren",
+    "title": "Importeer je flashcards",
+    "subtitle": "Importeer je gegevens van overal. We ondersteunen CSV en Excel. Lees onze documentatie voor meer informatie over formaten.",
+    "upload": "Bestand uploaden",
+    "supported": "Ondersteunde bestanden: "
   },
   "search": { "label": "Zoeken" }
 }

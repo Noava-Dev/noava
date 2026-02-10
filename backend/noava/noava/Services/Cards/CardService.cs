@@ -38,7 +38,8 @@ namespace noava.Services.Cards
                 BackAudio = card.BackAudio,
                 Memo = card.Memo,
                 CreatedAt = card.CreatedAt,
-                UpdatedAt = card.UpdatedAt
+                UpdatedAt = card.UpdatedAt,
+                HasVoiceAssistant = card.HasVoiceAssistant
             };
         }
 
@@ -100,7 +101,8 @@ namespace noava.Services.Cards
                 FrontAudio = request.FrontAudio,
                 BackImage = request.BackImage,
                 BackAudio = request.BackAudio,
-                Memo = request.Memo
+                Memo = request.Memo,
+                HasVoiceAssistant = request.HasVoiceAssistant
             };
 
             var createdCard = await _cardRepository.CreateAsync(card);
@@ -119,6 +121,7 @@ namespace noava.Services.Cards
             var oldFrontAudio = existingCard.FrontAudio;
             var oldBackImage = existingCard.BackImage;
             var oldBackAudio = existingCard.BackAudio;
+            
 
             var newFrontImage = request.FrontImage;
             var newFrontAudio = request.FrontAudio;
