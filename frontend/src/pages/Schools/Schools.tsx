@@ -74,7 +74,7 @@ return (
 
           <button
             onClick={() => setIsModalOpen(true)}
-            className="flex items-center justify-center gap-2 rounded-lg bg-primary-500 px-5 py-2.5 text-sm font-semibold text-white hover:bg-primary-600 transition-colors shadow-md"
+            className="flex items-center justify-center gap-2 rounded-lg bg-primary-500 px-5 py-2.5 text-sm font-semibold text-white hover:bg-primary-600 shadow-md"
           >
             <Plus className="size-5" />
             Add School
@@ -85,12 +85,9 @@ return (
       <main className="px-4 py-12 mx-auto max-w-7xl sm:px-6">
         <div className="max-w-4xl mx-auto space-y-4">
           {schools.length === 0 ? (
-            <div className="p-12 text-center border rounded-xl border-border bg-background-surface-light dark:bg-background-surface-dark">
-              <p className="text-lg font-medium text-text-body-light dark:text-text-body-dark">
-                No schools found.
-              </p>
-              <p className="mt-1 text-text-muted-light dark:text-text-muted-dark">
-                Start by adding a new school to the platform.
+            <div className="py-12 text-center md:py-20">
+              <p className="mb-6 text-xl text-text-body-light dark:text-text-muted-dark md:text-2xl">
+                No schools found. Start by adding a new school.
               </p>
             </div>
           ) : (
@@ -113,7 +110,7 @@ return (
       <CreateSchoolModal
         open={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onCreate={handleCreateSchool} // ✅ wired
+        onCreate={handleCreateSchool}
       />
     </div>
   );

@@ -13,7 +13,7 @@ interface Props {
 export default function CreateSchoolModal({
   open,
   onClose,
-  onCreate, // ✅ added
+  onCreate,
 }: Props) {
 
   const [name, setName] = useState("");
@@ -47,7 +47,7 @@ return (
       <ModalHeader />
       <ModalBody>
         <div className="space-y-6">
-            <h3 className="text-xl font-medium text-gray-900 dark:text-white">
+            <h3 className="text-xl font-medium text-text-title-light dark:text-text-title-dark">
                 Create School
             </h3>
 
@@ -56,7 +56,6 @@ return (
             {/* School Name Input */}
             <div>
                 <div className="mb-2 block">
-                {/* FIX: Label text goes inside the component, not in 'value' prop */}
                 <Label htmlFor="schoolName">School Name *</Label>
                 </div>
                 <TextInput
@@ -73,7 +72,7 @@ return (
                 <div className="mb-2 block">
                 <Label htmlFor="adminEmail">School Admin *</Label>
                 </div>
-                <p className="mb-2 text-xs text-gray-500 dark:text-gray-400">
+                <p className="mb-2 text-xs text-text-muted-light dark:text-text-muted-dark">
                 A school must have at least one school admin.
                 </p>
                 <TextInput
@@ -88,15 +87,14 @@ return (
 
             {/* Action Buttons */}
             <div className="flex justify-end gap-3 pt-2">
-                <Button color="gray" onClick={onClose} disabled={loading}>
+                <Button className="bg-primary-500" onClick={onClose} disabled={loading}>
                     Cancel
                 </Button>
                 
-                {/* FIX: Removed 'isProcessing'. Manually handle loading state. */}
                 <Button 
                     type="submit" 
                     disabled={loading || !name.trim()}
-                    color="blue"
+                    className="bg-primary-400"
                 >
                 {loading ? (
                     <>
