@@ -42,7 +42,8 @@
     "join": "Join",
     "request": "Request",
     "show": "Show",
-    "back": "Back"
+    "back": "Back",
+    "uploading": "Uploading..."
   },
   "validation": {
     "required": "This field is required",

@@ -11,10 +11,11 @@ import { useState } from 'react';
 import { FaCloudUploadAlt } from 'react-icons/fa';
 import { HiUpload } from 'react-icons/hi';
 import { PiFileCsv, PiMicrosoftExcelLogo } from 'react-icons/pi';
-import { useToast } from '../../contexts/ToastContext';
-import { useFlashcardService } from '../../services/FlashcardService';
+import { useToast } from '../../../contexts/ToastContext';
+import { useFlashcardService } from '../../../services/FlashcardService';
 import { useParams } from 'react-router-dom';
-import FormErrorMessage from './validation/FormErrorMessage';
+import FormErrorMessage from '../../../shared/components/validation/FormErrorMessage';
+import { useTranslation } from 'react-i18next';
 
 interface ImportCardsModalProps {
   isOpen: boolean;
@@ -33,6 +34,7 @@ function ImportCardsModal({
   const [file, setFile] = useState<File | null>(null);
   const flashcardService = useFlashcardService();
   const [error, setError] = useState<string>('');
+  const { t } = useTranslation('flashcards');
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -65,31 +67,30 @@ function ImportCardsModal({
   return (
     <Modal show={isOpen} onClose={onClose} dismissible>
       <div className="bg-background-app-light dark:bg-background-surface-dark">
-        <ModalHeader>Import Cards</ModalHeader>
+        <ModalHeader>{t('importCardsModal.header')}</ModalHeader>
         <ModalBody>
           <form onSubmit={handleSubmit}>
             <div className="flex flex-col gap-6 mb-4">
               <div className="flex flex-col items-center gap-1 pb-4 text-center border-b border-border dark:border-border-dark">
                 <FaCloudUploadAlt className="size-24 dark:text-primary-500 text-primary-700" />
                 <h3 className="text-xl font-semibold text-text-title-light dark:text-text-title-dark">
-                  Import your flashcards
+                  {t('importCardsModal.title')}
                 </h3>
                 <p className="text-sm text-text-body-light dark:text-text-body-dark">
-                  Bring your data from any source. We support CSV and Excel.
-                  Read our <span>Docs</span> for more information about formats.
+                  {t('importCardsModal.subtitle')}
                 </p>
               </div>
             </div>
             <div>
               <Label className="block mb-2" htmlFor="file-upload-helper-text">
-                Upload file
+                {t('importCardsModal.upload')}
               </Label>
               <FileInput
                 id="file-upload-helper-text"
                 onChange={handleFileChange}
               />
               <HelperText className="mt-1 ml-1">
-                Supported Files: .csv, .xls, .xlsx
+                {t('importCardsModal.supported')}.csv, .xls, .xlsx
               </HelperText>
               {error && <FormErrorMessage text={error} />}
             </div>
@@ -116,7 +117,7 @@ function ImportCardsModal({
                 {uploading ? (
                   <>
                     <HiUpload className="mr-2 size-5 animate-spin" />
-                    Uploading...
+                    {t('common:actions.uploading')}
                   </>
                 ) : (
                   'Upload'
@@ -127,7 +128,7 @@ function ImportCardsModal({
                 onClick={onClose}
                 disabled={uploading}
                 type="button">
-                Cancel
+                {t('common:actions.cancel')}
               </Button>
             </div>
           </form>

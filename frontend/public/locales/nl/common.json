@@ -42,7 +42,8 @@
     "join": "Deelnemen",
     "request": "Aanvragen",
     "show": "Tonen",
-    "back": "Terug"
+    "back": "Terug",
+    "uploading": "Bezig met uploaden..."
   },
   "validation": {
     "required": "Dit veld is verplicht",

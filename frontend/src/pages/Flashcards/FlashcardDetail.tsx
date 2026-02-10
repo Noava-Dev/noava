@@ -30,7 +30,7 @@ import { ManageOwnersModal } from '../../shared/components/ManageOwnersModal';
 import BackButton from '../../shared/components/navigation/BackButton';
 import PageHeader from '../../shared/components/PageHeader';
 import DropdownButton from '../../shared/components/DropdownButton';
-import ImportCardsModal from '../../shared/components/ImportCardsModal';
+import ImportCardsModal from './components/ImportCardsModal';
 
 interface FlashcardWithImages extends Flashcard {
   frontImageUrl?: string | null;
@@ -264,7 +264,7 @@ function FlashcardDetail() {
                   icon={HiPlus}
                   text={t('flashcardDetail.addCard')}>
                   <DropdownItem onClick={() => setShowImportModal(true)}>
-                    Import from File
+                    {t('flashcardDetail.importFromFile')}
                   </DropdownItem>
                 </DropdownButton>
                 <Button size="lg" disabled={totalCards === 0}>

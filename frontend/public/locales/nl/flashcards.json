@@ -47,7 +47,8 @@
     "addCard": "Kaart toevoegen",
     "studyNow": "Nu studeren",
     "shuffle": "Schudden",
-    "quickReview": "Snelle herhaling"
+    "quickReview": "Snelle herhaling",
+    "importFromFile": "Importeren via bestand"
   },
   "quickReview": {
     "title": "Snelle herhaling",
@@ -61,6 +62,13 @@
       "backToDeck": "Terug naar Deck",
       "restart": "Herhaling opnieuw starten"
     }
+  },
+  "importCardsModal": {
+    "header": "Flashcards Importeren",
+    "title": "Importeer je flashcards",
+    "subtitle": "Importeer je gegevens van overal. We ondersteunen CSV en Excel. Lees onze documentatie voor meer informatie over formaten.",
+    "upload": "Bestand uploaden",
+    "supported": "Ondersteunde bestanden: "
   },
   "search": { "label": "Zoeken" }
 }
