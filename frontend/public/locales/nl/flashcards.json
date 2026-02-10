@@ -50,7 +50,7 @@
     "studyNow": "Nu studeren",
     "shuffle": "Schudden",
     "quickReview": "Snelle herhaling",
-    "backToClassroom": "Terug naar {{name}}"
+    "backToClassroom": "Terug naar {{name}}",
     "importFromFile": "Importeren via bestand"
   },
   "quickReview": {

@@ -50,7 +50,7 @@
     "studyNow": "Study Now",
     "shuffle": "Shuffle",
     "quickReview": "Quick Review",
-    "backToClassroom": "Back to {{name}}"
+    "backToClassroom": "Back to {{name}}",
     "importFromFile": "Import from File"
   },
   "quickReview": {

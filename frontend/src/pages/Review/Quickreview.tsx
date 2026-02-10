@@ -215,6 +215,9 @@ function QuickReview() {
   };
 
   const handleExit = () => {
+    window.speechSynthesis.cancel();
+    setIsSpeaking(false);
+
     if (isBulkReview && classroomId) {
       navigate(`/classrooms/${classroomId}`);
     } else if (isBulkReview) {
@@ -224,9 +227,6 @@ function QuickReview() {
     } else {
       navigate('/decks');
     }
-    window.speechSynthesis.cancel();
-    setIsSpeaking(false);
-    navigate(`/decks/${deckId}/cards`);
   };
 
   // ← PRIORITY: Audio file FIRST, then TTS

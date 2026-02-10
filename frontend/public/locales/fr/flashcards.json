@@ -50,7 +50,7 @@
     "studyNow": "Étudier maintenant",
     "shuffle": "Mélanger",
     "quickReview": "Révision rapide",
-    "backToClassroom": "Retour à {{name}}"
+    "backToClassroom": "Retour à {{name}}",
     "importFromFile": "Importer depuis un fichier"
   },
   "quickReview": {
