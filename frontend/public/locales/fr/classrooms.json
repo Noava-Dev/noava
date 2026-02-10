@@ -99,6 +99,24 @@
     "addSuccess": "Deck ajouté à la classe",
     "addError": "Échec de l'ajout du deck"
   },
+  "bulkReview": {
+    "button": "Révision groupée",
+    "title": "Révision groupée",
+    "description": "Sélectionnez les decks que vous souhaitez réviser ensemble.",
+    "selectAll": "Tout sélectionner",
+    "deselectAll": "Tout désélectionner",
+    "selectedCount": "{{selected}} sur {{total}} sélectionné(s)",
+    "cards": "cartes",
+    "noDecks": "Aucun deck disponible",
+    "shuffleMode": {
+      "label": "Mode de mélange",
+      "none": "Pas de mélange - Garder l'ordre original",
+      "perDeck": "Mélanger par deck - Mélanger les cartes dans chaque deck",
+      "all": "Tout mélanger - Mélanger toutes les cartes ensemble"
+    },
+    "summary": "Prêt à réviser {{decks}} deck(s) avec {{cards}} carte(s)",
+    "startReview": "Commencer la révision"
+  },
   "addDeck": {
     "title": "Ajouter un Deck à la Classe",
     "description": "Ajoutez un de vos decks existants à cette classe.",

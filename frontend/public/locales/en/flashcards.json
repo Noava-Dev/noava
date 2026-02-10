@@ -52,14 +52,21 @@
   },
   "quickReview": {
     "title": "Quick Review",
+    "bulkTitle": "Bulk Review",
     "mode": "Quick Review Mode",
+    "bulkMode": "Bulk Review Mode",
     "noCards": "No cards available for review",
+    "loading": "Loading cards...",
+    "error": "Failed to load cards",
     "progress": "Progress",
     "next": "Next Card",
+    "finish": "Finish",
     "complete": {
       "title": "Session Complete!",
       "message": "You reviewed {{count}} cards",
+      "bulkMessage": "You reviewed {{count}} cards from multiple decks",
       "backToDeck": "Back to Deck",
+      "backToClassroom": "Back to Classroom",
       "restart": "Restart Review"
     }
   },

@@ -1,17 +1,18 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { Button, Progress, Badge } from 'flowbite-react';
-import { HiArrowLeft, HiRefresh, HiX, HiVolumeUp } from 'react-icons/hi'; // ← ADD HiVolumeUp
+import { HiArrowLeft, HiRefresh, HiX, HiVolumeUp } from 'react-icons/hi';
 import { useTranslation } from 'react-i18next';
 import { useDeckService } from '../../services/DeckService';
 import { useFlashcardService } from '../../services/FlashcardService';
 import { useToast } from '../../contexts/ToastContext';
 import { useAzureBlobService } from '../../services/AzureBlobService';
-import type { Deck } from '../../models/Deck';
+import { BulkReviewMode } from '../../models/Flashcard';
 import type { ReviewSession } from '../../models/ReviewSessions';
 
 function QuickReview() {
-  const { deckId } = useParams<{ deckId: string }>();
+  const { deckId, classroomId } = useParams<{ deckId?: string; classroomId?: string }>();
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { t } = useTranslation('flashcards');
   const deckService = useDeckService();
@@ -19,20 +20,29 @@ function QuickReview() {
   const azureBlobService = useAzureBlobService();
   const { showError } = useToast();
 
-  const [deck, setDeck] = useState<Deck | null>(null);
   const [session, setSession] = useState<ReviewSession | null>(null);
   const [isFlipped, setIsFlipped] = useState(false);
   const [loading, setLoading] = useState(true);
   const [frontImageUrl, setFrontImageUrl] = useState<string | null>(null);
   const [backImageUrl, setBackImageUrl] = useState<string | null>(null);
-  const [frontAudioUrl, setFrontAudioUrl] = useState<string | null>(null); // ← ADD
-  const [backAudioUrl, setBackAudioUrl] = useState<string | null>(null); // ← ADD
+  const [frontAudioUrl, setFrontAudioUrl] = useState<string | null>(null);
+  const [backAudioUrl, setBackAudioUrl] = useState<string | null>(null);
+  const [isBulkReview, setIsBulkReview] = useState(false);
 
   useEffect(() => {
-    if (deckId) {
-      initializeSession();
+    const deckIdsParam = searchParams.get('deckIds');
+    const modeParam = searchParams.get('mode');
+
+    if (classroomId && deckIdsParam) {
+      const deckIds = deckIdsParam.split(',').map(Number);
+      const mode = modeParam ? Number(modeParam) : BulkReviewMode.ShuffleAll;
+      setIsBulkReview(true);
+      initializeBulkSession(deckIds, mode);
+    } else if (deckId) {
+      setIsBulkReview(false);
+      initializeSingleSession();
     }
-  }, [deckId]);
+  }, [deckId, classroomId, searchParams]);
 
   // Load images and audio for current card
   useEffect(() => {
@@ -81,7 +91,7 @@ function QuickReview() {
     }
   }, [session?.currentIndex]);
 
-  const initializeSession = async () => {
+  const initializeSingleSession = async () => {
     try {
       setLoading(true);
 
@@ -98,7 +108,6 @@ function QuickReview() {
 
       const shuffledCards = [...cardsData].sort(() => Math.random() - 0.5);
 
-      setDeck(deckData);
       setSession({
         deckId: deckData.deckId,
         deckTitle: deckData.title,
@@ -110,6 +119,34 @@ function QuickReview() {
     } catch (error) {
       showError(t('quickReview.noCards'), t('quickReview.error'));
       navigate(`/decks/${deckId}/cards`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const initializeBulkSession = async (deckIds: number[], mode: BulkReviewMode) => {
+    try {
+      setLoading(true);
+
+      const cardsData = await flashcardService.getBulkReviewCards(deckIds, mode);
+
+      if (!cardsData || cardsData.length === 0) {
+        showError(t('quickReview.noCards'), t('quickReview.error'));
+        navigate(`/classrooms/${classroomId}`);
+        return;
+      }
+
+      setSession({
+        deckTitle: t('quickReview.bulkTitle'),
+        cards: cardsData,
+        currentIndex: 0,
+        isFlipped: false,
+        completedCards: 0,
+      });
+    } catch (error) {
+      console.error('Error loading bulk review cards:', error);
+      showError(t('common:toast.error'), t('quickReview.error'));
+      navigate(`/classrooms/${classroomId}`);
     } finally {
       setLoading(false);
     }
@@ -152,7 +189,13 @@ function QuickReview() {
   };
 
   const handleExit = () => {
-    navigate(`/decks/${deckId}/cards`);
+    if (isBulkReview && classroomId) {
+      navigate(`/classrooms/${classroomId}`);
+    } else if (deckId) {
+      navigate(`/decks/${deckId}/cards`);
+    } else {
+      navigate('/decks');
+    }
   };
 
   const handlePlayAudio = (audioUrl: string, e: React.MouseEvent) => {
@@ -174,7 +217,7 @@ function QuickReview() {
     );
   }
 
-  if (!session || !deck) {
+  if (!session) {
     return null;
   }
 
@@ -184,7 +227,7 @@ function QuickReview() {
 
   return (
     <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
-      <main className="flex-1 w-full ml-0 md:ml-64">
+      <main className="flex-1 w-full">
         <div className="container max-w-4xl px-4 py-6 mx-auto md:py-8">
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
@@ -196,10 +239,10 @@ function QuickReview() {
               </button>
               <div>
                 <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                  {deck.title}
+                  {session.deckTitle}
                 </h1>
                 <Badge color="info" className="mt-1">
-                  {t('quickReview.mode')}
+                  {isBulkReview ? t('quickReview.bulkMode') : t('quickReview.mode')}
                 </Badge>
               </div>
             </div>
@@ -330,7 +373,7 @@ function QuickReview() {
                   onClick={handleNext}
                   disabled={!isFlipped}>
                   {session.currentIndex === session.cards.length - 1
-                    ? t('common:actions.skip')
+                    ? t('quickReview.finish')
                     : t('quickReview.next')}
                 </Button>
               </div>
@@ -343,16 +386,22 @@ function QuickReview() {
                   {t('quickReview.complete.title')}
                 </h2>
                 <p className="text-lg text-gray-600 dark:text-gray-400">
-                  {t('quickReview.complete.message', {
-                    count: session.cards.length,
-                  })}
+                  {isBulkReview
+                    ? t('quickReview.complete.bulkMessage', {
+                        count: session.cards.length,
+                      })
+                    : t('quickReview.complete.message', {
+                        count: session.cards.length,
+                      })}
                 </p>
               </div>
 
               <div className="flex justify-center gap-4">
                 <Button size="lg" color="gray" onClick={handleExit}>
                   <HiArrowLeft className="w-5 h-5 mr-2" />
-                  {t('quickReview.complete.backToDeck')}
+                  {isBulkReview
+                    ? t('quickReview.complete.backToClassroom')
+                    : t('quickReview.complete.backToDeck')}
                 </Button>
                 <Button
                   size="lg"

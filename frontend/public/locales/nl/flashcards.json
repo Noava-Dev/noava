@@ -52,14 +52,21 @@
   },
   "quickReview": {
     "title": "Snelle herhaling",
+    "bulkTitle": "Groepsherhaling",
     "mode": "Snelle herhaalmodus",
+    "bulkMode": "Groepsherhaalmodus",
     "noCards": "Geen kaarten beschikbaar voor herhaling",
+    "loading": "Kaarten laden...",
+    "error": "Kon kaarten niet laden",
     "progress": "Voortgang",
     "next": "Volgende kaart",
+    "finish": "Voltooien",
     "complete": {
       "title": "Sessie voltooid!",
       "message": "Je hebt {{count}} kaarten herhaald",
+      "bulkMessage": "Je hebt {{count}} kaarten uit meerdere decks herhaald",
       "backToDeck": "Terug naar Deck",
+      "backToClassroom": "Terug naar klas",
       "restart": "Herhaling opnieuw starten"
     }
   },

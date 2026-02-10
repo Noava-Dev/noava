@@ -66,6 +66,10 @@ export default function AppRoutes() {
           path="/classrooms/:classroomId/members"
           element={<MembersPage />}
         />
+        <Route
+          path="/classrooms/:classroomId/review"
+          element={<QuickReview />}
+        />
 
         {/* Notifications */}
         <Route path="/notifications" element={<NotificationPage />} />

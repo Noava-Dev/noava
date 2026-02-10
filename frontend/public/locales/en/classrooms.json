@@ -99,6 +99,24 @@
     "addSuccess": "Deck added to classroom",
     "addError": "Failed to add deck to classroom"
   },
+  "bulkReview": {
+    "button": "Bulk Review",
+    "title": "Bulk Review",
+    "description": "Select the decks you want to review together.",
+    "selectAll": "Select All",
+    "deselectAll": "Deselect All",
+    "selectedCount": "{{selected}} of {{total}} selected",
+    "cards": "cards",
+    "noDecks": "No decks available",
+    "shuffleMode": {
+      "label": "Shuffle Mode",
+      "none": "No Shuffle - Keep original order",
+      "perDeck": "Shuffle Per Deck - Shuffle cards within each deck",
+      "all": "Shuffle All - Shuffle all cards together"
+    },
+    "summary": "Ready to review {{decks}} deck(s) with {{cards}} card(s)",
+    "startReview": "Start Review"
+  },
   "addDeck": {
      "title": "Add Deck to Classroom",
     "description": "Add one of your existing decks to this classroom.",

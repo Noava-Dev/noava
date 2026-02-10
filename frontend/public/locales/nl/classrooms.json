@@ -99,6 +99,24 @@
     "addSuccess": "Deck toegevoegd aan classroom",
     "addError": "Kon deck niet toevoegen aan classroom"
   },
+  "bulkReview": {
+    "button": "Groepsherhaling",
+    "title": "Groepsherhaling",
+    "description": "Selecteer de decks die je samen wilt herhalen.",
+    "selectAll": "Alles selecteren",
+    "deselectAll": "Alles deselecteren",
+    "selectedCount": "{{selected}} van {{total}} geselecteerd",
+    "cards": "kaarten",
+    "noDecks": "Geen decks beschikbaar",
+    "shuffleMode": {
+      "label": "Schudmodus",
+      "none": "Niet schudden - Behoud originele volgorde",
+      "perDeck": "Per deck schudden - Schud kaarten binnen elk deck",
+      "all": "Alles schudden - Schud alle kaarten door elkaar"
+    },
+    "summary": "Klaar om {{decks}} deck(s) met {{cards}} kaart(en) te herhalen",
+    "startReview": "Start herhaling"
+  },
   "addDeck": {
      "title": "Deck Toevoegen aan Classroom",
     "description": "Voeg een van je bestaande decks toe aan deze classroom.",

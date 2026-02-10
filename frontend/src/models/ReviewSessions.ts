@@ -1,5 +1,5 @@
 export interface ReviewSession {
-  deckId: number;
+  deckId?: number;
   deckTitle: string;
   cards: ReviewCard[];
   currentIndex: number;
