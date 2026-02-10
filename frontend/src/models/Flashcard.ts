@@ -10,6 +10,7 @@ export interface Flashcard {
   memo?: string;
   createdAt: string;
   updatedAt: string;
+  hasVoiceAssistant: boolean;
 }
 
 export interface CreateFlashcardRequest {
@@ -20,6 +21,7 @@ export interface CreateFlashcardRequest {
   backImage?: string;
   backAudio?: string;
   memo?: string;
+  hasVoiceAssistant: boolean;
 }
 
 export interface UpdateFlashcardRequest {
@@ -30,4 +32,5 @@ export interface UpdateFlashcardRequest {
   backImage?: string;
   backAudio?: string;
   memo?: string;
+  hasVoiceAssistant: boolean;
 }

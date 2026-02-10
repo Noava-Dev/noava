@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button, Progress, Badge } from 'flowbite-react';
-import { HiArrowLeft, HiRefresh, HiX, HiVolumeUp } from 'react-icons/hi'; // ← ADD HiVolumeUp
+import { HiArrowLeft, HiRefresh, HiX, HiVolumeUp } from 'react-icons/hi';
 import { useTranslation } from 'react-i18next';
 import { useDeckService } from '../../services/DeckService';
 import { useFlashcardService } from '../../services/FlashcardService';
 import { useToast } from '../../contexts/ToastContext';
 import { useAzureBlobService } from '../../services/AzureBlobService';
+import { getLanguageCode } from '../../shared/utils/speechHelpers';
 import type { Deck } from '../../models/Deck';
 import type { ReviewSession } from '../../models/ReviewSessions';
 
@@ -25,14 +26,22 @@ function QuickReview() {
   const [loading, setLoading] = useState(true);
   const [frontImageUrl, setFrontImageUrl] = useState<string | null>(null);
   const [backImageUrl, setBackImageUrl] = useState<string | null>(null);
-  const [frontAudioUrl, setFrontAudioUrl] = useState<string | null>(null); // ← ADD
-  const [backAudioUrl, setBackAudioUrl] = useState<string | null>(null); // ← ADD
+  const [frontAudioUrl, setFrontAudioUrl] = useState<string | null>(null);
+  const [backAudioUrl, setBackAudioUrl] = useState<string | null>(null);
+  const [isSpeaking, setIsSpeaking] = useState(false);
 
   useEffect(() => {
     if (deckId) {
       initializeSession();
     }
   }, [deckId]);
+
+  // Stop speech when component unmounts or card changes
+  useEffect(() => {
+    return () => {
+      window.speechSynthesis.cancel();
+    };
+  }, [session?.currentIndex]);
 
   // Load images and audio for current card
   useEffect(() => {
@@ -59,7 +68,7 @@ function QuickReview() {
         setBackImageUrl(null);
       }
 
-      // ← ADD: Load front audio
+      // Load front audio
       if (currentCard.frontAudio) {
         azureBlobService
           .getSasUrl('card-audio', currentCard.frontAudio)
@@ -69,7 +78,7 @@ function QuickReview() {
         setFrontAudioUrl(null);
       }
 
-      // ← ADD: Load back audio
+      // Load back audio
       if (currentCard.backAudio) {
         azureBlobService
           .getSasUrl('card-audio', currentCard.backAudio)
@@ -116,11 +125,16 @@ function QuickReview() {
   };
 
   const handleFlip = () => {
+    window.speechSynthesis.cancel();
+    setIsSpeaking(false);
     setIsFlipped(!isFlipped);
   };
 
   const handleNext = () => {
     if (!session) return;
+
+    window.speechSynthesis.cancel();
+    setIsSpeaking(false);
 
     if (session.currentIndex < session.cards.length - 1) {
       setSession({
@@ -140,6 +154,9 @@ function QuickReview() {
   const handleRestart = () => {
     if (!session) return;
 
+    window.speechSynthesis.cancel();
+    setIsSpeaking(false);
+
     const shuffledCards = [...session.cards].sort(() => Math.random() - 0.5);
 
     setSession({
@@ -152,13 +169,81 @@ function QuickReview() {
   };
 
   const handleExit = () => {
+    window.speechSynthesis.cancel();
+    setIsSpeaking(false);
     navigate(`/decks/${deckId}/cards`);
   };
 
-  const handlePlayAudio = (audioUrl: string, e: React.MouseEvent) => {
+  // ← PRIORITY: Audio file FIRST, then TTS
+  const handlePlayAudio = (side: 'front' | 'back', e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent card flip
-    const audio = new Audio(audioUrl);
-    audio.play().catch((err) => console.error('Failed to play audio:', err));
+
+    if (!session || !deck) return;
+
+    const currentCard = session.cards[session.currentIndex];
+
+    if (side === 'front') {
+      // PRIORITY 1: Audio file
+      if (frontAudioUrl) {
+        console.log('Playing front audio file (priority)');
+        const audio = new Audio(frontAudioUrl);
+        audio.play().catch((err) => console.error('Failed to play audio:', err));
+      } 
+      // PRIORITY 2: TTS (only if no audio file)
+      else if (currentCard.hasVoiceAssistant && currentCard.frontText) {
+        console.log('Using TTS for front (no audio file)');
+        speakText(currentCard.frontText, deck.language);
+      }
+    } else {
+      // PRIORITY 1: Audio file
+      if (backAudioUrl) {
+        console.log('Playing back audio file (priority)');
+        const audio = new Audio(backAudioUrl);
+        audio.play().catch((err) => console.error('Failed to play audio:', err));
+      } 
+      // PRIORITY 2: TTS (only if no audio file)
+      else if (currentCard.hasVoiceAssistant && currentCard.backText) {
+        console.log('Using TTS for back (no audio file)');
+        speakText(currentCard.backText, deck.language);
+      }
+    }
+  };
+
+  // Speak with deck language
+  const speakText = (text: string, deckLanguage: string) => {
+    window.speechSynthesis.cancel();
+
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = getLanguageCode(deckLanguage);
+    utterance.rate = 1.0;
+    utterance.pitch = 1.0;
+    utterance.volume = 1.0;
+
+    console.log(`Speaking: "${text}"`);
+    console.log(`Language: ${utterance.lang} (from deck: ${deckLanguage})`);
+
+    utterance.onstart = () => setIsSpeaking(true);
+    utterance.onend = () => setIsSpeaking(false);
+    utterance.onerror = (event) => {
+      console.error('Speech synthesis error:', event);
+      setIsSpeaking(false);
+    };
+
+    window.speechSynthesis.speak(utterance);
+  };
+
+  // Check if audio/TTS button should show
+  const shouldShowAudioButton = (side: 'front' | 'back'): boolean => {
+    if (!session) return false;
+
+    const currentCard = session.cards[session.currentIndex];
+
+    if (side === 'front') {
+      return !!(frontAudioUrl || currentCard.hasVoiceAssistant);
+    } else {
+      return !!(backAudioUrl || currentCard.hasVoiceAssistant);
+    }
   };
 
   if (loading) {
@@ -230,12 +315,14 @@ function QuickReview() {
                   <div className="absolute inset-0 backface-hidden">
                     <div className="flex flex-col items-center justify-center w-full h-full p-8 bg-white border-2 border-gray-200 shadow-xl dark:bg-gray-800 rounded-2xl dark:border-gray-700">
                       {/* Audio button - top right */}
-                      {frontAudioUrl && (
+                      {shouldShowAudioButton('front') && (
                         <button
-                          onClick={(e) => handlePlayAudio(frontAudioUrl, e)}
-                          className="absolute z-10 p-3 text-white transition-colors rounded-full shadow-lg top-4 right-4 bg-cyan-500 hover:bg-cyan-600"
-                          title="Play audio">
-                          <HiVolumeUp className="w-5 h-5" />
+                          onClick={(e) => handlePlayAudio('front', e)}
+                          className={`absolute z-10 p-3 text-white transition-colors rounded-full shadow-lg top-4 right-4 ${
+                            isSpeaking ? 'bg-cyan-600' : 'bg-cyan-500 hover:bg-cyan-600'
+                          }`}
+                          title={frontAudioUrl ? t('quickReview.playAudio') : t('quickReview.playVoiceAssistant')}>
+                          <HiVolumeUp className={`w-5 h-5 ${isSpeaking ? 'animate-pulse' : ''}`} />
                         </button>
                       )}
 
@@ -280,12 +367,14 @@ function QuickReview() {
                   <div className="absolute inset-0 backface-hidden rotate-y-180">
                     <div className="flex flex-col items-center justify-center w-full h-full p-8 bg-white border-2 border-gray-200 shadow-xl dark:bg-gray-800 rounded-2xl dark:border-gray-700">
                       {/* Audio button - top right */}
-                      {backAudioUrl && (
+                      {shouldShowAudioButton('back') && (
                         <button
-                          onClick={(e) => handlePlayAudio(backAudioUrl, e)}
-                          className="absolute z-10 p-3 text-white transition-colors bg-yellow-500 rounded-full shadow-lg top-4 right-4 hover:bg-yellow-600"
-                          title="Play audio">
-                          <HiVolumeUp className="w-5 h-5" />
+                          onClick={(e) => handlePlayAudio('back', e)}
+                          className={`absolute z-10 p-3 text-white transition-colors rounded-full shadow-lg top-4 right-4 ${
+                            isSpeaking ? 'bg-yellow-600' : 'bg-yellow-500 hover:bg-yellow-600'
+                          }`}
+                          title={backAudioUrl ? t('quickReview.playAudio') : t('quickReview.playVoiceAssistant')}>
+                          <HiVolumeUp className={`w-5 h-5 ${isSpeaking ? 'animate-pulse' : ''}`} />
                         </button>
                       )}
 
@@ -330,7 +419,7 @@ function QuickReview() {
                   onClick={handleNext}
                   disabled={!isFlipped}>
                   {session.currentIndex === session.cards.length - 1
-                    ? t('common:actions.skip')
+                    ? t('common:actions.finish')
                     : t('quickReview.next')}
                 </Button>
               </div>

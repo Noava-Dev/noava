@@ -23,7 +23,9 @@
     "uploading": "Téléversement...",
     "updateButton": "Mettre à jour la carte",
     "createButton": "Créer la carte",
-    "uploadError": "Échec du téléversement du média. Veuillez réessayer."
+    "uploadError": "Échec du téléversement du média. Veuillez réessayer.",
+    "enableVoiceAssistant": "Activer l'assistant vocal",
+    "voiceAssistantHelp": "Le texte de la carte sera lu à voix haute si aucun fichier audio n'est téléchargé"
   },
   "flashcardDetail": {
     "backToDeck": "Retour au Deck",

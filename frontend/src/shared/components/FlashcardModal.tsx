@@ -64,6 +64,9 @@ function FlashcardModal({
   const [backAudioBlobName, setBackAudioBlobName] = useState<
     string | undefined
   >(undefined);
+  const [hasVoiceAssistant, setHasVoiceAssistant] = useState(
+  flashcard?.hasVoiceAssistant || false
+);
 
   const [uploading, setUploading] = useState(false);
 
@@ -217,8 +220,9 @@ function FlashcardModal({
       const flashcardData: CreateFlashcardRequest = {
         frontText,
         backText,
+        hasVoiceAssistant: hasVoiceAssistant
       };
-
+         
       // Only include optional fields if they have values
       if (finalFrontImage) flashcardData.frontImage = finalFrontImage;
       if (finalFrontAudio) flashcardData.frontAudio = finalFrontAudio;
@@ -232,6 +236,7 @@ function FlashcardModal({
       setFrontText('');
       setBackText('');
       setMemo('');
+      setHasVoiceAssistant(false);
       setFrontImageFile(null);
       setFrontImagePreview(null);
       setFrontImageBlobName(undefined);
@@ -530,8 +535,34 @@ function FlashcardModal({
                     disabled={uploading}
                   />
                 </div>
-              </div>
+                  
+                  {/* Voice Assistant Toggle */}
+                  <div className="p-4 rounded-lg border border-border dark:border-border-dark bg-background-subtle-light dark:bg-background-subtle-dark">
+                    <label className="flex items-start gap-3 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={hasVoiceAssistant}
+                        onChange={(e) => setHasVoiceAssistant(e.target.checked)}
+                        disabled={uploading}
+                        className="mt-1 w-4 h-4 text-primary-600 rounded focus:ring-primary-500 focus:ring-2"
+                      />
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2">
+                          <HiVolumeUp className="w-4 h-4 text-primary-600 dark:text-primary-400" />
+                          <span className="text-sm font-medium text-text-title-light dark:text-text-title-dark">
+                            {t('flashcardModal.enableVoiceAssistant')}
+                          </span>
+                        </div>
+                        <p className="mt-1 text-xs text-text-muted-light dark:text-text-muted-dark">
+                          {t('flashcardModal.voiceAssistantHelp')}
+                        </p>
+                      </div>
+                    </label>
+                  </div>
+                </div>
+              
             )}
+
 
             {/* Actions */}
             <div className="flex gap-3 pt-4">
