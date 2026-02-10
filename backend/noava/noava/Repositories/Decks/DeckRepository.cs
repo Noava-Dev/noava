@@ -64,5 +64,14 @@ namespace noava.Repositories
             await _context.SaveChangesAsync();
             return true;
         }
+
+        public async Task<bool> IsUserLinkedToDeckAsync(int deckId, string userId)
+        {
+            return await _context.DecksUsers
+                .AnyAsync(du =>
+                    du.DeckId == deckId &&
+                    du.ClerkId == userId
+                );
+        }
     }
 }

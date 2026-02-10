@@ -1,8 +1,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 using noava.DTOs.Cards;
+using noava.Models.Enums;
 using noava.Services.Cards;
+using System.Security.Claims;
 
 namespace noava.Controllers.Cards
 {
@@ -24,7 +25,6 @@ namespace noava.Controllers.Cards
                    ?? User.FindFirstValue(ClaimTypes.NameIdentifier)
                    ?? throw new UnauthorizedAccessException("User ID not found");
         }
-
         
         [HttpGet("deck/{deckId}")]
         public async Task<ActionResult<List<CardResponse>>> GetCardsByDeckId(int deckId)
@@ -34,7 +34,6 @@ namespace noava.Controllers.Cards
             return Ok(cards);
         }
 
-        
         [HttpGet("{id}")]
         public async Task<ActionResult<CardResponse>> GetCard(int id)
         {
@@ -44,7 +43,25 @@ namespace noava.Controllers.Cards
             return Ok(card);
         }
 
-        
+        [HttpGet("bulk-review")]
+        public async Task<ActionResult<List<CardResponse>>> GetBulkReviewCards(
+            [FromQuery] List<int> deckIds,
+            [FromQuery] BulkReviewMode mode)
+        {
+            var userId = GetUserId();
+
+            if (deckIds == null || deckIds.Count == 0)
+                return BadRequest("DeckIds can not be empty");
+
+            var cards = await _cardService.GetBulkReviewCardsAsync(
+                deckIds,
+                userId,
+                mode
+            );
+
+            return Ok(cards);
+        }
+
         [HttpPost("deck/{deckId}")]
         public async Task<ActionResult<CardResponse>> CreateCard(
             int deckId,

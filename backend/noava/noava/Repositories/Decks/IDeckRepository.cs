@@ -10,5 +10,6 @@ namespace noava.Repositories.Decks
         Task<Deck> CreateAsync(Deck deck);
         Task<Deck> UpdateAsync(Deck deck);
         Task<bool> DeleteAsync(int id);
+        Task<bool> IsUserLinkedToDeckAsync(int deckId, string userId);
     }
 }
