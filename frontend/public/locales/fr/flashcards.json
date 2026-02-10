@@ -66,6 +66,7 @@
       "message": "Vous avez révisé {{count}} cartes",
       "bulkMessage": "Vous avez révisé {{count}} cartes en révision groupée",
       "backToDeck": "Retour au Deck",
+      "backToDecks": "Retour aux Decks",
       "backToClassroom": "Retour à la classe",
       "restart": "Recommencer la révision"
     }

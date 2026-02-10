@@ -66,6 +66,7 @@
       "message": "You reviewed {{count}} cards",
       "bulkMessage": "You reviewed {{count}} cards in bulk review",
       "backToDeck": "Back to Deck",
+      "backToDecks": "Back to Decks",
       "backToClassroom": "Back to Classroom",
       "restart": "Restart Review"
     }

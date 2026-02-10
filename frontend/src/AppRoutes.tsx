@@ -57,6 +57,7 @@ export default function AppRoutes() {
         <Route path="/decks" element={<Decks />} />
         <Route path="/decks/:deckId/cards" element={<FlashcardDetail />} />
         <Route path="/decks/:deckId/review" element={<QuickReview />} />
+        <Route path="/decks/review" element={<QuickReview />} />
 
         {/* Classrooms */}
         <Route path="/classrooms" element={<Classrooms />} />

@@ -84,12 +84,13 @@ function ClassroomModal({
             </div>
 
             <div className="flex flex-col gap-2">
-              <Label htmlFor="description">{t('modal.descriptionLabel')}</Label>
+              <Label htmlFor="description">{t('modal.descriptionLabel')} *</Label>
               <Textarea
                 id="description"
                 rows={3}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
+                required
               />
             </div>
 

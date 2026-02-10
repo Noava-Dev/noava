@@ -33,7 +33,7 @@ function QuickReview() {
     const deckIdsParam = searchParams.get('deckIds');
     const modeParam = searchParams.get('mode');
 
-    if (classroomId && deckIdsParam) {
+    if (deckIdsParam) {
       const deckIds = deckIdsParam.split(',').map(Number);
       const mode = modeParam ? Number(modeParam) : BulkReviewMode.ShuffleAll;
       setIsBulkReview(true);
@@ -132,7 +132,11 @@ function QuickReview() {
 
       if (!cardsData || cardsData.length === 0) {
         showError(t('quickReview.noCards'), t('quickReview.error'));
-        navigate(`/classrooms/${classroomId}`);
+        if (classroomId) {
+          navigate(`/classrooms/${classroomId}`);
+        } else {
+          navigate('/decks');
+        }
         return;
       }
 
@@ -146,7 +150,11 @@ function QuickReview() {
     } catch (error) {
       console.error('Error loading bulk review cards:', error);
       showError(t('common:toast.error'), t('quickReview.error'));
-      navigate(`/classrooms/${classroomId}`);
+      if (classroomId) {
+        navigate(`/classrooms/${classroomId}`);
+      } else {
+        navigate('/decks');
+      }
     } finally {
       setLoading(false);
     }
@@ -191,6 +199,8 @@ function QuickReview() {
   const handleExit = () => {
     if (isBulkReview && classroomId) {
       navigate(`/classrooms/${classroomId}`);
+    } else if (isBulkReview) {
+      navigate('/decks');
     } else if (deckId) {
       navigate(`/decks/${deckId}/cards`);
     } else {
@@ -399,8 +409,10 @@ function QuickReview() {
               <div className="flex justify-center gap-4">
                 <Button size="lg" color="gray" onClick={handleExit}>
                   <HiArrowLeft className="w-5 h-5 mr-2" />
-                  {isBulkReview
+                  {isBulkReview && classroomId
                     ? t('quickReview.complete.backToClassroom')
+                    : isBulkReview
+                    ? t('quickReview.complete.backToDecks')
                     : t('quickReview.complete.backToDeck')}
                 </Button>
                 <Button

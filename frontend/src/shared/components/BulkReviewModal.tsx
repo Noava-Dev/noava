@@ -17,7 +17,7 @@ interface BulkReviewModalProps {
   opened: boolean;
   onClose: () => void;
   decks: Deck[];
-  classroomId: number;
+  classroomId: number | null;
 }
 
 export const BulkReviewModal: React.FC<BulkReviewModalProps> = ({
@@ -26,7 +26,7 @@ export const BulkReviewModal: React.FC<BulkReviewModalProps> = ({
   decks,
   classroomId,
 }) => {
-  const { t } = useTranslation('classrooms');
+  const { t } = useTranslation(classroomId !== null ? 'classrooms' : 'decks');
   const navigate = useNavigate();
 
   const [selectedDeckIds, setSelectedDeckIds] = useState<number[]>([]);
@@ -61,9 +61,13 @@ export const BulkReviewModal: React.FC<BulkReviewModalProps> = ({
     if (selectedDeckIds.length === 0) return;
 
     const deckIdsParam = selectedDeckIds.join(',');
-    navigate(
-      `/classrooms/${classroomId}/review?deckIds=${deckIdsParam}&mode=${shuffleMode}`
-    );
+    if (classroomId !== null) {
+      navigate(
+        `/classrooms/${classroomId}/review?deckIds=${deckIdsParam}&mode=${shuffleMode}`
+      );
+    } else {
+      navigate(`/decks/review?deckIds=${deckIdsParam}&mode=${shuffleMode}`);
+    }
     onClose();
   };
 
