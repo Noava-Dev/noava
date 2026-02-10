@@ -73,5 +73,16 @@ namespace noava.Repositories.Schools
             _context.SchoolAdmins.Remove(schoolAdmin);
             await _context.SaveChangesAsync();
         }
+
+        //SCHOOLS
+
+        public async Task<List<Classroom>> GetClassroomsBySchoolIdAsync(int schoolId)
+        {
+            return await _context.Classrooms
+                .Include(c => c.ClassroomUsers)
+                .Where(c => c.SchoolId == schoolId)
+                .OrderByDescending(c => c.Name)
+                .ToListAsync();
+        }
     }
 }

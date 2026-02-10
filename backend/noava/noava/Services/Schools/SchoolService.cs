@@ -1,7 +1,9 @@
-﻿using noava.DTOs.Clerk;
+﻿using noava.DTOs.Classrooms;
+using noava.DTOs.Clerk;
 using noava.DTOs.Schools;
 using noava.Mappers.Schools;
 using noava.Models;
+using noava.Repositories.Classrooms;
 using noava.Repositories.Schools;
 using noava.Repositories.Users;
 using noava.Shared;
@@ -12,11 +14,13 @@ namespace noava.Services.Schools
     {
         private readonly ISchoolRepository _schoolRepository;
         private readonly IClerkService _clerkService;
+        private readonly IClassroomRepository _classroomRepository;
 
-        public SchoolService(ISchoolRepository schoolRepository, IClerkService clerkService)
+        public SchoolService(ISchoolRepository schoolRepository, IClerkService clerkService, IClassroomRepository classroomRepository)
         {
             _schoolRepository = schoolRepository;
             _clerkService = clerkService;
+            _classroomRepository = classroomRepository;
         }
 
         // gets all unique clerk users for a list of schools. used to map user objects based on clerk id in the school dto's (clerkid: userobject)
@@ -139,6 +143,26 @@ namespace noava.Services.Schools
         {
             var schoolAdmin = await _schoolRepository.GetSchoolAdminAsync(schoolId, clerkId);
             await _schoolRepository.RemoveAdminAsync(schoolAdmin);
+        }
+
+        public async Task CreateClassroomForSchool(int schoolId, ClassroomRequestDto request)
+        {
+            var school = await _schoolRepository.GetSchoolByIdAsync(schoolId);
+            if (school == null) throw new KeyNotFoundException("School not found.");
+
+            var classroom = new Classroom
+            {
+                Name = request.Name,
+                Description = request.Description,
+                SchoolId = schoolId,
+                JoinCode = GenerateJoinCode(),
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
+            };
+        }
+        private string GenerateJoinCode()
+        {
+            return Guid.NewGuid().ToString().Substring(0, 8).ToUpper();
         }
     }
 }
