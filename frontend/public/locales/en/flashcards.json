@@ -52,19 +52,32 @@
     "addCard": "Add Card",
     "studyNow": "Study Now",
     "shuffle": "Shuffle",
-    "quickReview": "Quick Review"
+    "quickReview": "Quick Review",
+    "writeReview": "Write Review",
+    "flipMode": "Flip Mode"
   },
   "quickReview": {
-    "title": "Quick Review",
+    "startReview": "Quick Review",
     "mode": "Quick Review Mode",
-    "noCards": "No cards available for review",
+    "flipMode": "Flip Mode",
+    "writeMode": "Write Mode",
+    "question": "Question",
+    "typeYourAnswer": "Type your answer...",
+    "checkAnswer": "Check Answer",
+    "correct": "Correct! Well done!",
+    "incorrect": "Not quite right. Keep practicing!",
+    "correctAnswer": "Correct Answer",
     "progress": "Progress",
-    "next": "Next Card",
+    "next": "Next",
+    "playAudio": "Play audio",
+    "playVoiceAssistant": "Play with voice assistant",
+    "noCards": "No cards found",
+    "error": "Error loading cards",
     "complete": {
-      "title": "Session Complete!",
-      "message": "You reviewed {{count}} cards",
+      "title": "Review Complete!",
+      "message": "You've reviewed all cards",
       "backToDeck": "Back to Deck",
-      "restart": "Restart Review"
+      "restart": "Restart"
     }
   },
   "search": { "label": "Search" }

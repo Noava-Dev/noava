@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Button } from 'flowbite-react';
+import { Button, Dropdown, DropdownItem } from 'flowbite-react';
 import {
   HiArrowLeft,
   HiPlus,
@@ -264,13 +264,29 @@ function FlashcardDetail() {
                   <HiPlay className="mr-2 size-5" />
                   {t('flashcardDetail.studyNow')}
                 </Button>
-                <Button
-                  size="lg"
-                  disabled={flashcards.length === 0}
-                  onClick={() => navigate(`/decks/${deckId}/review`)}>
-                  <HiPlay className="mr-2 size-5" />
-                  {t('flashcardDetail.quickReview')}
-                </Button>
+                <Dropdown
+                    label=""
+                    dismissOnClick={true}
+                    renderTrigger={() => (
+                      <Button className="bg-cyan-500 hover:bg-cyan-600">
+                        <HiPlay className="w-5 h-5 mr-2" />
+                        {t('flashcardDetail.quickReview')}
+                      </Button>
+                    )}
+                  >
+                    <DropdownItem
+                      icon={HiPlay}
+                      onClick={() => navigate(`/decks/${deckId}/quickReview`)}
+                    >
+                      {t('flashcardDetail.flipMode')}
+                    </DropdownItem>
+                    <DropdownItem
+                      icon={HiPencil}
+                      onClick={() => navigate(`/decks/${deckId}/writeReview`)}
+                    >
+                      {t('flashcardDetail.writeReview')}
+                    </DropdownItem>
+                  </Dropdown>
               </div>
               <div className="flex gap-3">
                 <Button

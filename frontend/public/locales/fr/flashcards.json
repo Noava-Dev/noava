@@ -52,19 +52,32 @@
     "addCard": "Ajouter une carte",
     "studyNow": "Étudier maintenant",
     "shuffle": "Mélanger",
-    "quickReview": "Révision rapide"
+    "quickReview": "Révision rapide",
+    "writeReview": "Écrire une révision",
+    "flipMode": "Mode retournement"
   },
-  "quickReview": {
-    "title": "Révision rapide",
-    "mode": "Mode révision rapide",
-    "noCards": "Aucune carte disponible pour la révision",
+   "quickReview": {
+    "startReview": "Révision Rapide",
+    "mode": "Mode Révision Rapide",
+    "flipMode": "Mode Flip",
+    "writeMode": "Mode Écriture",
+    "question": "Question",
+    "typeYourAnswer": "Tapez votre réponse...",
+    "checkAnswer": "Vérifier la Réponse",
+    "correct": "Correct! Bien joué!",
+    "incorrect": "Pas tout à fait. Continuez à pratiquer!",
+    "correctAnswer": "Réponse Correcte",
     "progress": "Progression",
-    "next": "Carte suivante",
+    "next": "Suivant",
+    "playAudio": "Lire l'audio",
+    "playVoiceAssistant": "Lire avec l'assistant vocal",
+    "noCards": "Aucune carte trouvée",
+    "error": "Erreur lors du chargement des cartes",
     "complete": {
-      "title": "Session terminée !",
-      "message": "Vous avez révisé {{count}} cartes",
+      "title": "Révision Terminée!",
+      "message": "Vous avez révisé toutes les cartes",
       "backToDeck": "Retour au Deck",
-      "restart": "Recommencer la révision"
+      "restart": "Recommencer"
     }
   },
   "search": { "label": "Rechercher" }
