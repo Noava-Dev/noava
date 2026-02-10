@@ -69,6 +69,9 @@ function FlashcardModal({
   flashcard?.hasVoiceAssistant || false
 );
 
+  const [isFrontImageDragActive, setIsFrontImageDragActive] = useState(false);
+  const [isBackImageDragActive, setIsBackImageDragActive] = useState(false);
+
   const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
@@ -130,27 +133,57 @@ function FlashcardModal({
     setIsFlipped(false);
   }, [flashcard, isOpen]);
 
+  const setFrontImageFromFile = (file: File) => {
+    setFrontImageFile(file);
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setFrontImagePreview(reader.result as string);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const setBackImageFromFile = (file: File) => {
+    setBackImageFile(file);
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setBackImagePreview(reader.result as string);
+    };
+    reader.readAsDataURL(file);
+  };
+
   const handleFrontImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setFrontImageFile(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setFrontImagePreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+      setFrontImageFromFile(file);
     }
   };
 
   const handleBackImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setBackImageFile(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setBackImagePreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+      setBackImageFromFile(file);
+    }
+  };
+
+  const handleFrontImageDrop = (e: React.DragEvent<HTMLLabelElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsFrontImageDragActive(false);
+    if (uploading) return;
+    const file = e.dataTransfer.files?.[0];
+    if (file && file.type.startsWith('image/')) {
+      setFrontImageFromFile(file);
+    }
+  };
+
+  const handleBackImageDrop = (e: React.DragEvent<HTMLLabelElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsBackImageDragActive(false);
+    if (uploading) return;
+    const file = e.dataTransfer.files?.[0];
+    if (file && file.type.startsWith('image/')) {
+      setBackImageFromFile(file);
     }
   };
 
@@ -407,12 +440,43 @@ function FlashcardModal({
                       />
                     </div>
                   )}
-                  <FileInput
-                    id="frontImage"
-                    accept="image/*"
-                    onChange={handleFrontImageChange}
-                    disabled={uploading}
-                  />
+                  <div className="flex w-full items-center justify-center">
+                    <Label
+                      htmlFor="frontImage"
+                      onDragOver={(e) => {
+                        e.preventDefault();
+                        if (!uploading) setIsFrontImageDragActive(true);
+                      }}
+                      onDragLeave={() => setIsFrontImageDragActive(false)}
+                      onDrop={handleFrontImageDrop}
+                      className={`flex h-48 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed ${
+                        isFrontImageDragActive
+                          ? 'border-cyan-400 bg-cyan-50 dark:bg-cyan-900/20'
+                          : 'border-gray-300 bg-gray-50 dark:border-gray-600 dark:bg-gray-700'
+                      } hover:bg-gray-100 dark:hover:border-gray-500 dark:hover:bg-gray-600 ${
+                        uploading ? 'opacity-60 cursor-not-allowed' : ''
+                      }`}>
+                      <div className="flex flex-col items-center justify-center pb-6 pt-5">
+                        <HiUpload className="mb-4 h-8 w-8 text-gray-500 dark:text-gray-400" />
+                        <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                          <span className="font-semibold">
+                            {t('flashcardModal.dragDropTitle')}
+                          </span>{' '}
+                          {t('flashcardModal.dragDropSubtext')}
+                        </p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                          {t('flashcardModal.dragDropHint')}
+                        </p>
+                      </div>
+                      <FileInput
+                        id="frontImage"
+                        accept="image/*"
+                        onChange={handleFrontImageChange}
+                        disabled={uploading}
+                        className="hidden"
+                      />
+                    </Label>
+                  </div>
                 </div>
 
                 {/* Front Audio */}
@@ -531,12 +595,43 @@ function FlashcardModal({
                       />
                     </div>
                   )}
-                  <FileInput
-                    id="backImage"
-                    accept="image/*"
-                    onChange={handleBackImageChange}
-                    disabled={uploading}
-                  />
+                  <div className="flex w-full items-center justify-center">
+                    <Label
+                      htmlFor="backImage"
+                      onDragOver={(e) => {
+                        e.preventDefault();
+                        if (!uploading) setIsBackImageDragActive(true);
+                      }}
+                      onDragLeave={() => setIsBackImageDragActive(false)}
+                      onDrop={handleBackImageDrop}
+                      className={`flex h-48 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed ${
+                        isBackImageDragActive
+                          ? 'border-cyan-400 bg-cyan-50 dark:bg-cyan-900/20'
+                          : 'border-gray-300 bg-gray-50 dark:border-gray-600 dark:bg-gray-700'
+                      } hover:bg-gray-100 dark:hover:border-gray-500 dark:hover:bg-gray-600 ${
+                        uploading ? 'opacity-60 cursor-not-allowed' : ''
+                      }`}>
+                      <div className="flex flex-col items-center justify-center pb-6 pt-5">
+                        <HiUpload className="mb-4 h-8 w-8 text-gray-500 dark:text-gray-400" />
+                        <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                          <span className="font-semibold">
+                            {t('flashcardModal.dragDropTitle')}
+                          </span>{' '}
+                          {t('flashcardModal.dragDropSubtext')}
+                        </p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                          {t('flashcardModal.dragDropHint')}
+                        </p>
+                      </div>
+                      <FileInput
+                        id="backImage"
+                        accept="image/*"
+                        onChange={handleBackImageChange}
+                        disabled={uploading}
+                        className="hidden"
+                      />
+                    </Label>
+                  </div>
                 </div>
 
                 {/* Back Audio */}
