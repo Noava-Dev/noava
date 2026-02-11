@@ -43,13 +43,16 @@ export default function CreateSchoolModal({
     }
   };
 return (
-    <Modal show={open} onClose={onClose} size="md" popup>
-      <ModalHeader />
-      <ModalBody>
-        <div className="space-y-6">
-            <h3 className="text-xl font-medium text-text-title-light dark:text-text-title-dark">
+    <Modal show={open} onClose={onClose} size="md" dismissible>
+      <ModalHeader>
+      <div className="">
+        <h3 className="text-xl font-medium text-text-title-light dark:text-text-title-dark">
                 Create School
             </h3>
+      </div>
+      </ModalHeader>
+      <ModalBody>
+        <div className="space-y-6">
 
             <form onSubmit={handleSubmit} className="space-y-6">
             
@@ -87,11 +90,7 @@ return (
 
             {/* Action Buttons */}
             <div className="flex justify-end gap-3 pt-2">
-                <Button className="bg-primary-500" onClick={onClose} disabled={loading}>
-                    Cancel
-                </Button>
-                
-                <Button 
+              <Button 
                     type="submit" 
                     disabled={loading || !name.trim()}
                     className="bg-primary-400"
@@ -105,6 +104,11 @@ return (
                     "Create School"
                 )}
                 </Button>
+                <Button className="bg-primary-500" onClick={onClose} disabled={loading}>
+                    Cancel
+                </Button>
+                
+                
             </div>
             
             </form>
