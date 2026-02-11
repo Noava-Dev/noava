@@ -11,7 +11,7 @@ namespace noava.Models
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
         //CLASSROOMS
-        public ICollection<Classroom> Classrooms { get; set; } = new List<Classroom>();
+        public ICollection<Classroom>? Classrooms { get; set; } = new List<Classroom>();
     }
 
 }
