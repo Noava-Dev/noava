@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Modal, Button, Label, TextInput, ModalBody, ModalHeader, Spinner } from "flowbite-react";
 
 interface Props {
@@ -8,16 +8,34 @@ interface Props {
     name: string;
     adminEmail: string;
   }) => Promise<void>;
+  initialData?: {
+    name: string;
+    adminEmail: string;
+  }
 }
 
 export default function CreateSchoolModal({
   open,
   onClose,
   onCreate,
+  initialData
 }: Props) {
 
-  const [name, setName] = useState("");
-  const [adminEmail, setAdminEmail] = useState("");
+const [name, setName] = useState(initialData?.name ?? "");
+const [adminEmail, setAdminEmail] = useState(
+  initialData?.adminEmail ?? ""
+);
+
+useEffect(() => { 
+  if (initialData){ 
+      setName(initialData.name); 
+      setAdminEmail(initialData.adminEmail);
+    } else { 
+      // reset when switching back to create mode
+      setName("");
+      setAdminEmail("");
+}}, [initialData, open]);
+
   const [loading, setLoading] = useState(false);
 
   if (!open) return null;
@@ -47,8 +65,8 @@ return (
       <ModalHeader>
       <div className="">
         <h3 className="text-xl font-medium text-text-title-light dark:text-text-title-dark">
-                Create School
-            </h3>
+                {initialData ? "Edit School" : "Create School"}
+        </h3>
       </div>
       </ModalHeader>
       <ModalBody>
@@ -100,9 +118,12 @@ return (
                         <Spinner size="sm" className="mr-2" />
                         Creating...
                     </>
+                ) : initialData ? (
+                    "Save Changes"
                 ) : (
                     "Create School"
-                )}
+                )
+              }
                 </Button>
                 <Button className="bg-primary-500" onClick={onClose} disabled={loading}>
                     Cancel

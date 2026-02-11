@@ -12,13 +12,15 @@ type SchoolAdminDto = {
 };
 
 type SchoolCardProps = {
+  id: number;
   name: string;
   description?: string;
   admins: SchoolAdminDto[];
   createdAt: Date;
+  onEdit?: (id: number) => void;
 };
 
-export function SchoolCard({ name, admins, createdAt }: SchoolCardProps) {
+export function SchoolCard({ id, name, admins, createdAt, onEdit }: SchoolCardProps) {
   return (
     <div className="rounded-lg border border-border bg-card p-5 shadow-sm hover:shadow-sm flex justify-between">
       <div className="flex items-start gap-4">
@@ -41,7 +43,9 @@ export function SchoolCard({ name, admins, createdAt }: SchoolCardProps) {
       </div>
 
       <div className="flex items-center gap-1">
-        <button className="rounded-lg p-2 text-muted-foreground hover:bg-muted hover:text-foreground">
+        <button 
+            onClick={() => onEdit?.(id)}
+            className="rounded-lg p-2 text-muted-foreground hover:bg-muted hover:text-foreground">
           <Pencil className="size-4" />
         </button>
         <button className="rounded-lg p-2 text-muted-foreground hover:bg-destructive/10 hover:text-destructive">

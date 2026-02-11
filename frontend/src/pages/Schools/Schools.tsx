@@ -11,9 +11,10 @@ import Loading from '../../shared/components/loading/Loading';
 export default function SchoolsPage() {
   const schoolService = useSchoolService();
   const { showError, showSuccess } = useToast();
-
-  const [schools, setSchools] = useState<SchoolDto[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const [editingSchool, setEditingSchool] = useState<SchoolDto | null>(null);
+  const [schools, setSchools] = useState<SchoolDto[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const fetchSchools = async () => {
@@ -37,19 +38,38 @@ const handleCreateSchool = async (data: {
     adminEmail: string;
   }) => {
     try {
-      await schoolService.create({
+      if(editingSchool){
+        await schoolService.update(editingSchool.id, {
+          schoolName: data.name,
+          schoolAdminEmails: [data.adminEmail]
+        })
+
+        showSuccess( "School updated", `${data.name} was updated successfully.` );
+
+      }else{
+        await schoolService.create({
         schoolName: data.name,
-        schoolAdminEmails: [data.adminEmail],
+        schoolAdminEmails: [data.adminEmail]
       });
 
       showSuccess('School created', `${data.name} was added successfully.`);
-
+    }
       setIsModalOpen(false);
+      setEditingSchool(null);
       await fetchSchools();
     } catch (error) {
       showError('Create failed', 'Could not create school.');
     }
   };
+
+const handleEditSchool = (id: number) => {
+  const school = schools.find((s) => s.id === id);
+  if (!school) return;
+
+  setEditingSchool(school);
+  setIsModalOpen(true);
+};
+
 
 if (loading) { 
   return ( 
@@ -73,7 +93,10 @@ return (
           </div>
 
           <button
-            onClick={() => setIsModalOpen(true)}
+            onClick={() => {
+              setIsModalOpen(true);
+              setEditingSchool(null);
+            }}
             className="flex items-center justify-center gap-2 rounded-lg bg-primary-500 px-5 py-2.5 text-sm font-semibold text-white hover:bg-primary-600 shadow-md"
           >
             <Plus className="size-5" />
@@ -93,7 +116,9 @@ return (
           ) : (
             schools.map((school) => (
               <SchoolCard
-                key={school.id} // ✅ fixed
+              //TODO: see if i can remove the id and just keep the key
+                key={school.id}
+                id={school.id}
                 name={school.schoolName}
                 createdAt={new Date(school.createdAt)}
                 admins={school.admins.map((a) => ({
@@ -101,6 +126,7 @@ return (
                   name: a.username,
                   email: a.email,
                 }))}
+                onEdit={handleEditSchool}
               />
             ))
           )}
@@ -109,8 +135,22 @@ return (
 
       <CreateSchoolModal
         open={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onClose={() => {
+          setIsModalOpen(false);
+          setEditingSchool(null);
+          }
+        }
         onCreate={handleCreateSchool}
+        initialData={
+          editingSchool
+          ? {
+            name: editingSchool.schoolName,
+            //TODO: fix so it shows all the adminEmails and not just the first
+            //TODO: add logic to add an admin every time
+            adminEmail: editingSchool.admins[0]?.email ?? "",
+          }
+          : undefined
+        }
       />
     </div>
   );
