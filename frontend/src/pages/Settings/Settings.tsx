@@ -104,13 +104,13 @@ function SettingsPage() {
                     <ChevronDown className="w-5 h-5 opacity-70" />
                   </button>
                 )}>
-                <DropdownItem onClick={() => changeLanguage('en')}>
+                <DropdownItem className='bg-transparent' onClick={() => changeLanguage('en')}>
                   English
                 </DropdownItem>
-                <DropdownItem onClick={() => changeLanguage('nl')}>
+                <DropdownItem className='bg-transparent' onClick={() => changeLanguage('nl')}>
                   Nederlands
                 </DropdownItem>
-                <DropdownItem onClick={() => changeLanguage('fr')}>
+                <DropdownItem className='bg-transparent' onClick={() => changeLanguage('fr')}>
                   Français
                 </DropdownItem>
               </Dropdown>
