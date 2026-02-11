@@ -169,7 +169,7 @@ function NoavaSidebar({ className, onNavigate }: NoavaSidebarProps) {
           <div className="flex items-center gap-3">
             <button
               onClick={() => openUserProfile()}
-              className="flex items-center gap-3 pl-0 text-left border-none active:outline-none">
+              className="flex items-center gap-3 pl-0 bg-transparent text-left border-none active:outline-none">
               <Avatar
                 img={user?.imageUrl}
                 className="shrink-0"

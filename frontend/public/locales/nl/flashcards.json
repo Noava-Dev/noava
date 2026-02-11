@@ -55,7 +55,9 @@
     "quickReview": "Snelle herhaling",
     "writeReview": "Schrijf Modus",
     "flipMode": "Draai Modus",
-    "reverseReview": "Omgekeerde Modus"
+    "reverseReview": "Omgekeerde Modus",
+    "backToClassroom": "Terug naar {{name}}",
+    "importFromFile": "Importeren via bestand"
   },
   "quickReview": {
     "startReview": "Quick Review",
@@ -82,6 +84,13 @@
     },
     "reverseMode": "Omgekeerde Modus"
     
+  },
+  "importCardsModal": {
+    "header": "Flashcards Importeren",
+    "title": "Importeer je flashcards",
+    "subtitle": "Importeer je gegevens van overal. We ondersteunen CSV en Excel. Lees onze documentatie voor meer informatie over formaten.",
+    "upload": "Bestand uploaden",
+    "supported": "Ondersteunde bestanden: "
   },
   "search": { "label": "Zoeken" }
 }

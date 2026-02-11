@@ -55,7 +55,9 @@
     "quickReview": "Révision rapide",
     "writeReview": "Mode Écriture",
     "flipMode": "Mode Retournement",
-    "reverseReview": "Mode Inversé"
+    "reverseReview": "Mode Inversé",
+    "backToClassroom": "Retour à {{name}}",
+    "importFromFile": "Importer depuis un fichier"
   },
    "quickReview": {
     "startReview": "Révision Rapide",
@@ -81,6 +83,13 @@
       "restart": "Recommencer"
     },
     "reverseMode": "Mode Inversé"
+  },
+  "importCardsModal": {
+    "header": "Importer cartes",
+    "title": "Importer vos cartes mémoire",
+    "subtitle": "Importez vos données depuis n'importe quelle source. Nous supportons CSV et Excel. Consultez notre documentation pour plus d'informations sur les formats.",
+    "upload": "Téléverser le fichier",
+    "supported": "Fichiers pris en charge: "
   },
   "search": { "label": "Rechercher" }
 }

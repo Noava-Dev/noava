@@ -61,6 +61,8 @@ export default function AppRoutes() {
         <Route path="/decks/:deckId/quickReview" element={<QuickReview />} />
         <Route path="/decks/:deckId/writeReview" element={<WriteReview />} />
         <Route path="/decks/:deckId/reverseReview" element={<ReverseReview />} />
+        <Route path="/decks/:deckId/review" element={<QuickReview />} />
+        <Route path="/decks/review" element={<QuickReview />} />
 
         {/* Classrooms */}
         <Route path="/classrooms" element={<Classrooms />} />
@@ -69,6 +71,10 @@ export default function AppRoutes() {
         <Route
           path="/classrooms/:classroomId/members"
           element={<MembersPage />}
+        />
+        <Route
+          path="/classrooms/:classroomId/review"
+          element={<QuickReview />}
         />
 
         {/* Notifications */}

@@ -55,7 +55,9 @@
     "quickReview": "Quick Review",
     "writeReview": "Write Mode",
     "flipMode": "Flip Mode",
-    "reverseReview": "Reverse Mode"
+    "reverseReview": "Reverse Mode",
+    "backToClassroom": "Back to {{name}}",
+    "importFromFile": "Import from File"
   },
   "quickReview": {
     "startReview": "Quick Review",
@@ -81,6 +83,13 @@
       "restart": "Restart"
     },
     "reverseMode": "Reverse Mode"
+  },
+  "importCardsModal": {
+    "header": "Import Flashcards",
+    "title": "Import your flashcards",
+    "subtitle": "Bring your data from any source. We support CSV and Excel. Read our Docs for more information about formats.",
+    "upload": "Upload file",
+    "supported": "Supported Files: "
   },
   "search": { "label": "Search" }
 }

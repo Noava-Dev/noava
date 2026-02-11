@@ -35,6 +35,8 @@ export const useClassroomService = () => {
     }
   };
 
+  
+
   const joinByCode = async (joinCode: string): Promise<ClassroomResponse> => {
     try {
       const response = await api.post<ClassroomResponse>(
@@ -46,6 +48,7 @@ export const useClassroomService = () => {
       throw new Error('Failed to join classroom');
     }
   };
+
 
   const update = async (
     id: number,
@@ -144,6 +147,53 @@ export const useClassroomService = () => {
     }
   };
 
+  const getDecksByClassroom = async (classroomId: number): Promise<any[]> => {
+  try {
+    const response = await api.get(`/classrooms/${classroomId}/decks`);
+    return response.data;
+  } catch (err) {
+    console.error(`Failed to fetch decks for classroom ${classroomId}:`, err);
+    throw new Error('Failed to fetch classroom decks');
+  }
+};
+
+const removeDeck = async (
+  classroomId: number,
+  deckId: number
+): Promise<ClassroomResponse> => {
+  try {
+    const response = await api.delete<ClassroomResponse>(
+      `/classrooms/${classroomId}/decks/${deckId}`
+    );
+    return response.data;
+  } catch (err) {
+    console.error(
+      `Failed to remove deck ${deckId} from classroom ${classroomId}:`,
+      err
+    );
+    throw new Error('Failed to remove deck from classroom');
+  }
+};
+
+
+const addDeck = async (
+  classroomId: number,
+  deckId: number
+): Promise<ClassroomResponse> => {
+  try {
+    const response = await api.post<ClassroomResponse>(
+      `/classrooms/${classroomId}/decks/${deckId}`
+    );
+    return response.data;
+  } catch (err) {
+    console.error(
+      `Failed to add deck ${deckId} to classroom ${classroomId}:`,
+      err
+    );
+    throw new Error('Failed to add deck to classroom');
+  }
+};
+
   const inviteByEmail = async (
     classroomId: number,
     email: string
@@ -176,5 +226,8 @@ export const useClassroomService = () => {
     removeUser,
     setUserRole,
     inviteByEmail,
+    getDecksByClassroom,
+    removeDeck,
+    addDeck,
   };
 };

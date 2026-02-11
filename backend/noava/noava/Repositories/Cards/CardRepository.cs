@@ -36,6 +36,21 @@ namespace noava.Repositories.Cards
             return card;
         }
 
+        public async Task<List<Card>> CreateBulkAsync(IEnumerable<Card> cards)
+        {
+            var now = DateTime.UtcNow;
+            foreach (var card in cards)
+            {
+                card.CreatedAt = now;
+                card.UpdatedAt = now;
+            }
+
+            _context.Cards.AddRange(cards);
+            await _context.SaveChangesAsync();
+
+            return cards.ToList();
+        }
+
         public async Task<Card> UpdateAsync(Card card)
         {
             card.UpdatedAt = DateTime.UtcNow;
