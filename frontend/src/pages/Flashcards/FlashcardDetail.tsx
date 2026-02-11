@@ -131,7 +131,7 @@ function FlashcardDetail() {
     }
   };
 
-  const handleCreateFlashcard = async (flashcard: CreateFlashcardRequest) => {
+  const handleCreateFlashcard = async (flashcard: CreateFlashcardRequest, createMore: boolean) => {
     try {
       if (selectedFlashcard) {
         await flashcardService.update(
@@ -143,7 +143,8 @@ function FlashcardDetail() {
         await flashcardService.create(Number(deckId), flashcard);
         showSuccess('Success', 'Flashcard created successfully');
       }
-      setIsModalOpen(false);
+
+      setIsModalOpen(createMore);
       setSelectedFlashcard(undefined);
       await fetchFlashcards();
     } catch (error) {
