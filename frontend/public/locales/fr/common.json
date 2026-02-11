@@ -42,7 +42,9 @@
     "join": "Rejoindre",
     "request": "Demander",
     "show": "Afficher",
-    "back": "Retour"
+    "back": "Retour",
+    "uploading": "Téléchargement en cours...",
+    "done": "Terminé"
   },
   "validation": {
     "required": "Ce champ est requis",
@@ -78,6 +80,10 @@
       "message": "Êtes-vous sûr de vouloir supprimer ceci ? Cette action est irréversible.",
       "yes": "Oui, supprimer"
     }
+  },
+  "toast": {
+    "success": "Succès",
+    "error": "Erreur"
   },
   "visibility": {
     "label": "Visibilité",

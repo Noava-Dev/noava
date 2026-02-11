@@ -1,8 +1,11 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 using noava.DTOs.Cards;
+using noava.Models.Enums;
 using noava.Services.Cards;
+using System.Security.Claims;
+using Azure.Core;
+using noava.Models;
 
 namespace noava.Controllers.Cards
 {
@@ -12,10 +15,12 @@ namespace noava.Controllers.Cards
     public class CardController : ControllerBase
     {
         private readonly ICardService _cardService;
+        private readonly ICardImportService _cardImportService;
 
-        public CardController(ICardService cardService)
+        public CardController(ICardService cardService, ICardImportService cardImportService)
         {
             _cardService = cardService;
+            _cardImportService = cardImportService;
         }
 
         private string GetUserId()
@@ -24,7 +29,6 @@ namespace noava.Controllers.Cards
                    ?? User.FindFirstValue(ClaimTypes.NameIdentifier)
                    ?? throw new UnauthorizedAccessException("User ID not found");
         }
-
         
         [HttpGet("deck/{deckId}")]
         public async Task<ActionResult<List<CardResponse>>> GetCardsByDeckId(int deckId)
@@ -34,7 +38,6 @@ namespace noava.Controllers.Cards
             return Ok(cards);
         }
 
-        
         [HttpGet("{id}")]
         public async Task<ActionResult<CardResponse>> GetCard(int id)
         {
@@ -44,7 +47,25 @@ namespace noava.Controllers.Cards
             return Ok(card);
         }
 
-        
+        [HttpGet("bulk-review")]
+        public async Task<ActionResult<List<CardResponse>>> GetBulkReviewCards(
+            [FromQuery] List<int> deckIds,
+            [FromQuery] BulkReviewMode mode)
+        {
+            var userId = GetUserId();
+
+            if (deckIds == null || deckIds.Count == 0)
+                return BadRequest("DeckIds can not be empty");
+
+            var cards = await _cardService.GetBulkReviewCardsAsync(
+                deckIds,
+                userId,
+                mode
+            );
+
+            return Ok(cards);
+        }
+
         [HttpPost("deck/{deckId}")]
         public async Task<ActionResult<CardResponse>> CreateCard(
             int deckId,
@@ -75,6 +96,36 @@ namespace noava.Controllers.Cards
             var result = await _cardService.DeleteCardAsync(id, userId);
             if (!result) return NotFound();
             return NoContent();
+        }
+
+        [HttpPost("deck/{deckId}/import")]
+        public async Task<ActionResult<int>> ImportCards(int deckId, [FromForm] IFormFile file)
+        {
+            var userId = GetUserId();
+
+            if (file == null || file.Length == 0)
+            {
+                return BadRequest("File is required.");
+            }
+
+            try
+            {
+                var count = await _cardImportService.ImportCardsAsync(deckId, file, userId);
+                return Ok(count);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Forbid(ex.Message);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+
         }
     }
 }

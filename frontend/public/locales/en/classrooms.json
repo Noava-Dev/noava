@@ -83,5 +83,51 @@
     "success": "You were added to the classroom",
     "error": "Failed to join with that code"
   },
+  "decks": {
+    "title": "Decks",
+    "addDeck": "Add Deck",
+    "addFirstDeck": "Add Your First Deck",
+    "emptyTitle": "No Decks Yet",
+    "emptyDescription": "This classroom doesn't have any decks yet. Add your first deck to get started!",
+    "loadError": "Failed to load decks",
+    "removeFromClassroom": "Remove from Classroom",
+    "confirmRemoveTitle": "Remove Deck from Classroom",
+    "confirmRemoveMessage": "Are you sure you want to remove this deck from the classroom? The deck itself will not be deleted, only removed from this classroom.",
+    "confirmRemoveButton": "Remove from Classroom",
+    "removeSuccess": "Deck removed from classroom",
+    "removeError": "Failed to remove deck from classroom",
+    "addSuccess": "Deck added to classroom",
+    "addError": "Failed to add deck to classroom"
+  },
+  "bulkReview": {
+    "button": "Bulk Review",
+    "title": "Bulk Review",
+    "description": "Select the decks you want to review together.",
+    "selectAll": "Select All",
+    "deselectAll": "Deselect All",
+    "selectedCount": "{{selected}} of {{total}} selected",
+    "cards": "cards",
+    "noDecks": "No decks available",
+    "shuffleMode": {
+      "label": "Shuffle Mode",
+      "none": "No Shuffle - Keep original order",
+      "perDeck": "Shuffle Per Deck - Shuffle cards within each deck",
+      "all": "Shuffle All - Shuffle all cards together"
+    },
+    "summary": "Ready to review {{decks}} deck(s) with {{cards}} card(s)",
+    "summaryDecks": "Ready to review {{count}} deck(s)",
+    "startReview": "Start Review"
+  },
+  "addDeck": {
+     "title": "Add Deck to Classroom",
+    "description": "Add one of your existing decks to this classroom.",
+    "searchPlaceholder": "Search your decks...",
+    "noResults": "No decks found matching your search",
+    "noDecks": "You don't have any decks yet",
+    "loadError": "Failed to load your decks",
+    "cards": "cards",
+    "addButton": "Add",
+    "done": "Done"
+  },
   "notFound": "Classroom not found"
 }

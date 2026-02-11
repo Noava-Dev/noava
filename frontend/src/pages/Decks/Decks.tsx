@@ -13,6 +13,7 @@ import NoavaFooter from '../../shared/components/navigation/NoavaFooter';
 import PageHeader from '../../shared/components/PageHeader';
 import DeckCard from '../../shared/components/DeckCard';
 import DeckModal from '../../shared/components/DeckModal';
+import { BulkReviewModal } from '../../shared/components/BulkReviewModal';
 import Searchbar from '../../shared/components/Searchbar';
 import { useDeckService } from '../../services/DeckService';
 import { useToast } from '../../contexts/ToastContext';
@@ -32,6 +33,7 @@ function DecksPage() {
   const [sortOrder, setSortOrder] = useState<'newest' | 'oldest'>('newest');
   const { showSuccess, showError } = useToast();
   const [deleteDeckId, setDeleteDeckId] = useState<number | null>(null);
+  const [bulkReviewModalOpened, setBulkReviewModalOpened] = useState(false);
 
   useEffect(() => {
     fetchDecks();
@@ -146,13 +148,24 @@ function DecksPage() {
                 )}
               </div>
 
-              <Button
-                onClick={() => setIsModalOpen(true)}
-                size="lg"
-                className="w-full border-none md:w-fit bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800">
-                <HiPlus className="w-5 h-5 mr-2" />
-                {t('createButton')}
-              </Button>
+              <div className="flex flex-col gap-3 sm:flex-row">
+                {decks.length > 0 && (
+                  <Button
+                    color="cyan"
+                    onClick={() => setBulkReviewModalOpened(true)}
+                    size="lg"
+                    className="w-full border-none md:w-fit">
+                    {t('bulkReview.button')}
+                  </Button>
+                )}
+                <Button
+                  onClick={() => setIsModalOpen(true)}
+                  size="lg"
+                  className="w-full border-none md:w-fit bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800">
+                  <HiPlus className="w-5 h-5 mr-2" />
+                  {t('createButton')}
+                </Button>
+              </div>
             </div>
           </div>
 
@@ -228,6 +241,14 @@ function DecksPage() {
           onClose={handleCloseModal}
           onSubmit={editingDeck ? handleUpdate : handleCreate}
           deck={editingDeck}
+        />
+
+        {/* Bulk Review Modal */}
+        <BulkReviewModal
+          opened={bulkReviewModalOpened}
+          onClose={() => setBulkReviewModalOpened(false)}
+          decks={decks}
+          classroomId={null}
         />
 
         {/* Delete Confirmation Modal */}

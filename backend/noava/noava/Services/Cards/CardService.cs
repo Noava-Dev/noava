@@ -1,9 +1,11 @@
-﻿using noava.Shared;
-using noava.Models.BlobStorage;
-using noava.Repositories.Decks;
-using noava.DTOs.Cards;
+﻿using noava.DTOs.Cards;
 using noava.Models;
+using noava.Models.BlobStorage;
+using noava.Models.Enums;
 using noava.Repositories.Cards;
+using noava.Repositories.Decks;
+using noava.Services.Cards.BulkReview;
+using noava.Shared;
 
 namespace noava.Services.Cards
 {
@@ -36,7 +38,8 @@ namespace noava.Services.Cards
                 BackAudio = card.BackAudio,
                 Memo = card.Memo,
                 CreatedAt = card.CreatedAt,
-                UpdatedAt = card.UpdatedAt
+                UpdatedAt = card.UpdatedAt,
+                HasVoiceAssistant = card.HasVoiceAssistant
             };
         }
 
@@ -48,6 +51,28 @@ namespace noava.Services.Cards
 
             var cards = await _cardRepository.GetByDeckIdAsync(deckId);
             return cards.Select(c => MapToResponse(c)).ToList();
+        }
+
+        public async Task<List<CardResponse>> GetBulkReviewCardsAsync(List<int> deckIds, string userId, BulkReviewMode mode)
+        {
+            var result = new List<Card>();
+            var strategy = ResolveBulkReviewStrategy(mode);
+
+            foreach (var deckId in deckIds)
+            {
+                var deck = await _deckRepository.GetByIdAsync(deckId);
+                if (deck == null || deck.UserId != userId)
+                    continue;
+
+                var cards = await _cardRepository.GetByDeckIdAsync(deckId);
+                cards = strategy.ApplyPerDeck(cards);
+
+                result.AddRange(cards);
+            }
+
+            result = strategy.ApplyGlobal(result);
+
+            return result.Select(MapToResponse).ToList();
         }
 
         public async Task<CardResponse?> GetCardByIdAsync(int id, string userId)
@@ -76,7 +101,8 @@ namespace noava.Services.Cards
                 FrontAudio = request.FrontAudio,
                 BackImage = request.BackImage,
                 BackAudio = request.BackAudio,
-                Memo = request.Memo
+                Memo = request.Memo,
+                HasVoiceAssistant = request.HasVoiceAssistant
             };
 
             var createdCard = await _cardRepository.CreateAsync(card);
@@ -95,6 +121,7 @@ namespace noava.Services.Cards
             var oldFrontAudio = existingCard.FrontAudio;
             var oldBackImage = existingCard.BackImage;
             var oldBackAudio = existingCard.BackAudio;
+            
 
             var newFrontImage = request.FrontImage;
             var newFrontAudio = request.FrontAudio;
@@ -142,7 +169,6 @@ namespace noava.Services.Cards
             return result;
         }
 
-
         private async Task CleanupOldBlobs(string? oldBlobName, string? newBlobName, string containerName)
         {
             // Only delete if blob changed and old blob exists
@@ -152,7 +178,6 @@ namespace noava.Services.Cards
             }
         }
 
-
         private async Task DeleteBlobIfExists(string? blobName, string containerName)
         {
             if (string.IsNullOrEmpty(blobName)) return;
@@ -161,9 +186,33 @@ namespace noava.Services.Cards
                 ContainerName = containerName,
                 BlobName = blobName
             });
-
-
-
         }
-    } 
+
+        private List<T> Shuffle<T>(IEnumerable<T> source)
+        {
+            var list = source.ToList();
+
+            for (int i = list.Count - 1; i > 0; i--)
+            {
+                int j = Random.Shared.Next(i + 1);
+                (list[i], list[j]) = (list[j], list[i]);
+            }
+
+            return list;
+        }
+
+        private IBulkReviewStrategy ResolveBulkReviewStrategy(BulkReviewMode mode)
+        {
+            return mode switch
+            {
+                BulkReviewMode.ShufflePerDeck =>
+                    new ShufflePerDeckStrategy(Shuffle),
+
+                BulkReviewMode.ShuffleAll =>
+                    new ShuffleAllStrategy(Shuffle),
+
+                _ => new BulkReviewStrategy()
+            };
+        }
+    }
 }

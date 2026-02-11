@@ -1,7 +1,9 @@
 ﻿using noava.DTOs.Classrooms;
 using noava.DTOs.Clerk;
+using noava.DTOs.Decks;
 using noava.DTOs.Notifications;
 using noava.Mappers.Classrooms;
+using noava.Mappers.Decks;
 using noava.Models;
 using noava.Models.Enums;
 using noava.Repositories.Classrooms;
@@ -17,6 +19,7 @@ namespace noava.Services.Classrooms
         private readonly IClassroomRepository _classroomRepository;
         private readonly IClerkService _clerkService;
         private readonly INotificationService _notificationService;
+
 
         public ClassroomService(
             IClassroomRepository classroomRepository,
@@ -289,6 +292,82 @@ namespace noava.Services.Classrooms
             await _notificationService.CreateNotificationAsync(notification);
 
             return classroom.ToResponseDto(userId);
+        }
+
+        public async Task<ClassroomResponseDto> AddDeckAsync(int classroomId, int deckId, string userId)
+        {
+            var classroom = await _classroomRepository.GetByIdAsync(classroomId)
+                ?? throw new KeyNotFoundException("Classroom not found.");
+
+            var isTeacher = classroom.ClassroomUsers
+                .Any(cu => cu.UserId == userId && cu.IsTeacher);
+
+            if (!isTeacher)
+                throw new UnauthorizedAccessException("Only teachers can add decks.");
+
+            var alreadyLinked = classroom.ClassroomDecks
+                .Any(cd => cd.DeckId == deckId);
+
+            if (!alreadyLinked)
+            {
+                classroom.ClassroomDecks.Add(new ClassroomDeck
+                {
+                    DeckId = deckId,
+                    ClassroomId = classroomId,
+                    AddedAt = DateTime.UtcNow
+                });
+
+                await _classroomRepository.UpdateAsync(classroom);
+                await _classroomRepository.SaveChangesAsync();
+            }
+
+            return classroom.ToResponseDto(userId);
+        }
+
+        public async Task<ClassroomResponseDto> RemoveDeckAsync(int classroomId, int deckId, string userId)
+        {
+            var classroom = await _classroomRepository.GetByIdAsync(classroomId)
+                ?? throw new KeyNotFoundException("Classroom not found.");
+
+            var isTeacher = classroom.ClassroomUsers
+                .Any(cu => cu.UserId == userId && cu.IsTeacher);
+
+            if (!isTeacher)
+                throw new UnauthorizedAccessException("Only teachers can remove decks.");
+
+            var link = classroom.ClassroomDecks
+                .FirstOrDefault(cd => cd.DeckId == deckId);
+
+            if (link != null)
+            {
+                classroom.ClassroomDecks.Remove(link);
+
+                await _classroomRepository.UpdateAsync(classroom);
+                await _classroomRepository.SaveChangesAsync();
+            }
+
+            return classroom.ToResponseDto(userId);
+        }
+
+        public async Task<List<DeckResponse>> GetDecksForClassroomAsync(int classroomId, string userId)
+        {
+            var classroom = await _classroomRepository.GetByIdAsync(classroomId);
+
+            if (classroom == null)
+                throw new KeyNotFoundException("Classroom not found.");
+
+            var isMember = classroom.ClassroomUsers
+                .Any(cu => cu.UserId == userId);
+
+            if (!isMember)
+                throw new UnauthorizedAccessException("User is not a member of this classroom.");
+
+            var decks = classroom.ClassroomDecks
+                .Where(cd => cd.Deck != null)
+                .Select(cd => cd.Deck!.ToResponseDto())
+                .ToList();
+
+            return decks;
         }
 
         private static string GenerateClassroomCode()

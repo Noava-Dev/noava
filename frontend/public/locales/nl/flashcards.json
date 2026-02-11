@@ -23,7 +23,9 @@
     "uploading": "Uploaden...",
     "updateButton": "Kaart bijwerken",
     "createButton": "Kaart aanmaken",
-    "uploadError": "Uploaden van media mislukt. Probeer het opnieuw."
+    "uploadError": "Uploaden van media mislukt. Probeer het opnieuw.",
+    "enableVoiceAssistant": "Spraakassistent inschakelen",
+    "voiceAssistantHelp": "Kaart tekst wordt voorgelezen als er geen audiobestand is geüpload"
   },
   "flashcardDetail": {
     "backToDeck": "Terug naar Deck",
@@ -47,20 +49,37 @@
     "addCard": "Kaart toevoegen",
     "studyNow": "Nu studeren",
     "shuffle": "Schudden",
-    "quickReview": "Snelle herhaling"
+    "quickReview": "Snelle herhaling",
+    "backToClassroom": "Terug naar {{name}}",
+    "importFromFile": "Importeren via bestand"
   },
   "quickReview": {
     "title": "Snelle herhaling",
+    "bulkTitle": "Groepsherhaling",
     "mode": "Snelle herhaalmodus",
+    "bulkMode": "Groepsherhaalmodus",
     "noCards": "Geen kaarten beschikbaar voor herhaling",
+    "loading": "Kaarten laden...",
+    "error": "Kon kaarten niet laden",
     "progress": "Voortgang",
     "next": "Volgende kaart",
+    "finish": "Voltooien",
     "complete": {
       "title": "Sessie voltooid!",
       "message": "Je hebt {{count}} kaarten herhaald",
+      "bulkMessage": "Je hebt {{count}} kaarten in groepsherhaling herhaald",
       "backToDeck": "Terug naar Deck",
+      "backToDecks": "Terug naar Decks",
+      "backToClassroom": "Terug naar klas",
       "restart": "Herhaling opnieuw starten"
     }
+  },
+  "importCardsModal": {
+    "header": "Flashcards Importeren",
+    "title": "Importeer je flashcards",
+    "subtitle": "Importeer je gegevens van overal. We ondersteunen CSV en Excel. Lees onze documentatie voor meer informatie over formaten.",
+    "upload": "Bestand uploaden",
+    "supported": "Ondersteunde bestanden: "
   },
   "search": { "label": "Zoeken" }
 }

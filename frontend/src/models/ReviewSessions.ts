@@ -1,5 +1,5 @@
 export interface ReviewSession {
-  deckId: number;
+  deckId?: number;
   deckTitle: string;
   cards: ReviewCard[];
   currentIndex: number;
@@ -8,6 +8,7 @@ export interface ReviewSession {
 }
 
 export interface ReviewCard {
+  hasVoiceAssistant: boolean;
   cardId: number;
   frontText: string;
   backText: string;
@@ -16,4 +17,5 @@ export interface ReviewCard {
   backImage?: string;
   backAudio?: string;
   memo?: string;
+  
 }

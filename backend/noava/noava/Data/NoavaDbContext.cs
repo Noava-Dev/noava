@@ -23,6 +23,7 @@ namespace noava.Data
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<NotificationAction> NotificationActions { get; set; }
         public DbSet<Classroom> Classrooms { get; set; }
+        public DbSet<ClassroomDeck> ClassroomDecks { get; set; }
         public DbSet<ClassroomUser> ClassroomUsers { get; set; }
         public DbSet<DeckUser> DecksUsers { get; set; } 
         public DbSet<DeckInvitation> DeckInvitations { get; set; }
