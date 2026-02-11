@@ -19,6 +19,7 @@ import NotificationPage from './pages/Notification/Notification';
 import Loading from './shared/components/loading/Loading';
 import FlashcardDetail from './pages/Flashcards/FlashcardDetail';
 import Dashboard from './pages/Dashboard/Dashboard';
+import SchoolClassrooms from './pages/SchoolClassrooms/SchoolClassrooms';
 
 export default function AppRoutes() {
   return (
@@ -87,6 +88,8 @@ export default function AppRoutes() {
 
           {/* Schools */}
           <Route path="schools" element={<SchoolsPage />} />
+          <Route path="schoolClassrooms/:id" element={<SchoolClassrooms/>} />
+
         </Route>
       </Route>
     </Routes>

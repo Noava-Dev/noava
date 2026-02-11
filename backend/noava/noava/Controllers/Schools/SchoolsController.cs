@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using noava.DTOs.Classrooms;
 using noava.DTOs.Schools;
+using noava.Services.Classrooms;
 using noava.Services.Schools;
 using noava.Services.Users;
 using System.Security.Claims;
@@ -16,6 +17,7 @@ namespace noava.Controllers.Schools
     public class SchoolsController : ControllerBase
     {
         private readonly ISchoolService _schoolService;
+        private readonly IClassroomService _classroomService;
         private string GetCurrentUserId()
         {
             return User.FindFirstValue("sub")
@@ -23,9 +25,10 @@ namespace noava.Controllers.Schools
                    ?? throw new UnauthorizedAccessException("User ID not found");
         }
 
-        public SchoolsController(ISchoolService schoolService)
+        public SchoolsController(ISchoolService schoolService, IClassroomService classroomService)
         {
             _schoolService = schoolService;
+            _classroomService = classroomService;
         }
 
         [HttpGet]
@@ -141,14 +144,18 @@ namespace noava.Controllers.Schools
         {
             try
             {
-                //TODO: to enforce that the current user is an admin i should add some extra logic here
-
-                await _schoolService.CreateClassroomForSchool(id, request);
+                var userId = GetCurrentUserId();
+                request.SchoolId = id;
+                await _classroomService.CreateAsync(request, userId);
                 return Ok();
             }
             catch (KeyNotFoundException)
             {
                 return NotFound();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
             }
         }
 

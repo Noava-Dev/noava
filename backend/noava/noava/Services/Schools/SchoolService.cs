@@ -145,35 +145,10 @@ namespace noava.Services.Schools
             await _schoolRepository.RemoveAdminAsync(schoolAdmin);
         }
 
-        public async Task CreateClassroomForSchool(int schoolId, ClassroomRequestDto request)
-        {
-            var school = await _schoolRepository.GetSchoolByIdAsync(schoolId);
-            if (school == null) throw new KeyNotFoundException("School not found.");
-
-            var classroom = new Classroom
-            {
-                Name = request.Name,
-                Description = request.Description,
-                SchoolId = schoolId,
-                JoinCode = GenerateJoinCode(),
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
-            };
-
-            await _classroomRepository.AddAsync(classroom);
-            await _classroomRepository.SaveChangesAsync();
-        }
-
         public async Task<List<SchoolClassroomResponseDto>> GetClassroomsForSchoolAsync(int schoolId)
         {
             var classrooms = await _schoolRepository.GetClassroomsBySchoolIdAsync(schoolId);
             return classrooms.Select(c => c.ToClassroomSummaryDto()).ToList();
-        }
-
-        //TODO: check to see if this properly works with the backend logic already set in place
-        private static string GenerateJoinCode()
-        {
-            return Guid.NewGuid().ToString().Substring(0, 8).ToUpper();
         }
     }
 }

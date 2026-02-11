@@ -17,7 +17,6 @@ namespace noava.Services.Schools
         Task RemoveSchoolAdminAsync(int schoolId, string clerkId);
 
         //SCHOOLS
-        Task CreateClassroomForSchool(int schoolId, ClassroomRequestDto request);
         Task<List<SchoolClassroomResponseDto>> GetClassroomsForSchoolAsync(int schoolId);
     }
 }

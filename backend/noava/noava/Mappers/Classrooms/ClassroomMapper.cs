@@ -11,8 +11,10 @@ namespace noava.Mappers.Classrooms
             {
                 Name = dto.Name,
                 Description = dto.Description,
+                SchoolId = dto.SchoolId,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
+                
             };
 
             return entity;
@@ -36,7 +38,8 @@ namespace noava.Mappers.Classrooms
                     CanDelete = isTeacher
                 },
                 CreatedAt = entity.CreatedAt,
-                UpdatedAt = entity.UpdatedAt
+                UpdatedAt = entity.UpdatedAt,
+                SchoolId = entity.SchoolId
             };
 
             return dto;

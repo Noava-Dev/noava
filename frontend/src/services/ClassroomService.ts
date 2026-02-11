@@ -15,6 +15,16 @@ export const useClassroomService = () => {
     }
   };
 
+  const createForSchool = async (schoolId: number, data: ClassroomRequest): Promise<ClassroomResponse> => {
+    try {
+      const response = await api.post<ClassroomResponse>('/classrooms', data);
+      return response.data;
+    } catch (err) {
+      console.error('Failed to create classroom:', err);
+      throw new Error('Failed to create classroom');
+    }
+  };
+
   const getAllForUser = async (): Promise<ClassroomResponse[]> => {
     try {
       const response = await api.get<ClassroomResponse[]>('/classrooms');

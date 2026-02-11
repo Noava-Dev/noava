@@ -7,8 +7,10 @@ import { useSchoolService } from '../../services/SchoolService';
 import { LuPlus as Plus } from 'react-icons/lu';
 import CreateSchoolModal from './components/CreateSchoolModal';
 import Loading from '../../shared/components/loading/Loading';
+import { useNavigate} from 'react-router-dom';
 
 export default function SchoolsPage() {
+  const navigate = useNavigate();
   const schoolService = useSchoolService();
   const { showError, showSuccess } = useToast();
   const [loading, setLoading] = useState(true);
@@ -74,6 +76,7 @@ const handleDeleteSchool = async (id: number) => {
   const school = schools.find((s) => s.id === id);
   if(!school) return;
 
+  //TODO: needs to replaced with the proper component for the confirm modal
   const confirmed = window.confirm(
     `Are you sure you want to delete "${school.schoolName}"?`
   )
@@ -92,6 +95,9 @@ const handleDeleteSchool = async (id: number) => {
     showError("Delete failed", "Could not delete school."); }
   }
 
+  const handleCardClick = (id: number) => {
+    navigate(`/admin/schoolClassrooms/${id}`)
+  }
 
 if (loading) { 
   return ( 
@@ -150,6 +156,7 @@ return (
                 }))}
                 onEdit={handleEditSchool}
                 onDelete={handleDeleteSchool}
+                onClick={handleCardClick}
               />
             ))
           )}

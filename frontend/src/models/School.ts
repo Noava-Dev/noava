@@ -29,5 +29,9 @@ export interface DeleteSchoolRequest{
 }
 
 export interface SchoolClassroomDto{
-  
+  id: number;
+  name: string;
+  description?: string;
+  deckCount?: number;
+  studentCount?: number;
 }
