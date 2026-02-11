@@ -11,6 +11,8 @@ import { useApi } from '../../hooks/useApi';
 import { formatDateToEuropean } from '../../services/DateService';
 import { useToast } from '../../contexts/ToastContext';
 import { useAuth } from '@clerk/clerk-react';
+import PageHeader from '../../shared/components/PageHeader';
+import Loading from '../../shared/components/loading/Loading';
 
 const NotificationPage = () => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
@@ -92,93 +94,103 @@ const NotificationPage = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900">
-        <Spinner />
+      <div className="flex items-center justify-center min-h-screen bg-background-app-light dark:bg-background-app-dark">
+        <Loading />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <div className="p-4 overflow-y-auto md:p-8">
-        <div className="container box-border px-4 pt-6 pb-12 mx-auto">
-          <h1 className="mb-6 text-2xl font-bold text-gray-900 md:text-3xl dark:text-white">
-            {t('common:navigation.notifications')}
-          </h1>
-
-          {notifications.length === 0 ? (
-            <div className="text-center text-gray-500 dark:text-gray-400">
-              {t('empty')}
+    <div className="flex min-h-screen bg-background-app-light dark:bg-background-app-dark">
+      <div className="flex-1 w-full ml-0">
+          <PageHeader>
+            <div className="pt-4 md:pt-8">
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex-1 min-w-0">
+                  <h1 className="text-3xl font-extrabold tracking-tight text-text-title-light md:text-5xl dark:text-text-title-dark">
+                    {t('common:navigation.notifications')}
+                  </h1>
+                </div>
+              </div>
             </div>
-          ) : (
-            <div className="space-y-4">
-              {notifications.map((n) => (
-                <Card
-                  key={n.id}
-                  className="box-border max-w-full min-w-0 overflow-hidden text-gray-900 transition-colors duration-300 bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100 dark:shadow-xl">
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex-1 min-w-0">
-                      <div>
-                        <div className="text-lg font-semibold text-gray-900 md:text-xl dark:text-white">
-                          {t('notifications.genericTitle')}
+          </PageHeader>
+
+          <section className="min-h-screen py-8 bg-background-app-light dark:bg-background-app-dark md:py-12">
+            <div className="container px-4 mx-auto max-w-7xl">
+              {notifications.length === 0 ? (
+                <div className="text-center text-text-muted-light dark:text-text-muted-dark">
+                  {t('empty')}
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {notifications.map((n) => (
+                    <Card
+                      key={n.id}
+                      className="box-border max-w-full min-w-0 overflow-hidden transition-colors duration-300 bg-background-app-light border border-border-strong rounded-lg shadow-md dark:bg-background-surface-dark dark:border-border-dark">
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="flex-1 min-w-0">
+                          <div>
+                            <div className="text-lg font-semibold text-text-title-light md:text-xl dark:text-text-title-dark">
+                              {t('notifications.genericTitle')}
+                            </div>
+                            <div className="mt-1 text-xs text-text-muted-light md:text-sm dark:text-text-muted-dark">
+                              {formatDateToEuropean(n.createdAt)}
+                            </div>
+                          </div>
+
+                          <div className="mt-2 text-base text-text-body-light dark:text-text-body-dark break-words break-all whitespace-normal ">
+                            {String(
+                              t(n.templateKey, parseParams(n.parametersJson))
+                            )}
+                          </div>
                         </div>
-                        <div className="mt-1 text-xs text-gray-500 md:text-sm dark:text-gray-400">
-                          {formatDateToEuropean(n.createdAt)}
+
+                        <div className="flex items-start">
+                          <Tooltip
+                            content={t('common:actions.delete')}
+                            placement="top">
+                            <button
+                              className="inline-flex items-center p-0 text-text-muted-light dark:text-text-muted-dark bg-transparent border-0 rounded-none hover:text-red-500 dark:hover:text-red-500 hover:bg-transparent focus:outline-none focus:ring-0 focus:ring-transparent hover:outline-none"
+                              onClick={() => handleDelete(n.id)}
+                              disabled={processingId === n.id}>
+                              <HiOutlineX size={20} />
+                            </button>
+                          </Tooltip>
                         </div>
                       </div>
 
-                      <div className="mt-2 text-base text-gray-800 break-words break-all whitespace-normal dark:text-gray-100">
-                        {String(
-                          t(n.templateKey, parseParams(n.parametersJson))
-                        )}
+                      {n.link && (
+                        <div className="w-full mt-3">
+                          <a
+                            href={n.link}
+                            className="inline-flex items-center gap-2 px-3 py-1 bg-primary-500 text-white rounded-full text-sm transition duration-200 shadow-sm hover:shadow-md hover:bg-primary-600 hover:text-white transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:hover:text-white dark:focus:ring-primary-700"
+                            target="_blank"
+                            rel="noopener noreferrer">
+                            <span className="font-medium">
+                              {t('common:actions.viewMore')}
+                            </span>
+                          </a>
+                        </div>
+                      )}
+
+                      <div className="flex justify-end w-full gap-2 mt-4 overflow-auto">
+                        {n.actions.map((action) => (
+                          <Button
+                            key={action.labelKey}
+                            size="xs"
+                            className="text-white whitespace-nowrap bg-primary-600 dark:text-white dark:hover:bg-primary-700"
+                            onClick={() => handleAction(n, action)}
+                            disabled={processingId === n.id}>
+                            {String(t(action.labelKey))}
+                          </Button>
+                        ))}
                       </div>
-                    </div>
-
-                    <div className="flex items-start">
-                      <Tooltip
-                        content={t('common:actions.delete')}
-                        placement="top">
-                        <button
-                          className="inline-flex items-center p-0 text-gray-400 bg-transparent border-0 rounded-none dark:text-gray-300 hover:text-red-500 dark:hover:text-red-500 hover:bg-transparent focus:outline-none focus:ring-0 focus:ring-transparent hover:outline-none"
-                          onClick={() => handleDelete(n.id)}
-                          disabled={processingId === n.id}>
-                          <HiOutlineX size={20} />
-                        </button>
-                      </Tooltip>
-                    </div>
-                  </div>
-
-                  {n.link && (
-                    <div className="w-full mt-3">
-                      <a
-                        href={n.link}
-                        className="inline-flex items-center gap-2 px-3 py-1 bg-primary-500 text-white rounded-full text-sm transition duration-200 shadow-sm hover:shadow-md hover:bg-primary-600 hover:text-white transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:hover:text-white dark:focus:ring-primary-700"
-                        target="_blank"
-                        rel="noopener noreferrer">
-                        <span className="font-medium">
-                          {t('common:actions.viewMore')}
-                        </span>
-                      </a>
-                    </div>
-                  )}
-
-                  <div className="flex justify-end w-full gap-2 mt-4 overflow-auto">
-                    {n.actions.map((action) => (
-                      <Button
-                        key={action.labelKey}
-                        size="xs"
-                        className="text-gray-800 bg-white border border-gray-200 whitespace-nowrap hover:bg-gray-100 dark:bg-primary-600 dark:text-white dark:hover:bg-primary-700 dark:border-transparent"
-                        onClick={() => handleAction(n, action)}
-                        disabled={processingId === n.id}>
-                        {String(t(action.labelKey))}
-                      </Button>
-                    ))}
-                  </div>
-                </Card>
-              ))}
+                    </Card>
+                  ))}
+                </div>
+              )}
             </div>
-          )}
-        </div>
+          </section>
       </div>
     </div>
   );
