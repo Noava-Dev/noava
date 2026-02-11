@@ -34,7 +34,5 @@ namespace noava.Controllers
                 Role = user.Role.ToString()
             });
         }
-
-
     }
 }

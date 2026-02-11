@@ -42,7 +42,9 @@
     "join": "Deelnemen",
     "request": "Aanvragen",
     "show": "Tonen",
-    "back": "Terug"
+    "back": "Terug",
+    "uploading": "Bezig met uploaden...",
+    "done": "Klaar"
   },
   "validation": {
     "required": "Dit veld is verplicht",
@@ -78,6 +80,10 @@
       "message": "Weet je zeker dat je dit wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.",
       "yes": "Ja, verwijderen"
     }
+  },
+  "toast": {
+    "success": "Succes",
+    "error": "Fout"
   },
   "visibility": {
     "label": "Zichtbaarheid",

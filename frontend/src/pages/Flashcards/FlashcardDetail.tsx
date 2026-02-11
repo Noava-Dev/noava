@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { Button } from 'flowbite-react';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { Button, DropdownItem } from 'flowbite-react';
 import {
   HiArrowLeft,
   HiPlus,
@@ -29,6 +29,8 @@ import { useAzureBlobService } from '../../services/AzureBlobService';
 import { ManageOwnersModal } from '../../shared/components/ManageOwnersModal';
 import BackButton from '../../shared/components/navigation/BackButton';
 import PageHeader from '../../shared/components/PageHeader';
+import DropdownButton from '../../shared/components/DropdownButton';
+import ImportCardsModal from './components/ImportCardsModal';
 
 interface FlashcardWithImages extends Flashcard {
   frontImageUrl?: string | null;
@@ -38,6 +40,7 @@ interface FlashcardWithImages extends Flashcard {
 function FlashcardDetail() {
   const { deckId } = useParams<{ deckId: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
   const { t } = useTranslation('flashcards');
   const deckService = useDeckService();
   const flashcardService = useFlashcardService();
@@ -49,12 +52,16 @@ function FlashcardDetail() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showImportModal, setShowImportModal] = useState(false);
   const [selectedFlashcard, setSelectedFlashcard] = useState<
     Flashcard | undefined
   >(undefined);
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const [cardToDelete, setCardToDelete] = useState<number | null>(null);
   const [manageOwnersOpened, setManageOwnersOpened] = useState(false);
+  const fromClassroom = location.state?.from === 'classroom';
+  const classroomId = location.state?.classroomId;
+  const classroomName = location.state?.classroomName;
 
   useEffect(() => {
     if (deckId) {
@@ -148,6 +155,14 @@ function FlashcardDetail() {
     }
   };
 
+  const backUrl = fromClassroom && classroomId 
+    ? `/classrooms/${classroomId}` 
+    : '/decks';
+  
+  const backText = fromClassroom && classroomName
+    ? t('flashcardDetail.backToClassroom', { name: classroomName })
+    : t('flashcardDetail.backToDeck');
+
   const handleEditFlashcard = (flashcard: Flashcard) => {
     setSelectedFlashcard(flashcard);
     setIsModalOpen(true);
@@ -181,7 +196,7 @@ function FlashcardDetail() {
     setIsModalOpen(false);
     setSelectedFlashcard(undefined);
   };
-
+  
   if (loading) {
     return (
       <div className="flex min-h-screen bg-background-app-light dark:bg-background-app-dark">
@@ -227,7 +242,7 @@ function FlashcardDetail() {
         <PageHeader>
           <div className="flex flex-col gap-4 md:gap-6">
             {/* Back Button */}
-            <BackButton text={t('flashcardDetail.backToDeck')} href="/decks" />
+            <BackButton text={backText} href={backUrl} />
             <div className="space-y-2">
               <span className="text-xs font-bold tracking-wider uppercase text-cyan-500 dark:text-cyan-400">
                 {deck.language}
@@ -251,15 +266,19 @@ function FlashcardDetail() {
             {/* Action Buttons */}
             <div className="flex justify-between mb-8">
               <div className="flex gap-3">
-                <Button
+                {/* Create/Import cards button */}
+                <DropdownButton
                   size="lg"
-                  onClick={() => {
+                  onClickMain={() => {
                     setSelectedFlashcard(undefined);
                     setIsModalOpen(true);
-                  }}>
-                  <HiPlus className="mr-2 size-5" />
-                  {t('flashcardDetail.addCard')}
-                </Button>
+                  }}
+                  icon={HiPlus}
+                  text={t('flashcardDetail.addCard')}>
+                  <DropdownItem onClick={() => setShowImportModal(true)}>
+                    {t('flashcardDetail.importFromFile')}
+                  </DropdownItem>
+                </DropdownButton>
                 <Button size="lg" disabled={totalCards === 0}>
                   <HiPlay className="mr-2 size-5" />
                   {t('flashcardDetail.studyNow')}
@@ -472,6 +491,12 @@ function FlashcardDetail() {
           flashcard={selectedFlashcard}
         />
 
+        <ImportCardsModal
+          isOpen={showImportModal}
+          onClose={() => setShowImportModal(false)}
+          onSubmit={async () => await fetchFlashcards()}
+        />
+
         {/* Delete Confirmation Modal */}
         {deleteConfirmOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -491,7 +516,7 @@ function FlashcardDetail() {
               {/* Actions */}
               <div className="flex gap-3">
                 <Button color="red" onClick={confirmDelete} className="flex-1">
-                  {t('common:actions.cancel')}
+                  {t('common:actions.delete')}
                 </Button>
                 <Button color="gray" onClick={cancelDelete} className="flex-1">
                   {t('common:actions.cancel')}

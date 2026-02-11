@@ -1,5 +1,6 @@
 ﻿using noava.DTOs.Classrooms;
 using noava.DTOs.Clerk;
+using noava.DTOs.Decks;
 using noava.Models;
 
 namespace noava.Services.Classrooms
@@ -18,5 +19,8 @@ namespace noava.Services.Classrooms
         Task<ClassroomResponseDto> DeleteAsync(int id, string userId);
         Task<IEnumerable<ClerkUserResponseDto>> GetAllUsersByClassroomAsync(int classroomId, int page, int pageSize);
         Task<ClassroomResponseDto> InviteUserByEmail(int classroomId, string userId, string email);
+        Task<ClassroomResponseDto> AddDeckAsync(int classroomId, int deckId, string userId);
+        Task<ClassroomResponseDto> RemoveDeckAsync(int classroomId, int deckId, string userId);
+        Task<List<DeckResponse>> GetDecksForClassroomAsync(int classroomId, string userId);
     }
 }

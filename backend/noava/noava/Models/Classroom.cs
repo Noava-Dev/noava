@@ -22,5 +22,6 @@ namespace noava.Models
         //SCHOOLS
         public int? SchoolId { get; set; }
         public School? School { get; set; }
+        public ICollection<ClassroomDeck> ClassroomDecks { get; set; } = new List<ClassroomDeck>();
     }
 }

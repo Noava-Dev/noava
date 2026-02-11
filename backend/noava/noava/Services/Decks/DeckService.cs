@@ -1,10 +1,12 @@
-﻿using noava.Models;
-using noava.Shared;
+﻿using noava.DTOs.Decks;
+using noava.Mappers.Decks;
+using noava.Models;
 using noava.Models.BlobStorage;
-using noava.DTOs.Decks;
+using noava.Models.Enums;
+using noava.Repositories;
 using noava.Repositories.Decks;
 using noava.Services.Decks;
-using noava.Mappers.Decks;
+using noava.Shared;
 
 namespace noava.Services
 {
@@ -135,6 +137,37 @@ namespace noava.Services
             }
 
             return result;
+        }
+
+        public async Task<bool> CanUserViewDeckAsync(int deckId, string userId)
+        {
+            var deck = await _repository.GetByIdAsync(deckId);
+            if (deck == null)
+                return false;
+
+            if (deck.Visibility == DeckVisibility.Public)
+                return true;
+
+            if (deck.UserId == userId)
+                return true;
+
+            return await _repository
+                .IsUserLinkedToDeckAsync(deckId, userId);
+        }
+
+        public async Task<Deck?> GetDeckIfUserCanViewAsync(int deckId, string userId)
+        {
+            var deck = await _repository.GetByIdAsync(deckId);
+            if (deck == null)
+                return null;
+
+            if (deck.Visibility == DeckVisibility.Public || deck.UserId == userId ||
+                await _repository.IsUserLinkedToDeckAsync(deckId, userId))
+            {
+                return deck;
+            }
+
+            return null;
         }
     }
 }

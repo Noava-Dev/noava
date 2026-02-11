@@ -235,6 +235,24 @@ namespace noava.Migrations
                     b.ToTable("Classrooms");
                 });
 
+            modelBuilder.Entity("noava.Models.ClassroomDeck", b =>
+                {
+                    b.Property<int>("ClassroomId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("DeckId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("AddedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("ClassroomId", "DeckId");
+
+                    b.HasIndex("DeckId");
+
+                    b.ToTable("ClassroomDecks");
+                });
+
             modelBuilder.Entity("noava.Models.ClassroomUser", b =>
                 {
                     b.Property<int>("ClassroomId")
@@ -717,6 +735,25 @@ namespace noava.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("noava.Models.ClassroomDeck", b =>
+                {
+                    b.HasOne("noava.Models.Classroom", "Classroom")
+                        .WithMany("ClassroomDecks")
+                        .HasForeignKey("ClassroomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("noava.Models.Deck", "Deck")
+                        .WithMany("ClassroomDecks")
+                        .HasForeignKey("DeckId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Classroom");
+
+                    b.Navigation("Deck");
+                });
+
             modelBuilder.Entity("noava.Models.ClassroomUser", b =>
                 {
                     b.HasOne("noava.Models.Classroom", "Classroom")
@@ -850,11 +887,15 @@ namespace noava.Migrations
 
             modelBuilder.Entity("noava.Models.Classroom", b =>
                 {
+                    b.Navigation("ClassroomDecks");
+
                     b.Navigation("ClassroomUsers");
                 });
 
             modelBuilder.Entity("noava.Models.Deck", b =>
                 {
+                    b.Navigation("ClassroomDecks");
+
                     b.Navigation("DeckUsers");
                 });
 
