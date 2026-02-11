@@ -7,7 +7,9 @@ namespace noava.DTOs.Schools
 
         public int Id { get; set; }
         public string SchoolName { get; set; } = string.Empty;
-        public ClerkUserResponseDto CreatedBy { get; set; }
+
+        //In frontend, show who created school (email)
+        public ClerkUserResponseDto? CreatedBy { get; set; }
         public List<ClerkUserResponseDto> Admins { get; set; } = new();
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }

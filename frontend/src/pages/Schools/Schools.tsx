@@ -5,13 +5,16 @@ import type { SchoolDto } from '../../models/School';
 import { useToast } from '../../contexts/ToastContext';
 import { useSchoolService } from '../../services/SchoolService';
 import { LuPlus as Plus } from 'react-icons/lu';
+import CreateSchoolModal from './components/CreateSchoolModal';
+import Loading from '../../shared/components/loading/Loading';
 
 export default function SchoolsPage() {
   const schoolService = useSchoolService();
-  const { showError } = useToast();
+  const { showError, showSuccess } = useToast();
 
   const [schools, setSchools] = useState<SchoolDto[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const fetchSchools = async () => {
     try {
@@ -28,15 +31,35 @@ export default function SchoolsPage() {
   useEffect(() => {
     fetchSchools();
   }, []);
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-background-app-light dark:bg-background-app-dark">
-        <div className="border-4 rounded-full size-10 animate-spin border-primary-100 border-t-primary-500" />
-      </div>
-    );
-  }
 
-  return (
+const handleCreateSchool = async (data: {
+    name: string;
+    adminEmail: string;
+  }) => {
+    try {
+      await schoolService.create({
+        schoolName: data.name,
+        schoolAdminEmails: [data.adminEmail],
+      });
+
+      showSuccess('School created', `${data.name} was added successfully.`);
+
+      setIsModalOpen(false);
+      await fetchSchools();
+    } catch (error) {
+      showError('Create failed', 'Could not create school.');
+    }
+  };
+
+if (loading) { 
+  return ( 
+  <div className="flex items-center justify-center min-h-screen bg-background-app-light dark:bg-background-app-dark">
+    <Loading size="lg" center text="Loading schools..." /> 
+  </div> 
+  ); 
+}
+
+return (
     <div className="min-h-screen bg-background-app-light dark:bg-background-app-dark">
       <PageHeader>
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -48,7 +71,11 @@ export default function SchoolsPage() {
               Overview of all registered educational institutions.
             </p>
           </div>
-          <button className="flex items-center justify-center gap-2 rounded-lg bg-primary-500 px-5 py-2.5 text-sm font-semibold text-white hover:bg-primary-600 transition-colors shadow-md">
+
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="flex items-center justify-center gap-2 rounded-lg bg-primary-500 px-5 py-2.5 text-sm font-semibold text-white hover:bg-primary-600 shadow-md"
+          >
             <Plus className="size-5" />
             Add School
           </button>
@@ -58,18 +85,15 @@ export default function SchoolsPage() {
       <main className="px-4 py-12 mx-auto max-w-7xl sm:px-6">
         <div className="max-w-4xl mx-auto space-y-4">
           {schools.length === 0 ? (
-            <div className="p-12 text-center border rounded-xl border-border bg-background-surface-light dark:bg-background-surface-dark">
-              <p className="text-lg font-medium text-text-body-light dark:text-text-body-dark">
-                No schools found.
-              </p>
-              <p className="mt-1 text-text-muted-light dark:text-text-muted-dark">
-                Start by adding a new school to the platform.
+            <div className="py-12 text-center md:py-20">
+              <p className="mb-6 text-xl text-text-body-light dark:text-text-muted-dark md:text-2xl">
+                No schools found. Start by adding a new school.
               </p>
             </div>
           ) : (
             schools.map((school) => (
               <SchoolCard
-                key={school.schoolId}
+                key={school.id} // ✅ fixed
                 name={school.schoolName}
                 createdAt={new Date(school.createdAt)}
                 admins={school.admins.map((a) => ({
@@ -82,6 +106,12 @@ export default function SchoolsPage() {
           )}
         </div>
       </main>
+
+      <CreateSchoolModal
+        open={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onCreate={handleCreateSchool}
+      />
     </div>
   );
 }
