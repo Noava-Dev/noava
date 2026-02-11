@@ -62,6 +62,8 @@
   "quickReview": {
     "startReview": "Quick Review",
     "mode": "Quick Review Modus",
+    "bulkMode": "Groepsherhaling Modus",
+    "bulkTitle": "Meerdere Decks",
     "flipMode": "Flip Modus",
     "writeMode": "Schrijf Modus",
     "question": "Vraag",
@@ -79,7 +81,10 @@
     "complete": {
       "title": "Review Voltooid!",
       "message": "Je hebt alle kaarten doorgenomen",
+      "bulkMessage": "Je hebt {{count}} kaarten uit {{deckCount}} deck(s) doorgenomen",
       "backToDeck": "Terug naar Deck",
+      "backToDecks": "Terug naar Decks",
+      "backToClassroom": "Terug naar Klas",
       "restart": "Opnieuw Starten"
     },
     "reverseMode": "Omgekeerde Modus"

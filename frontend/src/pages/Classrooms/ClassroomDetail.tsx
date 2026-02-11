@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Button } from 'flowbite-react';
+import { Button, Dropdown, DropdownItem } from 'flowbite-react';
 import { useTranslation } from 'react-i18next';
-import { HiPlus } from 'react-icons/hi';
+import { HiPlus, HiPlay, HiPencil, HiRefresh, HiChevronDown } from 'react-icons/hi';
 import PageHeader from '../../shared/components/PageHeader';
 import Loading from '../../shared/components/loading/Loading';
 import DeckCard from '../../shared/components/DeckCard';
@@ -29,6 +29,8 @@ function ClassroomDetailPage() {
   const [decksLoading, setDecksLoading] = useState(false);
   const [addDeckModalOpened, setAddDeckModalOpened] = useState(false);
   const [bulkReviewModalOpened, setBulkReviewModalOpened] = useState(false);
+  const [bulkWriteReviewModalOpened, setBulkWriteReviewModalOpened] = useState(false);
+  const [bulkReverseReviewModalOpened, setBulkReverseReviewModalOpened] = useState(false);
   const [deleteModalOpened, setDeleteModalOpened] = useState(false);
   const [deckToDelete, setDeckToDelete] = useState<number | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -173,14 +175,36 @@ return (
 
               <div className="flex flex-col gap-3 mt-6 sm:flex-row">
                 {decks.length > 0 && (
-                  <Button
-                    color="cyan"
-                    size="lg"
-                    className="w-full border-none md:w-fit"
-                    onClick={() => setBulkReviewModalOpened(true)}
+                  <Dropdown
+                    label=""
+                    dismissOnClick={true}
+                    renderTrigger={() => (
+                      <Button size="lg" className="w-full border-none bg-cyan-500 hover:bg-cyan-600 md:w-fit">
+                        <HiPlay className="w-5 h-5 mr-2" />
+                        {t('bulkReview.button')}
+                        <HiChevronDown className="w-4 h-4 ml-1" />
+                      </Button>
+                    )}
                   >
-                    {t('bulkReview.button')}
-                  </Button>
+                    <DropdownItem
+                      icon={HiPlay}
+                      onClick={() => setBulkReviewModalOpened(true)}
+                    >
+                      {t('reviewModes.flipMode')}
+                    </DropdownItem>
+                    <DropdownItem
+                      icon={HiPencil}
+                      onClick={() => setBulkWriteReviewModalOpened(true)}
+                    >
+                      {t('reviewModes.writeReview')}
+                    </DropdownItem>
+                    <DropdownItem
+                      icon={HiRefresh}
+                      onClick={() => setBulkReverseReviewModalOpened(true)}
+                    >
+                      {t('reviewModes.reverseReview')}
+                    </DropdownItem>
+                  </Dropdown>
                 )}
                 {classroom.permissions?.canEdit && (
                   <>
@@ -289,6 +313,25 @@ return (
         onClose={() => setBulkReviewModalOpened(false)}
         decks={decks}
         classroomId={id}
+        reviewType="flip"
+      />
+
+      {/* Bulk Write Review Modal */}
+      <BulkReviewModal
+        opened={bulkWriteReviewModalOpened}
+        onClose={() => setBulkWriteReviewModalOpened(false)}
+        decks={decks}
+        classroomId={id}
+        reviewType="write"
+      />
+
+      {/* Bulk Reverse Review Modal */}
+      <BulkReviewModal
+        opened={bulkReverseReviewModalOpened}
+        onClose={() => setBulkReverseReviewModalOpened(false)}
+        decks={decks}
+        classroomId={id}
+        reviewType="reverse"
       />
 
       {/* Confirm Delete Modal */}

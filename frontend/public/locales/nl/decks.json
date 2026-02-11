@@ -19,6 +19,11 @@
     "summaryDecks": "Klaar om {{count}} deck(s) te herhalen",
     "startReview": "Start herhaling"
   },
+  "reviewModes": {
+    "flipMode": "Draai Modus",
+    "writeReview": "Schrijf Modus",
+    "reverseReview": "Omgekeerde Modus"
+  },
   "empty": {
     "title": "Nog geen Decks",
     "message": "Maak je eerste Deck aan om te beginnen!",

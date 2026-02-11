@@ -492,6 +492,7 @@ function QuickReview() {
                   {isBulkReview
                     ? t('quickReview.complete.bulkMessage', {
                         count: session.cards.length,
+                        deckCount: decks.size,
                       })
                     : t('quickReview.complete.message', {
                         count: session.cards.length,

@@ -118,6 +118,11 @@
     "summaryDecks": "Ready to review {{count}} deck(s)",
     "startReview": "Start Review"
   },
+  "reviewModes": {
+    "flipMode": "Flip Mode",
+    "writeReview": "Write Mode",
+    "reverseReview": "Reverse Mode"
+  },
   "addDeck": {
      "title": "Add Deck to Classroom",
     "description": "Add one of your existing decks to this classroom.",
