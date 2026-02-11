@@ -169,5 +169,22 @@ namespace noava.Services
 
             return null;
         }
+
+        public async Task<List<DeckResponse>> GetDeckByIdsAsync(IEnumerable<int> ids, string userId)
+        {
+            var decks = await _repository.GetByIdsAsync(ids);
+            var authorizedDecks = new List<Deck>();
+
+            foreach (var deck in decks)
+            {
+                bool cond = await _repository.IsUserLinkedToDeckAsync(deck.DeckId, userId);
+                if (cond)
+                {
+                    authorizedDecks.Add(deck);
+                }
+            }
+
+            return authorizedDecks.ToResponseDtoList();
+        }
     }
 }

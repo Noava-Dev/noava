@@ -49,6 +49,15 @@ namespace noava.Controllers
             return Ok(deck);
         }
 
+        [HttpGet("multiple")]
+        public async Task<ActionResult<DeckResponse>> GetDecksByIds([FromQuery] int[] ids)
+        {
+            var userId = GetUserId();
+
+            var deck = await _deckService.GetDeckByIdsAsync(ids, userId);
+            return Ok(deck);
+        }
+
         [HttpPost]
         public async Task<ActionResult<DeckResponse>> CreateDeck([FromBody] DeckRequest request)
         {

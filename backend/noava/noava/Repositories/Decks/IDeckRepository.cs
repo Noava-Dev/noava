@@ -7,6 +7,7 @@ namespace noava.Repositories.Decks
         Task<List<Deck>> GetAllAsync();
         Task<List<Deck>> GetByUserIdAsync(string userId, int? limit);
         Task<Deck?> GetByIdAsync(int id);
+        Task<List<Deck>> GetByIdsAsync(IEnumerable<int> ids);
         Task<Deck> CreateAsync(Deck deck);
         Task<Deck> UpdateAsync(Deck deck);
         Task<bool> DeleteAsync(int id);

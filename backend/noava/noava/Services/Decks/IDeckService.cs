@@ -8,6 +8,7 @@ namespace noava.Services.Decks
         Task<List<DeckResponse>> GetAllDecksAsync();
         Task<List<DeckResponse>> GetUserDecksAsync(string userId, int? limit);
         Task<DeckResponse?> GetDeckByIdAsync(int id);
+        Task<List<DeckResponse>> GetDeckByIdsAsync(IEnumerable<int> id, string userId);
         Task<DeckResponse> CreateDeckAsync(DeckRequest request, string userId);
         Task<DeckResponse?> UpdateDeckAsync(int id, DeckRequest request, string userId);
         Task<bool> DeleteDeckAsync(int id, string userId);

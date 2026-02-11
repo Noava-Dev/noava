@@ -13,11 +13,14 @@ import {
 import type { Deck } from '../../models/Deck';
 import { BulkReviewMode } from '../../models/Flashcard';
 
+type ReviewType = 'flip' | 'write' | 'reverse';
+
 interface BulkReviewModalProps {
   opened: boolean;
   onClose: () => void;
   decks: Deck[];
   classroomId: number | null;
+  reviewType?: ReviewType;
 }
 
 export const BulkReviewModal: React.FC<BulkReviewModalProps> = ({
@@ -25,6 +28,7 @@ export const BulkReviewModal: React.FC<BulkReviewModalProps> = ({
   onClose,
   decks,
   classroomId,
+  reviewType = 'flip',
 }) => {
   const { t } = useTranslation(classroomId !== null ? 'classrooms' : 'decks');
   const navigate = useNavigate();
@@ -61,12 +65,17 @@ export const BulkReviewModal: React.FC<BulkReviewModalProps> = ({
     if (selectedDeckIds.length === 0) return;
 
     const deckIdsParam = selectedDeckIds.join(',');
+    
+    let reviewPath = 'review';
+    if (reviewType === 'write') reviewPath = 'writeReview';
+    else if (reviewType === 'reverse') reviewPath = 'reverseReview';
+
     if (classroomId !== null) {
       navigate(
-        `/classrooms/${classroomId}/review?deckIds=${deckIdsParam}&mode=${shuffleMode}`
+        `/classrooms/${classroomId}/${reviewPath}?deckIds=${deckIdsParam}&mode=${shuffleMode}`
       );
     } else {
-      navigate(`/decks/review?deckIds=${deckIdsParam}&mode=${shuffleMode}`);
+      navigate(`/decks/${reviewPath}?deckIds=${deckIdsParam}&mode=${shuffleMode}`);
     }
     onClose();
   };

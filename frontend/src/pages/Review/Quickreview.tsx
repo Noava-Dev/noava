@@ -22,6 +22,7 @@ function QuickReview() {
   const azureBlobService = useAzureBlobService();
   const { showError } = useToast();
 
+  const [decks, setDecks] = useState<Map<number, Deck>>(new Map());
   const [session, setSession] = useState<ReviewSession | null>(null);
   const [isFlipped, setIsFlipped] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -40,10 +41,10 @@ function QuickReview() {
       const deckIds = deckIdsParam.split(',').map(Number);
       const mode = modeParam ? Number(modeParam) : BulkReviewMode.ShuffleAll;
       setIsBulkReview(true);
-      initializeBulkSession(deckIds, mode);
+      initializeSession(deckIds, mode);
     } else if (deckId) {
       setIsBulkReview(false);
-      initializeSingleSession();
+      initializeSession([Number(deckId)], BulkReviewMode.ShuffleAll);
     }
   }, [deckId, classroomId, searchParams]);
 
@@ -108,48 +109,23 @@ function QuickReview() {
     }
   }, [session?.currentIndex]);
 
-  const initializeSingleSession = async () => {
+  const initializeSession = async (deckIds: number[], mode: BulkReviewMode) => {
+    //console.log('Initializing quick review session with deckIds:', deckIds, 'and mode:', mode);
     try {
       setLoading(true);
 
-      const [deckData, cardsData] = await Promise.all([
-        deckService.getById(Number(deckId)),
-        flashcardService.getByDeckId(Number(deckId)),
-      ]);
+      const isSingleDeck = deckIds.length === 1;
 
-      if (!deckData || cardsData.length === 0) {
-        showError(t('quickReview.noCards'), t('quickReview.error'));
-        navigate(`/decks/${deckId}/cards`);
-        return;
-      }
-
-      const shuffledCards = [...cardsData].sort(() => Math.random() - 0.5);
-
-      setSession({
-        deckId: deckData.deckId,
-        deckTitle: deckData.title,
-        cards: shuffledCards,
-        currentIndex: 0,
-        isFlipped: false,
-        completedCards: 0,
-      });
-    } catch (error) {
-      showError(t('quickReview.noCards'), t('quickReview.error'));
-      navigate(`/decks/${deckId}/cards`);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const initializeBulkSession = async (deckIds: number[], mode: BulkReviewMode) => {
-    try {
-      setLoading(true);
-
+      // Haal kaarten en alle betrokken decks op
       const cardsData = await flashcardService.getBulkReviewCards(deckIds, mode);
+      const decksData = await deckService.getByMultipleIds(deckIds);
+      //console.log('Loaded decks for quick review:', decksData);
 
-      if (!cardsData || cardsData.length === 0) {
+      if (cardsData.length === 0) {
         showError(t('quickReview.noCards'), t('quickReview.error'));
-        if (classroomId) {
+        if (isSingleDeck && deckId) {
+          navigate(`/decks/${deckId}/cards`);
+        } else if (classroomId) {
           navigate(`/classrooms/${classroomId}`);
         } else {
           navigate('/decks');
@@ -157,17 +133,29 @@ function QuickReview() {
         return;
       }
 
+      // Maak een map van deckId -> Deck voor spraak functionaliteit
+      const decksMap = new Map<number, Deck>();
+      decksData.forEach(deck => {
+        if (deck) {
+          decksMap.set(deck.deckId, deck);
+        }
+      });
+      setDecks(decksMap);
+
       setSession({
-        deckTitle: t('quickReview.bulkTitle'),
+        deckId: isSingleDeck ? decksData[0]?.deckId : undefined,
+        deckTitle: isSingleDeck ? decksData[0]?.title : t('quickReview.bulkTitle'),
         cards: cardsData,
         currentIndex: 0,
         isFlipped: false,
         completedCards: 0,
       });
     } catch (error) {
-      console.error('Error loading bulk review cards:', error);
+      console.error('Error loading review cards:', error);
       showError(t('common:toast.error'), t('quickReview.error'));
-      if (classroomId) {
+      if (deckIds.length === 1 && deckId) {
+        navigate(`/decks/${deckId}/cards`);
+      } else if (classroomId) {
         navigate(`/classrooms/${classroomId}`);
       } else {
         navigate('/decks');
@@ -240,9 +228,10 @@ function QuickReview() {
   const handlePlayAudio = (side: 'front' | 'back', e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent card flip
 
-    if (!session || !deck) return;
+    if (!session) return;
 
     const currentCard = session.cards[session.currentIndex];
+    const deck = decks.get(currentCard.deckId);
 
     if (side === 'front') {
       // PRIORITY 1: Audio file
@@ -251,8 +240,8 @@ function QuickReview() {
         const audio = new Audio(frontAudioUrl);
         audio.play().catch((err) => console.error('Failed to play audio:', err));
       } 
-      // PRIORITY 2: TTS (only if no audio file)
-      else if (currentCard.hasVoiceAssistant && currentCard.frontText) {
+      // PRIORITY 2: TTS (only if no audio file and deck language is available)
+      else if (deck && currentCard.hasVoiceAssistant && currentCard.frontText) {
         console.log('Using TTS for front (no audio file)');
         speakText(currentCard.frontText, deck.language);
       }
@@ -263,8 +252,8 @@ function QuickReview() {
         const audio = new Audio(backAudioUrl);
         audio.play().catch((err) => console.error('Failed to play audio:', err));
       } 
-      // PRIORITY 2: TTS (only if no audio file)
-      else if (currentCard.hasVoiceAssistant && currentCard.backText) {
+      // PRIORITY 2: TTS (only if no audio file and deck language is available)
+      else if (deck && currentCard.hasVoiceAssistant && currentCard.backText) {
         console.log('Using TTS for back (no audio file)');
         speakText(currentCard.backText, deck.language);
       }
@@ -503,6 +492,7 @@ function QuickReview() {
                   {isBulkReview
                     ? t('quickReview.complete.bulkMessage', {
                         count: session.cards.length,
+                        deckCount: decks.size,
                       })
                     : t('quickReview.complete.message', {
                         count: session.cards.length,

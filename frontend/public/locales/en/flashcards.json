@@ -62,6 +62,8 @@
   "quickReview": {
     "startReview": "Quick Review",
     "mode": "Quick Review Mode",
+    "bulkMode": "Bulk Review Mode",
+    "bulkTitle": "Multiple Decks",
     "flipMode": "Flip Mode",
     "writeMode": "Write Mode",
     "question": "Question",
@@ -79,7 +81,10 @@
     "complete": {
       "title": "Review Complete!",
       "message": "You've reviewed all cards",
+      "bulkMessage": "You've reviewed {{count}} cards from {{deckCount}} deck(s)",
       "backToDeck": "Back to Deck",
+      "backToDecks": "Back to Decks",
+      "backToClassroom": "Back to Classroom",
       "restart": "Restart"
     },
     "reverseMode": "Reverse Mode"
