@@ -8,8 +8,9 @@ import {
   ModalHeader,
   ModalBody,
   Modal,
+  HelperText,
 } from 'flowbite-react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { HiUpload, HiVolumeUp, HiPhotograph } from 'react-icons/hi';
 import type { Flashcard, CreateFlashcardRequest } from '../../models/Flashcard';
 import { useAzureBlobService } from '../../services/AzureBlobService';
@@ -18,7 +19,7 @@ import { useTranslation } from 'react-i18next';
 interface FlashcardModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (flashcard: CreateFlashcardRequest) => void;
+  onSubmit: (flashcard: CreateFlashcardRequest, createMoreCards: boolean) => void;
   flashcard?: Flashcard;
 }
 
@@ -73,6 +74,9 @@ function FlashcardModal({
   const [isBackImageDragActive, setIsBackImageDragActive] = useState(false);
 
   const [uploading, setUploading] = useState(false);
+  const [createMore, setCreateMore] = useState(false);
+  const modalContentRef = useRef<HTMLDivElement>(null);
+  const [createMoreSuccessMessage, setCreateMoreSuccessMessage] = useState("");
 
   useEffect(() => {
     if (flashcard) {
@@ -266,7 +270,7 @@ function FlashcardModal({
       if (finalBackAudio) flashcardData.backAudio = finalBackAudio;
       if (memo) flashcardData.memo = memo;
 
-      onSubmit(flashcardData);
+      onSubmit(flashcardData, createMore);
 
       // Reset form
       setFrontText('');
@@ -285,6 +289,19 @@ function FlashcardModal({
       setBackAudioFile(null);
       setBackAudioPreview(null);
       setBackAudioBlobName(undefined);
+
+      if (createMore) {
+        setActiveTab('front');
+        setIsFlipped(false);
+
+        modalContentRef.current?.scrollTo({
+          top: 0,
+          behavior: 'smooth',
+        });
+
+        setCreateMoreSuccessMessage("Card created successfully!");
+      }
+      
     } catch (error) {
       alert(t('flashcardModal.uploadError'));
       console.error(error);
@@ -306,12 +323,13 @@ function FlashcardModal({
       position="center"
       dismissible>
       {/* Modal Content */}
-      <div className="relative bg-background-app-light dark:bg-background-surface-dark rounded-lg shadow-xl w-full max-h-[90vh] overflow-y-auto">
+      <div ref={modalContentRef} className="relative bg-background-app-light dark:bg-background-surface-dark rounded-lg shadow-xl w-full max-h-[90vh] overflow-y-auto">
         {/* Header */}
         <ModalHeader>
           {flashcard
             ? t('flashcardModal.editTitle')
             : t('flashcardModal.createTitle')}
+            <HelperText className='text-xs'>{createMoreSuccessMessage}</HelperText>
         </ModalHeader>
 
         {/* Body */}
@@ -688,26 +706,34 @@ function FlashcardModal({
 
 
             {/* Actions */}
-            <div className="flex gap-3 pt-4">
-              <Button type="submit" className="flex-1" disabled={uploading}>
-                {uploading ? (
-                  <>
-                    <HiUpload className="mr-2 size-5 animate-spin" />
-                    {t('flashcardModal.uploading')}
-                  </>
-                ) : flashcard ? (
-                  t('flashcardModal.updateButton')
-                ) : (
-                  t('flashcardModal.createButton')
-                )}
-              </Button>
-              <Button
-                color="gray"
-                onClick={onClose}
-                disabled={uploading}
-                type="button">
-                {t('common:actions.cancel')}
-              </Button>
+            <div>
+              <div className='flex items-center gap-1'>
+                <Checkbox id="createMore" checked={createMore} onChange={(e) => setCreateMore(e.target.checked)} />
+                <Label htmlFor="createMore">
+                  Create more
+                </Label>
+              </div>
+              <div className="flex gap-3 pt-4">
+                <Button type="submit" className="flex-1" disabled={uploading}>
+                  {uploading ? (
+                    <>
+                      <HiUpload className="mr-2 size-5 animate-spin" />
+                      {t('flashcardModal.uploading')}
+                    </>
+                  ) : flashcard ? (
+                    t('flashcardModal.updateButton')
+                  ) : (
+                    t('flashcardModal.createButton')
+                  )}
+                </Button>
+                <Button
+                  color="gray"
+                  onClick={onClose}
+                  disabled={uploading}
+                  type="button">
+                  {t('common:actions.cancel')}
+                </Button>
+              </div>
             </div>
           </form>
         </ModalBody>
