@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { Button, DropdownItem } from 'flowbite-react';
+import { Button, Dropdown, DropdownItem } from 'flowbite-react';
 import {
   HiArrowLeft,
   HiPlus,
@@ -11,6 +11,7 @@ import {
   HiDocumentText,
   HiPencil,
   HiTrash,
+  HiChevronDown,
 } from 'react-icons/hi';
 import { useTranslation } from 'react-i18next';
 import { useDeckService } from '../../services/DeckService';
@@ -283,13 +284,36 @@ function FlashcardDetail() {
                   <HiPlay className="mr-2 size-5" />
                   {t('flashcardDetail.studyNow')}
                 </Button>
-                <Button
-                  size="lg"
-                  disabled={flashcards.length === 0}
-                  onClick={() => navigate(`/decks/${deckId}/review`)}>
-                  <HiPlay className="mr-2 size-5" />
-                  {t('flashcardDetail.quickReview')}
-                </Button>
+                <Dropdown
+                    label=""
+                    dismissOnClick={true}
+                    renderTrigger={() => (
+                      <Button size="lg" className="bg-cyan-500 hover:bg-cyan-600">
+                        <HiPlay className="w-5 h-5 mr-2" />
+                        {t('flashcardDetail.quickReview')}
+                        <HiChevronDown className="w-4 h-4 ml-1" />
+                      </Button>
+                    )}
+                  >
+                    <DropdownItem
+                      icon={HiPlay}
+                      onClick={() => navigate(`/decks/${deckId}/quickReview`)}
+                    >
+                      {t('flashcardDetail.flipMode')}
+                    </DropdownItem>
+                    <DropdownItem
+                      icon={HiPencil}
+                      onClick={() => navigate(`/decks/${deckId}/writeReview`)}
+                    >
+                      {t('flashcardDetail.writeReview')}
+                    </DropdownItem>
+                    <DropdownItem
+                      icon={HiRefresh}
+                      onClick={() => navigate(`/decks/${deckId}/reverseReview`)}
+                    >
+                      {t('flashcardDetail.reverseReview')}
+                    </DropdownItem>
+                  </Dropdown>
               </div>
               <div className="flex gap-3">
                 <Button

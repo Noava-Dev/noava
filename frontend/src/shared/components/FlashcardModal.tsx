@@ -4,6 +4,7 @@ import {
   Textarea,
   Button,
   FileInput,
+  Checkbox,
   ModalHeader,
   ModalBody,
   Modal,
@@ -68,6 +69,9 @@ function FlashcardModal({
   flashcard?.hasVoiceAssistant || false
 );
 
+  const [isFrontImageDragActive, setIsFrontImageDragActive] = useState(false);
+  const [isBackImageDragActive, setIsBackImageDragActive] = useState(false);
+
   const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
@@ -79,6 +83,7 @@ function FlashcardModal({
       setFrontAudioBlobName(flashcard.frontAudio);
       setBackImageBlobName(flashcard.backImage);
       setBackAudioBlobName(flashcard.backAudio);
+      setHasVoiceAssistant(flashcard.hasVoiceAssistant || false);
 
       // Load existing media previews
       if (flashcard.frontImage) {
@@ -122,32 +127,63 @@ function FlashcardModal({
       setBackAudioFile(null);
       setBackAudioPreview(null);
       setBackAudioBlobName(undefined);
+      setHasVoiceAssistant(false);
     }
     setActiveTab('front');
     setIsFlipped(false);
   }, [flashcard, isOpen]);
 
+  const setFrontImageFromFile = (file: File) => {
+    setFrontImageFile(file);
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setFrontImagePreview(reader.result as string);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const setBackImageFromFile = (file: File) => {
+    setBackImageFile(file);
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setBackImagePreview(reader.result as string);
+    };
+    reader.readAsDataURL(file);
+  };
+
   const handleFrontImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setFrontImageFile(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setFrontImagePreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+      setFrontImageFromFile(file);
     }
   };
 
   const handleBackImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setBackImageFile(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setBackImagePreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+      setBackImageFromFile(file);
+    }
+  };
+
+  const handleFrontImageDrop = (e: React.DragEvent<HTMLLabelElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsFrontImageDragActive(false);
+    if (uploading) return;
+    const file = e.dataTransfer.files?.[0];
+    if (file && file.type.startsWith('image/')) {
+      setFrontImageFromFile(file);
+    }
+  };
+
+  const handleBackImageDrop = (e: React.DragEvent<HTMLLabelElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsBackImageDragActive(false);
+    if (uploading) return;
+    const file = e.dataTransfer.files?.[0];
+    if (file && file.type.startsWith('image/')) {
+      setBackImageFromFile(file);
     }
   };
 
@@ -404,12 +440,43 @@ function FlashcardModal({
                       />
                     </div>
                   )}
-                  <FileInput
-                    id="frontImage"
-                    accept="image/*"
-                    onChange={handleFrontImageChange}
-                    disabled={uploading}
-                  />
+                  <div className="flex w-full items-center justify-center">
+                    <Label
+                      htmlFor="frontImage"
+                      onDragOver={(e) => {
+                        e.preventDefault();
+                        if (!uploading) setIsFrontImageDragActive(true);
+                      }}
+                      onDragLeave={() => setIsFrontImageDragActive(false)}
+                      onDrop={handleFrontImageDrop}
+                      className={`flex h-48 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed ${
+                        isFrontImageDragActive
+                          ? 'border-cyan-400 bg-cyan-50 dark:bg-cyan-900/20'
+                          : 'border-gray-300 bg-gray-50 dark:border-gray-600 dark:bg-gray-700'
+                      } hover:bg-gray-100 dark:hover:border-gray-500 dark:hover:bg-gray-600 ${
+                        uploading ? 'opacity-60 cursor-not-allowed' : ''
+                      }`}>
+                      <div className="flex flex-col items-center justify-center pb-6 pt-5">
+                        <HiUpload className="mb-4 h-8 w-8 text-gray-500 dark:text-gray-400" />
+                        <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                          <span className="font-semibold">
+                            {t('flashcardModal.dragDropTitle')}
+                          </span>{' '}
+                          {t('flashcardModal.dragDropSubtext')}
+                        </p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                          {t('flashcardModal.dragDropHint')}
+                        </p>
+                      </div>
+                      <FileInput
+                        id="frontImage"
+                        accept="image/*"
+                        onChange={handleFrontImageChange}
+                        disabled={uploading}
+                        className="hidden"
+                      />
+                    </Label>
+                  </div>
                 </div>
 
                 {/* Front Audio */}
@@ -436,7 +503,32 @@ function FlashcardModal({
                     disabled={uploading}
                   />
                 </div>
+
+               {/* Voice Assistant Toggle */}
+                <div className="p-4 rounded-lg border border-border dark:border-border-dark bg-background-subtle-light dark:bg-background-subtle-dark">
+                  <label className="flex items-start gap-3 cursor-pointer">
+                    <Checkbox
+                      id="voiceAssistant"
+                      checked={hasVoiceAssistant}
+                      onChange={(e) => setHasVoiceAssistant(e.target.checked)}
+                      disabled={uploading}
+                      className="mt-1"
+                    />
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2">
+                        <HiVolumeUp className="w-4 h-4 text-primary-600 dark:text-primary-400" />
+                        <span className="text-sm font-medium text-text-title-light dark:text-text-title-dark">
+                          {t('flashcardModal.enableVoiceAssistant')}
+                        </span>
+                      </div>
+                      <p className="mt-1 text-xs text-text-muted-light dark:text-text-muted-dark">
+                        {t('flashcardModal.voiceAssistantHelp')}
+                      </p>
+                    </div>
+                  </label>
+                </div>
               </div>
+
             )}
 
             {/* Back Side Content */}
@@ -503,12 +595,43 @@ function FlashcardModal({
                       />
                     </div>
                   )}
-                  <FileInput
-                    id="backImage"
-                    accept="image/*"
-                    onChange={handleBackImageChange}
-                    disabled={uploading}
-                  />
+                  <div className="flex w-full items-center justify-center">
+                    <Label
+                      htmlFor="backImage"
+                      onDragOver={(e) => {
+                        e.preventDefault();
+                        if (!uploading) setIsBackImageDragActive(true);
+                      }}
+                      onDragLeave={() => setIsBackImageDragActive(false)}
+                      onDrop={handleBackImageDrop}
+                      className={`flex h-48 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed ${
+                        isBackImageDragActive
+                          ? 'border-cyan-400 bg-cyan-50 dark:bg-cyan-900/20'
+                          : 'border-gray-300 bg-gray-50 dark:border-gray-600 dark:bg-gray-700'
+                      } hover:bg-gray-100 dark:hover:border-gray-500 dark:hover:bg-gray-600 ${
+                        uploading ? 'opacity-60 cursor-not-allowed' : ''
+                      }`}>
+                      <div className="flex flex-col items-center justify-center pb-6 pt-5">
+                        <HiUpload className="mb-4 h-8 w-8 text-gray-500 dark:text-gray-400" />
+                        <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                          <span className="font-semibold">
+                            {t('flashcardModal.dragDropTitle')}
+                          </span>{' '}
+                          {t('flashcardModal.dragDropSubtext')}
+                        </p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                          {t('flashcardModal.dragDropHint')}
+                        </p>
+                      </div>
+                      <FileInput
+                        id="backImage"
+                        accept="image/*"
+                        onChange={handleBackImageChange}
+                        disabled={uploading}
+                        className="hidden"
+                      />
+                    </Label>
+                  </div>
                 </div>
 
                 {/* Back Audio */}
@@ -539,12 +662,12 @@ function FlashcardModal({
                   {/* Voice Assistant Toggle */}
                   <div className="p-4 rounded-lg border border-border dark:border-border-dark bg-background-subtle-light dark:bg-background-subtle-dark">
                     <label className="flex items-start gap-3 cursor-pointer">
-                      <input
-                        type="checkbox"
+                      <Checkbox
+                        id="voiceAssistant"
                         checked={hasVoiceAssistant}
                         onChange={(e) => setHasVoiceAssistant(e.target.checked)}
                         disabled={uploading}
-                        className="mt-1 w-4 h-4 text-primary-600 rounded focus:ring-primary-500 focus:ring-2"
+                        className="mt-1"
                       />
                       <div className="flex-1">
                         <div className="flex items-center gap-2">
