@@ -17,3 +17,17 @@ export interface SchoolRequest {
   schoolName: string;
   schoolAdminEmails: string[];
 }
+
+//Not sure about this one
+export interface UpdateSchoolRequest{
+  name: string;
+  schoolAdminEmails: string[];
+}
+
+export interface DeleteSchoolRequest{
+  schoolId: number;
+}
+
+export interface SchoolClassroomDto{
+  
+}

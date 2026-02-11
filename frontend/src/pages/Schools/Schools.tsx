@@ -70,6 +70,28 @@ const handleEditSchool = (id: number) => {
   setIsModalOpen(true);
 };
 
+const handleDeleteSchool = async (id: number) => {
+  const school = schools.find((s) => s.id === id);
+  if(!school) return;
+
+  const confirmed = window.confirm(
+    `Are you sure you want to delete "${school.schoolName}"?`
+  )
+
+  if(!confirmed) return;
+
+  try{
+    await schoolService.delete(id);
+
+    showSuccess(
+      "School deleted",
+      `${school.schoolName} was removed successfully.`
+    );
+    await fetchSchools(); 
+  } catch { 
+    showError("Delete failed", "Could not delete school."); }
+  }
+
 
 if (loading) { 
   return ( 
@@ -127,6 +149,7 @@ return (
                   email: a.email,
                 }))}
                 onEdit={handleEditSchool}
+                onDelete={handleDeleteSchool}
               />
             ))
           )}
