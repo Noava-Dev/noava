@@ -1,8 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using noava.Data;
 using noava.Models;
+using noava.Repositories.Decks;
 
-namespace noava.Repositories.Decks
+namespace noava.Repositories.Implementations
 {
     public class DeckUserRepository : IDeckUserRepository
     {
@@ -13,66 +14,55 @@ namespace noava.Repositories.Decks
             _context = context;
         }
 
+        public async Task<DeckUser?> GetByDeckAndUserAsync(int deckId, string userId)
+        {
+            return await _context.DecksUsers
+                .FirstOrDefaultAsync(du => du.DeckId == deckId && du.ClerkId == userId);
+        }
+
+        public async Task<List<DeckUser>> GetOwnersByDeckIdAsync(int deckId)
+        {
+            return await _context.DecksUsers
+                .Where(du => du.DeckId == deckId && du.IsOwner)
+                .ToListAsync();
+        }
+
         public async Task<List<DeckUser>> GetByDeckIdAsync(int deckId)
         {
             return await _context.DecksUsers
-                .Include(ud => ud.User)
-                .Where(ud => ud.DeckId == deckId)
-                .OrderByDescending(ud => ud.IsOwner)
-                .ThenBy(ud => ud.AddedAt)
+                .Where(du => du.DeckId == deckId)
                 .ToListAsync();
         }
 
-        public async Task<List<DeckUser>> GetByClerkIdAsync(string clerkId)
+        public async Task<int> GetOwnerCountAsync(int deckId)
         {
             return await _context.DecksUsers
-                .Include(ud => ud.Deck)
-                .Where(ud => ud.ClerkId == clerkId)
-                .ToListAsync();
+                .Where(du => du.DeckId == deckId && du.IsOwner)
+                .CountAsync();
         }
 
-        public async Task<List<DeckUser>> GetOwnersForDeckAsync(int deckId)
+        public async Task<bool> IsOwnerAsync(int deckId, string userId)
         {
             return await _context.DecksUsers
-                .Include(ud => ud.User)
-                .Where(ud => ud.DeckId == deckId && ud.IsOwner)
-                .ToListAsync();
+                .AnyAsync(du => du.DeckId == deckId && du.ClerkId == userId && du.IsOwner);
         }
 
-        public async Task<DeckUser?> GetByDeckAndUserAsync(int deckId, string clerkId)
+        public async Task<bool> HasAccessAsync(int deckId, string userId)
         {
             return await _context.DecksUsers
-                .FirstOrDefaultAsync(ud => ud.DeckId == deckId && ud.ClerkId == clerkId);
+                .AnyAsync(du => du.DeckId == deckId && du.ClerkId == userId);
         }
 
-        public async Task<DeckUser> AddAsync(DeckUser userDeck)
+        public async Task AddAsync(DeckUser deckUser)
         {
-            userDeck.AddedAt = DateTime.UtcNow;
-            _context.DecksUsers.Add(userDeck);
+            await _context.DecksUsers.AddAsync(deckUser);
             await _context.SaveChangesAsync();
-            return userDeck;
         }
 
-        public async Task<bool> RemoveAsync(int deckId, string clerkId)
+        public async Task RemoveAsync(DeckUser deckUser)
         {
-            var userDeck = await GetByDeckAndUserAsync(deckId, clerkId);
-            if (userDeck == null) return false;
-
-            _context.DecksUsers.Remove(userDeck);
+            _context.DecksUsers.Remove(deckUser);
             await _context.SaveChangesAsync();
-            return true;
-        }
-
-        public async Task<bool> IsOwnerAsync(int deckId, string clerkId)
-        {
-            return await _context.DecksUsers
-                .AnyAsync(ud => ud.DeckId == deckId && ud.ClerkId == clerkId && ud.IsOwner);
-        }
-
-        public async Task<bool> HasAccessAsync(int deckId, string clerkId)
-        {
-            return await _context.DecksUsers
-                .AnyAsync(ud => ud.DeckId == deckId && ud.ClerkId == clerkId);
         }
     }
 }

@@ -1,264 +1,372 @@
-import React, { useState, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useEffect, useState } from 'react';
 import {
   Modal,
-  Button,
-  Badge,
-  Spinner,
   ModalHeader,
   ModalBody,
   ModalFooter,
+  Button,
+  Spinner,
+  TextInput,
+  Avatar,
+  Badge,
 } from 'flowbite-react';
-import { useAuth, useUser } from '@clerk/clerk-react';
-import { HiUserGroup, HiTrash, HiX, HiUserAdd, HiClock } from 'react-icons/hi';
-import { deckOwnershipService } from '../../services/DeckOwnershipService';
-import { deckInvitationService } from '../../services/DeckInvitationService';
-import type { DeckOwner } from '../../models/DeckOwner';
-import {
-  InvitationStatus,
-  type DeckInvitation,
-} from '../../models/DeckInvitation';
+import { useTranslation } from 'react-i18next';
+import { useToast } from '../../contexts/ToastContext';
+import { useDeckService } from '../../services/DeckService';
+import type { Deck } from '../../models/Deck';
+import type { ClerkUserResponse } from '../../models/User';
+import { useUser } from '@clerk/clerk-react';
 import { InviteUserModal } from './InviteUserModal';
+import { HiClipboardCopy, HiRefresh, HiTrash, HiUserAdd, HiUserRemove } from 'react-icons/hi';
+import ConfirmModal from './ConfirmModal';
 
 interface ManageOwnersModalProps {
-  opened: boolean;
+  isOpen: boolean;
   onClose: () => void;
-  deckId: number;
-  deckTitle: string;
+  deck: Deck;
+  onUpdate: () => void;
 }
 
-export const ManageOwnersModal: React.FC<ManageOwnersModalProps> = ({
-  opened,
+export const ManageOwnersModal = ({
+  isOpen,
   onClose,
-  deckId,
-  deckTitle,
-}) => {
-  const { t } = useTranslation('decks');
-  const { getToken } = useAuth();
+  deck,
+  onUpdate,
+}: ManageOwnersModalProps) => {
+  const { t } = useTranslation(['decks', 'common']);
+  const { showSuccess, showError } = useToast();
+  const deckService = useDeckService();
   const { user } = useUser();
 
-  const [owners, setOwners] = useState<DeckOwner[]>([]);
-  const [invitations, setInvitations] = useState<DeckInvitation[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [inviteModalOpened, setInviteModalOpened] = useState(false);
+  const [users, setUsers] = useState<ClerkUserResponse[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [inviteModalOpen, setInviteModalOpen] = useState(false);
+  const [updatingJoinCode, setUpdatingJoinCode] = useState(false);
+  const [confirmModalOpen, setConfirmModalOpen] = useState(false);
+  const [userToRemove, setUserToRemove] = useState<ClerkUserResponse | null>(null);
+  const [removingUser, setRemovingUser] = useState(false);
+
+  const isCreator = user?.id === deck?.userId;
+  const currentUserData = users.find(u => u.clerkId === user?.id);
+  const isOwner = currentUserData?.isOwner || false;
+  const canManageUsers = isCreator || isOwner;
 
   useEffect(() => {
-    if (opened) {
-      loadData();
+    if (isOpen && deck) {
+      loadUsers();
     }
-  }, [opened]);
+  }, [isOpen, deck?.deckId]);
 
-  const loadData = async () => {
-    setLoading(true);
+  const loadUsers = async () => {
+    if (!deck) {
+      console.error('No deck provided to ManageOwnersModal');
+      return;
+    }
+
     try {
-      const token = await getToken();
-      if (!token) return;
-
-      const [ownersData, invitationsData] = await Promise.all([
-        deckOwnershipService.getOwners(deckId, token),
-        deckInvitationService.getInvitationsForDeck(deckId, token),
-      ]);
-
-      setOwners(Array.isArray(ownersData) ? ownersData : []);
-      setInvitations(
-        Array.isArray(invitationsData)
-          ? invitationsData.filter((i) => i.status === InvitationStatus.Pending)
-          : []
-      );
-    } catch (err) {
-      console.error('Error loading owners:', err);
+      setLoading(true);
+      const usersData = await deckService.getUsersByDeck(deck.deckId, 1, 50);
+      setUsers(usersData);
+    } catch (error: any) {
+      console.error('Error loading users:', error);
+      let errorMessage = t('decks:owners.loadError');
+      
+      if (error.response?.data) {
+        if (typeof error.response.data === 'string') {
+          errorMessage = error.response.data;
+        } else if (error.response.data.title) {
+          errorMessage = error.response.data.title;
+        }
+      }
+      
+      showError(t('common:toast.error'), errorMessage);
+      setUsers([]);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleRemoveOwner = async (ownerClerkId: string) => {
-    if (!confirm(t('ownership.confirmRemove'))) return;
-
+  const handleInvite = async (email: string, isOwner: boolean) => {
+    if (!deck) return;
     try {
-      const token = await getToken();
-      if (!token) return;
-
-      await deckOwnershipService.removeOwner(deckId, ownerClerkId, token);
-      await loadData();
-    } catch (err: any) {
-      console.error('Error removing owner:', err);
-      alert(err.response?.data?.error || t('ownership.removeError'));
+      await deckService.inviteByEmail(deck.deckId, email, isOwner);
+      showSuccess(t('common:toast.success'), t('decks:invite.success'));
+      await loadUsers();
+      onUpdate();
+    } catch (error: any) {
+      console.error('Error inviting user:', error);
+      let errorMessage = t('decks:invite.error');
+      
+      if (error.response?.data) {
+        if (typeof error.response.data === 'string') {
+          errorMessage = error.response.data;
+        } else if (error.response.data.title) {
+          errorMessage = error.response.data.title;
+        }
+      }
+      
+      showError(t('common:toast.error'), errorMessage);
     }
   };
 
-  const handleCancelInvitation = async (invitationId: number) => {
-    if (!confirm(t('ownership.confirmCancel'))) return;
+  const handleRemoveUser = async () => {
+    if (!deck || !userToRemove) return;
 
     try {
-      const token = await getToken();
-      if (!token) return;
-
-      await deckInvitationService.cancelInvitation(invitationId, token);
-      await loadData();
-    } catch (err) {
-      console.error('Error canceling invitation:', err);
-      alert(t('ownership.cancelError'));
+      setRemovingUser(true);
+      await deckService.removeUser(deck.deckId, userToRemove.clerkId);
+      showSuccess(t('common:toast.success'), t('decks:owners.removeSuccess'));
+      await loadUsers();
+      onUpdate();
+    } catch (error: any) {
+      console.error('Error removing user:', error);
+      let errorMessage = t('decks:owners.removeError');
+      
+      if (error.response?.data) {
+        if (typeof error.response.data === 'string') {
+          errorMessage = error.response.data;
+        } else if (error.response.data.title) {
+          errorMessage = error.response.data.title;
+        }
+      }
+      
+      showError(t('common:toast.error'), errorMessage);
+    } finally {
+      setRemovingUser(false);
+      setConfirmModalOpen(false);
+      setUserToRemove(null);
     }
   };
 
-  const getStatusBadge = (status: InvitationStatus) => {
-    const colors: Record<InvitationStatus, string> = {
-      [InvitationStatus.Pending]: 'yellow',
-      [InvitationStatus.Accepted]: 'green',
-      [InvitationStatus.Declined]: 'red',
-      [InvitationStatus.Cancelled]: 'gray',
-    };
+  const openRemoveConfirm = (user: ClerkUserResponse) => {
+    setUserToRemove(user);
+    setConfirmModalOpen(true);
+  };
 
-    const statusNames: Record<InvitationStatus, string> = {
-      [InvitationStatus.Pending]: 'pending',
-      [InvitationStatus.Accepted]: 'accepted',
-      [InvitationStatus.Declined]: 'declined',
-      [InvitationStatus.Cancelled]: 'cancelled',
-    };
+  const handleToggleOwner = async (targetUser: ClerkUserResponse) => {
+    if (!deck) return;
 
-    return (
-      <Badge color={colors[status]} size="sm">
-        {t(`ownership.status.${statusNames[status]}`)}
-      </Badge>
-    );
+    try {
+      await deckService.inviteByEmail(deck.deckId, targetUser.email, !targetUser.isOwner);
+      showSuccess(t('common:toast.success'), t('decks:owners.updateSuccess'));
+      await loadUsers();
+      onUpdate();
+    } catch (error: any) {
+      console.error('Error updating user role:', error);
+      showError(t('common:toast.error'), t('decks:owners.updateError'));
+    }
+  };
+
+  const handleCopyJoinCode = () => {
+    if (deck?.joinCode) {
+      navigator.clipboard.writeText(deck.joinCode);
+      showSuccess(t('common:toast.success'), t('decks:owners.codeCopied'));
+    }
+  };
+
+  const handleUpdateJoinCode = async () => {
+    if (!deck) return;
+    
+    if (!confirm(t('decks:owners.confirmRegenerateCode'))) return;
+
+    try {
+      setUpdatingJoinCode(true);
+      await deckService.updateJoinCode(deck.deckId);
+      showSuccess(t('common:toast.success'), t('decks:owners.codeRegenerated'));
+      onUpdate();
+    } catch (error) {
+      console.error('Error updating join code:', error);
+      showError(t('common:toast.error'), t('decks:owners.codeRegenerateError'));
+    } finally {
+      setUpdatingJoinCode(false);
+    }
   };
 
   return (
     <>
-      <Modal
-        show={opened}
-        onClose={onClose}
-        title={t('ownership.modalTitle')}
-        size="lg"
-        dismissible>
-        <ModalHeader>{t('ownership.modalTitle')}</ModalHeader>
+      <Modal show={isOpen} onClose={onClose} size="2xl">
+        <ModalHeader>{t('decks:owners.title')}</ModalHeader>
         <ModalBody>
-          {loading ? (
+          {!deck ? (
             <div className="flex justify-center py-8">
-              <Spinner />
+              <Spinner size="lg" />
             </div>
           ) : (
             <div className="space-y-6">
-              {/* Current Owners */}
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <h3 className="text-lg font-semibold">
-                    {t('ownership.currentOwners')} ({owners.length})
-                  </h3>
-                  <Button size="sm" onClick={() => setInviteModalOpened(true)}>
-                    <HiUserAdd className="w-4 h-4 mr-2" />
-                    {t('ownership.inviteUser')}
+              {/* Join Code Section */}
+              <div className="p-4 rounded-lg bg-gray-50 dark:bg-gray-800">
+                <h3 className="mb-2 text-sm font-semibold">
+                  {t('decks:owners.joinCodeSection')}
+                </h3>
+                <p className="mb-3 text-xs text-gray-600 dark:text-gray-400">
+                  {t('decks:owners.joinCodeDescription')}
+                </p>
+                <div className="flex gap-2">
+                  <TextInput
+                    value={deck.joinCode || 'No code available'}
+                    readOnly
+                    className="flex-1"
+                  />
+                  <Button
+                    size="sm"
+                    color="gray"
+                    onClick={handleCopyJoinCode}
+                    disabled={!deck.joinCode}
+                  >
+                    <HiClipboardCopy className="w-4 h-4 mr-1" />
+                    {t('decks:owners.copyCode')}
                   </Button>
-                </div>
-
-                <div className="space-y-2">
-                  {owners.length === 0 ? (
-                    <div className="py-4 text-center text-text-muted-light dark:text-text-muted-dark">
-                      {t('ownership.noOwners')}
-                    </div>
-                  ) : (
-                    owners.map((owner) => (
-                      <div
-                        key={owner.clerkId}
-                        className="flex items-center justify-between p-3 rounded-lg bg-background-app-light dark:bg-background-app-dark">
-                        <div className="flex items-center gap-3">
-                          <div className="flex items-center justify-center w-10 h-10 font-semibold text-white bg-blue-500 rounded-full">
-                            {owner.userEmail.charAt(0).toUpperCase()}
-                          </div>
-                          <div>
-                            <div className="font-medium">
-                              {owner.userEmail}
-                              {owner.clerkId === user?.id && (
-                                <Badge size="sm" color="blue">
-                                  {t('ownership.you')}
-                                </Badge>
-                              )}
-                            </div>
-                            <div className="text-sm text-text-muted-light dark:text-text-muted-dark">
-                              {t('ownership.addedAt', {
-                                date: new Date(
-                                  owner.addedAt
-                                ).toLocaleDateString(),
-                              })}
-                            </div>
-                          </div>
-                        </div>
-
-                        {owner.clerkId !== user?.id && (
-                          <button
-                            className="p-2 text-red-600 transition rounded-lg hover:bg-red-100 dark:hover:bg-red-900/20"
-                            onClick={() => handleRemoveOwner(owner.clerkId)}>
-                            <HiTrash className="w-5 h-5" />
-                          </button>
-                        )}
-                      </div>
-                    ))
-                  )}
+                  <Button
+                    size="sm"
+                    color="gray"
+                    onClick={handleUpdateJoinCode}
+                    disabled={updatingJoinCode || !deck.joinCode}
+                  >
+                    {updatingJoinCode ? (
+                      <Spinner size="sm" />
+                    ) : (
+                      <>
+                        <HiRefresh className="w-4 h-4 mr-1" />
+                        {t('decks:owners.regenerateCode')}
+                      </>
+                    )}
+                  </Button>
                 </div>
               </div>
 
-              {/* Pending Invitations */}
-              {invitations.length > 0 && (
-                <div>
-                  <div className="flex items-center gap-2 mb-3">
-                    <HiClock className="w-5 h-5 text-yellow-500" />
-                    <h3 className="text-lg font-semibold">
-                      {t('ownership.pendingInvitations')} ({invitations.length})
-                    </h3>
-                  </div>
-
-                  <div className="space-y-2">
-                    {invitations.map((invitation) => (
-                      <div
-                        key={invitation.invitationId}
-                        className="flex items-center justify-between p-3 border border-yellow-200 rounded-lg bg-yellow-50 dark:bg-yellow-900/20 dark:border-yellow-800">
-                        <div className="flex items-center gap-3">
-                          <div className="flex items-center justify-center w-10 h-10 font-semibold text-white bg-yellow-500 rounded-full">
-                            {invitation.invitedUserEmail
-                              .charAt(0)
-                              .toUpperCase()}
-                          </div>
-                          <div>
-                            <div className="font-medium">
-                              {invitation.invitedUserEmail}
-                            </div>
-                            <div className="text-sm text-text-muted-light dark:text-text-muted-dark">
-                              {t('ownership.invitedAt', {
-                                date: new Date(
-                                  invitation.invitedAt
-                                ).toLocaleDateString(),
-                              })}
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="flex items-center gap-2">
-                          {getStatusBadge(invitation.status)}
-                          <button
-                            className="p-2 text-red-600 transition rounded-lg hover:bg-red-100 dark:hover:bg-red-900/20"
-                            onClick={() =>
-                              handleCancelInvitation(invitation.invitationId)
-                            }>
-                            <HiX className="size-5" />
-                          </button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+              {/* Users List */}
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-sm font-semibold">
+                    {t('decks:owners.title')}
+                  </h3>
+                  {canManageUsers && (
+                    <Button
+                      size="sm"
+                      onClick={() => setInviteModalOpen(true)}
+                    >
+                      <HiUserAdd className="w-4 h-4 mr-1" />
+                      {t('decks:owners.inviteButton')}
+                    </Button>
+                  )}
                 </div>
-              )}
+
+                {loading ? (
+                  <div className="flex justify-center py-4">
+                    <Spinner />
+                  </div>
+                ) : users.length === 0 ? (
+                  <p className="text-sm text-center text-gray-500 dark:text-gray-400 py-4">
+                    {t('decks:owners.noUsers')}
+                  </p>
+                ) : (
+                  <div className="space-y-2">
+                    {users.map((userData) => {
+                      const isCurrentUser = userData.clerkId === user?.id;
+                      const isDeckCreator = userData.clerkId === deck.userId;
+                      const canRemove = canManageUsers && !isDeckCreator && !isCurrentUser;
+                      const canToggleOwner = canManageUsers && !isDeckCreator && !isCurrentUser;
+
+                      return (
+                        <div
+                          key={userData.clerkId}
+                          className="flex items-center justify-between p-3 rounded-lg bg-gray-50 dark:bg-gray-800"
+                        >
+                          <div className="flex items-center gap-3">
+                            <div>
+                              <div className="flex items-center gap-2">
+                                <span className="text-sm font-medium">
+                                  {userData.firstName} {userData.lastName}
+                                </span>
+                                {isCurrentUser && (
+                                  <span className="text-xs text-gray-500">
+                                    {t('decks:owners.you')}
+                                  </span>
+                                )}
+                              </div>
+                              <span className="text-xs text-gray-500 dark:text-gray-400">
+                                {userData.email}
+                              </span>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center gap-2">
+                            {isDeckCreator ? (
+                              <Badge color="success">{t('decks:owners.owner')}</Badge>
+                            ) : userData.isOwner ? (
+                              <Badge color="info">{t('decks:owners.owner')}</Badge>
+                            ) : (
+                              <Badge color="gray">{t('decks:owners.member')}</Badge>
+                            )}
+
+                            {canToggleOwner && (
+                              <Button
+                                size="xs"
+                                color={userData.isOwner ? "gray" : "info"}
+                                onClick={() => handleToggleOwner(userData)}
+                              >
+                                {userData.isOwner ? (
+                                  <>
+                                    <HiUserRemove className="w-3 h-3 mr-1" />
+                                    {t('decks:owners.removeOwner')}
+                                  </>
+                                ) : (
+                                  <>
+                                    <HiUserAdd className="w-3 h-3 mr-1" />
+                                    {t('decks:owners.makeOwner')}
+                                  </>
+                                )}
+                              </Button>
+                            )}
+
+                            {canRemove && (
+                              <Button
+                                size="xs"
+                                color="failure"
+                                onClick={() => openRemoveConfirm(userData)}
+                              >
+                                <HiTrash className="w-3 h-3 mr-1" />
+                                {t('decks:owners.remove')}
+                              </Button>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
             </div>
           )}
         </ModalBody>
+        <ModalFooter>
+          <Button color="gray" onClick={onClose}>
+            {t('common:actions.close')}
+          </Button>
+        </ModalFooter>
       </Modal>
 
-      <InviteUserModal
-        opened={inviteModalOpened}
-        onClose={() => setInviteModalOpened(false)}
-        deckId={deckId}
-        deckTitle={deckTitle}
-        onInviteSent={loadData}
+      {deck && (
+        <InviteUserModal
+          isOpen={inviteModalOpen}
+          onClose={() => setInviteModalOpen(false)}
+          onInvite={handleInvite}
+          itemType="deck"
+          itemName={deck.title}
+        />
+      )}
+
+      <ConfirmModal
+        show={confirmModalOpen}
+        onConfirm={handleRemoveUser}
+        onCancel={() => {
+          setConfirmModalOpen(false);
+          setUserToRemove(null);
+        }}
+        title={t('decks:owners.confirmRemove')}
+        message={t('decks:owners.confirmRemoveMessage', {
+          name: userToRemove ? `${userToRemove.firstName} ${userToRemove.lastName}` : ''
+        })}
       />
     </>
   );
