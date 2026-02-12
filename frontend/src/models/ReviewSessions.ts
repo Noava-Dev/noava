@@ -10,6 +10,7 @@ export interface ReviewSession {
 export interface ReviewCard {
   hasVoiceAssistant: boolean;
   cardId: number;
+  deckId: number;
   frontText: string;
   backText: string;
   frontImage?: string;
@@ -17,5 +18,4 @@ export interface ReviewCard {
   backImage?: string;
   backAudio?: string;
   memo?: string;
-  
 }

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { Button, Progress, Badge, TextInput, Alert } from 'flowbite-react';
 import { HiArrowLeft, HiRefresh, HiX, HiVolumeUp, HiCheckCircle, HiXCircle, HiPencil } from 'react-icons/hi';
 import { useTranslation } from 'react-i18next';
@@ -7,12 +7,14 @@ import { useDeckService } from '../../services/DeckService';
 import { useFlashcardService } from '../../services/FlashcardService';
 import { useToast } from '../../contexts/ToastContext';
 import { useAzureBlobService } from '../../services/AzureBlobService';
+import { BulkReviewMode } from '../../models/Flashcard';
 import { getLanguageCode } from '../../shared/utils/speechHelpers';
 import type { Deck } from '../../models/Deck';
 import type { ReviewSession } from '../../models/ReviewSessions';
 
 function WriteReview() {
-  const { deckId } = useParams<{ deckId: string }>();
+  const { deckId, classroomId } = useParams<{ deckId?: string; classroomId?: string }>();
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { t } = useTranslation('flashcards');
   const deckService = useDeckService();
@@ -20,7 +22,7 @@ function WriteReview() {
   const azureBlobService = useAzureBlobService();
   const { showError } = useToast();
 
-  const [deck, setDeck] = useState<Deck | null>(null);
+  const [decks, setDecks] = useState<Map<number, Deck>>(new Map());
   const [session, setSession] = useState<ReviewSession | null>(null);
   const [loading, setLoading] = useState(true);
   
@@ -33,13 +35,23 @@ function WriteReview() {
   const [userAnswer, setUserAnswer] = useState('');
   const [showResult, setShowResult] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
+  const [isBulkReview, setIsBulkReview] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
 
   useEffect(() => {
-    if (deckId) {
-      initializeSession();
+    const deckIdsParam = searchParams.get('deckIds');
+    const modeParam = searchParams.get('mode');
+
+    if (deckIdsParam) {
+      const deckIds = deckIdsParam.split(',').map(Number);
+      const mode = modeParam ? Number(modeParam) : BulkReviewMode.ShuffleAll;
+      setIsBulkReview(true);
+      initializeSession(deckIds, mode);
+    } else if (deckId) {
+      setIsBulkReview(false);
+      initializeSession([Number(deckId)], BulkReviewMode.ShuffleAll);
     }
-  }, [deckId]);
+  }, [deckId, classroomId, searchParams]);
 
   useEffect(() => {
     return () => {
@@ -89,35 +101,57 @@ function WriteReview() {
     }
   }, [session?.currentIndex]);
 
-  const initializeSession = async () => {
+  const initializeSession = async (deckIds: number[], mode: BulkReviewMode) => {
     try {
       setLoading(true);
 
-      const [deckData, cardsData] = await Promise.all([
-        deckService.getById(Number(deckId)),
-        flashcardService.getByDeckId(Number(deckId)),
-      ]);
+      const isSingleDeck = deckIds.length === 1;
 
-      if (!deckData || cardsData.length === 0) {
+      // Haal kaarten en alle betrokken decks op
+      const cardsData = await flashcardService.getBulkReviewCards(deckIds, mode);
+      const decksData = await Promise.all(
+        deckIds.map(id => deckService.getById(id))
+      );
+
+      if (cardsData.length === 0) {
         showError(t('quickReview.noCards'), t('quickReview.error'));
-        navigate(`/decks/${deckId}/cards`);
+        if (isSingleDeck && deckId) {
+          navigate(`/decks/${deckId}/cards`);
+        } else if (classroomId) {
+          navigate(`/classrooms/${classroomId}`);
+        } else {
+          navigate('/decks');
+        }
         return;
       }
 
-      const shuffledCards = [...cardsData].sort(() => Math.random() - 0.5);
+      // Maak een map van deckId -> Deck voor spraak functionaliteit
+      const decksMap = new Map<number, Deck>();
+      decksData.forEach(deck => {
+        if (deck) {
+          decksMap.set(deck.deckId, deck);
+        }
+      });
+      setDecks(decksMap);
 
-      setDeck(deckData);
       setSession({
-        deckId: deckData.deckId,
-        deckTitle: deckData.title,
-        cards: shuffledCards,
+        deckId: isSingleDeck ? decksData[0]?.deckId : undefined,
+        deckTitle: isSingleDeck ? decksData[0]?.title : t('quickReview.bulkTitle'),
+        cards: cardsData,
         currentIndex: 0,
         isFlipped: false,
         completedCards: 0,
       });
     } catch (error) {
-      showError(t('quickReview.noCards'), t('quickReview.error'));
-      navigate(`/decks/${deckId}/cards`);
+      console.error('Error loading review cards:', error);
+      showError(t('common:toast.error'), t('quickReview.error'));
+      if (deckIds.length === 1 && deckId) {
+        navigate(`/decks/${deckId}/cards`);
+      } else if (classroomId) {
+        navigate(`/classrooms/${classroomId}`);
+      } else {
+        navigate('/decks');
+      }
     } finally {
       setLoading(false);
     }
@@ -195,7 +229,16 @@ function WriteReview() {
   const handleExit = () => {
     window.speechSynthesis.cancel();
     setIsSpeaking(false);
-    navigate(`/decks/${deckId}/cards`);
+
+    if (isBulkReview && classroomId) {
+      navigate(`/classrooms/${classroomId}`);
+    } else if (isBulkReview) {
+      navigate('/decks');
+    } else if (deckId) {
+      navigate(`/decks/${deckId}/cards`);
+    } else {
+      navigate('/decks');
+    }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -207,22 +250,23 @@ function WriteReview() {
   const handlePlayAudio = (side: 'front' | 'back', e: React.MouseEvent) => {
     e.stopPropagation();
 
-    if (!session || !deck) return;
+    if (!session) return;
 
     const currentCard = session.cards[session.currentIndex];
+    const deck = decks.get(currentCard.deckId);
 
     if (side === 'front') {
       if (frontAudioUrl) {
         const audio = new Audio(frontAudioUrl);
         audio.play().catch((err) => console.error('Failed to play audio:', err));
-      } else if (currentCard.hasVoiceAssistant && currentCard.frontText) {
+      } else if (deck && currentCard.hasVoiceAssistant && currentCard.frontText) {
         speakText(currentCard.frontText, deck.language);
       }
     } else {
       if (backAudioUrl) {
         const audio = new Audio(backAudioUrl);
         audio.play().catch((err) => console.error('Failed to play audio:', err));
-      } else if (currentCard.hasVoiceAssistant && currentCard.backText) {
+      } else if (deck && currentCard.hasVoiceAssistant && currentCard.backText) {
         speakText(currentCard.backText, deck.language);
       }
     }
@@ -272,7 +316,7 @@ function WriteReview() {
     );
   }
 
-  if (!session || !deck) {
+  if (!session) {
     return null;
   }
 
@@ -282,7 +326,7 @@ function WriteReview() {
 
   return (
     <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
-      <div className="flex-1">
+      <div className="flex-1 w-full">
         <div className="container max-w-4xl px-4 py-6 mx-auto md:py-8">
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
@@ -294,11 +338,11 @@ function WriteReview() {
               </button>
               <div>
                 <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                  {deck.title}
+                  {session.deckTitle}
                 </h1>
                 <div className="flex gap-2 mt-1">
                   <Badge color="info">
-                    {t('quickReview.mode')}
+                    {isBulkReview ? t('quickReview.bulkMode') : t('quickReview.mode')}
                   </Badge>
                   <Badge color="cyan">
                     <HiPencil className="w-3 h-3 mr-1" />
@@ -459,16 +503,25 @@ function WriteReview() {
                   {t('quickReview.complete.title')}
                 </h2>
                 <p className="text-lg text-gray-600 dark:text-gray-400">
-                  {t('quickReview.complete.message', {
-                    count: session.cards.length,
-                  })}
+                  {isBulkReview
+                    ? t('quickReview.complete.bulkMessage', {
+                        count: session.cards.length,
+                        deckCount: decks.size,
+                      })
+                    : t('quickReview.complete.message', {
+                        count: session.cards.length,
+                      })}
                 </p>
               </div>
 
               <div className="flex justify-center gap-4">
                 <Button size="lg" color="gray" onClick={handleExit}>
                   <HiArrowLeft className="w-5 h-5 mr-2" />
-                  {t('quickReview.complete.backToDeck')}
+                  {isBulkReview && classroomId
+                    ? t('quickReview.complete.backToClassroom')
+                    : isBulkReview
+                    ? t('quickReview.complete.backToDecks')
+                    : t('quickReview.complete.backToDeck')}
                 </Button>
                 <Button
                   size="lg"

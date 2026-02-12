@@ -62,6 +62,8 @@
    "quickReview": {
     "startReview": "Révision Rapide",
     "mode": "Mode Révision Rapide",
+    "bulkMode": "Mode Révision Groupée",
+    "bulkTitle": "Plusieurs Decks",
     "flipMode": "Mode Flip",
     "writeMode": "Mode Écriture",
     "question": "Question",
@@ -79,7 +81,10 @@
     "complete": {
       "title": "Révision Terminée!",
       "message": "Vous avez révisé toutes les cartes",
+      "bulkMessage": "Vous avez révisé {{count}} cartes de {{deckCount}} deck(s)",
       "backToDeck": "Retour au Deck",
+      "backToDecks": "Retour aux Decks",
+      "backToClassroom": "Retour à la Classe",
       "restart": "Recommencer"
     },
     "reverseMode": "Mode Inversé"

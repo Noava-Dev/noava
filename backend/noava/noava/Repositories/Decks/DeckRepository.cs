@@ -67,14 +67,22 @@ namespace noava.Repositories
 
         public async Task<bool> IsUserLinkedToDeckAsync(int deckId, string userId)
         {
+            var directAccess = await _context.DecksUsers
+                .AnyAsync(du => du.DeckId == deckId && du.ClerkId == userId);
+
+            if (directAccess) return true;
+
             return await _context.ClassroomDecks
-                .AnyAsync(cd =>
-                    cd.DeckId == deckId &&
-                    (
-                        (cd.Deck != null && cd.Deck.DeckUsers.Any(u => u.ClerkId == userId)) ||
-                        (cd.Classroom != null && cd.Classroom.ClassroomUsers.Any(u => u.UserId == userId))
-                    )
-                );
+                .Where(cd => cd.DeckId == deckId)
+                .AnyAsync(cd => cd.Classroom != null &&
+                               cd.Classroom.ClassroomUsers.Any(cu => cu.UserId == userId));
+        }
+
+        public async Task<List<Deck>> GetByIdsAsync(IEnumerable<int> ids)
+        {
+            return await _context.Decks
+                .Where(d => ids.Contains(d.DeckId))
+                .ToListAsync();
         }
     }
 }

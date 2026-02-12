@@ -28,7 +28,6 @@ export default function AppRoutes() {
     <Routes>
       {/* Unauthenticated Routes */}
       <Route path="/" element={<Home />} />
-      <Route path="*" element={<Navigate to="/not-found" replace />} />
       <Route path="/not-found" element={<NotFound />} />
       <Route path="/faq" element={<FAQ />} />
 
@@ -64,6 +63,8 @@ export default function AppRoutes() {
         <Route path="/decks/:deckId/reverseReview" element={<ReverseReview />} />
         <Route path="/decks/:deckId/review" element={<QuickReview />} />
         <Route path="/decks/review" element={<QuickReview />} />
+        <Route path="/decks/writeReview" element={<WriteReview />} />
+        <Route path="/decks/reverseReview" element={<ReverseReview />} />
 
         {/* Classrooms */}
         <Route path="/classrooms" element={<Classrooms />} />
@@ -76,6 +77,14 @@ export default function AppRoutes() {
         <Route
           path="/classrooms/:classroomId/review"
           element={<QuickReview />}
+        />
+        <Route
+          path="/classrooms/:classroomId/writeReview"
+          element={<WriteReview />}
+        />
+        <Route
+          path="/classrooms/:classroomId/reverseReview"
+          element={<ReverseReview />}
         />
 
         {/* Notifications */}
@@ -97,6 +106,9 @@ export default function AppRoutes() {
 
         </Route>
       </Route>
+
+      {/* Catch-all - must be last */}
+      <Route path="*" element={<Navigate to="/not-found" replace />} />
     </Routes>
   );
 }

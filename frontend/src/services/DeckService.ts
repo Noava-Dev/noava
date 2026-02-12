@@ -35,5 +35,16 @@ export const useDeckService = () => {
     async delete(id: number): Promise<void> {
       await api.delete(`/deck/${id}`);
     },
+
+     async getByMultipleIds(deckIds: number[]): Promise<Deck[]> {
+          const params = new URLSearchParams();
+          deckIds.forEach(id => params.append('ids', id.toString()));
+          
+          const response = await api.get<Deck[]>(`/deck/multiple?${params.toString()}`);
+          console.log('Received decks for multiple IDs:', response.data);
+          return response.data;
+        },
+
+
   };
 };

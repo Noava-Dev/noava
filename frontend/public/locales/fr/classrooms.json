@@ -118,6 +118,11 @@
     "summaryDecks": "Prêt à réviser {{count}} deck(s)",
     "startReview": "Commencer la révision"
   },
+  "reviewModes": {
+    "flipMode": "Mode Retournement",
+    "writeReview": "Mode Écriture",
+    "reverseReview": "Mode Inversé"
+  },
   "addDeck": {
     "title": "Ajouter un Deck à la Classe",
     "description": "Ajoutez un de vos decks existants à cette classe.",

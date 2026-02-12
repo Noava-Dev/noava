@@ -21,6 +21,11 @@ namespace noava.Mappers.Decks
             };
         }
 
+        public static List<DeckResponse> ToResponseDtoList(this List<Deck> decks)
+        {
+            return decks.Select(deck => deck.ToResponseDto()).ToList();
+        }
+
         public static Deck ToEntity(this DeckResponse dto)
         {
             return new Deck
