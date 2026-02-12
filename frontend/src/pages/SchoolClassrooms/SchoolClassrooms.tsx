@@ -1,145 +1,217 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { useToast } from '../../contexts/ToastContext';
-import { useSchoolService } from '../../services/SchoolService';
-import { SchoolClassroomDto, SchoolDto } from '../../models/School';
-import PageHeader from '../../shared/components/PageHeader';
-import ClassroomCard from './components/ClassroomCard';
-import ClassroomModal
- from '../../shared/components/ClassroomModal';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { Button } from 'flowbite-react';
 import { 
     LuGraduationCap as Cap,
-    LuPlus as Plus
- } from "react-icons/lu";
+    LuPlus as Plus } 
+from "react-icons/lu";
+
+import PageHeader from '../../shared/components/PageHeader';
+import ClassroomCard from '../../shared/components/ClassroomCard';
+import ClassroomModal from '../../shared/components/ClassroomModal';
 import Loading from '../../shared/components/loading/Loading';
+import ConfirmModal from '../../shared/components/ConfirmModal';
+import RequestCodeModal from '../../shared/components/RequestCodeModal';
+
+import { useSchoolService } from '../../services/SchoolService';
 import { useClassroomService } from '../../services/ClassroomService';
+import { useToast } from '../../contexts/ToastContext';
+import { SchoolDto, SchoolClassroomDto } from '../../models/School';
+import { ClassroomResponse } from '../../models/Classroom';
 
 export default function SchoolsPage() {
-    const { id } = useParams<{ id: string}>();
+    const { id } = useParams<{ id: string }>();
     const schoolId = Number(id);
-
+    
+    const { t } = useTranslation(['classrooms', 'common']);
     const schoolService = useSchoolService();
     const classroomService = useClassroomService();
     const { showError, showSuccess } = useToast();
 
     const [loading, setLoading] = useState(true);
-    const [ school, setSchool] = useState<SchoolDto | null>(null);
+    const [school, setSchool] = useState<SchoolDto | null>(null);
     const [classrooms, setClassrooms] = useState<SchoolClassroomDto[]>([]);
+    
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [editingClassroom, setEditingClassroom] = useState<ClassroomResponse | undefined>(undefined);
+    const [deleteId, setDeleteId] = useState<number | null>(null);
+    const [requestCodeId, setRequestCodeId] = useState<number | null>(null);
 
-    const fetchClassrooms = async () => {
-        if(!schoolId) return;
-
+    const fetchData = async () => {
+        if (!schoolId) return;
         setLoading(true);
-        
         try {
-            const schoolData = await schoolService.getById(schoolId);
+            const [schoolData, classroomData] = await Promise.all([
+                schoolService.getById(schoolId),
+                schoolService.getAllClassrooms(schoolId)
+            ]);
             setSchool(schoolData);
-        } catch (error) {
-            showError('Error loading school details', 'Could not fetch school info.');
-        }
-
-        try {
-            const classroomData = await schoolService.getAllClassrooms(schoolId);
             setClassrooms(classroomData);
         } catch (error) {
-            console.warn("Could not load classrooms (might be empty)", error);
-            setClassrooms([]);
+            showError(t('common:app.error'), t('classrooms:toast.loadError'));
         } finally {
             setLoading(false);
         }
     };
 
-    const handleCreateClassroom = async (data: {
-        name: string;
-        description: string;
-    }) => {
-        try{
-            await schoolService.createClassroom(
-                schoolId,
-                {
-                    name: data.name,
-                    description: data.description
-                }
-            )
+    useEffect(() => {
+        fetchData();
+    }, [schoolId]);
 
-            showSuccess('Classroom created', `${data.name} was added successfully.`);
-            setIsModalOpen(false);
-            await fetchClassrooms();
-        } catch(error) {
-            setIsModalOpen(false);
-            showError('Create failed', 'Could not create classroom.');
+    const handleSubmitClassroom = async (data: { name: string; description: string }) => {
+        try {
+            if (editingClassroom) {
+                await classroomService.update(editingClassroom.id, data);
+                showSuccess(t('common:app.success'), t('classrooms:toast.updateSuccess'));
+            } else {
+                await schoolService.createClassroom(schoolId, data);
+                showSuccess(t('common:app.success'), t('classrooms:toast.createSuccess'));
+            }
+            handleCloseModal();
+            await fetchData();
+        } catch (error) {
+            showError(t('common:app.error'), editingClassroom ? t('classrooms:toast.updateError') : t('classrooms:toast.createError'));
         }
-        
+    };
+
+    const confirmDelete = async () => {
+        if (!deleteId) return;
+        try {
+            await classroomService.delete(deleteId);
+            showSuccess(t('common:app.success'), t('classrooms:toast.deleteSuccess'));
+            await fetchData();
+        } catch (error) {
+            showError(t('common:app.error'), t('classrooms:toast.deleteError'));
+        } finally {
+            setDeleteId(null);
+        }
+    };
+
+    const confirmRequestNewCode = async () => {
+        if (!requestCodeId) return;
+        try {
+            await classroomService.updateJoinCode(requestCodeId);
+            showSuccess(t('common:app.success'), t('classrooms:toast.requestCodeSuccess'));
+            await fetchData();
+        } catch (error) {
+            showError(t('common:app.error'), t('classrooms:toast.requestCodeError'));
+        } finally {
+            setRequestCodeId(null);
+        }
+    };
+
+    const handleEdit = (c: ClassroomResponse) => {
+        setEditingClassroom(c);
+        setIsModalOpen(true);
+    };
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+        setEditingClassroom(undefined);
+    };
+
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center min-h-screen bg-background-app-light dark:bg-background-app-dark">
+                <Loading size="lg" center text={t('common:actions.loading')} />
+            </div>
+        );
     }
 
-    useEffect(() => {
-        fetchClassrooms();
-    }, [schoolId])
-
-if (loading) { 
-  return ( 
-  <div className="flex items-center justify-center min-h-screen bg-background-app-light dark:bg-background-app-dark">
-    <Loading size="lg" center text="Loading schools..." /> 
-  </div> 
-  ); 
-}
-  return (
-    <div>
-        <PageHeader>
-            <div className='flex items-center gap-7'>
-                <div className="bg-primary-400 size-12 rounded-xl flex justify-center items-center">
-                    <Cap className="size-9"></Cap>
-                </div>
-                <div className="School+Rest">
-                    <h1><b>{school?.schoolName}</b></h1>
-                    <p>x classrooms • x decks • x students</p>
-                </div>
-                <div className="button"></div>
-                <button 
-                    onClick={() => {
-                        setIsModalOpen(true);
-                    }}
-                    className="flex items-center gap-2 bg-teal-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-teal-700">
-                        <Plus /> New Classroom
-                </button>
-            </div>
-        </PageHeader>
-
-        <div className='ml-6'>
-            <h2><b>Classrooms</b></h2>
-            <p>Select a classroom to view and manage its decks</p>
-        </div>
-        <main className="px-4 py-12 mx-auto max-w-7xl sm:px-6">
-                <div className="max-w-4xl mx-auto space-y-4">
-                  {classrooms.length === 0 ? (
-                    <div className="py-12 text-center md:py-20">
-                      <p className="mb-6 text-xl text-text-body-light dark:text-text-muted-dark md:text-2xl">
-                        No classrooms found. Start by adding a new classroom.
-                      </p>
+    return (
+        <div className="min-h-screen bg-background-app-light dark:bg-background-app-dark">
+            <PageHeader>
+                <div className="flex flex-col gap-6 pt-4 md:flex-row md:items-center md:justify-between md:pt-8">
+                    <div className="flex items-center gap-5">
+                        <div className="flex items-center justify-center rounded-2xl bg-primary-600 size-14 md:size-16 shadow-lg shadow-primary-500/20">
+                            <Cap className="text-white size-8 md:size-10" />
+                        </div>
+                        <div className="space-y-1">
+                            <h1 className="text-2xl font-extrabold tracking-tight text-text-title-light md:text-4xl dark:text-text-title-dark">
+                                {school?.schoolName}
+                            </h1>
+                            <p className="text-sm font-medium md:text-base text-text-muted-light dark:text-text-muted-dark">
+                                {classrooms.length} {t('common:navigation.classrooms')}
+                                {/* TODO: add how many users are in a school */}
+                                {/* TODO: add how many decks are in a school */}
+                            </p>
+                        </div>
                     </div>
-                  ) : (
-                    classrooms.map((classroom) => (
-                      <ClassroomCard
-                      key={classroom.id}
-                      id= {classroom.id}
-                      name={classroom.name}
-                      description={classroom.description ?? ""}
-                      deckCount= {0}
-                      studentCount= {0}
-                      />
-                    ))
-                  )}
-                </div>
-        </main>
-        <ClassroomModal
-            isOpen={isModalOpen}
-            onClose={() => {
-                setIsModalOpen(false);
-            }}
-            onSubmit={handleCreateClassroom}
 
-        />
-    </div>
-  )
+                    <Button 
+                        onClick={() => setIsModalOpen(true)}
+                        size="lg"
+                        className="bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800"
+                    >
+                        <Plus className="mr-2 size-5" />
+                        {t('classrooms:createButton')}
+                    </Button>
+                </div>
+            </PageHeader>
+
+            <main className="container px-4 py-8 mx-auto max-w-7xl md:py-12">
+                <div className="mb-8 border-b border-border dark:border-border-dark pb-4">
+                    <h2 className="text-xl font-bold text-text-title-light dark:text-text-title-dark md:text-2xl">
+                        {t('common:navigation.classrooms')}
+                    </h2>
+                    <p className="text-text-body-light dark:text-text-body-dark">
+                        {t('classrooms:subtitle')}
+                    </p>
+                </div>
+
+                {classrooms.length === 0 ? (
+                    <div className="py-20 text-center">
+                        <p className="text-xl text-text-muted-light dark:text-text-muted-dark">
+                            {t('classrooms:empty.message')}
+                        </p>
+                    </div>
+                ) : (
+                    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                        {classrooms.map((classroom) => (
+                            <ClassroomCard
+                                key={classroom.id}
+                                // currently mapping the schoolclassroomDto to classroomResponse because a different structure is expected
+                                // by the card. will need to review the Dto in both front and backend afterwards
+                                // to ensure the tracking of permissions is set up properly.
+                                classroom={{
+                                    ...classroom,
+                                    // using .toISOString() because the frontend model expects a string
+                                    createdAt: new Date().toISOString(),
+                                    permissions: { canEdit: true, canDelete: true }
+                                } as ClassroomResponse}
+                                onEdit={handleEdit}
+                                onDelete={(id) => setDeleteId(id)}
+                                onRequestNewCode={(id) => setRequestCodeId(id)}
+                            />
+                        ))}
+                    </div>
+                )}
+            </main>
+
+            <ClassroomModal
+                isOpen={isModalOpen}
+                onClose={handleCloseModal}
+                onSubmit={handleSubmitClassroom}
+                classroom={editingClassroom}
+            />
+
+            <ConfirmModal
+                show={deleteId !== null}
+                title={t('common:modals.deleteModal.title')}
+                message={t('common:modals.deleteModal.message')}
+                confirmLabel={t('common:modals.deleteModal.yes')}
+                cancelLabel={t('common:actions.cancel')}
+                onConfirm={confirmDelete}
+                onCancel={() => setDeleteId(null)}
+            />
+
+            <RequestCodeModal
+                show={requestCodeId !== null}
+                onConfirm={confirmRequestNewCode}
+                onCancel={() => setRequestCodeId(null)}
+            />
+
+        </div>
+    );
 }
