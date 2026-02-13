@@ -73,6 +73,7 @@ namespace noava.Controllers.Schools
         }
 
         [HttpPut("{id:int}")]
+        [Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> UpdateSchool(int id, [FromBody] SchoolRequestDto request)
         {
             await _schoolService.UpdateSchoolAsync(id, request);
@@ -81,6 +82,7 @@ namespace noava.Controllers.Schools
 
 
         [HttpDelete("{id:int}")]
+        [Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> DeleteSchool(int id)
         {
             try
@@ -93,8 +95,6 @@ namespace noava.Controllers.Schools
                 return NotFound();
             }
         }
-
-        //only add one admin at a time
         [HttpPut("{id:int}/admins/{userEmail}")]
         public async Task<IActionResult> AddSchoolAdmin(int id, string userEmail)
         {
@@ -109,12 +109,10 @@ namespace noava.Controllers.Schools
             }
         }
 
-        //only delete one admin at a time
         [HttpDelete("{id:int}/admins/{clerkId}")]
         [Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> RemoveSchoolAdmin(int id, string clerkId)
         {
-            //no null check? school should have one minimum schooladmin
             try
             {
                 await _schoolService.RemoveSchoolAdminAsync(id, clerkId);
@@ -147,6 +145,17 @@ namespace noava.Controllers.Schools
             try
             {
                 var userId = GetCurrentUserId();
+                var school = await _schoolService.GetSchoolByIdAsync(id);
+                if (school == null) return NotFound();
+
+                bool isSiteAdmin = User.IsInRole("ADMIN");
+                bool isSchoolAdmin = school.Admins.Any(a => a.ClerkId == userId);
+
+                if (!isSiteAdmin && !isSchoolAdmin)
+                {
+                    return Forbid("You do not have permission to add classrooms to this school.");
+                }
+
                 request.SchoolId = id;
                 await _classroomService.CreateAsync(request, userId);
                 return Ok();

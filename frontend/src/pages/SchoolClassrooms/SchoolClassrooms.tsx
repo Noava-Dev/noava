@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Button } from 'flowbite-react';
+import { useUser } from '@clerk/clerk-react';
+import { useUserRole } from '../../hooks/useUserRole';
 import { 
     LuGraduationCap as Cap,
     LuPlus as Plus } 
@@ -28,6 +30,8 @@ export default function SchoolClassroomsPage() {
     const schoolService = useSchoolService();
     const classroomService = useClassroomService();
     const { showError, showSuccess } = useToast();
+    const { user } = useUser();
+    const { userRole } = useUserRole();
 
     const [loading, setLoading] = useState(true);
     const [school, setSchool] = useState<SchoolDto | null>(null);
@@ -40,6 +44,10 @@ export default function SchoolClassroomsPage() {
     const [editingClassroom, setEditingClassroom] = useState<ClassroomResponse | undefined>(undefined);
     const [deleteId, setDeleteId] = useState<number | null>(null);
     const [requestCodeId, setRequestCodeId] = useState<number | null>(null);
+
+    const canManageSchool = 
+    userRole === 'ADMIN' || 
+    (school?.admins?.some(admin => admin.clerkId === user?.id));
 
     const fetchData = async () => {
         if (!schoolId) return;
@@ -140,14 +148,16 @@ export default function SchoolClassroomsPage() {
                         </div>
                     </div>
 
-                    <Button 
-                        onClick={() => setIsModalOpen(true)}
-                        size="lg"
-                        className="bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800"
-                    >
-                        <Plus className="mr-2 size-5" />
-                        {t('classrooms:createButton')}
-                    </Button>
+                    {canManageSchool && (
+                        <Button 
+                            onClick={() => setIsModalOpen(true)}
+                            size="lg"
+                            className="bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800"
+                        >
+                            <Plus className="mr-2 size-5" />
+                            {t('classrooms:createButton')}
+                        </Button>
+                    )}
                 </div>
             </PageHeader>
 
