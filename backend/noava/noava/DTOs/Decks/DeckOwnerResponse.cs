@@ -8,5 +8,6 @@ namespace noava.DTOs.Decks
         public DateTime AddedAt { get; set; }
         public string UserEmail { get; set; } = string.Empty;
         public string? UserName { get; set; }
+
     }
 }

@@ -70,5 +70,61 @@
     "currentOwners": "Current owners",
     "inviteUser": "Invite User",
     "noOwners": "You have not invited any co-owners yet."
+  },
+  "sections": {
+    "myDecks": "My Decks",
+    "sharedWithMe": "Shared with Me"
+  },
+  "joinCode": {
+    "button": "Join by Code",
+    "title": "Join Deck",
+    "description": "Enter the join code you received to access a shared deck.",
+    "label": "Join Code",
+    "placeholder": "Enter join code...",
+    "join": "Join Deck",
+    "joining": "Joining...",
+    "success": "Successfully joined deck!",
+    "error": "Failed to join deck. Please check the code and try again.",
+    "empty": "Please enter a join code"
+  },
+  "owners": {
+    "title": "Manage Users",
+    "invite": "Invite User",
+    "inviteButton": "Invite User",
+    "remove": "Remove",
+    "makeOwner": "Make Owner",
+    "removeOwner": "Remove Owner Status",
+    "confirmRemove": "Remove User",
+    "confirmRemoveMessage": "Are you sure you want to remove {{name}} from this deck? This action cannot be undone.",
+    "lastOwnerError": "Cannot remove the last owner",
+    "loadError": "Failed to load users",
+    "removeSuccess": "User removed successfully",
+    "removeError": "Failed to remove user",
+    "updateSuccess": "User role updated successfully",
+    "updateError": "Failed to update user role",
+    "joinCodeSection": "Join Code",
+    "joinCodeDescription": "Share this code with others so they can join this deck",
+    "copyCode": "Copy Code",
+    "regenerateCode": "Regenerate Code",
+    "codeCopied": "Code copied!",
+    "codeRegenerated": "Code regenerated successfully!",
+    "confirmRegenerateCode": "Are you sure you want to generate a new code? The old code will no longer work.",
+    "codeRegenerateError": "Failed to regenerate code",
+    "noUsers": "No users have been added to this deck yet.",
+    "owner": "Owner",
+    "member": "Member",
+    "you": "(You)"
+  },
+  "invite": {
+    "title": "Invite User to {{deckName}}",
+    "emailLabel": "Email Address",
+    "emailPlaceholder": "user@example.com",
+    "ownerLabel": "Grant owner permissions",
+    "ownerHelp": "Owners can add/edit cards and manage other users (except removing the creator)",
+    "inviteButton": "Send Invite",
+    "inviting": "Inviting...",
+    "success": "Invitation sent successfully",
+    "error": "Failed to send invitation",
+    "invalidEmail": "Please enter a valid email address"
   }
 }

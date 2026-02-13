@@ -2,18 +2,17 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { Button, Dropdown, DropdownItem } from 'flowbite-react';
 import {
-  HiArrowLeft,
   HiPlus,
   HiPlay,
   HiRefresh,
   HiUserGroup,
-  HiCog,
   HiDocumentText,
   HiPencil,
   HiTrash,
   HiChevronDown,
 } from 'react-icons/hi';
 import { useTranslation } from 'react-i18next';
+import { useUser } from '@clerk/clerk-react';
 import { useDeckService } from '../../services/DeckService';
 import { useFlashcardService } from '../../services/FlashcardService';
 import { useToast } from '../../contexts/ToastContext';
@@ -25,6 +24,7 @@ import type {
   CreateFlashcardRequest,
   UpdateFlashcardRequest,
 } from '../../models/Flashcard';
+import type { ClerkUserResponse } from '../../models/User';
 import Searchbar from '../../shared/components/Searchbar';
 import { useAzureBlobService } from '../../services/AzureBlobService';
 import { ManageOwnersModal } from '../../shared/components/ManageOwnersModal';
@@ -43,6 +43,7 @@ function FlashcardDetail() {
   const navigate = useNavigate();
   const location = useLocation();
   const { t } = useTranslation('flashcards');
+  const { user } = useUser();
   const deckService = useDeckService();
   const flashcardService = useFlashcardService();
   const { showError, showSuccess } = useToast();
@@ -54,13 +55,16 @@ function FlashcardDetail() {
   const [searchTerm, setSearchTerm] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showImportModal, setShowImportModal] = useState(false);
-  const [selectedFlashcard, setSelectedFlashcard] = useState<
-    Flashcard | undefined
-  >(undefined);
+  const [selectedFlashcard, setSelectedFlashcard] = useState<Flashcard | undefined>(undefined);
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const [cardToDelete, setCardToDelete] = useState<number | null>(null);
   const [manageOwnersOpened, setManageOwnersOpened] = useState(false);
-  const fromClassroom = location.state?.from === 'classroom';
+  const [deckUsers, setDeckUsers] = useState<ClerkUserResponse[]>([]);
+  const [canEdit, setCanEdit] = useState(false);
+  const [isCreator, setIsCreator] = useState(false);
+
+  // Extract navigation state
+  const fromClassroom = location.state?.fromClassroom || false;
   const classroomId = location.state?.classroomId;
   const classroomName = location.state?.classroomName;
 
@@ -71,14 +75,48 @@ function FlashcardDetail() {
     }
   }, [deckId]);
 
+  // Check permissions
+  useEffect(() => {
+    const checkPermissions = async () => {
+      if (!deck || !user) return;
+
+      // Check if user is creator
+      const userIsCreator = deck.userId === user.id;
+      setIsCreator(userIsCreator);
+
+      // Creator can always edit
+      if (userIsCreator) {
+        setCanEdit(true);
+        return;
+      }
+
+      // Check if user is owner (IsOwner = true)
+      try {
+        const users = await deckService.getUsersByDeck(deck.deckId, 1, 50);
+        setDeckUsers(users);
+        const currentUser = users.find(u => u.clerkId === user.id);
+        setCanEdit(currentUser?.isOwner || false);
+      } catch (error) {
+        console.error('Error checking permissions:', error);
+        setCanEdit(false);
+      }
+    };
+
+    checkPermissions();
+  }, [deck, user]);
+
   const fetchDeck = async () => {
     try {
       setLoading(true);
       const deckData = await deckService.getById(Number(deckId));
       setDeck(deckData);
-    } catch (error) {
-      showError(t('flashcardDetail.error'), t('flashcardDetail.error'));
+    } catch (error: any) {
       console.error(error);
+      if (error.response?.status === 404 || error.response?.status === 403) {
+        navigate('/not-found', { replace: true });
+      } else {
+        showError(t('flashcardDetail.error'), t('flashcardDetail.error'));
+      }
     } finally {
       setLoading(false);
     }
@@ -126,8 +164,13 @@ function FlashcardDetail() {
       );
 
       setFlashcards(cardsWithImages);
-    } catch (error) {
-      showError(t('flashcardDetail.error'), t('flashcardDetail.error'));
+    } catch (error: any) {
+      console.error(error);
+      if (error.response?.status === 404 || error.response?.status === 403) {
+        navigate('/not-found', { replace: true });
+      } else {
+        showError(t('flashcardDetail.error'), t('flashcardDetail.error'));
+      }
     }
   };
 
@@ -225,7 +268,7 @@ function FlashcardDetail() {
 
   if (!deck) {
     navigate('/not-found', { replace: true });
-    return;
+    return null;
   }
 
   // Filter flashcards based on search term
@@ -268,11 +311,14 @@ function FlashcardDetail() {
               )}
             </div>
 
-            {/* Action Buttons */}
-            <div className="flex flex-col gap-3 mb-8 md:flex-row md:justify-between md:items-start">
+
+           {/* Action Buttons */}
+             <div className="flex flex-col gap-3 mb-8 md:flex-row md:justify-between md:items-start">
               {/* Left button group */}
               <div className="grid grid-cols-1 gap-3 md:flex md:flex-wrap">
+                {/* Create/Import cards button - only for owners/creator */}
                 {/* Create/Import cards button */}
+                {canEdit && (
                 <DropdownButton
                   size="lg"
                   onClickMain={() => {
@@ -286,19 +332,20 @@ function FlashcardDetail() {
                     {t('flashcardDetail.importFromFile')}
                   </DropdownItem>
                 </DropdownButton>
+                )}
 
                 {/* Study Now */}
+
                 <Button size="lg" disabled={totalCards === 0}>
                   <HiPlay className="mr-2 size-5" />
                   {t('flashcardDetail.studyNow')}
                 </Button>
 
-                {/* Quick Review */}
                 <Dropdown
                   label=""
                   dismissOnClick={true}
                   renderTrigger={() => (
-                    <Button size="lg" className="bg-cyan-500 hover:bg-cyan-600">
+                    <Button size="lg" className="bg-cyan-500 hover:bg-cyan-600" disabled={totalCards === 0}>
                       <HiPlay className="w-5 h-5 mr-2" />
                       {t('flashcardDetail.quickReview')}
                       <HiChevronDown className="w-4 h-4 ml-1" />
@@ -332,6 +379,19 @@ function FlashcardDetail() {
                   {t('decks:ownership.manageAccess')}
                 </Button>
               </div>
+
+              {/*  Only show Manage Access button for creator */}
+              {isCreator && (
+                <div className="flex gap-3">
+                  <Button
+                    size="lg"
+                    className="bg-gradient-to-r from-secondary-600 to-secondary-700 hover:shadow-sm hover:border-border"
+                    onClick={() => setManageOwnersOpened(true)}>
+                    <HiUserGroup className="mr-2 size-5" />
+                    {t('decks:ownership.manageAccess')}
+                  </Button>
+                </div>
+              )}
             </div>
 
             {/* Search */}
@@ -345,36 +405,12 @@ function FlashcardDetail() {
                     searchTerm={searchTerm}
                     setSearchTerm={setSearchTerm}
                   />
-                  {/* {searchTerm && (
-                  <p className="flex items-center gap-1 text-xs text-text-body-light dark:text-text-body-dark">
-                    <span className="inline-block w-2 h-2 rounded-full bg-primary-500"></span>
-                    {sorted.length} {t('common:search.found')}
-                  </p>
-                )} */}
                 </div>
-
-                {/* <div className="space-y-2">
-                <label className="block text-sm font-semibold tracking-wide text-gray-700 uppercase dark:text-gray-300">
-                  {t('common:sort.label')}
-                </label>
-                <Select
-                  value={sortOrder}
-                  onChange={(e) =>
-                    setSortOrder(
-                      e.target.value as 'newest' | 'oldest' | 'az' | 'za'
-                    )
-                  }
-                  className="cursor-pointer">
-                  <option value="newest">{t('common:sort.newest')}</option>
-                  <option value="oldest">{t('common:sort.oldest')}</option>
-                  <option value="az">{t('common:sort.az')}</option>
-                  <option value="za">{t('common:sort.za')}</option>
-                </Select>
-              </div> */}
               </div>
             </div>
           </div>
         </PageHeader>
+
         <div className="container max-w-6xl px-4 py-6 mx-auto md:py-8">
           {/* Header */}
           <div className="mb-8">
@@ -427,30 +463,34 @@ function FlashcardDetail() {
               <p className="mb-6 text-text-muted-light dark:text-text-muted-dark">
                 {searchTerm
                   ? 'Try adjusting your search'
-                  : 'Start learning by creating your first flashcard!'}
+                  : canEdit
+                  ? 'Start learning by creating your first flashcard!'
+                  : 'No cards have been created yet.'}
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 b">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
               {filteredFlashcards.map((card) => (
                 <div
                   key={card.cardId}
                   className="relative overflow-hidden transition-shadow border rounded-lg shadow-md bg-background-app-light border-border dark:bg-background-surface-dark hover:shadow-lg dark:border-border-dark">
-                  {/* Action buttons */}
-                  <div className="absolute z-10 flex gap-2 top-4 right-4">
-                    <button
-                      onClick={() => handleEditFlashcard(card)}
-                      className="p-2 transition-colors rounded-lg text-text-muted-light dark:text-text-muted-dark hover:shadow-md hover:text-cyan-500 dark:hover:text-cyan-400 hover:bg-background-app-light dark:hover:bg-background-surface-dark"
-                      title={t('common:actions.edit')}>
-                      <HiPencil className="w-5 h-5" />
-                    </button>
-                    <button
-                      onClick={() => handleDeleteFlashcard(card.cardId)}
-                      className="p-2 transition-colors rounded-lg text-text-muted-light dark:text-text-muted-dark hover:shadow-md hover:text-red-500 dark:hover:text-red-400 hover:bg-background-app-light dark:hover:bg-background-surface-dark"
-                      title={t('common:actions.delete')}>
-                      <HiTrash className="w-5 h-5" />
-                    </button>
-                  </div>
+                  {/* Action buttons - only for owners/creator */}
+                  {canEdit && (
+                    <div className="absolute z-10 flex gap-2 top-4 right-4">
+                      <button
+                        onClick={() => handleEditFlashcard(card)}
+                        className="p-2 transition-colors rounded-lg text-text-muted-light dark:text-text-muted-dark hover:shadow-md hover:text-cyan-500 dark:hover:text-cyan-400 hover:bg-background-app-light dark:hover:bg-background-surface-dark"
+                        title={t('common:actions.edit')}>
+                        <HiPencil className="w-5 h-5" />
+                      </button>
+                      <button
+                        onClick={() => handleDeleteFlashcard(card.cardId)}
+                        className="p-2 transition-colors rounded-lg text-text-muted-light dark:text-text-muted-dark hover:shadow-md hover:text-red-500 dark:hover:text-red-400 hover:bg-background-app-light dark:hover:bg-background-surface-dark"
+                        title={t('common:actions.delete')}>
+                        <HiTrash className="w-5 h-5" />
+                      </button>
+                    </div>
+                  )}
 
                   {/* Front Side */}
                   <div className="p-6 mt-2">
@@ -501,8 +541,7 @@ function FlashcardDetail() {
 
                     {/* Memo */}
                     {card.memo && (
-                      <div>
-                        <span className="flex-shrink-0 text-yellow-500 dark:text-yellow-400"></span>
+                      <div className="mt-4">
                         <p className="text-xs italic text-text-muted-light dark:text-text-muted-dark line-clamp-2">
                           {card.memo}
                         </p>
@@ -515,19 +554,24 @@ function FlashcardDetail() {
           )}
         </div>
 
-        {/* Flashcard Modal */}
-        <FlashcardModal
-          isOpen={isModalOpen}
-          onClose={handleCloseModal}
-          onSubmit={handleCreateFlashcard}
-          flashcard={selectedFlashcard}
-        />
+        {/* Flashcard Modal - only for owners/creator */}
+        {canEdit && (
+          <FlashcardModal
+            isOpen={isModalOpen}
+            onClose={handleCloseModal}
+            onSubmit={handleCreateFlashcard}
+            flashcard={selectedFlashcard}
+          />
+        )}
 
-        <ImportCardsModal
-          isOpen={showImportModal}
-          onClose={() => setShowImportModal(false)}
-          onSubmit={async () => await fetchFlashcards()}
-        />
+        {/* Import Modal - only for owners/creator */}
+        {canEdit && (
+          <ImportCardsModal
+            isOpen={showImportModal}
+            onClose={() => setShowImportModal(false)}
+            onSubmit={async () => await fetchFlashcards()}
+          />
+        )}
 
         {/* Delete Confirmation Modal */}
         {deleteConfirmOpen && (
@@ -558,12 +602,15 @@ function FlashcardDetail() {
           </div>
         )}
 
-        <ManageOwnersModal
-          opened={manageOwnersOpened}
-          onClose={() => setManageOwnersOpened(false)}
-          deckId={parseInt(deckId!)}
-          deckTitle={deck?.title || ''}
-        />
+        {/* Manage Owners Modal */}
+        {deck && (
+          <ManageOwnersModal
+            isOpen={manageOwnersOpened}
+            onClose={() => setManageOwnersOpened(false)}
+            deck={deck}
+            onUpdate={fetchDeck}
+          />
+        )}
 
         <NoavaFooter />
       </div>

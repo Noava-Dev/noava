@@ -142,15 +142,19 @@ function WriteReview() {
         isFlipped: false,
         completedCards: 0,
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error loading review cards:', error);
-      showError(t('common:toast.error'), t('quickReview.error'));
-      if (deckIds.length === 1 && deckId) {
-        navigate(`/decks/${deckId}/cards`);
-      } else if (classroomId) {
-        navigate(`/classrooms/${classroomId}`);
+      if (error.response?.status === 404 || error.response?.status === 403) {
+        navigate('/not-found', { replace: true });
       } else {
-        navigate('/decks');
+        showError(t('common:toast.error'), t('quickReview.error'));
+        if (deckIds.length === 1 && deckId) {
+          navigate(`/decks/${deckId}/cards`);
+        } else if (classroomId) {
+          navigate(`/classrooms/${classroomId}`);
+        } else {
+          navigate('/decks');
+        }
       }
     } finally {
       setLoading(false);
