@@ -6,7 +6,7 @@ namespace noava.Mappers.Schools
 {
     public static class SchoolMapper
     {
-        public static SchoolResponseDto ToDetailsDto(this School school, Dictionary<string, ClerkUserResponseDto> clerkUsers)
+        public static SchoolResponseDto ToDetailsDto(this School school, Dictionary<string, ClerkUserResponseDto> clerkUsers, List<Classroom> classrooms)
         {
             return new SchoolResponseDto
             {
@@ -16,6 +16,16 @@ namespace noava.Mappers.Schools
                 Admins = school.SchoolAdmins.Select(sa => clerkUsers[sa.ClerkId]).ToList(),
                 CreatedAt = school.CreatedAt,
                 UpdatedAt = school.UpdatedAt,
+                TotalStudents = classrooms
+                    .SelectMany(c => c.ClassroomUsers)
+                    .Where(cu => !cu.IsTeacher)
+                    .Select(cu => cu.UserId)
+                    .Distinct()
+                    .Count(),
+                TotalDecks = classrooms
+                    .SelectMany(c => c.ClassroomDecks)
+                    .Select(cd => cd.DeckId)
+                    .Count()
             };
         }
 
@@ -33,11 +43,11 @@ namespace noava.Mappers.Schools
         {
             return new SchoolClassroomResponseDto
             {
+                ClassroomId = classroom.Id,
                 Name = classroom.Name,
                 Description = classroom.Description,
-                StudentCount = classroom.ClassroomUsers?.Count ?? 0,
-                // Placeholder for now since logic for the decks isn't fully setup yet (i need to wait for brent and youmni)
-                DeckCount = 0
+                StudentCount = classroom.ClassroomUsers.Count(cu => !cu.IsTeacher),
+                DeckCount = classroom.ClassroomDecks.Count
             };
         }
     }

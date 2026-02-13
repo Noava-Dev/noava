@@ -40,10 +40,10 @@ namespace noava.Services.Schools
         public async Task<List<SchoolResponseDto>> GetAllSchoolsAsync()
         {
             var schools = await _schoolRepository.GetAllSchoolsAsync();
-
             var clerkUsers = await GetClerkUsersForSchoolAsync(schools);
 
-            var schoolDtos = schools.Select(school => school.ToDetailsDto(clerkUsers)).ToList();
+            var schoolDtos = schools.Select(school => 
+                school.ToDetailsDto(clerkUsers, school.Classrooms?.ToList() ?? [])).ToList();
 
             return schoolDtos;
         }
@@ -57,9 +57,9 @@ namespace noava.Services.Schools
                 throw new KeyNotFoundException("School not found.");
             } else
             {
+                var classrooms = await _schoolRepository.GetClassroomsBySchoolIdAsync(id);
                 var clerkUsers = await GetClerkUsersForSchoolAsync(new List<School> { school });
-                var schoolDto = school.ToDetailsDto(clerkUsers);
-                return schoolDto;
+                return school.ToDetailsDto(clerkUsers, classrooms);
             }
         }
 

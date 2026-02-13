@@ -18,7 +18,6 @@ export interface SchoolRequest {
   schoolAdminEmails: string[];
 }
 
-//Not sure about this one
 export interface UpdateSchoolRequest{
   name: string;
   schoolAdminEmails: string[];
@@ -29,7 +28,7 @@ export interface DeleteSchoolRequest{
 }
 
 export interface SchoolClassroomDto{
-  id: number;
+  classroomId: number;
   name: string;
   description?: string;
   deckCount?: number;

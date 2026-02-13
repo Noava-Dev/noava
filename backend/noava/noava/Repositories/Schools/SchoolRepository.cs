@@ -80,6 +80,7 @@ namespace noava.Repositories.Schools
         {
             return await _context.Classrooms
                 .Include(c => c.ClassroomUsers)
+                .Include(c => c.ClassroomDecks)
                 .Where(c => c.SchoolId == schoolId)
                 .OrderByDescending(c => c.Name)
                 .ToListAsync();

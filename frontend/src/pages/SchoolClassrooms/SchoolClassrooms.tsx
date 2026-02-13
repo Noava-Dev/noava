@@ -20,7 +20,7 @@ import { useToast } from '../../contexts/ToastContext';
 import { SchoolDto, SchoolClassroomDto } from '../../models/School';
 import { ClassroomResponse } from '../../models/Classroom';
 
-export default function SchoolsPage() {
+export default function SchoolClassroomsPage() {
     const { id } = useParams<{ id: string }>();
     const schoolId = Number(id);
     
@@ -32,6 +32,9 @@ export default function SchoolsPage() {
     const [loading, setLoading] = useState(true);
     const [school, setSchool] = useState<SchoolDto | null>(null);
     const [classrooms, setClassrooms] = useState<SchoolClassroomDto[]>([]);
+
+    const totalStudents = classrooms.reduce((acc, curr) => acc + (curr.studentCount || 0), 0);
+    const totalDecks = classrooms.reduce((acc, curr) => acc + (curr.deckCount || 0), 0);
     
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingClassroom, setEditingClassroom] = useState<ClassroomResponse | undefined>(undefined);
@@ -132,9 +135,7 @@ export default function SchoolsPage() {
                                 {school?.schoolName}
                             </h1>
                             <p className="text-sm font-medium md:text-base text-text-muted-light dark:text-text-muted-dark">
-                                {classrooms.length} {t('common:navigation.classrooms')}
-                                {/* TODO: add how many users are in a school */}
-                                {/* TODO: add how many decks are in a school */}
+                                {classrooms.length} {t('common:navigation.classrooms')} • {totalStudents} {t('common:students')} • {totalDecks} {t('common:navigation.decks')}
                             </p>
                         </div>
                     </div>
@@ -170,16 +171,17 @@ export default function SchoolsPage() {
                     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                         {classrooms.map((classroom) => (
                             <ClassroomCard
-                                key={classroom.id}
-                                // currently mapping the schoolclassroomDto to classroomResponse because a different structure is expected
-                                // by the card. will need to review the Dto in both front and backend afterwards
-                                // to ensure the tracking of permissions is set up properly.
+                                key={classroom.classroomId}
                                 classroom={{
-                                    ...classroom,
-                                    // using .toISOString() because the frontend model expects a string
+                                    id: classroom.classroomId,
+                                    name: classroom.name,
+                                    description: classroom.description ?? '',
                                     createdAt: new Date().toISOString(),
+                                    updatedAt: new Date().toISOString(),
+                                    joinCode: '',
                                     permissions: { canEdit: true, canDelete: true }
-                                } as ClassroomResponse}
+                                }}
+
                                 onEdit={handleEdit}
                                 onDelete={(id) => setDeleteId(id)}
                                 onRequestNewCode={(id) => setRequestCodeId(id)}
