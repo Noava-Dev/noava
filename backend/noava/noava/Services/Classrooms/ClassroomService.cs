@@ -43,7 +43,6 @@ namespace noava.Services.Classrooms
             });
 
             await _classroomRepository.AddAsync(classroom);
-            await _classroomRepository.SaveChangesAsync();
 
             return classroom.ToResponseDto(userId);
         }
@@ -117,7 +116,6 @@ namespace noava.Services.Classrooms
             classroom.Description = classroomDto.Description;
 
             await _classroomRepository.UpdateAsync(classroom);
-            await _classroomRepository.SaveChangesAsync();
 
             return classroom.ToResponseDto(userId);
         }
@@ -143,7 +141,6 @@ namespace noava.Services.Classrooms
             classroom.ClassroomUsers.Remove(targetUser);
 
             await _classroomRepository.UpdateAsync(classroom);
-            await _classroomRepository.SaveChangesAsync();
 
             return classroom.ToResponseDto(userId);
         }
@@ -169,7 +166,6 @@ namespace noava.Services.Classrooms
             targetUser.IsTeacher = isTeacher;
 
             await _classroomRepository.UpdateAsync(classroom);
-            await _classroomRepository.SaveChangesAsync();
 
             return classroom.ToResponseDto(userId);
         }
@@ -187,8 +183,7 @@ namespace noava.Services.Classrooms
             if (!isTeacher)
                 throw new UnauthorizedAccessException("Only teachers can delete a classroom.");
 
-            _classroomRepository.Delete(classroom);
-            await _classroomRepository.SaveChangesAsync();
+            await _classroomRepository.DeleteAsync(classroom);
 
             return classroom.ToResponseDto(userId);
         }
@@ -209,7 +204,6 @@ namespace noava.Services.Classrooms
             classroom.JoinCode = GenerateClassroomCode();
 
             await _classroomRepository.UpdateAsync(classroom);
-            await _classroomRepository.SaveChangesAsync();
 
             return classroom.ToResponseDto(userId);
         }
@@ -318,7 +312,6 @@ namespace noava.Services.Classrooms
                 });
 
                 await _classroomRepository.UpdateAsync(classroom);
-                await _classroomRepository.SaveChangesAsync();
             }
 
             return classroom.ToResponseDto(userId);
@@ -343,7 +336,6 @@ namespace noava.Services.Classrooms
                 classroom.ClassroomDecks.Remove(link);
 
                 await _classroomRepository.UpdateAsync(classroom);
-                await _classroomRepository.SaveChangesAsync();
             }
 
             return classroom.ToResponseDto(userId);
