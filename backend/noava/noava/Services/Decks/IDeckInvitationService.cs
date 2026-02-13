@@ -1,11 +1,10 @@
-using noava.DTOs;
 using noava.DTOs.Decks;
 
 namespace noava.Services.Decks
 {
     public interface IDeckInvitationService
     {
-        Task<DeckInvitationResponse> InviteUserAsync(int deckId, InviteUserRequest request, string invitedByClerkId);
+        Task<DeckInvitationResponse> InviteUserAsync(int deckId, string clerkId, string invitedByClerkId);
         Task<List<DeckInvitationResponse>> GetInvitationsForDeckAsync(int deckId, string clerkId);
         Task<List<DeckInvitationResponse>> GetPendingInvitationsForUserAsync(string clerkId);
         Task<DeckInvitationResponse?> AcceptInvitationAsync(int invitationId, string clerkId);

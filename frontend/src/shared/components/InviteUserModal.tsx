@@ -10,6 +10,7 @@ import {
   Checkbox,
 } from 'flowbite-react';
 import { useTranslation } from 'react-i18next';
+import { useDeckInvitationService } from '../../services/DeckInvitationService';
 
 interface InviteUserModalProps {
   isOpen: boolean;
@@ -25,10 +26,15 @@ export const InviteUserModal = ({
   onInvite,
   itemType,
   itemName,
+  deckId,
+  deckTitle,
 }: InviteUserModalProps) => {
   const { t } = useTranslation(['decks', 'common']);
   const [email, setEmail] = useState('');
   const [isOwner, setIsOwner] = useState(false);
+  const deckInvitationService = useDeckInvitationService();
+  const [userId, setUserId] = useState('');
+
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
