@@ -1,5 +1,6 @@
 import { useApi } from '../hooks/useApi';
 import type { Deck, DeckRequest } from '../models/Deck';
+import type { ClerkUserResponse } from '../models/User';
 
 export const useDeckService = () => {
   const api = useApi();
@@ -11,7 +12,7 @@ export const useDeckService = () => {
     },
 
     async getMyDecks(limit?: number): Promise<Deck[]> {
-      const response = await api.get<Deck[]>('/deck/user', {
+      const response = await api.get<Deck[]>('/deck/user/all', {
         params: limit ? { limit } : undefined,
       });
       return response.data;
@@ -46,5 +47,46 @@ export const useDeckService = () => {
         },
 
 
-  };
+      async getUsersByDeck(
+            deckId: number,
+            page = 1,
+            pageSize = 50
+          ): Promise<ClerkUserResponse[]> {
+            const response = await api.get<ClerkUserResponse[]>(
+              `/deck/${deckId}/users`,
+              { params: { page, pageSize } }
+            );
+            return response.data;
+          },
+
+        async inviteByEmail(deckId: number, email: string, isOwner: boolean = false): Promise<Deck> {
+          const response = await api.post<Deck>(
+            `/deck/${deckId}/invite`,
+            null,
+            { params: { email, isOwner } } 
+          );
+          return response.data;
+        },
+
+       async joinByCode(joinCode: string, isOwner: boolean = false): Promise<Deck> {
+        const response = await api.post<Deck>(
+          `/deck/join/${joinCode}`,
+          null,
+          { params: { isOwner } } 
+        );
+        return response.data;
+      },
+
+        async updateJoinCode(deckId: number): Promise<Deck> {
+          const response = await api.put<Deck>(`/deck/${deckId}/joincode`);
+          return response.data;
+        },
+
+        async removeUser(deckId: number, targetUserId: string): Promise<Deck> {
+          const response = await api.delete<Deck>(
+            `/deck/${deckId}/users/${targetUserId}`
+          );
+          return response.data;
+        },
+      };
 };

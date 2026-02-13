@@ -102,11 +102,8 @@ function ReverseReview() {
 
       const isSingleDeck = deckIds.length === 1;
 
-      // Haal kaarten en alle betrokken decks op
       const cardsData = await flashcardService.getBulkReviewCards(deckIds, mode);
-      const decksData = await Promise.all(
-        deckIds.map(id => deckService.getById(id))
-      );
+      const decksData = await deckService.getByMultipleIds(deckIds);
 
       if (cardsData.length === 0) {
         showError(t('quickReview.noCards'), t('quickReview.error'));
@@ -120,7 +117,6 @@ function ReverseReview() {
         return;
       }
 
-      // Maak een map van deckId -> Deck voor spraak functionaliteit
       const decksMap = new Map<number, Deck>();
       decksData.forEach(deck => {
         if (deck) {
@@ -137,15 +133,19 @@ function ReverseReview() {
         isFlipped: false,
         completedCards: 0,
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error loading review cards:', error);
-      showError(t('common:toast.error'), t('quickReview.error'));
-      if (deckIds.length === 1 && deckId) {
-        navigate(`/decks/${deckId}/cards`);
-      } else if (classroomId) {
-        navigate(`/classrooms/${classroomId}`);
+      if (error.response?.status === 404 || error.response?.status === 403) {
+        navigate('/not-found', { replace: true });
       } else {
-        navigate('/decks');
+        showError(t('common:toast.error'), t('quickReview.error'));
+        if (deckIds.length === 1 && deckId) {
+          navigate(`/decks/${deckId}/cards`);
+        } else if (classroomId) {
+          navigate(`/classrooms/${classroomId}`);
+        } else {
+          navigate('/decks');
+        }
       }
     } finally {
       setLoading(false);
@@ -211,7 +211,6 @@ function ReverseReview() {
     }
   };
 
-  // REVERSED: Back first, then front
   const handlePlayAudio = (side: 'back' | 'front', e: React.MouseEvent) => {
     e.stopPropagation();
 
@@ -291,7 +290,6 @@ function ReverseReview() {
 
   return (
     <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
-      <main className="flex-1 w-full">
         <div className="container max-w-4xl px-4 py-6 mx-auto md:py-8">
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
@@ -335,13 +333,23 @@ function ReverseReview() {
               {/* Card */}
               <div className="mb-6 perspective-1000">
                 <div
-                  className={`relative w-full h-96 transition-transform duration-500 transform-style-3d cursor-pointer ${
-                    isFlipped ? 'rotate-y-180' : ''
-                  }`}
-                  onClick={handleFlip}>
-                  {/*Back side shown FIRST */}
-                  <div className="absolute inset-0 backface-hidden">
-                    <div className="flex flex-col items-center justify-center w-full h-full p-8 bg-white border-2 border-gray-200 shadow-xl dark:bg-gray-800 rounded-2xl dark:border-gray-700">
+                  className={`
+                    relative w-full h-96 
+                    transition-transform duration-500 
+                    transform-style-3d cursor-pointer 
+                    ${isFlipped ? 'rotate-y-180' : ''}
+                  `}
+                  style={{
+                    WebkitFontSmoothing: 'antialiased',
+                    MozOsxFontSmoothing: 'grayscale',
+                  }}
+                  onClick={handleFlip}
+                  key={currentCard.cardId}> 
+                  {/* Back side shown FIRST */}
+                  <div 
+                    className="absolute inset-0 backface-hidden"
+                    style={{ transform: 'translateZ(1px)' }}>
+                    <div className="flex flex-col items-center justify-center w-full h-full p-8 antialiased bg-white border-2 border-gray-200 shadow-xl dark:bg-gray-800 rounded-2xl dark:border-gray-700">
                       {shouldShowAudioButton('back') && (
                         <button
                           onClick={(e) => handlePlayAudio('back', e)}
@@ -387,45 +395,49 @@ function ReverseReview() {
                     </div>
                   </div>
 
-                  {/*Front side shown as ANSWER */}
-                  <div className="absolute inset-0 backface-hidden rotate-y-180">
-                    <div className="flex flex-col items-center justify-center w-full h-full p-8 bg-white border-2 border-gray-200 shadow-xl dark:bg-gray-800 rounded-2xl dark:border-gray-700">
-                      {shouldShowAudioButton('front') && (
-                        <button
-                          onClick={(e) => handlePlayAudio('front', e)}
-                          className={`absolute z-10 p-3 text-white transition-colors rounded-full shadow-lg top-4 right-4 ${
-                            isSpeaking ? 'bg-yellow-600' : 'bg-yellow-500 hover:bg-yellow-600'
-                          }`}
-                          title={frontAudioUrl ? t('quickReview.playAudio') : t('quickReview.playVoiceAssistant')}>
-                          <HiVolumeUp className={`w-5 h-5 ${isSpeaking ? 'animate-pulse' : ''}`} />
-                        </button>
-                      )}
+                  {/* Front side*/}
+                  {isFlipped && (
+                    <div 
+                      className="absolute inset-0 backface-hidden rotate-y-180"
+                      style={{ transform: 'rotateY(180deg) translateZ(1px)' }}>
+                      <div className="flex flex-col items-center justify-center w-full h-full p-8 antialiased bg-white border-2 border-gray-200 shadow-xl dark:bg-gray-800 rounded-2xl dark:border-gray-700">
+                        {shouldShowAudioButton('front') && (
+                          <button
+                            onClick={(e) => handlePlayAudio('front', e)}
+                            className={`absolute z-10 p-3 text-white transition-colors rounded-full shadow-lg top-4 right-4 ${
+                              isSpeaking ? 'bg-yellow-600' : 'bg-yellow-500 hover:bg-yellow-600'
+                            }`}
+                            title={frontAudioUrl ? t('quickReview.playAudio') : t('quickReview.playVoiceAssistant')}>
+                            <HiVolumeUp className={`w-5 h-5 ${isSpeaking ? 'animate-pulse' : ''}`} />
+                          </button>
+                        )}
 
-                      <div className="mb-4 text-sm font-semibold tracking-wide text-yellow-500 uppercase">
-                        {t('flashcardModal.front')}
-                      </div>
-
-                      {frontImageUrl && (
-                        <div className="flex justify-center w-full mb-4">
-                          <img
-                            src={frontImageUrl}
-                            alt="Front"
-                            className="object-contain max-w-full rounded-lg max-h-40"
-                          />
+                        <div className="mb-4 text-sm font-semibold tracking-wide text-yellow-500 uppercase">
+                          {t('flashcardModal.front')}
                         </div>
-                      )}
 
-                      <div className="flex items-center justify-center flex-1 w-full px-4 text-center">
-                        <p className="text-2xl font-bold text-gray-900 break-words md:text-3xl dark:text-white">
-                          {currentCard.frontText}
-                        </p>
-                      </div>
+                        {frontImageUrl && (
+                          <div className="flex justify-center w-full mb-4">
+                            <img
+                              src={frontImageUrl}
+                              alt="Front"
+                              className="object-contain max-w-full rounded-lg max-h-40"
+                            />
+                          </div>
+                        )}
 
-                      <div className="mt-6 text-sm text-gray-500 dark:text-gray-400">
-                        {t('flashcardModal.clickToFlip')}
+                        <div className="flex items-center justify-center flex-1 w-full px-4 text-center">
+                          <p className="text-2xl font-bold text-gray-900 break-words md:text-3xl dark:text-white">
+                            {currentCard.frontText}
+                          </p>
+                        </div>
+
+                        <div className="mt-6 text-sm text-gray-500 dark:text-gray-400">
+                          {t('flashcardModal.clickToFlip')}
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  )}
                 </div>
               </div>
 
@@ -484,7 +496,6 @@ function ReverseReview() {
             </div>
           )}
         </div>
-      </main>
     </div>
   );
 }

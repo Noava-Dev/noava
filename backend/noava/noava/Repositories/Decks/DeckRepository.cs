@@ -23,13 +23,18 @@ namespace noava.Repositories
 
         public async Task<List<Deck>> GetByUserIdAsync(string userId, int? limit)
         {
-            IQueryable<Deck> query = _context.Decks
-                .Where(d => d.UserId == userId)
+            var query = _context.Decks
+                .Where(d =>
+                    d.UserId == userId ||
+                    _context.DeckInvitations.Any(di =>
+                        di.DeckId == d.DeckId &&
+                        di.InvitedUserClerkId == userId &&
+                        di.Status == InvitationStatus.Accepted))
                 .OrderByDescending(d => d.CreatedAt);
 
             if (limit.HasValue)
             {
-                query = query.Take(limit.Value);
+                query = (IOrderedQueryable<Deck>)query.Take(limit.Value);
             }
 
             return await query.ToListAsync();
@@ -38,6 +43,7 @@ namespace noava.Repositories
         public async Task<Deck?> GetByIdAsync(int id)
         {
             return await _context.Decks
+                .Include(d => d.DeckUsers)
                 .FirstOrDefaultAsync(d => d.DeckId == id);
         }
 
@@ -83,6 +89,74 @@ namespace noava.Repositories
             return await _context.Decks
                 .Where(d => ids.Contains(d.DeckId))
                 .ToListAsync();
+        }
+
+        public async Task<bool> HasAcceptedInvitationAsync(int deckId, string userId)
+        {
+            return await _context.DeckInvitations
+                .AnyAsync(di =>
+                    di.DeckId == deckId &&
+                    di.InvitedUserClerkId == userId &&
+                    di.Status == InvitationStatus.Accepted);
+        }
+
+        public async Task<Deck?> GetByJoinCodeAsync(string joinCode)
+        {
+            return await _context.Decks
+                .Include(d => d.DeckUsers)
+                .FirstOrDefaultAsync(d => d.JoinCode == joinCode);
+        }
+
+        public async Task<DeckUser?> GetByDeckAndUserAsync(int deckId, string userId)
+        {
+            return await _context.DecksUsers
+                .FirstOrDefaultAsync(du => du.DeckId == deckId && du.ClerkId == userId);
+        }
+
+        public async Task<List<DeckUser>> GetOwnersByDeckIdAsync(int deckId)
+        {
+            return await _context.DecksUsers
+                .Where(du => du.DeckId == deckId && du.IsOwner)
+                .ToListAsync();
+        }
+
+        public async Task<List<DeckUser>> GetByDeckIdAsync(int deckId)
+        {
+            return await _context.DecksUsers
+                .Where(du => du.DeckId == deckId)
+                .ToListAsync();
+        }
+
+        public async Task<int> GetOwnerCountAsync(int deckId)
+        {
+            return await _context.DecksUsers
+                .CountAsync(du => du.DeckId == deckId && du.IsOwner);
+        }
+
+        public async Task<bool> IsOwnerAsync(int deckId, string userId)
+        {
+            return await _context.DecksUsers
+                .AnyAsync(du => du.DeckId == deckId && du.ClerkId == userId && du.IsOwner);
+        }
+
+        public async Task<bool> HasAccessAsync(int deckId, string userId)
+        {
+            // User is owner or has accepted invitation
+            return await _context.DecksUsers
+                .AnyAsync(du => du.DeckId == deckId && du.ClerkId == userId)
+                || await HasAcceptedInvitationAsync(deckId, userId);
+        }
+
+        public async Task AddAsync(DeckUser deckUser)
+        {
+            _context.DecksUsers.Add(deckUser);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task RemoveAsync(DeckUser deckUser)
+        {
+            _context.DecksUsers.Remove(deckUser);
+            await _context.SaveChangesAsync();
         }
     }
 }

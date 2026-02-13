@@ -17,7 +17,7 @@ namespace noava.Services.Classrooms
         Task<ClassroomResponseDto> RemoveUserAsync(int classroomId, string targetUserId, string userId);
         Task<ClassroomResponseDto> SetUserTeacherStatusAsync(int classroomId, string targetUserId, string userId, bool isTeacher);
         Task<ClassroomResponseDto> DeleteAsync(int id, string userId);
-        Task<IEnumerable<ClerkUserResponseDto>> GetAllUsersByClassroomAsync(int classroomId, int page, int pageSize);
+        Task<IEnumerable<ClassroomUserResponseDto>> GetAllUsersByClassroomAsync(int classroomId, int page, int pageSize);
         Task<ClassroomResponseDto> InviteUserByEmail(int classroomId, string userId, string email);
         Task<ClassroomResponseDto> AddDeckAsync(int classroomId, int deckId, string userId);
         Task<ClassroomResponseDto> RemoveDeckAsync(int classroomId, int deckId, string userId);

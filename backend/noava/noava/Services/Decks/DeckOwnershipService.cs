@@ -1,28 +1,29 @@
 using noava.DTOs.Decks;
 using noava.Repositories.Decks;
+using noava.Services.Decks;
 
-namespace noava.Services.Decks
+namespace noava.Services.Implementations
 {
     public class DeckOwnershipService : IDeckOwnershipService
     {
-        private readonly IDeckUserRepository _userDeckRepo;
+        private readonly IDeckUserRepository _deckUserRepo;
         private readonly IDeckRepository _deckRepo;
 
         public DeckOwnershipService(
-            IDeckUserRepository userDeckRepo,
+            IDeckUserRepository deckUserRepo,
             IDeckRepository deckRepo)
         {
-            _userDeckRepo = userDeckRepo;
+            _deckUserRepo = deckUserRepo;
             _deckRepo = deckRepo;
         }
 
         public async Task<List<DeckOwnerResponse>> GetOwnersForDeckAsync(int deckId, string clerkId)
         {
-            var hasAccess = await _userDeckRepo.HasAccessAsync(deckId, clerkId);
+            var hasAccess = await _deckUserRepo.HasAccessAsync(deckId, clerkId);
             if (!hasAccess)
                 throw new UnauthorizedAccessException("You don't have access to this deck");
 
-            var owners = await _userDeckRepo.GetOwnersForDeckAsync(deckId);
+            var owners = await _deckUserRepo.GetOwnersByDeckIdAsync(deckId);
 
             return owners.Select(o => new DeckOwnerResponse
             {
@@ -35,7 +36,7 @@ namespace noava.Services.Decks
 
         public async Task<bool> RemoveOwnerAsync(int deckId, string ownerClerkId, string requestingClerkId)
         {
-            var isOwner = await _userDeckRepo.IsOwnerAsync(deckId, requestingClerkId);
+            var isOwner = await _deckUserRepo.IsOwnerAsync(deckId, requestingClerkId);
             if (!isOwner)
                 throw new UnauthorizedAccessException("Only owners can remove other owners");
 
@@ -46,16 +47,22 @@ namespace noava.Services.Decks
             if (deck.UserId == ownerClerkId)
                 throw new InvalidOperationException("Cannot remove the deck creator");
 
-            var owners = await _userDeckRepo.GetOwnersForDeckAsync(deckId);
+            var owners = await _deckUserRepo.GetOwnersByDeckIdAsync(deckId);
             if (owners.Count == 1 && owners[0].ClerkId == ownerClerkId)
                 throw new InvalidOperationException("Cannot remove the last owner");
 
-            return await _userDeckRepo.RemoveAsync(deckId, ownerClerkId);
+            var deckUser = await _deckUserRepo.GetByDeckAndUserAsync(deckId, ownerClerkId);
+            if (deckUser == null)
+                throw new InvalidOperationException("Owner not found");
+
+            await _deckUserRepo.RemoveAsync(deckUser);
+
+            return true;
         }
 
         public async Task<bool> IsOwnerAsync(int deckId, string clerkId)
         {
-            return await _userDeckRepo.IsOwnerAsync(deckId, clerkId);
+            return await _deckUserRepo.IsOwnerAsync(deckId, clerkId);
         }
     }
 }

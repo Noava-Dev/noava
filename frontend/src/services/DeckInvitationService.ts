@@ -1,68 +1,48 @@
-import axios from 'axios';
+import { useApi } from '../hooks/useApi';
 import type { DeckInvitation } from '../models/DeckInvitation';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ;
+export const useDeckInvitationService = () => {
+  const api = useApi();
 
-export const deckInvitationService = {
-  async inviteUser(deckId: number, userId: string, token: string): Promise<DeckInvitation> {
-    const response = await axios.post(
-      `${API_BASE_URL}/deckinvitation/deck/${deckId}/invite`,
-      { clerkId: userId },
-      {
-        headers: { Authorization: `Bearer ${token}` }
-      }
-    );
-    return response.data;
-  },
+  return {
+    async inviteUser(deckId: number, userId: string): Promise<DeckInvitation> {
+      const response = await api.post<DeckInvitation>(
+        `/deckinvitation/deck/${deckId}/invite/${userId}`,
+        {}
+      );
+      return response.data;
+    },
 
-  async getInvitationsForDeck(deckId: number, token: string): Promise<DeckInvitation[]> {
-    const response = await axios.get(
-      `${API_BASE_URL}/deckinvitation/deck/${deckId}`,
-      {
-        headers: { Authorization: `Bearer ${token}` }
-      }
-    );
-    return response.data;
-  },
+    async getInvitationsForDeck(deckId: number): Promise<DeckInvitation[]> {
+      const response = await api.get<DeckInvitation[]>(
+        `/deckinvitation/deck/${deckId}`
+      );
+      return response.data;
+    },
 
-  async getPendingInvitations(token: string): Promise<DeckInvitation[]> {
-    const response = await axios.get(
-      `${API_BASE_URL}/deckinvitation/pending`,
-      {
-        headers: { Authorization: `Bearer ${token}` }
-      }
-    );
-    return response.data;
-  },
+    async getPendingInvitations(): Promise<DeckInvitation[]> {
+      const response = await api.get<DeckInvitation[]>('/deckinvitation/pending');
+      return response.data;
+    },
 
-  async acceptInvitation(invitationId: number, token: string): Promise<DeckInvitation> {
-    const response = await axios.post(
-      `${API_BASE_URL}/deckinvitation/${invitationId}/accept`,
-      {},
-      {
-        headers: { Authorization: `Bearer ${token}` }
-      }
-    );
-    return response.data;
-  },
+    async acceptInvitation(invitationId: number): Promise<DeckInvitation> {
+      const response = await api.post<DeckInvitation>(
+        `/deckinvitation/${invitationId}/accept`,
+        {}
+      );
+      return response.data;
+    },
 
-  async declineInvitation(invitationId: number, token: string): Promise<DeckInvitation> {
-    const response = await axios.post(
-      `${API_BASE_URL}/deckinvitation/${invitationId}/decline`,
-      {},
-      {
-        headers: { Authorization: `Bearer ${token}` }
-      }
-    );
-    return response.data;
-  },
+    async declineInvitation(invitationId: number): Promise<DeckInvitation> {
+      const response = await api.post<DeckInvitation>(
+        `/deckinvitation/${invitationId}/decline`,
+        {}
+      );
+      return response.data;
+    },
 
-  async cancelInvitation(invitationId: number, token: string): Promise<void> {
-    await axios.delete(
-      `${API_BASE_URL}/deckinvitation/${invitationId}`,
-      {
-        headers: { Authorization: `Bearer ${token}` }
-      }
-    );
-  }
+    async cancelInvitation(invitationId: number): Promise<void> {
+      await api.delete(`/deckinvitation/${invitationId}`);
+    }
+  };
 };

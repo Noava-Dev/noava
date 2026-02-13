@@ -16,7 +16,6 @@ namespace noava.Mappers.ClerkUsers
                 FirstName = dto.First_Name ?? string.Empty,
                 LastName = dto.Last_Name ?? string.Empty,
                 Email = primaryEmail ?? string.Empty,
-                IsTeacher = isTeacher
             };
         }
     }

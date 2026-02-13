@@ -1,5 +1,4 @@
-﻿using noava.DTOs;
-using noava.DTOs.Decks;
+﻿using noava.DTOs.Decks;
 using noava.DTOs.Notifications;
 using noava.Models;
 using noava.Models.Enums;
@@ -32,10 +31,7 @@ namespace noava.Services.Decks
             _notificationService = notificationService;
         }
 
-        public async Task<DeckInvitationResponse> InviteUserAsync(
-    int deckId,
-    InviteUserRequest request,
-    string invitedByClerkId)
+        public async Task<DeckInvitationResponse> InviteUserAsync(int deckId, string clerkId, string invitedByClerkId)
         {
             var isOwner = await _userDeckRepo.IsOwnerAsync(deckId, invitedByClerkId);
             if (!isOwner)
@@ -45,7 +41,7 @@ namespace noava.Services.Decks
             if (deck == null)
                 throw new InvalidOperationException("Deck not found");
 
-            var invitedUser = await _userRepo.GetByClerkIdAsync(request.ClerkId);
+            var invitedUser = await _userRepo.GetByClerkIdAsync(clerkId);
             if (invitedUser == null)
                 throw new InvalidOperationException("User not found. They must create an account first.");
 

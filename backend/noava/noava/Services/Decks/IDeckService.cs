@@ -1,3 +1,4 @@
+using noava.DTOs.Clerk;
 using noava.DTOs.Decks;
 using noava.Models;
 
@@ -14,5 +15,11 @@ namespace noava.Services.Decks
         Task<bool> DeleteDeckAsync(int id, string userId);
         Task<bool> CanUserViewDeckAsync(int deckId, string userId);
         Task<Deck?> GetDeckIfUserCanViewAsync(int deckId, string userId);
+        Task<DeckResponse> InviteUserByEmailAsync(int deckId, string userId, string email, bool isOwner);
+        Task<DeckResponse> JoinByJoinCodeAsync(string joinCode, string userId, bool isOwner);
+        Task<DeckResponse> UpdateJoinCodeAsync(int deckId, string userId);
+        Task<IEnumerable<ClerkUserResponseDto>> GetAllUsersByDeckAsync(int deckId, int page, int pageSize, string userId);
+        Task<DeckResponse> RemoveOwnerAsync(int deckId, string targetUserId, string userId);
+        Task<DeckResponse> RemoveUserAsync(int deckId, string targetUserId, string userId);
     }
 }
