@@ -29,27 +29,6 @@ namespace noava.Services.Cards
             _blobService = blobService;
         }
 
-        public async Task<List<CardResponse>> GetCardsByDeckIdAsync(int deckId, string userId)
-        private CardResponse MapToResponse(Card card)
-        {
-            return new CardResponse
-            {
-                CardId = card.Id,
-                DeckId = card.DeckId,
-                FrontText = card.FrontText,
-                BackText = card.BackText,
-                FrontImage = card.FrontImage,
-                FrontAudio = card.FrontAudio,
-                BackImage = card.BackImage,
-                BackAudio = card.BackAudio,
-                Memo = card.Memo,
-                CreatedAt = card.CreatedAt,
-                UpdatedAt = card.UpdatedAt,
-                HasVoiceAssistant = card.HasVoiceAssistant
-            };
-        }
-
-    
         private async Task<bool> CanUserViewDeckAsync(int deckId, string userId)
         {
             var deck = await _deckRepository.GetByIdAsync(deckId);
@@ -131,18 +110,7 @@ namespace noava.Services.Cards
             if (!await CanUserEditDeckAsync(deckId, userId))
                 throw new UnauthorizedAccessException("Not authorized to add cards to this deck");
 
-            var card = new Card
-            {
-                DeckId = deckId,
-                FrontText = request.FrontText,
-                BackText = request.BackText,
-                FrontImage = request.FrontImage,
-                FrontAudio = request.FrontAudio,
-                BackImage = request.BackImage,
-                BackAudio = request.BackAudio,
-                Memo = request.Memo,
-                HasVoiceAssistant = request.HasVoiceAssistant
-            };
+            var card = CardMapper.ToEntity(request, deckId);
 
             var createdCard = await _cardRepository.CreateAsync(card);
             return CardMapper.ToResponse(createdCard);
