@@ -57,7 +57,8 @@ namespace noava.Services.Cards
             var headerRow = ws.Row(1);
             int frontCol = 0, backCol = 0, memoCol = 0;
 
-            // read header row and map column numbers
+            // to centralize this, an extra DTO could be made (CardExcelIportDto) but the parsing is already 
+            // very low-level so this would be a slight overkill.
             foreach (var cell in headerRow.CellsUsed())
             {
                 var value = cell.GetString().Trim().ToLower();
@@ -94,7 +95,9 @@ namespace noava.Services.Cards
 
             return importedCards;
         }
-
+        // by adding an int deckId in this function you could remove the cards.add(....) and turn it into:
+        //cards.Add(CardMapper.FromCsvDto(row, deckId));
+        //no changes were made here as it would affect a lot of different files
         private List<Card> ParseCsv(Stream fileStream)
         {
             using var reader = new StreamReader(fileStream);
