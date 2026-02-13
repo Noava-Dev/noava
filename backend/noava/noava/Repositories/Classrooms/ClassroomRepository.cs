@@ -13,9 +13,11 @@ namespace noava.Repositories.Classrooms
             _context = context;
         }
 
-        public async Task AddAsync(Classroom classroom)
+        public async Task<Classroom> AddAsync(Classroom classroom)
         {
             await _context.Classrooms.AddAsync(classroom);
+            await _context.SaveChangesAsync();
+            return classroom;
         }
 
         public async Task<IEnumerable<Classroom>> GetAllAsync()
@@ -43,10 +45,11 @@ namespace noava.Repositories.Classrooms
                 .FirstOrDefaultAsync(c => c.Id == classroomId);
         }
 
-        public Task UpdateAsync(Classroom classroom)
+        public async Task<Classroom> UpdateAsync(Classroom classroom)
         {
             _context.Classrooms.Update(classroom);
-            return Task.CompletedTask;
+            await _context.SaveChangesAsync();
+            return classroom;
         }
 
         public async Task<Classroom?> GetByJoinCodeAsync(string joinCode)
@@ -56,14 +59,17 @@ namespace noava.Repositories.Classrooms
                 .FirstOrDefaultAsync(c => c.JoinCode == joinCode);
         }
 
-        public void Delete(Classroom classroom)
+        public async Task<bool> DeleteAsync(Classroom classroom)
         {
             _context.Classrooms.Remove(classroom);
+            await _context.SaveChangesAsync();
+            return true;
         }
 
         public async Task SaveChangesAsync()
         {
             await _context.SaveChangesAsync();
         }
+
     }
 }
