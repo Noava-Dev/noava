@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using noava.DTOs.Classrooms;
 using noava.DTOs.Clerk;
 using noava.DTOs.Decks;
+using noava.Exceptions;
 using noava.Services.Classrooms;
 using noava.Services.Users;
 using System.Security.Claims;
@@ -41,7 +42,7 @@ namespace noava.Controllers.Classrooms
         public async Task<ActionResult<IEnumerable<ClassroomResponseDto>>> GetAllForUser()
         {
             var userId = _userService.GetUserId(User);
-            if (userId == null) return Unauthorized();
+            if (userId == null) throw new UnauthorizedException("Not authorized");
 
             var result = await _classroomService.GetAllByUserAsync(userId);
             return Ok(result);
@@ -51,7 +52,7 @@ namespace noava.Controllers.Classrooms
         public async Task<ActionResult<ClassroomResponseDto>> GetById(int id)
         {
             var userId = _userService.GetUserId(User);
-            if (userId == null) return Unauthorized();
+            if (userId == null) throw new UnauthorizedException("Not authorized");
 
             var result = await _classroomService.GetByIdAsync(id, userId);
             if (result == null) return NotFound();
