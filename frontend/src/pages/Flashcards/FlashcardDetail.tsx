@@ -131,7 +131,10 @@ function FlashcardDetail() {
     }
   };
 
-  const handleCreateFlashcard = async (flashcard: CreateFlashcardRequest, createMore: boolean) => {
+  const handleCreateFlashcard = async (
+    flashcard: CreateFlashcardRequest,
+    createMore: boolean
+  ) => {
     try {
       if (selectedFlashcard) {
         await flashcardService.update(
@@ -157,13 +160,13 @@ function FlashcardDetail() {
     }
   };
 
-  const backUrl = fromClassroom && classroomId 
-    ? `/classrooms/${classroomId}` 
-    : '/decks';
-  
-  const backText = fromClassroom && classroomName
-    ? t('flashcardDetail.backToClassroom', { name: classroomName })
-    : t('flashcardDetail.backToDeck');
+  const backUrl =
+    fromClassroom && classroomId ? `/classrooms/${classroomId}` : '/decks';
+
+  const backText =
+    fromClassroom && classroomName
+      ? t('flashcardDetail.backToClassroom', { name: classroomName })
+      : t('flashcardDetail.backToDeck');
 
   const handleEditFlashcard = (flashcard: Flashcard) => {
     setSelectedFlashcard(flashcard);
@@ -198,7 +201,7 @@ function FlashcardDetail() {
     setIsModalOpen(false);
     setSelectedFlashcard(undefined);
   };
-  
+
   if (loading) {
     return (
       <div className="flex min-h-screen bg-background-app-light dark:bg-background-app-dark">
@@ -266,8 +269,9 @@ function FlashcardDetail() {
             </div>
 
             {/* Action Buttons */}
-            <div className="flex justify-between mb-8">
-              <div className="flex gap-3">
+            <div className="flex flex-col gap-3 mb-8 md:flex-row md:justify-between md:items-start">
+              {/* Left button group */}
+              <div className="grid grid-cols-1 gap-3 md:flex md:flex-wrap">
                 {/* Create/Import cards button */}
                 <DropdownButton
                   size="lg"
@@ -276,47 +280,50 @@ function FlashcardDetail() {
                     setIsModalOpen(true);
                   }}
                   icon={HiPlus}
-                  text={t('flashcardDetail.addCard')}>
+                  text={t('flashcardDetail.addCard')}
+                  className="w-full">
                   <DropdownItem onClick={() => setShowImportModal(true)}>
                     {t('flashcardDetail.importFromFile')}
                   </DropdownItem>
                 </DropdownButton>
+
+                {/* Study Now */}
                 <Button size="lg" disabled={totalCards === 0}>
                   <HiPlay className="mr-2 size-5" />
                   {t('flashcardDetail.studyNow')}
                 </Button>
+
+                {/* Quick Review */}
                 <Dropdown
-                    label=""
-                    dismissOnClick={true}
-                    renderTrigger={() => (
-                      <Button size="lg" className="bg-cyan-500 hover:bg-cyan-600">
-                        <HiPlay className="w-5 h-5 mr-2" />
-                        {t('flashcardDetail.quickReview')}
-                        <HiChevronDown className="w-4 h-4 ml-1" />
-                      </Button>
-                    )}
-                  >
-                    <DropdownItem
-                      icon={HiPlay}
-                      onClick={() => navigate(`/decks/${deckId}/quickReview`)}
-                    >
-                      {t('flashcardDetail.flipMode')}
-                    </DropdownItem>
-                    <DropdownItem
-                      icon={HiPencil}
-                      onClick={() => navigate(`/decks/${deckId}/writeReview`)}
-                    >
-                      {t('flashcardDetail.writeReview')}
-                    </DropdownItem>
-                    <DropdownItem
-                      icon={HiRefresh}
-                      onClick={() => navigate(`/decks/${deckId}/reverseReview`)}
-                    >
-                      {t('flashcardDetail.reverseReview')}
-                    </DropdownItem>
-                  </Dropdown>
+                  label=""
+                  dismissOnClick={true}
+                  renderTrigger={() => (
+                    <Button size="lg" className="bg-cyan-500 hover:bg-cyan-600">
+                      <HiPlay className="w-5 h-5 mr-2" />
+                      {t('flashcardDetail.quickReview')}
+                      <HiChevronDown className="w-4 h-4 ml-1" />
+                    </Button>
+                  )}>
+                  <DropdownItem
+                    icon={HiPlay}
+                    onClick={() => navigate(`/decks/${deckId}/quickReview`)}>
+                    {t('flashcardDetail.flipMode')}
+                  </DropdownItem>
+                  <DropdownItem
+                    icon={HiPencil}
+                    onClick={() => navigate(`/decks/${deckId}/writeReview`)}>
+                    {t('flashcardDetail.writeReview')}
+                  </DropdownItem>
+                  <DropdownItem
+                    icon={HiRefresh}
+                    onClick={() => navigate(`/decks/${deckId}/reverseReview`)}>
+                    {t('flashcardDetail.reverseReview')}
+                  </DropdownItem>
+                </Dropdown>
               </div>
-              <div className="flex gap-3">
+
+              {/* Right button group */}
+              <div className="grid grid-cols-1 gap-3 md:block">
                 <Button
                   size="lg"
                   className="bg-gradient-to-r from-secondary-600 to-secondary-700 hover:shadow-sm hover:border-border"
