@@ -369,20 +369,10 @@ function FlashcardDetail() {
                 </Dropdown>
               </div>
 
-              {/* Right button group */}
-              <div className="grid grid-cols-1 gap-3 md:block">
-                <Button
-                  size="lg"
-                  className="bg-gradient-to-r from-secondary-600 to-secondary-700 hover:shadow-sm hover:border-border"
-                  onClick={() => setManageOwnersOpened(true)}>
-                  <HiUserGroup className="mr-2 size-5" />
-                  {t('decks:ownership.manageAccess')}
-                </Button>
-              </div>
-
+       
               {/*  Only show Manage Access button for creator */}
               {isCreator && (
-                <div className="flex gap-3">
+                <div className="grid grid-cols-1 gap-3 md:block">
                   <Button
                     size="lg"
                     className="bg-gradient-to-r from-secondary-600 to-secondary-700 hover:shadow-sm hover:border-border"
