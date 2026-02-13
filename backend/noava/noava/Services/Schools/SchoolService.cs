@@ -71,15 +71,17 @@ namespace noava.Services.Schools
             foreach (var email in request.SchoolAdminEmails.Distinct())
             {
                 var user = await _clerkService.GetUserByEmailAsync(email);
-
-                if (user != null)
+                if (user == null)
                 {
-                    schoolAdmins.Add(new SchoolAdmin
-                    {
-                        ClerkId = user.ClerkId
-                    });
+                    Console.WriteLine($"Clerk user not found for email: {email}");
+                }
+                else
+                {
+                    Console.WriteLine($"Clerk found: {user.ClerkId} for {email}");
+                    schoolAdmins.Add(new SchoolAdmin { ClerkId = user.ClerkId });
                 }
             }
+
 
             if (schoolAdmins.Count == 0)
             {
