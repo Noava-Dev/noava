@@ -42,11 +42,25 @@ namespace noava.Services
             _context = context;
         }
 
+        private bool IsValidBlobName(string? blobName)
+        {
+            if (string.IsNullOrEmpty(blobName))
+                return true;
+
+
+            var parts = blobName.Split('_', 2);
+            if (parts.Length != 2) return false;
+
+            return Guid.TryParse(parts[0], out _);
+        }
+
+
         public async Task<List<DeckResponse>> GetAllDecksAsync()
         {
             var decks = await _repository.GetAllAsync();
             return decks.Select(d => d.ToResponseDto()).ToList();
         }
+
 
         public async Task<List<DeckResponse>> GetUserDecksAsync(string userId, int? limit = null)
         {
@@ -91,6 +105,12 @@ namespace noava.Services
 
         public async Task<DeckResponse> CreateDeckAsync(DeckRequest request, string userId)
         {
+            
+            if (!IsValidBlobName(request.CoverImageBlobName))
+            {
+                throw new ArgumentException("Invalid cover image blob name format.");
+            }
+
             var deck = new Deck
             {
                 Title = request.Title,
@@ -122,9 +142,18 @@ namespace noava.Services
             var existingDeck = await _repository.GetByIdAsync(id);
             if (existingDeck == null) return null;
 
-            // Only allow update if user is owner
+
             var isOwner = await _deckUserRepo.IsOwnerAsync(id, userId);
-            if (!isOwner) return null;
+            var isCreator = existingDeck.UserId == userId;
+
+            if (!isOwner && !isCreator)
+                return null;
+
+
+            if (!IsValidBlobName(request.CoverImageBlobName))
+            {
+                throw new ArgumentException("Invalid cover image blob name format.");
+            }
 
             var oldImageBlobName = existingDeck.CoverImageBlobName;
             var newImageBlobName = request.CoverImageBlobName;

@@ -83,29 +83,52 @@ namespace noava.Controllers
         [HttpPost]
         public async Task<ActionResult<DeckResponse>> CreateDeck([FromBody] DeckRequest request)
         {
-            var userId = _userService.GetUserId(User);
+
+               var userId = _userService.GetUserId(User);
             if (userId == null)
                 return Unauthorized();
-            
-            var createdDeck = await _deckService.CreateDeckAsync(request, userId);
-            return CreatedAtAction(nameof(GetDeck), new { id = createdDeck.DeckId }, createdDeck);
+
+            try
+            {
+                var createdDeck = await _deckService.CreateDeckAsync(request, userId);
+                return CreatedAtAction(nameof(GetDeck), new { id = createdDeck.DeckId }, createdDeck);
+            }
+            catch (ArgumentException ex)  
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+
         }
 
         [HttpPut("{id}")]
         public async Task<ActionResult<DeckResponse>> UpdateDeck(int id, [FromBody] DeckRequest request)
         {
+
             var userId = _userService.GetUserId(User);
             if (userId == null)
                 return Unauthorized();
-                
+
             var canView = await _deckService.CanUserViewDeckAsync(id, userId);
             if (!canView)
                 return NotFound();
-            
-            var updatedDeck = await _deckService.UpdateDeckAsync(id, request, userId);
-            if (updatedDeck == null) return NotFound();
-            return Ok(updatedDeck);
+                
+            try
+            {
+                var updatedDeck = await _deckService.UpdateDeckAsync(id, request, userId);
+                if (updatedDeck == null) return NotFound();
+                return Ok(updatedDeck);
+            }
+            catch (ArgumentException ex) 
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Forbid();
+            }
+
         }
+
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteDeck(int id)

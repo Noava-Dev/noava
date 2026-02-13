@@ -36,7 +36,7 @@ export const useApi = (): AxiosInstance => {
           await clerkReadyRef.current?.promise;
 
           const token = await getToken();
-          //console.log(token);
+          console.log(token);
           if (token) config.headers.Authorization = `Bearer ${token}`;
         } catch (err) {}
 
@@ -44,7 +44,6 @@ export const useApi = (): AxiosInstance => {
       },
       (error) => Promise.reject(error)
     );
-
     return instance;
   }, [getToken]);
 
