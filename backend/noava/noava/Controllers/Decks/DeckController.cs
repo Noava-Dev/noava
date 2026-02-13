@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 using noava.DTOs.Decks;
 using noava.Services.Decks;
+using noava.Services.Users;
 
 namespace noava.Controllers
 {
@@ -12,18 +12,12 @@ namespace noava.Controllers
     public class DeckController : ControllerBase
     {
         private readonly IDeckService _deckService;
+        private readonly IUserService _userService;
 
-        public DeckController(IDeckService deckService)
+        public DeckController(IDeckService deckService, IUserService userService)
         {
             _deckService = deckService;
-        }
-
-        // TODO: Move to UserService
-        private string GetUserId()
-        {
-            return User.FindFirstValue("sub")
-                   ?? User.FindFirstValue(ClaimTypes.NameIdentifier)
-                   ?? throw new UnauthorizedAccessException("User ID not found");
+            _userService = userService;
         }
 
         [HttpGet]
@@ -36,7 +30,10 @@ namespace noava.Controllers
         [HttpGet("user")]
         public async Task<ActionResult<List<DeckResponse>>> GetMyDecks([FromQuery] int? limit = null)
         {
-            var userId = GetUserId();
+            var userId = _userService.GetUserId(User);
+            if (userId == null)
+                return Unauthorized();
+            
             var decks = await _deckService.GetUserDecksAsync(userId, limit);
             return Ok(decks);
         }
@@ -52,7 +49,9 @@ namespace noava.Controllers
         [HttpGet("multiple")]
         public async Task<ActionResult<DeckResponse>> GetDecksByIds([FromQuery] int[] ids)
         {
-            var userId = GetUserId();
+            var userId = _userService.GetUserId(User);
+            if (userId == null)
+                return Unauthorized();
 
             var deck = await _deckService.GetDeckByIdsAsync(ids, userId);
             return Ok(deck);
@@ -61,7 +60,10 @@ namespace noava.Controllers
         [HttpPost]
         public async Task<ActionResult<DeckResponse>> CreateDeck([FromBody] DeckRequest request)
         {
-            var userId = GetUserId();
+            var userId = _userService.GetUserId(User);
+            if (userId == null)
+                return Unauthorized();
+            
             var createdDeck = await _deckService.CreateDeckAsync(request, userId);
             return CreatedAtAction(nameof(GetDeck), new { id = createdDeck.DeckId }, createdDeck);
         }
@@ -69,7 +71,10 @@ namespace noava.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<DeckResponse>> UpdateDeck(int id, [FromBody] DeckRequest request)
         {
-            var userId = GetUserId();
+            var userId = _userService.GetUserId(User);
+            if (userId == null)
+                return Unauthorized();
+            
             var updatedDeck = await _deckService.UpdateDeckAsync(id, request, userId);
             if (updatedDeck == null) return NotFound();
             return Ok(updatedDeck);
@@ -78,7 +83,10 @@ namespace noava.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteDeck(int id)
         {
-            var userId = GetUserId();
+            var userId = _userService.GetUserId(User);
+            if (userId == null)
+                return Unauthorized();
+            
             var result = await _deckService.DeleteDeckAsync(id, userId);
             if (!result) return NotFound();
             return NoContent();
