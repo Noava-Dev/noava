@@ -10,6 +10,7 @@ import Loading from '../../shared/components/loading/Loading';
 import { useNavigate} from 'react-router-dom';
 import { useUser } from '@clerk/clerk-react';
 import { useUserRole } from '../../hooks/useUserRole';
+import ConfirmModal from '../../shared/components/ConfirmModal';
 
 export default function SchoolsPage() {
   const navigate = useNavigate();
@@ -24,6 +25,7 @@ export default function SchoolsPage() {
   const [editingSchool, setEditingSchool] = useState<SchoolDto | null>(null);
   const [schools, setSchools] = useState<SchoolDto[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [deleteSchool, setDeleteSchool] = useState<SchoolDto | null>(null);
 
   const fetchSchools = async () => {
     try {
@@ -90,28 +92,30 @@ const handleDeleteSchool = async (id: number) => {
   const school = schools.find((s) => s.id === id);
   if(!school) return;
 
-  //TODO: needs to replaced with the proper component for the confirm modal
-  const confirmed = window.confirm(
-    `Are you sure you want to delete "${school.schoolName}"?`
-  )
+  setDeleteSchool(school)
+}
 
-  if(!confirmed) return;
+const confirmDeleteSchool = async () => {
+  if (!deleteSchool) return;
 
-  try{
-    await schoolService.delete(id);
-
+  try {
+    await schoolService.delete(deleteSchool.id);
     showSuccess(
       "School deleted",
-      `${school.schoolName} was removed successfully.`
+      `${deleteSchool.schoolName} was removed successfully.`
     );
-    await fetchSchools(); 
-  } catch { 
-    showError("Delete failed", "Could not delete school."); }
+    await fetchSchools();
+  } catch {
+    showError("Delete failed", "Could not delete school.");
+  } finally {
+    setDeleteSchool(null);
   }
+};
 
-  const handleCardClick = (id: number) => {
+
+const handleCardClick = (id: number) => {
     navigate(`/schoolClassrooms/${id}`)
-  }
+}
 
 if (loading) { 
   return ( 
@@ -165,7 +169,6 @@ return (
           ) : (
             schools.map((school) => (
               <SchoolCard
-              //TODO: see if i can remove the id and just keep the key
                 key={school.id}
                 id={school.id}
                 name={school.schoolName}
@@ -203,6 +206,17 @@ return (
           : undefined
         }
       />
+
+      <ConfirmModal
+        show={deleteSchool !== null}
+        title="Delete School"
+        message={`Are you sure you want to delete "${deleteSchool?.schoolName}"?`}
+        confirmLabel="Yes, delete"
+        cancelLabel="Cancel"
+        onConfirm={confirmDeleteSchool}
+        onCancel={() => setDeleteSchool(null)}
+      />
+
     </div>
   );
 }
