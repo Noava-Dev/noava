@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using noava.DTOs.Schools;
 using noava.Services.Schools;
 using noava.Services.Users;
@@ -7,24 +6,18 @@ using System.Security.Claims;
 
 namespace noava.Controllers.Schools
 {
-    //Changed the controller slightly because i had issues with the role enforcing
-    //later on this allow anonymous should be removed
-    [AllowAnonymous]
+
     [ApiController]
     [Route("api/[controller]")]
     public class SchoolsController : ControllerBase
     {
         private readonly ISchoolService _schoolService;
-        private string GetCurrentUserId()
-        {
-            return User.FindFirstValue("sub")
-                   ?? User.FindFirstValue(ClaimTypes.NameIdentifier)
-                   ?? throw new UnauthorizedAccessException("User ID not found");
-        }
+        private readonly IUserService _userService;
 
-        public SchoolsController(ISchoolService schoolService)
+        public SchoolsController(ISchoolService schoolService, IUserService userService)
         {
             _schoolService = schoolService;
+            _userService = userService;
         }
 
         [HttpGet]
@@ -53,7 +46,10 @@ namespace noava.Controllers.Schools
         {
             try
             {
-                var createdByUserId = GetCurrentUserId();
+                var createdByUserId = _userService.GetUserId(User);
+                if (createdByUserId == null)
+                    return Unauthorized();
+                
                 request.CreatedBy = createdByUserId;
 
                 await _schoolService.CreateSchoolAsync(request);

@@ -3,9 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using noava.DTOs.Cards;
 using noava.Models.Enums;
 using noava.Services.Cards;
-using System.Security.Claims;
-using Azure.Core;
-using noava.Models;
+using noava.Services.Users;
 
 namespace noava.Controllers.Cards
 {
@@ -16,24 +14,21 @@ namespace noava.Controllers.Cards
     {
         private readonly ICardService _cardService;
         private readonly ICardImportService _cardImportService;
+        private readonly IUserService _userService;
 
-        public CardController(ICardService cardService, ICardImportService cardImportService)
+        public CardController(ICardService cardService, ICardImportService cardImportService, IUserService userService)
         {
             _cardService = cardService;
             _cardImportService = cardImportService;
-        }
-
-        private string GetUserId()
-        {
-            return User.FindFirstValue("sub")
-                   ?? User.FindFirstValue(ClaimTypes.NameIdentifier)
-                   ?? throw new UnauthorizedAccessException("User ID not found");
+            _userService = userService;
         }
         
         [HttpGet("deck/{deckId}")]
         public async Task<ActionResult<List<CardResponse>>> GetCardsByDeckId(int deckId)
         {
-            var userId = GetUserId();
+            var userId = _userService.GetUserId(User);
+            if (userId == null) return Unauthorized();
+            
             var cards = await _cardService.GetCardsByDeckIdAsync(deckId, userId);
             return Ok(cards);
         }
@@ -41,7 +36,9 @@ namespace noava.Controllers.Cards
         [HttpGet("{id}")]
         public async Task<ActionResult<CardResponse>> GetCard(int id)
         {
-            var userId = GetUserId();
+            var userId = _userService.GetUserId(User);
+            if (userId == null) return Unauthorized();
+
             var card = await _cardService.GetCardByIdAsync(id, userId);
             if (card == null) return NotFound();
             return Ok(card);
@@ -52,7 +49,8 @@ namespace noava.Controllers.Cards
             [FromQuery] List<int> deckIds,
             [FromQuery] BulkReviewMode mode)
         {
-            var userId = GetUserId();
+            var userId = _userService.GetUserId(User);
+            if (userId == null) return Unauthorized();
 
             if (deckIds == null || deckIds.Count == 0)
                 return BadRequest("DeckIds can not be empty");
@@ -71,7 +69,9 @@ namespace noava.Controllers.Cards
             int deckId,
             [FromBody] CardRequest request)
         {
-            var userId = GetUserId();
+            var userId = _userService.GetUserId(User);
+            if (userId == null) return Unauthorized();
+            
             var createdCard = await _cardService.CreateCardAsync(deckId, request, userId);
             return CreatedAtAction(nameof(GetCard), new { id = createdCard.CardId }, createdCard);
         }
@@ -82,7 +82,9 @@ namespace noava.Controllers.Cards
             int id,
             [FromBody] CardRequest request)
         {
-            var userId = GetUserId();
+            var userId = _userService.GetUserId(User);
+            if (userId == null) return Unauthorized();
+            
             var updatedCard = await _cardService.UpdateCardAsync(id, request, userId);
             if (updatedCard == null) return NotFound();
             return Ok(updatedCard);
@@ -92,7 +94,9 @@ namespace noava.Controllers.Cards
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteCard(int id)
         {
-            var userId = GetUserId();
+            var userId = _userService.GetUserId(User);
+            if (userId == null) return Unauthorized();
+            
             var result = await _cardService.DeleteCardAsync(id, userId);
             if (!result) return NotFound();
             return NoContent();
@@ -101,7 +105,8 @@ namespace noava.Controllers.Cards
         [HttpPost("deck/{deckId}/import")]
         public async Task<ActionResult<int>> ImportCards(int deckId, [FromForm] IFormFile file)
         {
-            var userId = GetUserId();
+            var userId = _userService.GetUserId(User);
+            if (userId == null) return Unauthorized();
 
             if (file == null || file.Length == 0)
             {
