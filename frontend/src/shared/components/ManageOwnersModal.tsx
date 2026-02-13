@@ -9,10 +9,10 @@ import {
   ModalBody,
   ModalFooter,
 } from 'flowbite-react';
-import { useAuth, useUser } from '@clerk/clerk-react';
+import { useUser } from '@clerk/clerk-react';
 import { HiUserGroup, HiTrash, HiX, HiUserAdd, HiClock } from 'react-icons/hi';
-import { deckOwnershipService } from '../../services/DeckOwnershipService';
-import { deckInvitationService } from '../../services/DeckInvitationService';
+import { useDeckOwnershipService } from '../../services/DeckOwnershipService';
+import { useDeckInvitationService } from '../../services/DeckInvitationService';
 import type { DeckOwner } from '../../models/DeckOwner';
 import {
   InvitationStatus,
@@ -34,8 +34,9 @@ export const ManageOwnersModal: React.FC<ManageOwnersModalProps> = ({
   deckTitle,
 }) => {
   const { t } = useTranslation('decks');
-  const { getToken } = useAuth();
   const { user } = useUser();
+  const deckOwnershipService = useDeckOwnershipService();
+  const deckInvitationService = useDeckInvitationService();
 
   const [owners, setOwners] = useState<DeckOwner[]>([]);
   const [invitations, setInvitations] = useState<DeckInvitation[]>([]);
@@ -51,12 +52,9 @@ export const ManageOwnersModal: React.FC<ManageOwnersModalProps> = ({
   const loadData = async () => {
     setLoading(true);
     try {
-      const token = await getToken();
-      if (!token) return;
-
       const [ownersData, invitationsData] = await Promise.all([
-        deckOwnershipService.getOwners(deckId, token),
-        deckInvitationService.getInvitationsForDeck(deckId, token),
+        deckOwnershipService.getOwners(deckId),
+        deckInvitationService.getInvitationsForDeck(deckId),
       ]);
 
       setOwners(Array.isArray(ownersData) ? ownersData : []);
@@ -76,10 +74,8 @@ export const ManageOwnersModal: React.FC<ManageOwnersModalProps> = ({
     if (!confirm(t('ownership.confirmRemove'))) return;
 
     try {
-      const token = await getToken();
-      if (!token) return;
 
-      await deckOwnershipService.removeOwner(deckId, ownerClerkId, token);
+      await deckOwnershipService.removeOwner(deckId, ownerClerkId);
       await loadData();
     } catch (err: any) {
       console.error('Error removing owner:', err);
@@ -91,10 +87,7 @@ export const ManageOwnersModal: React.FC<ManageOwnersModalProps> = ({
     if (!confirm(t('ownership.confirmCancel'))) return;
 
     try {
-      const token = await getToken();
-      if (!token) return;
-
-      await deckInvitationService.cancelInvitation(invitationId, token);
+      await deckInvitationService.cancelInvitation(invitationId);
       await loadData();
     } catch (err) {
       console.error('Error canceling invitation:', err);

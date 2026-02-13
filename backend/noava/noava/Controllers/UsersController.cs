@@ -20,13 +20,11 @@ namespace noava.Controllers
         [HttpGet("me")]
         public async Task<IActionResult> SyncUser()
         {
-            var clerkId = User.FindFirstValue(ClaimTypes.NameIdentifier) ??
-                          User.FindFirstValue("sub");
+            var userId = _userService.GetUserId(User);
+            if (userId == null)
+                return Unauthorized();
 
-            if (string.IsNullOrEmpty(clerkId))
-                return Unauthorized("No ClerkId found in token.");
-
-            var user = await _userService.SyncUserAsync(clerkId);
+            var user = await _userService.SyncUserAsync(userId);
 
             return Ok(new
             {

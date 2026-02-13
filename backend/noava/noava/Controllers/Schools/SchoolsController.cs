@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using noava.DTOs.Classrooms;
+﻿using Microsoft.AspNetCore.Mvc;
 using noava.DTOs.Schools;
 using noava.Services.Classrooms;
 using noava.Services.Schools;
@@ -10,6 +11,7 @@ using System.Security.Claims;
 namespace noava.Controllers.Schools
 {
     [Authorize]
+
     [ApiController]
     [Route("api/[controller]")]
     public class SchoolsController : ControllerBase
@@ -27,6 +29,12 @@ namespace noava.Controllers.Schools
         {
             _schoolService = schoolService;
             _classroomService = classroomService;
+        private readonly IUserService _userService;
+
+        public SchoolsController(ISchoolService schoolService, IUserService userService)
+        {
+            _schoolService = schoolService;
+            _userService = userService;
         }
 
         [HttpGet]
@@ -58,7 +66,10 @@ namespace noava.Controllers.Schools
             Console.WriteLine(string.Join("\n", claims));
             try
             {
-                var createdByUserId = GetCurrentUserId();
+                var createdByUserId = _userService.GetUserId(User);
+                if (createdByUserId == null)
+                    return Unauthorized();
+                
                 request.CreatedBy = createdByUserId;
 
                 await _schoolService.CreateSchoolAsync(request);

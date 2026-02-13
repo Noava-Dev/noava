@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using noava.DTOs.Decks;
 using noava.Services.Decks;
-using System.Security.Claims;
+using noava.Services.Users;
 
 namespace noava.Controllers
 {
@@ -12,17 +12,12 @@ namespace noava.Controllers
     public class DeckOwnershipController : ControllerBase
     {
         private readonly IDeckOwnershipService _ownershipService;
+        private readonly IUserService _userService;
 
-        public DeckOwnershipController(IDeckOwnershipService ownershipService)
+        public DeckOwnershipController(IDeckOwnershipService ownershipService, IUserService userService)
         {
             _ownershipService = ownershipService;
-        }
-
-        private string GetClerkId()
-        {
-            return User.FindFirstValue("sub")
-                   ?? User.FindFirstValue(ClaimTypes.NameIdentifier)
-                   ?? throw new UnauthorizedAccessException("User ID not found");
+            _userService = userService;
         }
 
         [HttpGet("deck/{deckId}/owners")]
@@ -30,8 +25,11 @@ namespace noava.Controllers
         {
             try
             {
-                var clerkId = GetClerkId();
-                var owners = await _ownershipService.GetOwnersForDeckAsync(deckId, clerkId);
+                var userId = _userService.GetUserId(User);
+                if (userId == null)
+                    return Unauthorized();
+                
+                var owners = await _ownershipService.GetOwnersForDeckAsync(deckId, userId);
                 return Ok(owners);
             }
             catch (UnauthorizedAccessException ex)
@@ -45,8 +43,11 @@ namespace noava.Controllers
         {
             try
             {
-                var clerkId = GetClerkId();
-                var result = await _ownershipService.RemoveOwnerAsync(deckId, ownerClerkId, clerkId);
+                var userId = _userService.GetUserId(User);
+                if (userId == null)
+                    return Unauthorized();
+                
+                var result = await _ownershipService.RemoveOwnerAsync(deckId, ownerClerkId, userId);
 
                 if (!result)
                     return NotFound(new { error = "Owner not found" });
@@ -66,8 +67,11 @@ namespace noava.Controllers
         [HttpGet("deck/{deckId}/is-owner")]
         public async Task<ActionResult<bool>> IsOwner(int deckId)
         {
-            var clerkId = GetClerkId();
-            var isOwner = await _ownershipService.IsOwnerAsync(deckId, clerkId);
+            var userId = _userService.GetUserId(User);
+            if (userId == null)
+                return Unauthorized();
+            
+            var isOwner = await _ownershipService.IsOwnerAsync(deckId, userId);
             return Ok(new { isOwner });
         }
     }

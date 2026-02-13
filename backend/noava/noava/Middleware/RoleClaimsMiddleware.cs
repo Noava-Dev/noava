@@ -14,7 +14,7 @@ public class RoleClaimsMiddleware
     {
         if (context.User.Identity?.IsAuthenticated == true)
         {
-            var clerkId = context.User.Identity.Name;
+            var clerkId = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             if (!string.IsNullOrEmpty(clerkId))
             {

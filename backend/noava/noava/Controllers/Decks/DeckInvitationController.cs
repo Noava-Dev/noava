@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using noava.DTOs;
 using noava.DTOs.Decks;
 using noava.Services.Decks;
-using System.Security.Claims;
+using noava.Services.Users;
 
 namespace noava.Controllers
 {
@@ -13,28 +12,25 @@ namespace noava.Controllers
     public class DeckInvitationController : ControllerBase
     {
         private readonly IDeckInvitationService _invitationService;
+        private readonly IUserService _userService;
 
-        public DeckInvitationController(IDeckInvitationService invitationService)
+        public DeckInvitationController(IDeckInvitationService invitationService, IUserService userService)
         {
             _invitationService = invitationService;
+            _userService = userService;
         }
 
-        private string GetClerkId()
-        {
-            return User.FindFirstValue("sub")
-                   ?? User.FindFirstValue(ClaimTypes.NameIdentifier)
-                   ?? throw new UnauthorizedAccessException("User ID not found");
-        }
-
-        [HttpPost("deck/{deckId}/invite")]
+        [HttpPost("deck/{deckId}/invite/{clerkId}")]
         public async Task<ActionResult<DeckInvitationResponse>> InviteUser(
-            int deckId,
-            [FromBody] InviteUserRequest request)
+            int deckId, string clerkId)
         {
             try
             {
-                var clerkId = GetClerkId();
-                var invitation = await _invitationService.InviteUserAsync(deckId, request, clerkId);
+                var userId = _userService.GetUserId(User);
+                if (userId == null)
+                    return Unauthorized();
+                
+                var invitation = await _invitationService.InviteUserAsync(deckId, clerkId, userId);
                 return Ok(invitation);
             }
             catch (UnauthorizedAccessException ex)
@@ -52,8 +48,11 @@ namespace noava.Controllers
         {
             try
             {
-                var clerkId = GetClerkId();
-                var invitations = await _invitationService.GetInvitationsForDeckAsync(deckId, clerkId);
+                var userId = _userService.GetUserId(User);
+                if (userId == null)
+                    return Unauthorized();
+                
+                var invitations = await _invitationService.GetInvitationsForDeckAsync(deckId, userId);
                 return Ok(invitations);
             }
             catch (UnauthorizedAccessException ex)
@@ -65,8 +64,11 @@ namespace noava.Controllers
         [HttpGet("pending")]
         public async Task<ActionResult<List<DeckInvitationResponse>>> GetPendingInvitations()
         {
-            var clerkId = GetClerkId();
-            var invitations = await _invitationService.GetPendingInvitationsForUserAsync(clerkId);
+            var userId = _userService.GetUserId(User);
+            if (userId == null)
+                return Unauthorized();
+            
+            var invitations = await _invitationService.GetPendingInvitationsForUserAsync(userId);
             return Ok(invitations);
         }
 
@@ -75,8 +77,11 @@ namespace noava.Controllers
         {
             try
             {
-                var clerkId = GetClerkId();
-                var invitation = await _invitationService.AcceptInvitationAsync(invitationId, clerkId);
+                var userId = _userService.GetUserId(User);
+                if (userId == null)
+                    return Unauthorized();
+                
+                var invitation = await _invitationService.AcceptInvitationAsync(invitationId, userId);
 
                 if (invitation == null)
                     return NotFound(new { error = "Invitation not found" });
@@ -98,8 +103,11 @@ namespace noava.Controllers
         {
             try
             {
-                var clerkId = GetClerkId();
-                var invitation = await _invitationService.DeclineInvitationAsync(invitationId, clerkId);
+                var userId = _userService.GetUserId(User);
+                if (userId == null)
+                    return Unauthorized();
+                
+                var invitation = await _invitationService.DeclineInvitationAsync(invitationId, userId);
 
                 if (invitation == null)
                     return NotFound(new { error = "Invitation not found" });
@@ -121,8 +129,11 @@ namespace noava.Controllers
         {
             try
             {
-                var clerkId = GetClerkId();
-                var result = await _invitationService.CancelInvitationAsync(invitationId, clerkId);
+                var userId = _userService.GetUserId(User);
+                if (userId == null)
+                    return Unauthorized();
+                
+                var result = await _invitationService.CancelInvitationAsync(invitationId, userId);
 
                 if (!result)
                     return NotFound(new { error = "Invitation not found" });
