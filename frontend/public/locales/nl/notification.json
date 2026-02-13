@@ -1,21 +1,50 @@
 {
-  "empty": "Geen meldingen",
+  "title": "Meldingen",
+  "empty": {
+    "title": "Geen meldingen",
+    "message": "Je hebt op dit moment geen meldingen."
+  },
+  "types": {
+    "deckInvite": "Deck Uitnodiging",
+    "info": "Informatie",
+    "warning": "Waarschuwing",
+    "error": "Fout"
+  },
+  "actions": {
+    "accept": "Accepteren",
+    "decline": "Afwijzen",
+    "view": "Bekijken",
+    "dismiss": "Sluiten"
+  },
+  "messages": {
+    "deckInvite": "{{userName}} heeft je uitgenodigd voor het deck \"{{deckName}}\"",
+    "deckJoined": "Je bent toegevoegd aan het deck \"{{deckName}}\"",
+    "roleChanged": "Je rol in \"{{deckName}}\" is gewijzigd naar {{role}}"
+  },
   "errors": {
-    "fetch": "Meldingen ophalen mislukt",
-    "delete": "Melding verwijderen mislukt",
     "action": "Actie uitvoeren mislukt",
+    "delete": "Melding verwijderen mislukt",
+    "load": "Meldingen laden mislukt",
+    "fetch": "Kon meldingen niet laden",
     "params": "Ongeldige meldingsparameters"
+  },
+  "toast": {
+    "accepted": "Uitnodiging geaccepteerd",
+    "declined": "Uitnodiging afgewezen",
+    "deleted": "Melding verwijderd"
+  },
+  "joined": {
+    "success": "Succesvol toegevoegd aan het deck!"
   },
   "notifications": {
     "genericTitle": "Melding",
-    "received": "Je hebt een nieuwe melding",
     "items": {
-      "classroom": {
+      "deck": {
         "invite": {
-          "received": "Je bent uitgenodigd voor {{classroomName}} door {{teacherName}}",
+          "received": "{{userName}} heeft je uitgenodigd voor het deck \"{{deckName}}\"",
           "actions": {
-            "accept": "Uitnodiging accepteren",
-            "deny": "Uitnodiging weigeren"
+            "accept": "Accepteren",
+            "decline": "Afwijzen"
           }
         }
       }

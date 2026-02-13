@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using noava.Data;
@@ -11,9 +12,11 @@ using noava.Data;
 namespace noava.Migrations
 {
     [DbContext(typeof(NoavaDbContext))]
-    partial class NoavaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260212093030_AddJoinCodeToDeck")]
+    partial class AddJoinCodeToDeck
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -224,9 +227,6 @@ namespace noava.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
-                    b.Property<int?>("SchoolId")
-                        .HasColumnType("integer");
-
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -234,8 +234,6 @@ namespace noava.Migrations
 
                     b.HasIndex("JoinCode")
                         .IsUnique();
-
-                    b.HasIndex("SchoolId");
 
                     b.ToTable("Classrooms");
                 });
@@ -747,15 +745,6 @@ namespace noava.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("noava.Models.Classroom", b =>
-                {
-                    b.HasOne("noava.Models.School", "School")
-                        .WithMany("Classrooms")
-                        .HasForeignKey("SchoolId");
-
-                    b.Navigation("School");
-                });
-
             modelBuilder.Entity("noava.Models.ClassroomDeck", b =>
                 {
                     b.HasOne("noava.Models.Classroom", "Classroom")
@@ -927,8 +916,6 @@ namespace noava.Migrations
 
             modelBuilder.Entity("noava.Models.School", b =>
                 {
-                    b.Navigation("Classrooms");
-
                     b.Navigation("SchoolAdmins");
                 });
 

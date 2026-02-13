@@ -44,7 +44,6 @@ export const useApi = (): AxiosInstance => {
       },
       (error) => Promise.reject(error)
     );
-
     return instance;
   }, [getToken]);
 

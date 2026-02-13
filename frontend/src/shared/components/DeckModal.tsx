@@ -81,6 +81,17 @@ function DeckModal({ isOpen, onClose, onSubmit, deck }: DeckModalProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Validation
+    if (!title.trim()) {
+      showError(t('toast.error'), t('modal.titleRequired'));
+      return;
+    }
+
+    if (!language) {
+      showError(t('toast.error'), t('modal.languageRequired'));
+      return;
+    }
+
     try {
       setUploading(true);
 
@@ -89,13 +100,26 @@ function DeckModal({ isOpen, onClose, onSubmit, deck }: DeckModalProps) {
         finalBlobName = await azureBlobService.upload('deck-images', imageFile);
       }
 
-      onSubmit({
-        title,
-        description: description || undefined,
-        language,
+      // Backend security update: expects format {GUID}_{extension} (underscore, not dot)
+      // Convert blob name from "uuid.ext" to "uuid_ext"
+      let cleanBlobName = finalBlobName;
+      if (cleanBlobName) {
+        // Replace the last dot with underscore (e.g., "uuid.jpg" -> "uuid_jpg")
+        const lastDotIndex = cleanBlobName.lastIndexOf('.');
+        if (lastDotIndex !== -1) {
+          cleanBlobName = cleanBlobName.substring(0, lastDotIndex) + '_' + cleanBlobName.substring(lastDotIndex + 1);
+        }
+      }
+
+      const deckData: DeckRequest = {
+        title: title.trim(),
+        description: description.trim() || undefined,
+        language: language.trim(),
         visibility,
-        coverImageBlobName: finalBlobName,
-      });
+        coverImageBlobName: cleanBlobName,
+      };
+
+      onSubmit(deckData);
 
       setTitle('');
       setDescription('');

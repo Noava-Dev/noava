@@ -55,13 +55,6 @@ function QuickReview() {
     };
   }, [session?.currentIndex]);
 
-  // Stop speech when component unmounts or card changes
-  useEffect(() => {
-    return () => {
-      window.speechSynthesis.cancel();
-    };
-  }, [session?.currentIndex]);
-
   // Load images and audio for current card
   useEffect(() => {
     if (session && session.cards.length > 0) {
@@ -110,16 +103,13 @@ function QuickReview() {
   }, [session?.currentIndex]);
 
   const initializeSession = async (deckIds: number[], mode: BulkReviewMode) => {
-    //console.log('Initializing quick review session with deckIds:', deckIds, 'and mode:', mode);
     try {
       setLoading(true);
 
       const isSingleDeck = deckIds.length === 1;
 
-      // Haal kaarten en alle betrokken decks op
       const cardsData = await flashcardService.getBulkReviewCards(deckIds, mode);
       const decksData = await deckService.getByMultipleIds(deckIds);
-      //console.log('Loaded decks for quick review:', decksData);
 
       if (cardsData.length === 0) {
         showError(t('quickReview.noCards'), t('quickReview.error'));
@@ -133,7 +123,6 @@ function QuickReview() {
         return;
       }
 
-      // Maak een map van deckId -> Deck voor spraak functionaliteit
       const decksMap = new Map<number, Deck>();
       decksData.forEach(deck => {
         if (deck) {
@@ -150,15 +139,19 @@ function QuickReview() {
         isFlipped: false,
         completedCards: 0,
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error loading review cards:', error);
-      showError(t('common:toast.error'), t('quickReview.error'));
-      if (deckIds.length === 1 && deckId) {
-        navigate(`/decks/${deckId}/cards`);
-      } else if (classroomId) {
-        navigate(`/classrooms/${classroomId}`);
+      if (error.response?.status === 404 || error.response?.status === 403) {
+        navigate('/not-found', { replace: true });
       } else {
-        navigate('/decks');
+        showError(t('common:toast.error'), t('quickReview.error'));
+        if (deckIds.length === 1 && deckId) {
+          navigate(`/decks/${deckId}/cards`);
+        } else if (classroomId) {
+          navigate(`/classrooms/${classroomId}`);
+        } else {
+          navigate('/decks');
+        }
       }
     } finally {
       setLoading(false);
@@ -224,9 +217,8 @@ function QuickReview() {
     }
   };
 
-  // ← PRIORITY: Audio file FIRST, then TTS
   const handlePlayAudio = (side: 'front' | 'back', e: React.MouseEvent) => {
-    e.stopPropagation(); // Prevent card flip
+    e.stopPropagation();
 
     if (!session) return;
 
@@ -234,45 +226,30 @@ function QuickReview() {
     const deck = decks.get(currentCard.deckId);
 
     if (side === 'front') {
-      // PRIORITY 1: Audio file
       if (frontAudioUrl) {
-        console.log('Playing front audio file (priority)');
         const audio = new Audio(frontAudioUrl);
         audio.play().catch((err) => console.error('Failed to play audio:', err));
-      } 
-      // PRIORITY 2: TTS (only if no audio file and deck language is available)
-      else if (deck && currentCard.hasVoiceAssistant && currentCard.frontText) {
-        console.log('Using TTS for front (no audio file)');
+      } else if (deck && currentCard.hasVoiceAssistant && currentCard.frontText) {
         speakText(currentCard.frontText, deck.language);
       }
     } else {
-      // PRIORITY 1: Audio file
       if (backAudioUrl) {
-        console.log('Playing back audio file (priority)');
         const audio = new Audio(backAudioUrl);
         audio.play().catch((err) => console.error('Failed to play audio:', err));
-      } 
-      // PRIORITY 2: TTS (only if no audio file and deck language is available)
-      else if (deck && currentCard.hasVoiceAssistant && currentCard.backText) {
-        console.log('Using TTS for back (no audio file)');
+      } else if (deck && currentCard.hasVoiceAssistant && currentCard.backText) {
         speakText(currentCard.backText, deck.language);
       }
     }
   };
 
-  // Speak with deck language
   const speakText = (text: string, deckLanguage: string) => {
     window.speechSynthesis.cancel();
-
 
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = getLanguageCode(deckLanguage);
     utterance.rate = 1.0;
     utterance.pitch = 1.0;
     utterance.volume = 1.0;
-
-    console.log(`Speaking: "${text}"`);
-    console.log(`Language: ${utterance.lang} (from deck: ${deckLanguage})`);
 
     utterance.onstart = () => setIsSpeaking(true);
     utterance.onend = () => setIsSpeaking(false);
@@ -284,7 +261,6 @@ function QuickReview() {
     window.speechSynthesis.speak(utterance);
   };
 
-  // Check if audio/TTS button should show
   const shouldShowAudioButton = (side: 'front' | 'back'): boolean => {
     if (!session) return false;
 
@@ -335,13 +311,13 @@ function QuickReview() {
                   {session.deckTitle}
                 </h1>
                 <div className="flex gap-2 mt-1">
-                <Badge color="info" className="mt-1">
-                  {isBulkReview ? t('quickReview.bulkMode') : t('quickReview.mode')}
-                </Badge>
-                <Badge color="cyan">
-                  <HiPlay className="w-3 h-3 mr-1" />
-                  {t('quickReview.flipMode')}
-                </Badge>
+                  <Badge color="info" className="mt-1">
+                    {isBulkReview ? t('quickReview.bulkMode') : t('quickReview.mode')}
+                  </Badge>
+                  <Badge color="cyan">
+                    <HiPlay className="w-3 h-3 mr-1" />
+                    {t('quickReview.flipMode')}
+                  </Badge>
                 </div>
               </div>
             </div>
@@ -364,14 +340,23 @@ function QuickReview() {
               {/* Card */}
               <div className="mb-6 perspective-1000">
                 <div
-                  className={`relative w-full h-96 transition-transform duration-500 transform-style-3d cursor-pointer ${
-                    isFlipped ? 'rotate-y-180' : ''
-                  }`}
-                  onClick={handleFlip}>
+                  className={`
+                    relative w-full h-96 
+                    transition-transform duration-500 
+                    transform-style-3d cursor-pointer 
+                    ${isFlipped ? 'rotate-y-180' : ''}
+                  `}
+                  style={{
+                    WebkitFontSmoothing: 'antialiased',
+                    MozOsxFontSmoothing: 'grayscale',
+                  }}
+                  onClick={handleFlip}
+                  key={currentCard.cardId}>
                   {/* Front */}
-                  <div className="absolute inset-0 backface-hidden">
-                    <div className="flex flex-col items-center justify-center w-full h-full p-8 bg-white border-2 border-gray-200 shadow-xl dark:bg-gray-800 rounded-2xl dark:border-gray-700">
-                      {/* Audio button - top right */}
+                  <div 
+                    className="absolute inset-0 backface-hidden"
+                    style={{ transform: 'translateZ(1px)' }}>
+                    <div className="flex flex-col items-center justify-center w-full h-full p-8 antialiased bg-white border-2 border-gray-200 shadow-xl dark:bg-gray-800 rounded-2xl dark:border-gray-700">
                       {shouldShowAudioButton('front') && (
                         <button
                           onClick={(e) => handlePlayAudio('front', e)}
@@ -387,7 +372,6 @@ function QuickReview() {
                         {t('flashcardModal.front')}
                       </div>
 
-                      {/* Image */}
                       {frontImageUrl && (
                         <div className="flex justify-center w-full mb-4">
                           <img
@@ -398,14 +382,12 @@ function QuickReview() {
                         </div>
                       )}
 
-                      {/* Text */}
                       <div className="flex items-center justify-center flex-1 w-full px-4 text-center">
                         <p className="text-2xl font-bold text-gray-900 break-words md:text-3xl dark:text-white">
                           {currentCard.frontText}
                         </p>
                       </div>
 
-                      {/* Memo */}
                       {currentCard.memo && (
                         <div className="w-full p-3 mt-4 border border-yellow-200 rounded-lg bg-yellow-50 dark:bg-yellow-900/20 dark:border-yellow-800">
                           <p className="text-sm text-yellow-800 dark:text-yellow-200">
@@ -420,48 +402,49 @@ function QuickReview() {
                     </div>
                   </div>
 
-                  {/* Back */}
-                  <div className="absolute inset-0 backface-hidden rotate-y-180">
-                    <div className="flex flex-col items-center justify-center w-full h-full p-8 bg-white border-2 border-gray-200 shadow-xl dark:bg-gray-800 rounded-2xl dark:border-gray-700">
-                      {/* Audio button - top right */}
-                      {shouldShowAudioButton('back') && (
-                        <button
-                          onClick={(e) => handlePlayAudio('back', e)}
-                          className={`absolute z-10 p-3 text-white transition-colors rounded-full shadow-lg top-4 right-4 ${
-                            isSpeaking ? 'bg-yellow-600' : 'bg-yellow-500 hover:bg-yellow-600'
-                          }`}
-                          title={backAudioUrl ? t('quickReview.playAudio') : t('quickReview.playVoiceAssistant')}>
-                          <HiVolumeUp className={`w-5 h-5 ${isSpeaking ? 'animate-pulse' : ''}`} />
-                        </button>
-                      )}
+                  {/* Back*/}
+                  {isFlipped && (
+                    <div 
+                      className="absolute inset-0 backface-hidden rotate-y-180"
+                      style={{ transform: 'rotateY(180deg) translateZ(1px)' }}>
+                      <div className="flex flex-col items-center justify-center w-full h-full p-8 antialiased bg-white border-2 border-gray-200 shadow-xl dark:bg-gray-800 rounded-2xl dark:border-gray-700">
+                        {shouldShowAudioButton('back') && (
+                          <button
+                            onClick={(e) => handlePlayAudio('back', e)}
+                            className={`absolute z-10 p-3 text-white transition-colors rounded-full shadow-lg top-4 right-4 ${
+                              isSpeaking ? 'bg-yellow-600' : 'bg-yellow-500 hover:bg-yellow-600'
+                            }`}
+                            title={backAudioUrl ? t('quickReview.playAudio') : t('quickReview.playVoiceAssistant')}>
+                            <HiVolumeUp className={`w-5 h-5 ${isSpeaking ? 'animate-pulse' : ''}`} />
+                          </button>
+                        )}
 
-                      <div className="mb-4 text-sm font-semibold tracking-wide text-yellow-500 uppercase">
-                        {t('flashcardModal.back')}
-                      </div>
-
-                      {/* Image */}
-                      {backImageUrl && (
-                        <div className="flex justify-center w-full mb-4">
-                          <img
-                            src={backImageUrl}
-                            alt="Back"
-                            className="object-contain max-w-full rounded-lg max-h-40"
-                          />
+                        <div className="mb-4 text-sm font-semibold tracking-wide text-yellow-500 uppercase">
+                          {t('flashcardModal.back')}
                         </div>
-                      )}
 
-                      {/* Text */}
-                      <div className="flex items-center justify-center flex-1 w-full px-4 text-center">
-                        <p className="text-2xl font-bold text-gray-900 break-words md:text-3xl dark:text-white">
-                          {currentCard.backText}
-                        </p>
-                      </div>
+                        {backImageUrl && (
+                          <div className="flex justify-center w-full mb-4">
+                            <img
+                              src={backImageUrl}
+                              alt="Back"
+                              className="object-contain max-w-full rounded-lg max-h-40"
+                            />
+                          </div>
+                        )}
 
-                      <div className="mt-6 text-sm text-gray-500 dark:text-gray-400">
-                        {t('flashcardModal.clickToFlip')}
+                        <div className="flex items-center justify-center flex-1 w-full px-4 text-center">
+                          <p className="text-2xl font-bold text-gray-900 break-words md:text-3xl dark:text-white">
+                            {currentCard.backText}
+                          </p>
+                        </div>
+
+                        <div className="mt-6 text-sm text-gray-500 dark:text-gray-400">
+                          {t('flashcardModal.clickToFlip')}
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  )}
                 </div>
               </div>
 
@@ -482,7 +465,6 @@ function QuickReview() {
               </div>
             </>
           ) : (
-            /* Complete Screen */
             <div className="py-12 text-center">
               <div className="mb-6">
                 <h2 className="mb-2 text-3xl font-bold text-gray-900 dark:text-white">

@@ -17,6 +17,7 @@ export interface User {
 }
 
 export interface ClerkUserResponse {
+  isOwner: any;
   clerkId: string;
   firstName: string;
   lastName: string;

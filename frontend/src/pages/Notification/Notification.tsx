@@ -13,6 +13,7 @@ import { useToast } from '../../contexts/ToastContext';
 import { useAuth } from '@clerk/clerk-react';
 import PageHeader from '../../shared/components/PageHeader';
 import Loading from '../../shared/components/loading/Loading';
+import { useDeckService } from '../../services/DeckService';
 
 const NotificationPage = () => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
@@ -23,7 +24,8 @@ const NotificationPage = () => {
   const service = notificationService();
   const { t } = useTranslation('notification');
   const api = useApi();
-  const { showError } = useToast();
+  const deckService = useDeckService();
+  const { showError, showSuccess } = useToast();
 
   function parseParams(data?: any): Record<string, unknown> {
     if (!data) return {};
@@ -79,14 +81,24 @@ const NotificationPage = () => {
   ) {
     setProcessingId(notification.id);
     try {
-      await api.request({ method: action.method, url: action.endpoint });
+      // Check if this is a deck join action
+      if (action.endpoint.includes('/join/')) {
+        const joinCode = action.endpoint.split('/join/')[1];
+        const joinedDeck = await deckService.joinByCode(joinCode);
+        
+        // Show success message
+        showSuccess(t('common:toast.success'), t('notification:joined.success'));
+        
+        // Navigate to the deck or refresh the page
+        window.location.reload(); // Force refresh to update deck list
+      } else {
+        await api.request({ method: action.method, url: action.endpoint });
+      }
 
       await service.deleteNotification(notification.id);
       setNotifications((prev) => prev.filter((n) => n.id !== notification.id));
     } catch (error) {
-      try {
-        showError(t('common:app.error'), t('errors.action'));
-      } catch {}
+      showError(t('common:app.error'), t('errors.action'));
     } finally {
       setProcessingId(null);
     }

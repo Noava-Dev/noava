@@ -142,15 +142,19 @@ function WriteReview() {
         isFlipped: false,
         completedCards: 0,
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error loading review cards:', error);
-      showError(t('common:toast.error'), t('quickReview.error'));
-      if (deckIds.length === 1 && deckId) {
-        navigate(`/decks/${deckId}/cards`);
-      } else if (classroomId) {
-        navigate(`/classrooms/${classroomId}`);
+      if (error.response?.status === 404 || error.response?.status === 403) {
+        navigate('/not-found', { replace: true });
       } else {
-        navigate('/decks');
+        showError(t('common:toast.error'), t('quickReview.error'));
+        if (deckIds.length === 1 && deckId) {
+          navigate(`/decks/${deckId}/cards`);
+        } else if (classroomId) {
+          navigate(`/classrooms/${classroomId}`);
+        } else {
+          navigate('/decks');
+        }
       }
     } finally {
       setLoading(false);
@@ -368,7 +372,7 @@ function WriteReview() {
           {!isComplete ? (
             <div className="space-y-6">
               {/* Question Card */}
-              <div className="relative flex flex-col items-center justify-center p-8 bg-white border-2 border-gray-200 shadow-xl h-96 dark:bg-gray-800 rounded-2xl dark:border-gray-700">
+              <div className="relative flex flex-col items-center justify-center p-8 antialiased bg-white border-2 border-gray-200 shadow-xl h-96 dark:bg-gray-800 rounded-2xl dark:border-gray-700">
                 {shouldShowAudioButton('front') && (
                   <button
                     onClick={(e) => handlePlayAudio('front', e)}
@@ -444,7 +448,7 @@ function WriteReview() {
                   </Alert>
 
                   {/* Correct Answer Card */}
-                  <div className="relative p-6 bg-white border-2 border-gray-200 shadow-lg dark:bg-gray-800 rounded-2xl dark:border-gray-700">
+                  <div className="relative p-6 antialiased bg-white border-2 border-gray-200 shadow-lg dark:bg-gray-800 rounded-2xl dark:border-gray-700">
                     {shouldShowAudioButton('back') && (
                       <button
                         onClick={(e) => handlePlayAudio('back', e)}
