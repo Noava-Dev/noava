@@ -84,8 +84,12 @@ function DecksPage() {
       setIsModalOpen(false);
       setEditingDeck(undefined);
       fetchDecks();
-    } catch (error) {
-      showError(t('toast.updateError'), t('toast.updateError'));
+    } catch (error: any) {
+      if (error.response?.status === 404 || error.response?.status === 403) {
+        navigate('/not-found', { replace: true });
+      } else {
+        showError(t('toast.updateError'), t('toast.updateError'));
+      }
     }
   };
 
@@ -100,8 +104,12 @@ function DecksPage() {
       await deckService.delete(deleteDeckId);
       showSuccess(t('toast.deleteSuccess'), t('toast.deleteSuccess'));
       fetchDecks();
-    } catch (error) {
-      showError(t('toast.deleteError'), t('toast.deleteError'));
+    } catch (error: any) {
+      if (error.response?.status === 404 || error.response?.status === 403) {
+        navigate('/not-found', { replace: true });
+      } else {
+        showError(t('toast.deleteError'), t('toast.deleteError'));
+      }
     } finally {
       setDeleteDeckId(null);
     }
@@ -220,7 +228,7 @@ function DecksPage() {
                   onClick={() => setJoinCodeModalOpen(true)}
                   size="lg"
                   color="gray"
-                  className="w-full border-none md:w-fit ml-auto">
+                  className="w-full border-none md:w-fit">
                   {t('joinCode.button')}
                 </Button>
                 <Button

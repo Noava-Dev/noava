@@ -55,6 +55,11 @@ namespace noava.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<DeckResponse>> GetDeck(int id)
         {
+            var userId = GetUserId();
+            var canView = await _deckService.CanUserViewDeckAsync(id, userId);
+            if (!canView)
+                return NotFound(); 
+
             var deck = await _deckService.GetDeckByIdAsync(id);
             if (deck == null) return NotFound();
             return Ok(deck);
@@ -80,6 +85,10 @@ namespace noava.Controllers
         public async Task<ActionResult<DeckResponse>> UpdateDeck(int id, [FromBody] DeckRequest request)
         {
             var userId = GetUserId();
+            var canView = await _deckService.CanUserViewDeckAsync(id, userId);
+            if (!canView)
+                return NotFound();
+
             var updatedDeck = await _deckService.UpdateDeckAsync(id, request, userId);
             if (updatedDeck == null) return NotFound();
             return Ok(updatedDeck);
@@ -89,11 +98,15 @@ namespace noava.Controllers
         public async Task<ActionResult> DeleteDeck(int id)
         {
             var userId = GetUserId();
+
+            var canDelete = await _deckService.CanUserViewDeckAsync(id, userId);
+            if (!canDelete)
+                return NotFound(); 
+
             var result = await _deckService.DeleteDeckAsync(id, userId);
             if (!result) return NotFound();
             return NoContent();
         }
-
         [HttpPost("{deckId:int}/invite")]
         public async Task<ActionResult<DeckResponse>> InviteUserByEmail(
        int deckId,

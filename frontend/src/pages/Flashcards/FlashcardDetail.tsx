@@ -110,9 +110,13 @@ function FlashcardDetail() {
       setLoading(true);
       const deckData = await deckService.getById(Number(deckId));
       setDeck(deckData);
-    } catch (error) {
-      showError(t('flashcardDetail.error'), t('flashcardDetail.error'));
+    } catch (error: any) {
       console.error(error);
+      if (error.response?.status === 404 || error.response?.status === 403) {
+        navigate('/not-found', { replace: true });
+      } else {
+        showError(t('flashcardDetail.error'), t('flashcardDetail.error'));
+      }
     } finally {
       setLoading(false);
     }
@@ -160,8 +164,13 @@ function FlashcardDetail() {
       );
 
       setFlashcards(cardsWithImages);
-    } catch (error) {
-      showError(t('flashcardDetail.error'), t('flashcardDetail.error'));
+    } catch (error: any) {
+      console.error(error);
+      if (error.response?.status === 404 || error.response?.status === 403) {
+        navigate('/not-found', { replace: true });
+      } else {
+        showError(t('flashcardDetail.error'), t('flashcardDetail.error'));
+      }
     }
   };
 
