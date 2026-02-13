@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using noava.DTOs;
 using noava.DTOs.Decks;
 using noava.Services.Decks;
 using System.Security.Claims;
@@ -26,15 +25,14 @@ namespace noava.Controllers
                    ?? throw new UnauthorizedAccessException("User ID not found");
         }
 
-        [HttpPost("deck/{deckId}/invite")]
+        [HttpPost("deck/{deckId}/invite/{clerkId}")]
         public async Task<ActionResult<DeckInvitationResponse>> InviteUser(
-            int deckId,
-            [FromBody] InviteUserRequest request)
+            int deckId, string clerkId)
         {
             try
             {
-                var clerkId = GetClerkId();
-                var invitation = await _invitationService.InviteUserAsync(deckId, request, clerkId);
+                var userId = GetClerkId();
+                var invitation = await _invitationService.InviteUserAsync(deckId, clerkId, userId);
                 return Ok(invitation);
             }
             catch (UnauthorizedAccessException ex)
