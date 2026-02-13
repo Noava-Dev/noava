@@ -8,8 +8,7 @@ import {
   ModalHeader,
   Label,
 } from 'flowbite-react';
-import { useAuth } from '@clerk/clerk-react';
-import { deckInvitationService } from '../../services/DeckInvitationService';
+import { useDeckInvitationService } from '../../services/DeckInvitationService';
 
 interface InviteUserModalProps {
   opened: boolean;
@@ -27,7 +26,7 @@ export const InviteUserModal: React.FC<InviteUserModalProps> = ({
   onInviteSent,
 }) => {
   const { t } = useTranslation('decks');
-  const { getToken } = useAuth();
+  const deckInvitationService = useDeckInvitationService();
 
   const [userId, setUserId] = useState('');
   const [loading, setLoading] = useState(false);
@@ -45,10 +44,7 @@ export const InviteUserModal: React.FC<InviteUserModalProps> = ({
     setError(null);
 
     try {
-      const token = await getToken();
-      if (!token) throw new Error('Not authenticated');
-
-      await deckInvitationService.inviteUser(deckId, userId, token);
+      await deckInvitationService.inviteUser(deckId, userId);
 
       setUserId('');
       onInviteSent();

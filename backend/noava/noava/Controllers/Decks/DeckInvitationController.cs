@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using noava.DTOs;
 using noava.DTOs.Decks;
 using noava.Services.Decks;
 using noava.Services.Users;
@@ -21,10 +20,9 @@ namespace noava.Controllers
             _userService = userService;
         }
 
-        [HttpPost("deck/{deckId}/invite")]
+        [HttpPost("deck/{deckId}/invite/{clerkId}")]
         public async Task<ActionResult<DeckInvitationResponse>> InviteUser(
-            int deckId,
-            [FromBody] InviteUserRequest request)
+            int deckId, string clerkId)
         {
             try
             {
@@ -32,7 +30,7 @@ namespace noava.Controllers
                 if (userId == null)
                     return Unauthorized();
                 
-                var invitation = await _invitationService.InviteUserAsync(deckId, request, userId);
+                var invitation = await _invitationService.InviteUserAsync(deckId, clerkId, userId);
                 return Ok(invitation);
             }
             catch (UnauthorizedAccessException ex)
