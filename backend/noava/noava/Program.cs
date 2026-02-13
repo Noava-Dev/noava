@@ -2,26 +2,27 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using noava.Data;
+using noava.Exceptions;
 using noava.Repositories;
-using noava.Services;
-using noava.Shared;
-using System.Security.Claims;
-using noava.Repositories.FAQs;
-using noava.Services.FAQs;
-using noava.Repositories.Decks;
-using noava.Services.Decks;
 using noava.Repositories.Cards;
 using noava.Repositories.Classrooms;
+using noava.Repositories.Decks;
+using noava.Repositories.FAQs;
+using noava.Repositories.Implementations;
 using noava.Repositories.Notifications;
 using noava.Repositories.Schools;
 using noava.Repositories.Users;
+using noava.Services;
 using noava.Services.Cards;
 using noava.Services.Classrooms;
+using noava.Services.Decks;
+using noava.Services.FAQs;
+using noava.Services.Implementations;
 using noava.Services.Notifications;
 using noava.Services.Schools;
 using noava.Services.Users;
-using noava.Repositories.Implementations;
-using noava.Services.Implementations;
+using noava.Shared;
+using System.Security.Claims;
 
 namespace noava
 {
@@ -63,6 +64,7 @@ namespace noava
             // External Service Registrations
             builder.Services.AddHttpClient();
             builder.Services.AddScoped<IClerkService, ClerkService>();
+            builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
             // Add services to the container.
             builder.Services.AddCors(options =>
@@ -114,7 +116,6 @@ namespace noava
                         ValidateLifetime = true,
                         RoleClaimType = ClaimTypes.Role
                     };
-
                 });
 
             builder.Services.AddAuthorization();
@@ -131,6 +132,8 @@ namespace noava
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            app.UseExceptionHandler(_ => { });
 
             app.UseCors("Frontend");
 
