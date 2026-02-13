@@ -1,35 +1,28 @@
-import axios from 'axios';
+import { useApi } from '../hooks/useApi';
 import type { DeckOwner } from '../models/DeckOwner';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_UR ;
+export const useDeckOwnershipService = () => {
+  const api = useApi();
 
-export const deckOwnershipService = {
-  async getOwners(deckId: number, token: string): Promise<DeckOwner[]> {
-    const response = await axios.get(
-      `${API_BASE_URL}/deckownership/deck/${deckId}/owners`,
-      {
-        headers: { Authorization: `Bearer ${token}` }
-      }
-    );
-    return response.data;
-  },
+  return {
+    async getOwners(deckId: number): Promise<DeckOwner[]> {
+      const response = await api.get<DeckOwner[]>(
+        `/deckownership/deck/${deckId}/owners`
+      );
+      return response.data;
+    },
 
-  async removeOwner(deckId: number, ownerClerkId: string, token: string): Promise<void> {
-    await axios.delete(
-      `${API_BASE_URL}/deckownership/deck/${deckId}/owner/${ownerClerkId}`,
-      {
-        headers: { Authorization: `Bearer ${token}` }
-      }
-    );
-  },
+    async removeOwner(deckId: number, ownerClerkId: string): Promise<void> {
+      await api.delete(
+        `/deckownership/deck/${deckId}/owner/${ownerClerkId}`
+      );
+    },
 
-  async isOwner(deckId: number, token: string): Promise<boolean> {
-    const response = await axios.get(
-      `${API_BASE_URL}/deckownership/deck/${deckId}/is-owner`,
-      {
-        headers: { Authorization: `Bearer ${token}` }
-      }
-    );
-    return response.data.isOwner;
-  }
+    async isOwner(deckId: number): Promise<boolean> {
+      const response = await api.get<{ isOwner: boolean }>(
+        `/deckownership/deck/${deckId}/is-owner`
+      );
+      return response.data.isOwner;
+    }
+  };
 };

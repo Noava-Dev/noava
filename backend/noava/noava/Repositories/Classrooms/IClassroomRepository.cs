@@ -8,10 +8,10 @@ namespace noava.Repositories.Classrooms
         Task<IEnumerable<Classroom>> GetAllAsync();
         Task<IEnumerable<Classroom>> GetAllByUserAsync(string userId);
 
-        Task AddAsync(Classroom classroom);
-        Task UpdateAsync(Classroom classroom);
-        void Delete(Classroom classroom);
-        Task SaveChangesAsync();
+        Task<Classroom> AddAsync(Classroom classroom);
+        Task<Classroom> UpdateAsync(Classroom classroom);
+        Task<bool> DeleteAsync(Classroom classroom);
         Task<Classroom?> GetByJoinCodeAsync(string joinCode);
+        Task SaveChangesAsync();
     }
 }

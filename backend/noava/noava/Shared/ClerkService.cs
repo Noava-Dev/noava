@@ -13,11 +13,11 @@ namespace noava.Shared
         {
             _httpClient = httpClient;
             _httpClient.BaseAddress = new Uri("https://api.clerk.com/v1/");
+            var secretKey = configuration["Clerk:SecretKeyDefault"];
+            if (string.IsNullOrWhiteSpace(secretKey))
+                throw new InvalidOperationException("Clerk secret key is not configured.");
             _httpClient.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue(
-                    "Bearer",
-                    configuration["Clerk:SecretKeyDefault"]
-                );
+                new AuthenticationHeaderValue("Bearer", secretKey);
         }
 
         public async Task<ClerkUserResponseDto?> GetUserAsync(string clerkUserId)
@@ -25,8 +25,8 @@ namespace noava.Shared
             if (string.IsNullOrWhiteSpace(clerkUserId))
                 return null;
 
-            return (await GetUsersAsync(new[] { clerkUserId }))
-                .FirstOrDefault();
+            var users = await GetUsersAsync(new[] { clerkUserId });
+            return users.FirstOrDefault();
         }
 
         public async Task<IEnumerable<ClerkUserResponseDto>> GetUsersAsync(IEnumerable<string> clerkUserIds)
@@ -40,8 +40,18 @@ namespace noava.Shared
                 return Enumerable.Empty<ClerkUserResponseDto>();
 
             var query = string.Join("&", ids.Select(id => $"user_id={id}"));
+            var url = $"users?{query}";
 
-            var response = await _httpClient.GetAsync($"users?{query}");
+            var response = await _httpClient.GetAsync(url);
+
+            if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized ||
+                response.StatusCode == System.Net.HttpStatusCode.Forbidden ||
+                response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                // Clerk API key invalid or user(s) not found
+                return Enumerable.Empty<ClerkUserResponseDto>();
+            }
+
             response.EnsureSuccessStatusCode();
 
             var json = await response.Content.ReadAsStringAsync();
@@ -65,9 +75,16 @@ namespace noava.Shared
             if (string.IsNullOrWhiteSpace(email))
                 return null;
 
-            var response = await _httpClient.GetAsync(
-                $"users?email_address={Uri.EscapeDataString(email)}"
-            );
+            var url = $"users?email_address={Uri.EscapeDataString(email)}";
+            var response = await _httpClient.GetAsync(url);
+
+            if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized ||
+                response.StatusCode == System.Net.HttpStatusCode.Forbidden ||
+                response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                // Clerk API key invalid or user not found
+                return null;
+            }
 
             response.EnsureSuccessStatusCode();
 

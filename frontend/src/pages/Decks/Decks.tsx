@@ -23,10 +23,12 @@ import { useToast } from '../../contexts/ToastContext';
 import type { Deck, DeckRequest } from '../../models/Deck';
 import Skeleton from '../../shared/components/loading/Skeleton';
 import EmptyState from '../../shared/components/EmptyState';
+import { useUser } from '@clerk/clerk-react';
 
 function DecksPage() {
   const { t } = useTranslation('decks');
   const navigate = useNavigate();
+  const { user } = useUser();
 
   const deckService = useDeckService();
   const [decks, setDecks] = useState<Deck[]>([]);
@@ -40,6 +42,9 @@ function DecksPage() {
   const [bulkReviewModalOpened, setBulkReviewModalOpened] = useState(false);
   const [bulkWriteReviewModalOpened, setBulkWriteReviewModalOpened] = useState(false);
   const [bulkReverseReviewModalOpened, setBulkReverseReviewModalOpened] = useState(false);
+  const [joinCodeModalOpen, setJoinCodeModalOpen] = useState(false);
+  const [joinCode, setJoinCode] = useState('');
+  const [joiningDeck, setJoiningDeck] = useState(false);
 
   useEffect(() => {
     fetchDecks();
@@ -79,8 +84,12 @@ function DecksPage() {
       setIsModalOpen(false);
       setEditingDeck(undefined);
       fetchDecks();
-    } catch (error) {
-      showError(t('toast.updateError'), t('toast.updateError'));
+    } catch (error: any) {
+      if (error.response?.status === 404 || error.response?.status === 403) {
+        navigate('/not-found', { replace: true });
+      } else {
+        showError(t('toast.updateError'), t('toast.updateError'));
+      }
     }
   };
 
@@ -95,8 +104,12 @@ function DecksPage() {
       await deckService.delete(deleteDeckId);
       showSuccess(t('toast.deleteSuccess'), t('toast.deleteSuccess'));
       fetchDecks();
-    } catch (error) {
-      showError(t('toast.deleteError'), t('toast.deleteError'));
+    } catch (error: any) {
+      if (error.response?.status === 404 || error.response?.status === 403) {
+        navigate('/not-found', { replace: true });
+      } else {
+        showError(t('toast.deleteError'), t('toast.deleteError'));
+      }
     } finally {
       setDeleteDeckId(null);
     }
@@ -116,6 +129,26 @@ function DecksPage() {
     setEditingDeck(undefined);
   };
 
+  const handleJoinByCode = async () => {
+    if (!joinCode.trim()) {
+      showError(t('common:toast.error'), t('joinCode.empty'));
+      return;
+    }
+
+    try {
+      setJoiningDeck(true);
+      await deckService.joinByCode(joinCode.trim());
+      showSuccess(t('common:toast.success'), t('joinCode.success'));
+      setJoinCodeModalOpen(false);
+      setJoinCode('');
+      fetchDecks();
+    } catch (error) {
+      showError(t('common:toast.error'), t('joinCode.error'));
+    } finally {
+      setJoiningDeck(false);
+    }
+  };
+
   const filteredDecks = decks.filter(
     (deck) =>
       deck.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -128,6 +161,10 @@ function DecksPage() {
     const dateB = new Date(b.createdAt).getTime();
     return sortOrder === 'newest' ? dateB - dateA : dateA - dateB;
   });
+
+  // Split decks into owned and shared
+  const ownedDecks = sortedDecks.filter(deck => deck.userId === user?.id);
+  const sharedDecks = sortedDecks.filter(deck => deck.userId !== user?.id);
 
   if (loading) {
     return <Skeleton />;
@@ -188,6 +225,13 @@ function DecksPage() {
                   </Dropdown>
                 )}
                 <Button
+                  onClick={() => setJoinCodeModalOpen(true)}
+                  size="lg"
+                  color="gray"
+                  className="w-full border-none md:w-fit">
+                  {t('joinCode.button')}
+                </Button>
+                <Button
                   onClick={() => setIsModalOpen(true)}
                   size="lg"
                   className="w-full border-none md:w-fit bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800">
@@ -238,15 +282,44 @@ function DecksPage() {
         <section className="min-h-screen py-8 bg-background-app-light dark:bg-background-app-dark md:py-12">
           <div className="container px-4 mx-auto max-w-7xl">
             {sortedDecks.length > 0 ? (
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:gap-6">
-                {sortedDecks.map((deck) => (
-                  <DeckCard
-                    key={deck.deckId}
-                    deck={deck}
-                    onEdit={handleEdit}
-                    onDelete={handleDelete}
-                  />
-                ))}
+              <div className="space-y-12">
+                {/* My Decks Section */}
+                {ownedDecks.length > 0 && (
+                  <div>
+                    <h2 className="mb-6 text-2xl font-bold text-text-title-light dark:text-text-title-dark">
+                      {t('sections.myDecks')}
+                    </h2>
+                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:gap-6">
+                      {ownedDecks.map((deck) => (
+                        <DeckCard
+                          key={deck.deckId}
+                          deck={deck}
+                          onEdit={handleEdit}
+                          onDelete={handleDelete}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Shared Decks Section */}
+                {sharedDecks.length > 0 && (
+                  <div>
+                    <h2 className="mb-6 text-2xl font-bold text-text-title-light dark:text-text-title-dark">
+                      {t('sections.sharedWithMe')}
+                    </h2>
+                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:gap-6">
+                      {sharedDecks.map((deck) => (
+                        <DeckCard
+                          key={deck.deckId}
+                          deck={deck}
+                          onEdit={handleEdit}
+                          onDelete={handleDelete}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             ) : searchTerm ? (
               <EmptyState
@@ -264,6 +337,45 @@ function DecksPage() {
             )}
           </div>
         </section>
+
+        {/* Join by Code Modal */}
+        <Modal show={joinCodeModalOpen} onClose={() => setJoinCodeModalOpen(false)} size="md">
+          <ModalHeader>{t('joinCode.title')}</ModalHeader>
+          <ModalBody>
+            <div className="space-y-4">
+              <p className="text-sm text-text-body-light dark:text-text-muted-dark">
+                {t('joinCode.description')}
+              </p>
+              <div>
+                <label className="block mb-2 text-sm font-medium">
+                  {t('joinCode.label')}
+                </label>
+                <input
+                  type="text"
+                  value={joinCode}
+                  onChange={(e) => setJoinCode(e.target.value)}
+                  placeholder={t('joinCode.placeholder')}
+                  className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600"
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter') {
+                      handleJoinByCode();
+                    }
+                  }}
+                />
+              </div>
+            </div>
+          </ModalBody>
+          <ModalFooter>
+            <div className="flex justify-end w-full gap-3">
+              <Button color="gray" onClick={() => setJoinCodeModalOpen(false)}>
+                {t('common:actions.cancel')}
+              </Button>
+              <Button onClick={handleJoinByCode} disabled={joiningDeck}>
+                {joiningDeck ? t('joinCode.joining') : t('joinCode.join')}
+              </Button>
+            </div>
+          </ModalFooter>
+        </Modal>
 
         <DeckModal
           isOpen={isModalOpen}

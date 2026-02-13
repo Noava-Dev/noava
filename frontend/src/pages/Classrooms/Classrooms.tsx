@@ -164,7 +164,9 @@ function ClassroomsPage() {
                   )}
                 </div>
 
-                <div className="flex items-center justify-between gap-4 mt-4 md:mt-6">
+                {/* Action Buttons */}
+                <div className="flex flex-col gap-3 mt-4 mb-8 md:flex-row md:justify-between md:items-start md:mt-6">
+                  {/* Create Classroom */}
                   <Button
                     onClick={() => setIsModalOpen(true)}
                     size="lg"
@@ -173,6 +175,7 @@ function ClassroomsPage() {
                     {t('createButton')}
                   </Button>
 
+                  {/* Join Classroom */}
                   <Button
                     onClick={() => navigate('/classrooms/join')}
                     size="lg"

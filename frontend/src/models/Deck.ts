@@ -6,11 +6,13 @@ export enum DeckVisibility {
 
 export interface Deck {
   deckId: number;
+  userId: string;
   title: string;
-  description?: string;
+  description: string;
   language: string;
-  visibility: DeckVisibility;
-  coverImageBlobName?: string;
+  visibility: string;
+  coverImageBlobName: string | null;
+  joinCode: string;
   createdAt: string;
   updatedAt: string;
 }

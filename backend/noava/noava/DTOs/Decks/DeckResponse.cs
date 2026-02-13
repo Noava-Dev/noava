@@ -11,6 +11,7 @@ namespace noava.DTOs.Decks
         public string? Description { get; set; }
         public string Language { get; set; } = string.Empty;
         public DeckVisibility Visibility { get; set; }
+        public string JoinCode { get; set; }
         public string? CoverImageBlobName { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }

@@ -13,15 +13,19 @@ namespace noava.Services.Cards
     {
         private readonly ICardRepository _cardRepository;
         private readonly IDeckRepository _deckRepository;
-        private readonly IBlobService _blobService;  
+        private readonly IDeckUserRepository _deckUserRepository;  
+        private readonly IBlobService _blobService;
+
         public CardService(
             ICardRepository cardRepository,
             IDeckRepository deckRepository,
-            IBlobService blobService)  
+            IDeckUserRepository deckUserRepository,  
+            IBlobService blobService)
         {
             _cardRepository = cardRepository;
             _deckRepository = deckRepository;
-            _blobService = blobService;  
+            _deckUserRepository = deckUserRepository;  
+            _blobService = blobService;
         }
 
         private CardResponse MapToResponse(Card card)
@@ -43,25 +47,56 @@ namespace noava.Services.Cards
             };
         }
 
-        public async Task<List<CardResponse>> GetCardsByDeckIdAsync(int deckId, string userId)
+    
+        private async Task<bool> CanUserViewDeckAsync(int deckId, string userId)
         {
             var deck = await _deckRepository.GetByIdAsync(deckId);
-            if (deck == null || deck.UserId != userId)
+            if (deck == null) return false;
+
+            // Creator can always view
+            if (deck.UserId == userId) return true;
+
+            // Check if user has access via DeckUsers (owner OR invited)
+            return await _deckUserRepository.HasAccessAsync(deckId, userId);
+        }
+
+    
+        private async Task<bool> CanUserEditDeckAsync(int deckId, string userId)
+        {
+            var deck = await _deckRepository.GetByIdAsync(deckId);
+            if (deck == null) return false;
+
+            // Creator can always edit
+            if (deck.UserId == userId) return true;
+
+            // Check if user is owner (not just invited)
+            return await _deckUserRepository.IsOwnerAsync(deckId, userId);
+        }
+
+
+        public async Task<List<CardResponse>> GetCardsByDeckIdAsync(int deckId, string userId)
+        {
+            // Check if user can view deck (creator, owner, OR invited)
+            if (!await CanUserViewDeckAsync(deckId, userId))
                 return new List<CardResponse>();
 
             var cards = await _cardRepository.GetByDeckIdAsync(deckId);
             return cards.Select(c => MapToResponse(c)).ToList();
         }
 
-        public async Task<List<CardResponse>> GetBulkReviewCardsAsync(List<int> deckIds, string userId, BulkReviewMode mode)
+
+        public async Task<List<CardResponse>> GetBulkReviewCardsAsync(
+            List<int> deckIds,
+            string userId,
+            BulkReviewMode mode)
         {
             var result = new List<Card>();
             var strategy = ResolveBulkReviewStrategy(mode);
 
             foreach (var deckId in deckIds)
             {
-                var deck = await _deckRepository.GetByIdAsync(deckId);
-                if (deck == null || deck.UserId != userId)
+                // Check if user can view deck (creator, owner, OR invited)
+                if (!await CanUserViewDeckAsync(deckId, userId))
                     continue;
 
                 var cards = await _cardRepository.GetByDeckIdAsync(deckId);
@@ -80,16 +115,18 @@ namespace noava.Services.Cards
             var card = await _cardRepository.GetByIdAsync(id);
             if (card == null) return null;
 
-            var deck = await _deckRepository.GetByIdAsync(card.DeckId);
-            if (deck == null || deck.UserId != userId) return null;
+            // Check if user can view deck (creator, owner, OR invited)
+            if (!await CanUserViewDeckAsync(card.DeckId, userId))
+                return null;
 
             return MapToResponse(card);
         }
 
+
         public async Task<CardResponse> CreateCardAsync(int deckId, CardRequest request, string userId)
         {
-            var deck = await _deckRepository.GetByIdAsync(deckId);
-            if (deck == null || deck.UserId != userId)
+            // Check if user can edit deck (creator OR owner, NOT invited)
+            if (!await CanUserEditDeckAsync(deckId, userId))
                 throw new UnauthorizedAccessException("Not authorized to add cards to this deck");
 
             var card = new Card
@@ -109,19 +146,20 @@ namespace noava.Services.Cards
             return MapToResponse(createdCard);
         }
 
+
         public async Task<CardResponse?> UpdateCardAsync(int id, CardRequest request, string userId)
         {
             var existingCard = await _cardRepository.GetByIdAsync(id);
             if (existingCard == null) return null;
 
-            var deck = await _deckRepository.GetByIdAsync(existingCard.DeckId);
-            if (deck == null || deck.UserId != userId) return null;
+            // Check if user can edit deck (creator OR owner, NOT invited)
+            if (!await CanUserEditDeckAsync(existingCard.DeckId, userId))
+                return null;
 
             var oldFrontImage = existingCard.FrontImage;
             var oldFrontAudio = existingCard.FrontAudio;
             var oldBackImage = existingCard.BackImage;
             var oldBackAudio = existingCard.BackAudio;
-            
 
             var newFrontImage = request.FrontImage;
             var newFrontAudio = request.FrontAudio;
@@ -140,7 +178,6 @@ namespace noava.Services.Cards
 
             var updatedCard = await _cardRepository.UpdateAsync(existingCard);
 
-
             await CleanupOldBlobs(oldFrontImage, newFrontImage, "card-images");
             await CleanupOldBlobs(oldFrontAudio, newFrontAudio, "card-audio");
             await CleanupOldBlobs(oldBackImage, newBackImage, "card-images");
@@ -154,8 +191,9 @@ namespace noava.Services.Cards
             var card = await _cardRepository.GetByIdAsync(id);
             if (card == null) return false;
 
-            var deck = await _deckRepository.GetByIdAsync(card.DeckId);
-            if (deck == null || deck.UserId != userId) return false;
+            // Check if user can edit deck (creator OR owner, NOT invited)
+            if (!await CanUserEditDeckAsync(card.DeckId, userId))
+                return false;
 
             var result = await _cardRepository.DeleteAsync(id);
 
@@ -172,7 +210,6 @@ namespace noava.Services.Cards
 
         private async Task CleanupOldBlobs(string? oldBlobName, string? newBlobName, string containerName)
         {
-            // Only delete if blob changed and old blob exists
             if (!string.IsNullOrEmpty(oldBlobName) && oldBlobName != newBlobName)
             {
                 await DeleteBlobIfExists(oldBlobName, containerName);

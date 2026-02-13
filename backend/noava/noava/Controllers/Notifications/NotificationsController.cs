@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using noava.DTOs.Notifications;
 using noava.Services.Notifications;
-using System.Security.Claims;
+using noava.Services.Users;
 
 namespace noava.Controllers.Notifications
 {
@@ -12,16 +12,18 @@ namespace noava.Controllers.Notifications
     public class NotificationsController : ControllerBase
     {
         private readonly INotificationService _notificationService;
+        private readonly IUserService _userService;
 
-        public NotificationsController(INotificationService notificationService)
+        public NotificationsController(INotificationService notificationService, IUserService userService)
         {
             _notificationService = notificationService;
+            _userService = userService;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetMyNotifications()
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userId = _userService.GetUserId(User);
             if (userId == null)
                 return Unauthorized();
 
@@ -32,7 +34,7 @@ namespace noava.Controllers.Notifications
         [HttpGet("count")]
         public async Task<IActionResult> GetMyNotificationCount()
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userId = _userService.GetUserId(User);
             if (userId == null)
                 return Unauthorized();
 
@@ -44,7 +46,7 @@ namespace noava.Controllers.Notifications
         [HttpGet("{id:long}")]
         public async Task<IActionResult> GetById(long id)
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userId = _userService.GetUserId(User);
             if (userId == null)
                 return Unauthorized();
 
@@ -69,7 +71,7 @@ namespace noava.Controllers.Notifications
         [HttpDelete("{id:long}")]
         public async Task<IActionResult> DeleteNotification(long id)
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userId = _userService.GetUserId(User);
             if (userId == null)
                 return Unauthorized();
 

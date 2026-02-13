@@ -1,9 +1,11 @@
 ﻿using noava.Models;
+using System.Security.Claims;
 
 namespace noava.Services.Users
 {
     public interface IUserService
     {
         Task<User> SyncUserAsync(string clerkId);
+        string? GetUserId(ClaimsPrincipal? user);
     }
 }

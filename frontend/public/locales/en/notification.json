@@ -1,21 +1,48 @@
 {
-  "empty": "No notifications",
+  "title": "Notifications",
+  "empty": {
+    "title": "No notifications",
+    "message": "You don't have any notifications at the moment."
+  },
+  "types": {
+    "deckInvite": "Deck Invitation",
+    "info": "Information",
+    "warning": "Warning",
+    "error": "Error"
+  },
+  "actions": {
+    "accept": "Accept",
+    "decline": "Decline",
+    "view": "View",
+    "dismiss": "Dismiss"
+  },
+  "messages": {
+    "deckInvite": "{userName} invited you to join the deck \"{{deckName}}\"",
+    "deckJoined": "You have joined the deck \"{{deckName}}\"",
+    "roleChanged": "Your role in \"{{deckName}}\" has been changed to {{role}}"
+  },
   "errors": {
-    "fetch": "Failed to fetch notifications",
+    "action": "Failed to process action",
     "delete": "Failed to delete notification",
-    "action": "Failed to perform action",
-    "params": "Invalid notification parameters"
+    "load": "Failed to load notifications"
+  },
+  "toast": {
+    "accepted": "Invitation accepted",
+    "declined": "Invitation declined",
+    "deleted": "Notification deleted"
+  },
+  "joined": {
+    "success": "Successfully joined the deck!"
   },
   "notifications": {
     "genericTitle": "Notification",
-    "received": "You have a new notification",
     "items": {
-      "classroom": {
+      "deck": {
         "invite": {
-          "received": "You were invited to {{classroomName}} by {{teacherName}}",
+          "received": "{userName} invited you to join the deck \"{{deckName}}\"",
           "actions": {
-            "accept": "Accept invitation",
-            "deny": "Deny invitation"
+            "accept": "Accept",
+            "decline": "Decline"
           }
         }
       }

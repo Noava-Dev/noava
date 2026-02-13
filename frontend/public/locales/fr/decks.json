@@ -1,5 +1,5 @@
 {
-  "subtitle": "Organisez vos flashcards en Decks par matière",
+  "subtitle": "Organisez vos flashcards en decks par matière",
   "createButton": "Créer un Deck",
   "bulkReview": {
     "button": "Révision groupée",
@@ -11,8 +11,8 @@
     "cards": "cartes",
     "noDecks": "Aucun deck disponible",
     "shuffleMode": {
-      "label": "Mode de mélange",
-      "none": "Pas de mélange - Garder l'ordre original",
+      "label": "Mode aléatoire",
+      "none": "Ne pas mélanger - Conserver l'ordre original",
       "perDeck": "Mélanger par deck - Mélanger les cartes dans chaque deck",
       "all": "Tout mélanger - Mélanger toutes les cartes ensemble"
     },
@@ -25,8 +25,8 @@
     "reverseReview": "Mode Inversé"
   },
   "empty": {
-    "title": "Aucun Deck pour le moment",
-    "message": "Créez votre premier Deck pour commencer !",
+    "title": "Pas encore de Decks",
+    "message": "Créez votre premier Deck pour commencer!",
     "button": "Créer votre premier Deck",
     "noResults": "Aucun Deck trouvé"
   },
@@ -38,12 +38,12 @@
     "descriptionLabel": "Description",
     "descriptionPlaceholder": "Décrivez votre Deck...",
     "imageLabel": "Image de couverture",
-    "imageHelp": "Taille recommandée : 300x200 pixels. Taille max : 2 Mo.",
+    "imageHelp": "Format recommandé: 300x200 pixels. Taille max: 2 Mo.",
     "languageLabel": "Langue",
     "languageSelect": "Sélectionnez une langue",
     "createButton": "Créer le Deck",
     "updateButton": "Mettre à jour le Deck",
-    "uploading": "Création du Deck..."
+    "uploading": "Création du Deck en cours..."
   },
   "languages": {
     "select": "Sélectionnez une langue",
@@ -55,20 +55,76 @@
     "italian": "Italien"
   },
   "toast": {
-    "createSuccess": "Deck créé avec succès !",
-    "updateSuccess": "Deck mis à jour avec succès !",
-    "deleteSuccess": "Deck supprimé avec succès !",
+    "createSuccess": "Deck créé avec succès!",
+    "updateSuccess": "Deck mis à jour avec succès!",
+    "deleteSuccess": "Deck supprimé avec succès!",
     "createError": "Échec de la création du Deck",
     "updateError": "Échec de la mise à jour du Deck",
     "deleteError": "Échec de la suppression du Deck",
     "loadError": "Échec du chargement des Decks",
-    "uploadError": "Échec de l’envoi de l’image"
+    "uploadError": "Échec du téléchargement de l'image"
   },
   "ownership": {
     "manageAccess": "Gérer la propriété",
     "modalTitle": "Propriété du Deck",
     "currentOwners": "Propriétaires actuels",
     "inviteUser": "Inviter un utilisateur",
-    "noOwners": "Vous n’avez pas encore invité de copropriétaires."
+    "noOwners": "Vous n'avez pas encore invité de copropriétaires."
+  },
+  "sections": {
+    "myDecks": "Mes Decks",
+    "sharedWithMe": "Partagés avec Moi"
+  },
+  "joinCode": {
+    "button": "Rejoindre par Code",
+    "title": "Rejoindre un Deck",
+    "description": "Entrez le code de participation que vous avez reçu pour accéder à un deck partagé.",
+    "label": "Code de participation",
+    "placeholder": "Entrez le code...",
+    "join": "Rejoindre",
+    "joining": "Rejoindre en cours...",
+    "success": "Deck rejoint avec succès!",
+    "error": "Échec de rejoindre le deck. Vérifiez le code et réessayez.",
+    "empty": "Veuillez entrer un code"
+  },
+  "owners": {
+    "title": "Gérer les Utilisateurs",
+    "invite": "Inviter un Utilisateur",
+    "inviteButton": "Inviter un Utilisateur",
+    "remove": "Supprimer",
+    "makeOwner": "Rendre Propriétaire",
+    "removeOwner": "Retirer le Statut de Propriétaire",
+    "confirmRemove": "Supprimer l'Utilisateur",
+    "confirmRemoveMessage": "Êtes-vous sûr de vouloir supprimer {{name}} de ce deck? Cette action ne peut pas être annulée.",
+    "lastOwnerError": "Impossible de supprimer le dernier propriétaire",
+    "loadError": "Échec du chargement des utilisateurs",
+    "removeSuccess": "Utilisateur supprimé avec succès",
+    "removeError": "Échec de la suppression de l'utilisateur",
+    "updateSuccess": "Rôle de l'utilisateur mis à jour avec succès",
+    "updateError": "Échec de la mise à jour du rôle de l'utilisateur",
+    "joinCodeSection": "Code de Participation",
+    "joinCodeDescription": "Partagez ce code avec d'autres pour qu'ils puissent rejoindre ce deck",
+    "copyCode": "Copier le Code",
+    "regenerateCode": "Régénérer le Code",
+    "codeCopied": "Code copié!",
+    "codeRegenerated": "Code régénéré avec succès!",
+    "confirmRegenerateCode": "Êtes-vous sûr de vouloir générer un nouveau code? L'ancien code ne fonctionnera plus.",
+    "codeRegenerateError": "Échec de la régénération du code",
+    "noUsers": "Aucun utilisateur n'a encore été ajouté à ce deck.",
+    "owner": "Propriétaire",
+    "member": "Membre",
+    "you": "(Vous)"
+  },
+  "invite": {
+    "title": "Inviter un Utilisateur à {{deckName}}",
+    "emailLabel": "Adresse E-mail",
+    "emailPlaceholder": "utilisateur@exemple.com",
+    "ownerLabel": "Accorder les permissions de propriétaire",
+    "ownerHelp": "Les propriétaires peuvent ajouter/modifier des cartes et gérer d'autres utilisateurs (sauf supprimer le créateur)",
+    "inviteButton": "Envoyer l'Invitation",
+    "inviting": "Invitation en cours...",
+    "success": "Invitation envoyée avec succès",
+    "error": "Échec de l'envoi de l'invitation",
+    "invalidEmail": "Veuillez entrer une adresse e-mail valide"
   }
 }

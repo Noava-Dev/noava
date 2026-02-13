@@ -16,6 +16,7 @@ namespace noava.Mappers.Decks
                 Language = action.Language,
                 Visibility = action.Visibility,
                 CoverImageBlobName = action.CoverImageBlobName,
+                JoinCode = action.JoinCode,
                 CreatedAt = action.CreatedAt,
                 UpdatedAt = action.UpdatedAt
             };

@@ -5,6 +5,7 @@ using noava.DTOs.Classrooms;
 using noava.DTOs.Clerk;
 using noava.DTOs.Decks;
 using noava.Services.Classrooms;
+using noava.Services.Users;
 using System.Security.Claims;
 
 namespace noava.Controllers.Classrooms
@@ -15,15 +16,12 @@ namespace noava.Controllers.Classrooms
     public class ClassroomsController : ControllerBase
     {
         private readonly IClassroomService _classroomService;
+        private readonly IUserService _userService;
 
-        public ClassroomsController(IClassroomService classroomService)
+        public ClassroomsController(IClassroomService classroomService, IUserService userService)
         {
             _classroomService = classroomService;
-        }
-
-        private string? GetUserId()
-        {
-            return User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            _userService = userService;
         }
 
         [HttpPost]
@@ -32,9 +30,9 @@ namespace noava.Controllers.Classrooms
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var userId = GetUserId();
+            var userId = _userService.GetUserId(User);
             if (userId == null) return Unauthorized();
-
+            
             var result = await _classroomService.CreateAsync(request, userId);
             return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
         }
@@ -42,7 +40,7 @@ namespace noava.Controllers.Classrooms
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ClassroomResponseDto>>> GetAllForUser()
         {
-            var userId = GetUserId();
+            var userId = _userService.GetUserId(User);
             if (userId == null) return Unauthorized();
 
             var result = await _classroomService.GetAllByUserAsync(userId);
@@ -52,7 +50,7 @@ namespace noava.Controllers.Classrooms
         [HttpGet("{id:int}")]
         public async Task<ActionResult<ClassroomResponseDto>> GetById(int id)
         {
-            var userId = GetUserId();
+            var userId = _userService.GetUserId(User);
             if (userId == null) return Unauthorized();
 
             var result = await _classroomService.GetByIdAsync(id, userId);
@@ -64,7 +62,7 @@ namespace noava.Controllers.Classrooms
         [HttpGet("{classroomId:int}/decks")]
         public async Task<ActionResult<List<DeckResponse>>> GetDecksByClassroom(int classroomId)
         {
-            var userId = GetUserId();
+            var userId = _userService.GetUserId(User);
             if (userId == null) return Unauthorized();
 
             try
@@ -88,9 +86,8 @@ namespace noava.Controllers.Classrooms
             if (string.IsNullOrWhiteSpace(email))
                 return BadRequest("Email is required.");
 
-            var userId = GetUserId();
-            if (userId == null)
-                return Unauthorized();
+            var userId = _userService.GetUserId(User);
+            if (userId == null) return Unauthorized();
 
             try
             {
@@ -113,8 +110,8 @@ namespace noava.Controllers.Classrooms
             [FromQuery] int page = 1,
             [FromQuery] int pageSize = 50)
         {
-            var userId = GetUserId();
-            if (userId == null)
+            var userId = _userService.GetUserId(User);
+            if (userId == null) 
                 return Unauthorized();
 
             if (page <= 0) page = 1;
@@ -139,8 +136,9 @@ namespace noava.Controllers.Classrooms
         [HttpPost("join/{joinCode}")]
         public async Task<ActionResult<ClassroomResponseDto>> JoinByCode(string joinCode)
         {
-            var userId = GetUserId();
-            if (userId == null) return Unauthorized();
+            var userId = _userService.GetUserId(User);
+            if (userId == null)
+                return Unauthorized();
 
             var result = await _classroomService.JoinByClassroomCode(joinCode, userId);
             if (result == null) return NotFound("Invalid join code");
@@ -151,8 +149,9 @@ namespace noava.Controllers.Classrooms
         [HttpPost("{classroomId:int}/decks/{deckId:int}")]
         public async Task<ActionResult<ClassroomResponseDto>> AddDeck(int classroomId, int deckId)
         {
-            var userId = GetUserId();
-            if (userId == null) return Unauthorized();
+            var userId = _userService.GetUserId(User);
+            if (userId == null)
+                return Unauthorized();
 
             try
             {
@@ -172,8 +171,9 @@ namespace noava.Controllers.Classrooms
         [HttpPut("{id:int}")]
         public async Task<ActionResult<ClassroomResponseDto>> Update(int id, [FromBody] ClassroomRequestDto request)
         {
-            var userId = GetUserId();
-            if (userId == null) return Unauthorized();
+            var userId = _userService.GetUserId(User);
+            if (userId == null)
+                return Unauthorized();
 
             try
             {
@@ -193,8 +193,9 @@ namespace noava.Controllers.Classrooms
         [HttpDelete("{id:int}")]
         public async Task<ActionResult<ClassroomResponseDto>> Delete(int id)
         {
-            var userId = GetUserId();
-            if (userId == null) return Unauthorized();
+            var userId = _userService.GetUserId(User);
+            if (userId == null)
+                return Unauthorized();
 
             try
             {
@@ -214,7 +215,7 @@ namespace noava.Controllers.Classrooms
         [HttpDelete("{classroomId:int}/users/{targetUserId}")]
         public async Task<ActionResult<ClassroomResponseDto>> RemoveUser(int classroomId, string targetUserId)
         {
-            var userId = GetUserId();
+            var userId = _userService.GetUserId(User);
             if (userId == null)
                 return Unauthorized();
 
@@ -236,8 +237,9 @@ namespace noava.Controllers.Classrooms
         [HttpDelete("{classroomId:int}/decks/{deckId:int}")]
         public async Task<ActionResult<ClassroomResponseDto>> RemoveDeck(int classroomId, int deckId)
         {
-            var userId = GetUserId();
-            if (userId == null) return Unauthorized();
+            var userId = _userService.GetUserId(User);
+            if (userId == null)
+                return Unauthorized();
 
             try
             {
@@ -257,7 +259,7 @@ namespace noava.Controllers.Classrooms
         [HttpPut("{classroomId:int}/users/{targetUserId}/role")]
         public async Task<ActionResult<ClassroomResponseDto>> SetUserRole(int classroomId,string targetUserId,[FromQuery] bool isTeacher)
         {
-            var userId = GetUserId();
+            var userId = _userService.GetUserId(User);
             if (userId == null)
                 return Unauthorized();
 
@@ -280,8 +282,9 @@ namespace noava.Controllers.Classrooms
         [HttpPut("{id:int}/joincode")]
         public async Task<ActionResult<ClassroomResponseDto>> UpdateJoinCode(int id)
         {
-            var userId = GetUserId();
-            if (userId == null) return Unauthorized();
+            var userId = _userService.GetUserId(User);
+            if (userId == null)
+                return Unauthorized();
 
             try
             {
