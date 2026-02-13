@@ -1,6 +1,7 @@
 ﻿using noava.Models;
 using noava.Models.Enums;
 using noava.Repositories.Users;
+using System.Security.Claims;
 
 namespace noava.Services.Users
 {
@@ -27,6 +28,12 @@ namespace noava.Services.Users
             };
 
             return await _userRepository.CreateAsync(newUser);
+        }
+
+        public string? GetUserId(ClaimsPrincipal? user)
+        {
+            var clerkUserId = user?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            return string.IsNullOrWhiteSpace(clerkUserId) ? null : clerkUserId;
         }
     }
 }
