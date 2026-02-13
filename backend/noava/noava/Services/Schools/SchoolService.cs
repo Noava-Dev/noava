@@ -96,12 +96,56 @@ namespace noava.Services.Schools
             var school = await _schoolRepository.GetSchoolByIdAsync(schoolId);
 
             if (school == null)
-            {
                 throw new KeyNotFoundException("School not found.");
-            }
+            
+            if (request.SchoolAdminEmails == null)
+                throw new ArgumentException("Admin list cannot be null.");
+
 
             school.Name = request.SchoolName.Trim();
             school.UpdatedAt = DateTime.UtcNow;
+
+            //ADMINS
+            var requestedClerkIds = new List<string>();
+
+            foreach (var email in request.SchoolAdminEmails.Distinct())
+            {
+                var user = await _clerkService.GetUserByEmailAsync(email);
+
+                if (user == null)
+                    throw new KeyNotFoundException($"User with email {email} not found.");
+
+                requestedClerkIds.Add(user.ClerkId);
+            }
+            var currentAdmins = school.SchoolAdmins.ToList();
+            var currentClerkIds = currentAdmins
+                .Select(a => a.ClerkId)
+                .ToList();
+
+            //REMOVE ADMINS
+
+            var adminsToRemove = currentAdmins
+                .Where(a => !requestedClerkIds.Contains(a.ClerkId))
+                .ToList();
+
+            foreach (var admin in adminsToRemove)
+            {
+                school.SchoolAdmins.Remove(admin);
+            }
+
+            //ADD NEW ADMINS
+            var clerkIdsToAdd = requestedClerkIds
+                .Where(id => !currentClerkIds.Contains(id))
+                .ToList();
+
+            foreach (var clerkId in clerkIdsToAdd)
+            {
+                school.SchoolAdmins.Add(new SchoolAdmin
+                {
+                    SchoolId = school.Id,
+                    ClerkId = clerkId
+                });
+            }
 
             return await _schoolRepository.UpdateSchoolAsync(school);
         }

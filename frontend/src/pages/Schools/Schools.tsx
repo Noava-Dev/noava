@@ -53,13 +53,13 @@ export default function SchoolsPage() {
 
 const handleCreateSchool = async (data: {
     name: string;
-    adminEmail: string;
+    adminEmails: string[];
   }) => {
     try {
       if(editingSchool){
         await schoolService.update(editingSchool.id, {
           schoolName: data.name,
-          schoolAdminEmails: [data.adminEmail]
+          schoolAdminEmails: data.adminEmails
         })
 
         showSuccess( "School updated", `${data.name} was updated successfully.` );
@@ -67,7 +67,7 @@ const handleCreateSchool = async (data: {
       }else{
         await schoolService.create({
         schoolName: data.name,
-        schoolAdminEmails: [data.adminEmail]
+        schoolAdminEmails: data.adminEmails
       });
 
       showSuccess('School created', `${data.name} was added successfully.`);
@@ -201,7 +201,7 @@ return (
             name: editingSchool.schoolName,
             //TODO: fix so it shows all the adminEmails and not just the first
             //TODO: add logic to add an admin every time
-            adminEmail: editingSchool.admins[0]?.email ?? "",
+            adminEmails: editingSchool.admins.map(a => a.email),
           }
           : undefined
         }
