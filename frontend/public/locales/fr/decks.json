@@ -19,6 +19,11 @@
     "summaryDecks": "Prêt à réviser {{count}} deck(s)",
     "startReview": "Commencer la révision"
   },
+  "reviewModes": {
+    "flipMode": "Mode Retournement",
+    "writeReview": "Mode Écriture",
+    "reverseReview": "Mode Inversé"
+  },
   "empty": {
     "title": "Aucun Deck pour le moment",
     "message": "Créez votre premier Deck pour commencer !",

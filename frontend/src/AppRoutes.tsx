@@ -19,13 +19,14 @@ import NotificationPage from './pages/Notification/Notification';
 import Loading from './shared/components/loading/Loading';
 import FlashcardDetail from './pages/Flashcards/FlashcardDetail';
 import Dashboard from './pages/Dashboard/Dashboard';
+import WriteReview from './pages/Review/WriteReview';
+import ReverseReview from './pages/Review/ReverseReview';
 
 export default function AppRoutes() {
   return (
     <Routes>
       {/* Unauthenticated Routes */}
       <Route path="/" element={<Home />} />
-      <Route path="*" element={<Navigate to="/not-found" replace />} />
       <Route path="/not-found" element={<NotFound />} />
       <Route path="/faq" element={<FAQ />} />
 
@@ -56,8 +57,13 @@ export default function AppRoutes() {
         {/* Decks */}
         <Route path="/decks" element={<Decks />} />
         <Route path="/decks/:deckId/cards" element={<FlashcardDetail />} />
+        <Route path="/decks/:deckId/quickReview" element={<QuickReview />} />
+        <Route path="/decks/:deckId/writeReview" element={<WriteReview />} />
+        <Route path="/decks/:deckId/reverseReview" element={<ReverseReview />} />
         <Route path="/decks/:deckId/review" element={<QuickReview />} />
         <Route path="/decks/review" element={<QuickReview />} />
+        <Route path="/decks/writeReview" element={<WriteReview />} />
+        <Route path="/decks/reverseReview" element={<ReverseReview />} />
 
         {/* Classrooms */}
         <Route path="/classrooms" element={<Classrooms />} />
@@ -70,6 +76,14 @@ export default function AppRoutes() {
         <Route
           path="/classrooms/:classroomId/review"
           element={<QuickReview />}
+        />
+        <Route
+          path="/classrooms/:classroomId/writeReview"
+          element={<WriteReview />}
+        />
+        <Route
+          path="/classrooms/:classroomId/reverseReview"
+          element={<ReverseReview />}
         />
 
         {/* Notifications */}
@@ -89,6 +103,9 @@ export default function AppRoutes() {
           <Route path="schools" element={<SchoolsPage />} />
         </Route>
       </Route>
+
+      {/* Catch-all - must be last */}
+      <Route path="*" element={<Navigate to="/not-found" replace />} />
     </Routes>
   );
 }

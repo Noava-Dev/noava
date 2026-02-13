@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
-import { Button, Progress, Badge } from 'flowbite-react';
-import { HiArrowLeft, HiRefresh, HiX, HiVolumeUp, HiPlay } from 'react-icons/hi';
+import { Button, Progress, Badge, TextInput, Alert } from 'flowbite-react';
+import { HiArrowLeft, HiRefresh, HiX, HiVolumeUp, HiCheckCircle, HiXCircle, HiPencil } from 'react-icons/hi';
 import { useTranslation } from 'react-i18next';
 import { useDeckService } from '../../services/DeckService';
 import { useFlashcardService } from '../../services/FlashcardService';
@@ -12,7 +12,7 @@ import { getLanguageCode } from '../../shared/utils/speechHelpers';
 import type { Deck } from '../../models/Deck';
 import type { ReviewSession } from '../../models/ReviewSessions';
 
-function QuickReview() {
+function WriteReview() {
   const { deckId, classroomId } = useParams<{ deckId?: string; classroomId?: string }>();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -24,12 +24,17 @@ function QuickReview() {
 
   const [decks, setDecks] = useState<Map<number, Deck>>(new Map());
   const [session, setSession] = useState<ReviewSession | null>(null);
-  const [isFlipped, setIsFlipped] = useState(false);
   const [loading, setLoading] = useState(true);
+  
+
   const [frontImageUrl, setFrontImageUrl] = useState<string | null>(null);
   const [backImageUrl, setBackImageUrl] = useState<string | null>(null);
   const [frontAudioUrl, setFrontAudioUrl] = useState<string | null>(null);
   const [backAudioUrl, setBackAudioUrl] = useState<string | null>(null);
+  
+  const [userAnswer, setUserAnswer] = useState('');
+  const [showResult, setShowResult] = useState(false);
+  const [isCorrect, setIsCorrect] = useState(false);
   const [isBulkReview, setIsBulkReview] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
 
@@ -48,26 +53,16 @@ function QuickReview() {
     }
   }, [deckId, classroomId, searchParams]);
 
-  // Stop speech when component unmounts or card changes
   useEffect(() => {
     return () => {
       window.speechSynthesis.cancel();
     };
   }, [session?.currentIndex]);
 
-  // Stop speech when component unmounts or card changes
-  useEffect(() => {
-    return () => {
-      window.speechSynthesis.cancel();
-    };
-  }, [session?.currentIndex]);
-
-  // Load images and audio for current card
   useEffect(() => {
     if (session && session.cards.length > 0) {
       const currentCard = session.cards[session.currentIndex];
 
-      // Load front image
       if (currentCard.frontImage) {
         azureBlobService
           .getSasUrl('card-images', currentCard.frontImage)
@@ -77,7 +72,6 @@ function QuickReview() {
         setFrontImageUrl(null);
       }
 
-      // Load back image
       if (currentCard.backImage) {
         azureBlobService
           .getSasUrl('card-images', currentCard.backImage)
@@ -87,7 +81,6 @@ function QuickReview() {
         setBackImageUrl(null);
       }
 
-      // Load front audio
       if (currentCard.frontAudio) {
         azureBlobService
           .getSasUrl('card-audio', currentCard.frontAudio)
@@ -97,7 +90,6 @@ function QuickReview() {
         setFrontAudioUrl(null);
       }
 
-      // Load back audio
       if (currentCard.backAudio) {
         azureBlobService
           .getSasUrl('card-audio', currentCard.backAudio)
@@ -110,7 +102,6 @@ function QuickReview() {
   }, [session?.currentIndex]);
 
   const initializeSession = async (deckIds: number[], mode: BulkReviewMode) => {
-    //console.log('Initializing quick review session with deckIds:', deckIds, 'and mode:', mode);
     try {
       setLoading(true);
 
@@ -118,8 +109,9 @@ function QuickReview() {
 
       // Haal kaarten en alle betrokken decks op
       const cardsData = await flashcardService.getBulkReviewCards(deckIds, mode);
-      const decksData = await deckService.getByMultipleIds(deckIds);
-      //console.log('Loaded decks for quick review:', decksData);
+      const decksData = await Promise.all(
+        deckIds.map(id => deckService.getById(id))
+      );
 
       if (cardsData.length === 0) {
         showError(t('quickReview.noCards'), t('quickReview.error'));
@@ -165,10 +157,17 @@ function QuickReview() {
     }
   };
 
-  const handleFlip = () => {
-    window.speechSynthesis.cancel();
-    setIsSpeaking(false);
-    setIsFlipped(!isFlipped);
+  const handleCheckAnswer = () => {
+    if (!session) return;
+
+    const currentCard = session.cards[session.currentIndex];
+    const correctAnswer = currentCard.backText.toLowerCase().trim();
+    const userAnswerNormalized = userAnswer.toLowerCase().trim();
+
+    const isAnswerCorrect = correctAnswer === userAnswerNormalized;
+
+    setIsCorrect(isAnswerCorrect);
+    setShowResult(true);
   };
 
   const handleNext = () => {
@@ -177,19 +176,34 @@ function QuickReview() {
     window.speechSynthesis.cancel();
     setIsSpeaking(false);
 
+    setUserAnswer('');
+    setShowResult(false);
+    setIsCorrect(false);
+
     if (session.currentIndex < session.cards.length - 1) {
       setSession({
         ...session,
         currentIndex: session.currentIndex + 1,
         completedCards: session.completedCards + 1,
       });
-      setIsFlipped(false);
     } else {
       setSession({
         ...session,
         completedCards: session.cards.length,
       });
     }
+  };
+
+  // Skip function (shows answer without checking)
+  const handleSkip = () => {
+    if (!session) return;
+
+    window.speechSynthesis.cancel();
+    setIsSpeaking(false);
+
+    // Show result as incorrect (skipped)
+    setIsCorrect(false);
+    setShowResult(true);
   };
 
   const handleRestart = () => {
@@ -206,7 +220,10 @@ function QuickReview() {
       currentIndex: 0,
       completedCards: 0,
     });
-    setIsFlipped(false);
+    
+    setUserAnswer('');
+    setShowResult(false);
+    setIsCorrect(false);
   };
 
   const handleExit = () => {
@@ -224,9 +241,14 @@ function QuickReview() {
     }
   };
 
-  // ← PRIORITY: Audio file FIRST, then TTS
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && userAnswer.trim() && !showResult) {
+      handleCheckAnswer();
+    }
+  };
+
   const handlePlayAudio = (side: 'front' | 'back', e: React.MouseEvent) => {
-    e.stopPropagation(); // Prevent card flip
+    e.stopPropagation();
 
     if (!session) return;
 
@@ -234,45 +256,30 @@ function QuickReview() {
     const deck = decks.get(currentCard.deckId);
 
     if (side === 'front') {
-      // PRIORITY 1: Audio file
       if (frontAudioUrl) {
-        console.log('Playing front audio file (priority)');
         const audio = new Audio(frontAudioUrl);
         audio.play().catch((err) => console.error('Failed to play audio:', err));
-      } 
-      // PRIORITY 2: TTS (only if no audio file and deck language is available)
-      else if (deck && currentCard.hasVoiceAssistant && currentCard.frontText) {
-        console.log('Using TTS for front (no audio file)');
+      } else if (deck && currentCard.hasVoiceAssistant && currentCard.frontText) {
         speakText(currentCard.frontText, deck.language);
       }
     } else {
-      // PRIORITY 1: Audio file
       if (backAudioUrl) {
-        console.log('Playing back audio file (priority)');
         const audio = new Audio(backAudioUrl);
         audio.play().catch((err) => console.error('Failed to play audio:', err));
-      } 
-      // PRIORITY 2: TTS (only if no audio file and deck language is available)
-      else if (deck && currentCard.hasVoiceAssistant && currentCard.backText) {
-        console.log('Using TTS for back (no audio file)');
+      } else if (deck && currentCard.hasVoiceAssistant && currentCard.backText) {
         speakText(currentCard.backText, deck.language);
       }
     }
   };
 
-  // Speak with deck language
   const speakText = (text: string, deckLanguage: string) => {
     window.speechSynthesis.cancel();
-
 
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = getLanguageCode(deckLanguage);
     utterance.rate = 1.0;
     utterance.pitch = 1.0;
     utterance.volume = 1.0;
-
-    console.log(`Speaking: "${text}"`);
-    console.log(`Language: ${utterance.lang} (from deck: ${deckLanguage})`);
 
     utterance.onstart = () => setIsSpeaking(true);
     utterance.onend = () => setIsSpeaking(false);
@@ -284,7 +291,6 @@ function QuickReview() {
     window.speechSynthesis.speak(utterance);
   };
 
-  // Check if audio/TTS button should show
   const shouldShowAudioButton = (side: 'front' | 'back'): boolean => {
     if (!session) return false;
 
@@ -320,7 +326,7 @@ function QuickReview() {
 
   return (
     <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
-      <main className="flex-1 w-full">
+      <div className="flex-1 w-full">
         <div className="container max-w-4xl px-4 py-6 mx-auto md:py-8">
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
@@ -335,13 +341,13 @@ function QuickReview() {
                   {session.deckTitle}
                 </h1>
                 <div className="flex gap-2 mt-1">
-                <Badge color="info" className="mt-1">
-                  {isBulkReview ? t('quickReview.bulkMode') : t('quickReview.mode')}
-                </Badge>
-                <Badge color="cyan">
-                  <HiPlay className="w-3 h-3 mr-1" />
-                  {t('quickReview.flipMode')}
-                </Badge>
+                  <Badge color="info">
+                    {isBulkReview ? t('quickReview.bulkMode') : t('quickReview.mode')}
+                  </Badge>
+                  <Badge color="cyan">
+                    <HiPencil className="w-3 h-3 mr-1" />
+                    {t('quickReview.writeMode')}
+                  </Badge>
                 </div>
               </div>
             </div>
@@ -358,129 +364,137 @@ function QuickReview() {
             <Progress progress={progress} color="cyan" size="lg" />
           </div>
 
-          {/* Card or Complete Screen */}
+          {/* Content */}
           {!isComplete ? (
-            <>
-              {/* Card */}
-              <div className="mb-6 perspective-1000">
-                <div
-                  className={`relative w-full h-96 transition-transform duration-500 transform-style-3d cursor-pointer ${
-                    isFlipped ? 'rotate-y-180' : ''
-                  }`}
-                  onClick={handleFlip}>
-                  {/* Front */}
-                  <div className="absolute inset-0 backface-hidden">
-                    <div className="flex flex-col items-center justify-center w-full h-full p-8 bg-white border-2 border-gray-200 shadow-xl dark:bg-gray-800 rounded-2xl dark:border-gray-700">
-                      {/* Audio button - top right */}
-                      {shouldShowAudioButton('front') && (
-                        <button
-                          onClick={(e) => handlePlayAudio('front', e)}
-                          className={`absolute z-10 p-3 text-white transition-colors rounded-full shadow-lg top-4 right-4 ${
-                            isSpeaking ? 'bg-cyan-600' : 'bg-cyan-500 hover:bg-cyan-600'
-                          }`}
-                          title={frontAudioUrl ? t('quickReview.playAudio') : t('quickReview.playVoiceAssistant')}>
-                          <HiVolumeUp className={`w-5 h-5 ${isSpeaking ? 'animate-pulse' : ''}`} />
-                        </button>
-                      )}
+            <div className="space-y-6">
+              {/* Question Card */}
+              <div className="relative flex flex-col items-center justify-center p-8 bg-white border-2 border-gray-200 shadow-xl h-96 dark:bg-gray-800 rounded-2xl dark:border-gray-700">
+                {shouldShowAudioButton('front') && (
+                  <button
+                    onClick={(e) => handlePlayAudio('front', e)}
+                    className={`absolute p-3 text-white transition-colors rounded-full shadow-lg top-4 right-4 ${
+                      isSpeaking ? 'bg-cyan-600' : 'bg-cyan-500 hover:bg-cyan-600'
+                    }`}
+                    title={frontAudioUrl ? t('quickReview.playAudio') : t('quickReview.playVoiceAssistant')}>
+                    <HiVolumeUp className={`w-5 h-5 ${isSpeaking ? 'animate-pulse' : ''}`} />
+                  </button>
+                )}
 
-                      <div className="mb-4 text-sm font-semibold tracking-wide uppercase text-cyan-500">
-                        {t('flashcardModal.front')}
-                      </div>
+                <div className="mb-4 text-sm font-semibold tracking-wide uppercase text-cyan-500">
+                  {t('quickReview.question')}
+                </div>
 
-                      {/* Image */}
-                      {frontImageUrl && (
-                        <div className="flex justify-center w-full mb-4">
-                          <img
-                            src={frontImageUrl}
-                            alt="Front"
-                            className="object-contain max-w-full rounded-lg max-h-40"
-                          />
-                        </div>
-                      )}
-
-                      {/* Text */}
-                      <div className="flex items-center justify-center flex-1 w-full px-4 text-center">
-                        <p className="text-2xl font-bold text-gray-900 break-words md:text-3xl dark:text-white">
-                          {currentCard.frontText}
-                        </p>
-                      </div>
-
-                      {/* Memo */}
-                      {currentCard.memo && (
-                        <div className="w-full p-3 mt-4 border border-yellow-200 rounded-lg bg-yellow-50 dark:bg-yellow-900/20 dark:border-yellow-800">
-                          <p className="text-sm text-yellow-800 dark:text-yellow-200">
-                            {currentCard.memo}
-                          </p>
-                        </div>
-                      )}
-
-                      <div className="mt-6 text-sm text-gray-500 dark:text-gray-400">
-                        {t('flashcardModal.clickToFlip')}
-                      </div>
-                    </div>
+                {frontImageUrl && (
+                  <div className="flex justify-center w-full mb-4">
+                    <img
+                      src={frontImageUrl}
+                      alt="Question"
+                      className="object-contain max-w-full rounded-lg max-h-40"
+                    />
                   </div>
+                )}
 
-                  {/* Back */}
-                  <div className="absolute inset-0 backface-hidden rotate-y-180">
-                    <div className="flex flex-col items-center justify-center w-full h-full p-8 bg-white border-2 border-gray-200 shadow-xl dark:bg-gray-800 rounded-2xl dark:border-gray-700">
-                      {/* Audio button - top right */}
-                      {shouldShowAudioButton('back') && (
-                        <button
-                          onClick={(e) => handlePlayAudio('back', e)}
-                          className={`absolute z-10 p-3 text-white transition-colors rounded-full shadow-lg top-4 right-4 ${
-                            isSpeaking ? 'bg-yellow-600' : 'bg-yellow-500 hover:bg-yellow-600'
-                          }`}
-                          title={backAudioUrl ? t('quickReview.playAudio') : t('quickReview.playVoiceAssistant')}>
-                          <HiVolumeUp className={`w-5 h-5 ${isSpeaking ? 'animate-pulse' : ''}`} />
-                        </button>
-                      )}
-
-                      <div className="mb-4 text-sm font-semibold tracking-wide text-yellow-500 uppercase">
-                        {t('flashcardModal.back')}
-                      </div>
-
-                      {/* Image */}
-                      {backImageUrl && (
-                        <div className="flex justify-center w-full mb-4">
-                          <img
-                            src={backImageUrl}
-                            alt="Back"
-                            className="object-contain max-w-full rounded-lg max-h-40"
-                          />
-                        </div>
-                      )}
-
-                      {/* Text */}
-                      <div className="flex items-center justify-center flex-1 w-full px-4 text-center">
-                        <p className="text-2xl font-bold text-gray-900 break-words md:text-3xl dark:text-white">
-                          {currentCard.backText}
-                        </p>
-                      </div>
-
-                      <div className="mt-6 text-sm text-gray-500 dark:text-gray-400">
-                        {t('flashcardModal.clickToFlip')}
-                      </div>
-                    </div>
-                  </div>
+                <div className="flex items-center justify-center flex-1 w-full px-4 text-center">
+                  <p className="text-2xl font-bold text-gray-900 break-words md:text-3xl dark:text-white">
+                    {currentCard.frontText}
+                  </p>
                 </div>
               </div>
 
-              {/* Actions */}
-              <div className="flex justify-center gap-4">
-                <Button size="lg" color="gray" onClick={handleNext}>
-                  {t('common:actions.skip')}
-                </Button>
-                <Button
-                  size="lg"
-                  className="bg-cyan-500 hover:bg-cyan-600"
-                  onClick={handleNext}
-                  disabled={!isFlipped}>
-                  {session.currentIndex === session.cards.length - 1
-                    ? t('common:actions.finish')
-                    : t('quickReview.next')}
-                </Button>
-              </div>
-            </>
+              {/* Answer Section */}
+              {!showResult ? (
+                <div className="space-y-4">
+                  <TextInput
+                    type="text"
+                    placeholder={t('quickReview.typeYourAnswer')}
+                    value={userAnswer}
+                    onChange={(e) => setUserAnswer(e.target.value)}
+                    onKeyPress={handleKeyPress}
+                    sizing="lg"
+                    autoFocus
+                  />
+                  
+                  {/*  Check and Skip buttons */}
+                  <div className="flex gap-3">
+                    <Button
+                      size="lg"
+                      color="gray"
+                      className="flex-1"
+                      onClick={handleSkip}>
+                      {t('common:actions.skip')}
+                    </Button>
+                    <Button
+                      size="lg"
+                      className="flex-1 bg-cyan-500 hover:bg-cyan-600"
+                      onClick={handleCheckAnswer}
+                      disabled={!userAnswer.trim()}>
+                      {t('quickReview.checkAnswer')}
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {/* Result Alert */}
+                  <Alert
+                    color={isCorrect ? 'success' : 'failure'}
+                    icon={isCorrect ? HiCheckCircle : HiXCircle}>
+                    <span className="font-medium">
+                      {isCorrect ? t('quickReview.correct') : t('quickReview.incorrect')}
+                    </span>
+                  </Alert>
+
+                  {/* Correct Answer Card */}
+                  <div className="relative p-6 bg-white border-2 border-gray-200 shadow-lg dark:bg-gray-800 rounded-2xl dark:border-gray-700">
+                    {shouldShowAudioButton('back') && (
+                      <button
+                        onClick={(e) => handlePlayAudio('back', e)}
+                        className={`absolute p-3 text-white transition-colors rounded-full shadow-lg top-4 right-4 ${
+                          isSpeaking ? 'bg-yellow-600' : 'bg-yellow-500 hover:bg-yellow-600'
+                        }`}
+                        title={backAudioUrl ? t('quickReview.playAudio') : t('quickReview.playVoiceAssistant')}>
+                        <HiVolumeUp className={`w-5 h-5 ${isSpeaking ? 'animate-pulse' : ''}`} />
+                      </button>
+                    )}
+
+                    <div className="mb-3 text-sm font-semibold tracking-wide text-yellow-500 uppercase">
+                      {t('quickReview.correctAnswer')}
+                    </div>
+
+                    {backImageUrl && (
+                      <div className="flex justify-center w-full mb-4">
+                        <img
+                          src={backImageUrl}
+                          alt="Answer"
+                          className="object-contain max-w-full rounded-lg max-h-40"
+                        />
+                      </div>
+                    )}
+
+                    <p className="text-xl font-bold text-center text-gray-900 dark:text-white">
+                      {currentCard.backText}
+                    </p>
+
+                    {currentCard.memo && (
+                      <div className="p-3 mt-4 border border-yellow-200 rounded-lg bg-yellow-50 dark:bg-yellow-900/20 dark:border-yellow-800">
+                        <p className="text-sm text-yellow-800 dark:text-yellow-200">
+                          {currentCard.memo}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Next Button */}
+                  <Button
+                    size="lg"
+                    className="w-full bg-cyan-500 hover:bg-cyan-600"
+                    onClick={handleNext}>
+                    {session.currentIndex === session.cards.length - 1
+                      ? t('common:actions.finish')
+                      : t('quickReview.next')}
+                  </Button>
+                </div>
+              )}
+            </div>
           ) : (
             /* Complete Screen */
             <div className="py-12 text-center">
@@ -520,9 +534,9 @@ function QuickReview() {
             </div>
           )}
         </div>
-      </main>
+      </div>
     </div>
   );
 }
 
-export default QuickReview;
+export default WriteReview;

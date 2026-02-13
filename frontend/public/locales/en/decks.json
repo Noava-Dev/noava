@@ -19,6 +19,11 @@
     "summaryDecks": "Ready to review {{count}} deck(s)",
     "startReview": "Start Review"
   },
+  "reviewModes": {
+    "flipMode": "Flip Mode",
+    "writeReview": "Write Mode",
+    "reverseReview": "Reverse Mode"
+  },
   "empty": {
     "title": "No decks yet",
     "message": "Create your first deck to get started!",

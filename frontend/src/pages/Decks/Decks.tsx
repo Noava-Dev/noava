@@ -5,10 +5,13 @@ import {
   ModalFooter,
   ModalHeader,
   Select,
+  Dropdown,
+  DropdownItem,
 } from 'flowbite-react';
 import { Modal } from 'flowbite-react';
-import { HiPlus } from 'react-icons/hi';
+import { HiPlus, HiPlay, HiPencil, HiRefresh, HiChevronDown } from 'react-icons/hi';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import NoavaFooter from '../../shared/components/navigation/NoavaFooter';
 import PageHeader from '../../shared/components/PageHeader';
 import DeckCard from '../../shared/components/DeckCard';
@@ -23,6 +26,7 @@ import EmptyState from '../../shared/components/EmptyState';
 
 function DecksPage() {
   const { t } = useTranslation('decks');
+  const navigate = useNavigate();
 
   const deckService = useDeckService();
   const [decks, setDecks] = useState<Deck[]>([]);
@@ -34,6 +38,8 @@ function DecksPage() {
   const { showSuccess, showError } = useToast();
   const [deleteDeckId, setDeleteDeckId] = useState<number | null>(null);
   const [bulkReviewModalOpened, setBulkReviewModalOpened] = useState(false);
+  const [bulkWriteReviewModalOpened, setBulkWriteReviewModalOpened] = useState(false);
+  const [bulkReverseReviewModalOpened, setBulkReverseReviewModalOpened] = useState(false);
 
   useEffect(() => {
     fetchDecks();
@@ -150,13 +156,36 @@ function DecksPage() {
 
               <div className="flex flex-col gap-3 sm:flex-row">
                 {decks.length > 0 && (
-                  <Button
-                    color="cyan"
-                    onClick={() => setBulkReviewModalOpened(true)}
-                    size="lg"
-                    className="w-full border-none md:w-fit">
-                    {t('bulkReview.button')}
-                  </Button>
+                  <Dropdown
+                    label=""
+                    dismissOnClick={true}
+                    renderTrigger={() => (
+                      <Button size="lg" className="w-full border-none bg-cyan-500 hover:bg-cyan-600 md:w-fit">
+                        <HiPlay className="w-5 h-5 mr-2" />
+                        {t('bulkReview.button')}
+                        <HiChevronDown className="w-4 h-4 ml-1" />
+                      </Button>
+                    )}
+                  >
+                    <DropdownItem
+                      icon={HiPlay}
+                      onClick={() => setBulkReviewModalOpened(true)}
+                    >
+                      {t('reviewModes.flipMode')}
+                    </DropdownItem>
+                    <DropdownItem
+                      icon={HiPencil}
+                      onClick={() => setBulkWriteReviewModalOpened(true)}
+                    >
+                      {t('reviewModes.writeReview')}
+                    </DropdownItem>
+                    <DropdownItem
+                      icon={HiRefresh}
+                      onClick={() => setBulkReverseReviewModalOpened(true)}
+                    >
+                      {t('reviewModes.reverseReview')}
+                    </DropdownItem>
+                  </Dropdown>
                 )}
                 <Button
                   onClick={() => setIsModalOpen(true)}
@@ -249,6 +278,25 @@ function DecksPage() {
           onClose={() => setBulkReviewModalOpened(false)}
           decks={decks}
           classroomId={null}
+          reviewType="flip"
+        />
+
+        {/* Bulk Write Review Modal */}
+        <BulkReviewModal
+          opened={bulkWriteReviewModalOpened}
+          onClose={() => setBulkWriteReviewModalOpened(false)}
+          decks={decks}
+          classroomId={null}
+          reviewType="write"
+        />
+
+        {/* Bulk Reverse Review Modal */}
+        <BulkReviewModal
+          opened={bulkReverseReviewModalOpened}
+          onClose={() => setBulkReverseReviewModalOpened(false)}
+          decks={decks}
+          classroomId={null}
+          reviewType="reverse"
         />
 
         {/* Delete Confirmation Modal */}

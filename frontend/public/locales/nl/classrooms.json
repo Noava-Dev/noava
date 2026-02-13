@@ -118,6 +118,11 @@
     "summaryDecks": "Klaar om {{count}} deck(s) te herhalen",
     "startReview": "Start herhaling"
   },
+  "reviewModes": {
+    "flipMode": "Draai Modus",
+    "writeReview": "Schrijf Modus",
+    "reverseReview": "Omgekeerde Modus"
+  },
   "addDeck": {
      "title": "Deck Toevoegen aan Classroom",
     "description": "Voeg een van je bestaande decks toe aan deze classroom.",
