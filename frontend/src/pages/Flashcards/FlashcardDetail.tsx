@@ -203,13 +203,13 @@ function FlashcardDetail() {
     }
   };
 
-  const backUrl = fromClassroom && classroomId
-    ? `/classrooms/${classroomId}`
-    : '/decks';
+  const backUrl =
+    fromClassroom && classroomId ? `/classrooms/${classroomId}` : '/decks';
 
-  const backText = fromClassroom && classroomName
-    ? t('flashcardDetail.backToClassroom', { name: classroomName })
-    : t('flashcardDetail.backToDeck');
+  const backText =
+    fromClassroom && classroomName
+      ? t('flashcardDetail.backToClassroom', { name: classroomName })
+      : t('flashcardDetail.backToDeck');
 
   const handleEditFlashcard = (flashcard: Flashcard) => {
     setSelectedFlashcard(flashcard);
@@ -311,24 +311,30 @@ function FlashcardDetail() {
               )}
             </div>
 
+
            {/* Action Buttons */}
-            <div className="flex justify-between mb-8">
-              <div className="flex gap-3">
+             <div className="flex flex-col gap-3 mb-8 md:flex-row md:justify-between md:items-start">
+              {/* Left button group */}
+              <div className="grid grid-cols-1 gap-3 md:flex md:flex-wrap">
                 {/* Create/Import cards button - only for owners/creator */}
+                {/* Create/Import cards button */}
                 {canEdit && (
-                  <DropdownButton
-                    size="lg"
-                    onClickMain={() => {
-                      setSelectedFlashcard(undefined);
-                      setIsModalOpen(true);
-                    }}
-                    icon={HiPlus}
-                    text={t('flashcardDetail.addCard')}>
-                    <DropdownItem onClick={() => setShowImportModal(true)}>
-                      {t('flashcardDetail.importFromFile')}
-                    </DropdownItem>
-                  </DropdownButton>
+                <DropdownButton
+                  size="lg"
+                  onClickMain={() => {
+                    setSelectedFlashcard(undefined);
+                    setIsModalOpen(true);
+                  }}
+                  icon={HiPlus}
+                  text={t('flashcardDetail.addCard')}
+                  className="w-full">
+                  <DropdownItem onClick={() => setShowImportModal(true)}>
+                    {t('flashcardDetail.importFromFile')}
+                  </DropdownItem>
+                </DropdownButton>
                 )}
+
+                {/* Study Now */}
 
                 <Button size="lg" disabled={totalCards === 0}>
                   <HiPlay className="mr-2 size-5" />
@@ -361,6 +367,17 @@ function FlashcardDetail() {
                     {t('flashcardDetail.reverseReview')}
                   </DropdownItem>
                 </Dropdown>
+              </div>
+
+              {/* Right button group */}
+              <div className="grid grid-cols-1 gap-3 md:block">
+                <Button
+                  size="lg"
+                  className="bg-gradient-to-r from-secondary-600 to-secondary-700 hover:shadow-sm hover:border-border"
+                  onClick={() => setManageOwnersOpened(true)}>
+                  <HiUserGroup className="mr-2 size-5" />
+                  {t('decks:ownership.manageAccess')}
+                </Button>
               </div>
 
               {/*  Only show Manage Access button for creator */}
