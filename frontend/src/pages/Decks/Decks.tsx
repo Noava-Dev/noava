@@ -220,7 +220,7 @@ function DecksPage() {
                   onClick={() => setJoinCodeModalOpen(true)}
                   size="lg"
                   color="gray"
-                  className="w-full border-none md:w-fit">
+                  className="w-full border-none md:w-fit ml-auto">
                   {t('joinCode.button')}
                 </Button>
                 <Button

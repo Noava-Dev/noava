@@ -184,7 +184,7 @@ export const ManageOwnersModal = ({
 
   return (
     <>
-      <Modal show={isOpen} onClose={onClose} size="2xl">
+      <Modal show={isOpen} onClose={onClose} size="2xl" dismissible>
         <ModalHeader>{t('decks:owners.title')}</ModalHeader>
         <ModalBody>
           {!deck ? (
@@ -201,7 +201,7 @@ export const ManageOwnersModal = ({
                 <p className="mb-3 text-xs text-gray-600 dark:text-gray-400">
                   {t('decks:owners.joinCodeDescription')}
                 </p>
-                <div className="flex gap-2">
+                <div className="flex gap-2 items-center">
                   <TextInput
                     value={deck.joinCode || 'No code available'}
                     readOnly
@@ -340,7 +340,7 @@ export const ManageOwnersModal = ({
           )}
         </ModalBody>
         <ModalFooter>
-          <Button color="gray" onClick={onClose}>
+          <Button color="gray" onClick={onClose} className="ml-auto">
             {t('common:actions.close')}
           </Button>
         </ModalFooter>
