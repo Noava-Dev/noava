@@ -208,7 +208,7 @@ namespace noava.Services.Classrooms
             return classroom.ToResponseDto(userId);
         }
 
-        public async Task<IEnumerable<ClerkUserResponseDto>> GetAllUsersByClassroomAsync(
+        public async Task<IEnumerable<ClassroomUserResponseDto>> GetAllUsersByClassroomAsync(
             int classroomId, int page, int pageSize)
         {
             var classroom = await _classroomRepository.GetByIdAsync(classroomId);
@@ -221,7 +221,7 @@ namespace noava.Services.Classrooms
                 .ToList();
 
             if (!userIds.Any())
-                return Enumerable.Empty<ClerkUserResponseDto>();
+                return Enumerable.Empty<ClassroomUserResponseDto>();
 
             var pagedUserIds = userIds
                 .Skip((page - 1) * pageSize)
@@ -234,13 +234,20 @@ namespace noava.Services.Classrooms
                 .Where(cu => cu.IsTeacher)
                 .ToDictionary(cu => cu.UserId, cu => true);
 
-            foreach (var user in clerkUsers)
-            {
-                user.IsTeacher = teacherLookup.ContainsKey(user.ClerkId);
-            }
+            var result = clerkUsers
+                .Select(u => new ClassroomUserResponseDto
+                {
+                    ClerkId = u.ClerkId,
+                    FirstName = u.FirstName,
+                    LastName = u.LastName,
+                    Email = u.Email,
+                    IsTeacher = teacherLookup.ContainsKey(u.ClerkId)
+                })
+                .ToList();
 
-            return clerkUsers;
+            return result;
         }
+
         public async Task<ClassroomResponseDto> InviteUserByEmail(int classroomId,string userId,string email)
         {
             var classroom = await _classroomRepository.GetByIdAsync(classroomId)
