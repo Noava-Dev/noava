@@ -7,7 +7,6 @@ import {
   Button,
   Spinner,
   TextInput,
-  Avatar,
   Badge,
 } from 'flowbite-react';
 import { useTranslation } from 'react-i18next';
@@ -16,14 +15,6 @@ import { useDeckService } from '../../services/DeckService';
 import type { Deck } from '../../models/Deck';
 import type { ClerkUserResponse } from '../../models/User';
 import { useUser } from '@clerk/clerk-react';
-import { HiUserGroup, HiTrash, HiX, HiUserAdd, HiClock } from 'react-icons/hi';
-import { useDeckOwnershipService } from '../../services/DeckOwnershipService';
-import { useDeckInvitationService } from '../../services/DeckInvitationService';
-import type { DeckOwner } from '../../models/DeckOwner';
-import {
-  InvitationStatus,
-  type DeckInvitation,
-} from '../../models/DeckInvitation';
 import { InviteUserModal } from './InviteUserModal';
 import { HiClipboardCopy, HiRefresh, HiTrash, HiUserAdd, HiUserRemove } from 'react-icons/hi';
 import ConfirmModal from './ConfirmModal';
@@ -40,16 +31,13 @@ export const ManageOwnersModal = ({
   onClose,
   deck,
   onUpdate,
-  deckId,
-  deckTitle,
 }: ManageOwnersModalProps) => {
   const { t } = useTranslation(['decks', 'common']);
   const { showSuccess, showError } = useToast();
   const deckService = useDeckService();
 
   const { user } = useUser();
-  const deckOwnershipService = useDeckOwnershipService();
-  const deckInvitationService = useDeckInvitationService();
+
 
   const [users, setUsers] = useState<ClerkUserResponse[]>([]);
   const [loading, setLoading] = useState(true);

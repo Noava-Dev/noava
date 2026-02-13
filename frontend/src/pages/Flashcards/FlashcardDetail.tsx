@@ -347,23 +347,23 @@ function FlashcardDetail() {
                   )}>
                   <DropdownItem
                     icon={HiPlay}
-                    onClick={() => navigate(`/decks/${deckId}/quick-review`)}>
+                    onClick={() => navigate(`/decks/${deckId}/quickReview`)}>
                     {t('flashcardDetail.flipMode')}
                   </DropdownItem>
                   <DropdownItem
                     icon={HiPencil}
-                    onClick={() => navigate(`/decks/${deckId}/write-review`)}>
+                    onClick={() => navigate(`/decks/${deckId}/writeReview`)}>
                     {t('flashcardDetail.writeReview')}
                   </DropdownItem>
                   <DropdownItem
                     icon={HiRefresh}
-                    onClick={() => navigate(`/decks/${deckId}/reverse-review`)}>
+                    onClick={() => navigate(`/decks/${deckId}/reverseReview`)}>
                     {t('flashcardDetail.reverseReview')}
                   </DropdownItem>
                 </Dropdown>
               </div>
 
-              {/* ← CHANGE: Only show Manage Access button for creator */}
+              {/*  Only show Manage Access button for creator */}
               {isCreator && (
                 <div className="flex gap-3">
                   <Button

@@ -43,7 +43,10 @@ namespace noava.Controllers
         [HttpGet("user/all")]
         public async Task<ActionResult<List<DeckResponse>>> GetUserDecks([FromQuery] int? limit = null)
         {
-            var userId = GetUserId();
+            var userId = _userService.GetUserId(User);
+            if (userId == null)
+                return Unauthorized();
+
             var decks = await _deckService.GetUserDecksAsync(userId, limit);
             return Ok(decks);
         }
@@ -53,7 +56,10 @@ namespace noava.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<DeckResponse>> GetDeck(int id)
         {
-            var userId = GetUserId();
+            var userId = _userService.GetUserId(User);
+            if (userId == null)
+                return Unauthorized();
+
             var canView = await _deckService.CanUserViewDeckAsync(id, userId);
             if (!canView)
                 return NotFound(); 
@@ -126,7 +132,9 @@ namespace noava.Controllers
             if (string.IsNullOrWhiteSpace(email))
                 return BadRequest("Email is required.");
 
-            var userId = GetUserId();
+            var userId = _userService.GetUserId(User);
+            if (userId == null)
+                return Unauthorized();
 
             try
             {
@@ -149,7 +157,9 @@ namespace noava.Controllers
             string joinCode,
             [FromQuery] bool isOwner = false)  
         {
-            var userId = GetUserId();
+            var userId = _userService.GetUserId(User);
+            if (userId == null)
+                return Unauthorized();
 
             try
             {
@@ -166,7 +176,9 @@ namespace noava.Controllers
         [HttpPut("{deckId:int}/joincode")]
         public async Task<ActionResult<DeckResponse>> UpdateJoinCode(int deckId)
         {
-            var userId = GetUserId();
+            var userId = _userService.GetUserId(User);
+            if (userId == null)
+                return Unauthorized();
 
             try
             {
@@ -190,7 +202,9 @@ namespace noava.Controllers
             [FromQuery] int page = 1,
             [FromQuery] int pageSize = 50)
                 {
-            var userId = GetUserId();
+            var userId = _userService.GetUserId(User);
+            if (userId == null)
+                return Unauthorized();
 
             if (page <= 0) page = 1;
             if (pageSize <= 0) pageSize = 50;
@@ -213,7 +227,9 @@ namespace noava.Controllers
         [HttpDelete("{deckId:int}/users/{targetUserId}")]
         public async Task<ActionResult<DeckResponse>> RemoveUser(int deckId, string targetUserId)
         {
-            var userId = GetUserId();
+            var userId = _userService.GetUserId(User);
+            if (userId == null)
+                return Unauthorized();
 
             try
             {
