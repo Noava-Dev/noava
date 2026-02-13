@@ -372,7 +372,7 @@ function WriteReview() {
           {!isComplete ? (
             <div className="space-y-6">
               {/* Question Card */}
-              <div className="relative flex flex-col items-center justify-center p-8 bg-white border-2 border-gray-200 shadow-xl h-96 dark:bg-gray-800 rounded-2xl dark:border-gray-700">
+              <div className="relative flex flex-col items-center justify-center p-8 antialiased bg-white border-2 border-gray-200 shadow-xl h-96 dark:bg-gray-800 rounded-2xl dark:border-gray-700">
                 {shouldShowAudioButton('front') && (
                   <button
                     onClick={(e) => handlePlayAudio('front', e)}
@@ -448,7 +448,7 @@ function WriteReview() {
                   </Alert>
 
                   {/* Correct Answer Card */}
-                  <div className="relative p-6 bg-white border-2 border-gray-200 shadow-lg dark:bg-gray-800 rounded-2xl dark:border-gray-700">
+                  <div className="relative p-6 antialiased bg-white border-2 border-gray-200 shadow-lg dark:bg-gray-800 rounded-2xl dark:border-gray-700">
                     {shouldShowAudioButton('back') && (
                       <button
                         onClick={(e) => handlePlayAudio('back', e)}
