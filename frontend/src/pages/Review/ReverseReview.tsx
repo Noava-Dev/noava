@@ -339,11 +339,17 @@ function ReverseReview() {
                     transform-style-3d cursor-pointer 
                     ${isFlipped ? 'rotate-y-180' : ''}
                   `}
+                  style={{
+                    WebkitFontSmoothing: 'antialiased',
+                    MozOsxFontSmoothing: 'grayscale',
+                  }}
                   onClick={handleFlip}
                   key={currentCard.cardId}> 
                   {/* Back side shown FIRST */}
-                  <div className="absolute inset-0 backface-hidden">
-                    <div className="flex flex-col items-center justify-center w-full h-full p-8 bg-white border-2 border-gray-200 shadow-xl dark:bg-gray-800 rounded-2xl dark:border-gray-700">
+                  <div 
+                    className="absolute inset-0 backface-hidden"
+                    style={{ transform: 'translateZ(1px)' }}>
+                    <div className="flex flex-col items-center justify-center w-full h-full p-8 antialiased bg-white border-2 border-gray-200 shadow-xl dark:bg-gray-800 rounded-2xl dark:border-gray-700">
                       {shouldShowAudioButton('back') && (
                         <button
                           onClick={(e) => handlePlayAudio('back', e)}
@@ -391,8 +397,10 @@ function ReverseReview() {
 
                   {/* Front side*/}
                   {isFlipped && (
-                    <div className="absolute inset-0 backface-hidden rotate-y-180">
-                      <div className="flex flex-col items-center justify-center w-full h-full p-8 bg-white border-2 border-gray-200 shadow-xl dark:bg-gray-800 rounded-2xl dark:border-gray-700">
+                    <div 
+                      className="absolute inset-0 backface-hidden rotate-y-180"
+                      style={{ transform: 'rotateY(180deg) translateZ(1px)' }}>
+                      <div className="flex flex-col items-center justify-center w-full h-full p-8 antialiased bg-white border-2 border-gray-200 shadow-xl dark:bg-gray-800 rounded-2xl dark:border-gray-700">
                         {shouldShowAudioButton('front') && (
                           <button
                             onClick={(e) => handlePlayAudio('front', e)}
