@@ -114,7 +114,7 @@ const confirmDeleteSchool = async () => {
 
 
 const handleCardClick = (id: number) => {
-    navigate(`/schoolClassrooms/${id}`)
+    navigate(`/schools/${id}/classrooms`)
 }
 
 if (loading) { 
@@ -199,8 +199,6 @@ return (
           editingSchool
           ? {
             name: editingSchool.schoolName,
-            //TODO: fix so it shows all the adminEmails and not just the first
-            //TODO: add logic to add an admin every time
             adminEmails: editingSchool.admins.map(a => a.email),
           }
           : undefined

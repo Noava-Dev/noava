@@ -30,6 +30,8 @@ export interface DeleteSchoolRequest{
 export interface SchoolClassroomDto{
   classroomId: number;
   name: string;
+  createdAt: string;
+  updatedAt: string;
   description?: string;
   deckCount?: number;
   studentCount?: number;

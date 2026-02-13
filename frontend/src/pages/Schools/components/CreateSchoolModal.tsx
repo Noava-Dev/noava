@@ -40,16 +40,25 @@ useEffect(() => {
 
   if (!open) return null;
 
-  const handleAddAdmin = (e?: React.MouseEvent) => {
-    if (e) e.preventDefault();
-    const email = adminInput.trim();
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const handleAddAdmin = (e?: React.MouseEvent) => {
+  if (e) e.preventDefault();
 
-    if (!email || !emailRegex.test(email)) return;
-    if (adminEmails.includes(email)) return; // avoid duplicates
-    setAdminEmails([...adminEmails, email]);
+  const email = adminInput.trim();
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (!email || !emailRegex.test(email)) {
+    setAdminInput(""); 
+    return;
+  }
+
+  if (adminEmails.includes(email)) {
     setAdminInput("");
-  };
+    return;
+  }
+
+  setAdminEmails([...adminEmails, email]);
+  setAdminInput("");
+};
 
   const handleRemoveAdmin = (email: string) => {
     setAdminEmails(adminEmails.filter(e => e !== email));

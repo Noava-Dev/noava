@@ -95,7 +95,7 @@ export default function AppRoutes() {
 
         {/* Schools */}
         <Route path="schools" element={<SchoolsPage />} />
-        <Route path="schoolClassrooms/:id" element={<SchoolClassrooms/>} />
+        <Route path="schools/:id/classrooms" element={<SchoolClassrooms/>} />
       </Route>
 
       {/* Admin Routes */}
