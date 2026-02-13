@@ -8,11 +8,17 @@ import { LuPlus as Plus } from 'react-icons/lu';
 import CreateSchoolModal from './components/CreateSchoolModal';
 import Loading from '../../shared/components/loading/Loading';
 import { useNavigate} from 'react-router-dom';
+import { useUser } from '@clerk/clerk-react';
+import { useUserRole } from '../../hooks/useUserRole';
 
 export default function SchoolsPage() {
   const navigate = useNavigate();
   const schoolService = useSchoolService();
   const { showError, showSuccess } = useToast();
+
+  const { user } = useUser();
+  const { userRole } = useUserRole();
+
   const [loading, setLoading] = useState(true);
 
   const [editingSchool, setEditingSchool] = useState<SchoolDto | null>(null);
@@ -23,7 +29,13 @@ export default function SchoolsPage() {
     try {
       setLoading(true);
       const data = await schoolService.getAll();
-      setSchools(data);
+
+      if(userRole == 'ADMIN'){
+        setSchools(data);
+      } else if (user) {
+        const filteredSchools = data.filter(school => school.admins.some(a => a.clerkId === user.id))
+        setSchools(filteredSchools)
+      }
     } catch (error) {
       showError('Error loading schools', 'Please check your connection.');
     } finally {
@@ -32,8 +44,10 @@ export default function SchoolsPage() {
   };
 
   useEffect(() => {
+    if(userRole) {
     fetchSchools();
-  }, []);
+    }
+  }, [user, userRole]);
 
 const handleCreateSchool = async (data: {
     name: string;
@@ -96,7 +110,7 @@ const handleDeleteSchool = async (id: number) => {
   }
 
   const handleCardClick = (id: number) => {
-    navigate(`/admin/schoolClassrooms/${id}`)
+    navigate(`/schoolClassrooms/${id}`)
   }
 
 if (loading) { 
@@ -116,20 +130,25 @@ return (
               Schools
             </h1>
             <p className="text-text-muted-light dark:text-text-muted-dark">
-              Overview of all registered educational institutions.
+              {userRole === 'ADMIN' 
+              ? 'Overview of all registered educational institutions.' 
+              : 'Overview of schools you manage.'}
             </p>
           </div>
 
-          <button
-            onClick={() => {
-              setIsModalOpen(true);
-              setEditingSchool(null);
-            }}
-            className="flex items-center justify-center gap-2 rounded-lg bg-primary-500 px-5 py-2.5 text-sm font-semibold text-white hover:bg-primary-600 shadow-md"
-          >
-            <Plus className="size-5" />
-            Add School
-          </button>
+          {userRole === 'ADMIN' && (
+            <button
+              onClick={() => {
+                setIsModalOpen(true);
+                setEditingSchool(null);
+              }}
+              className="flex items-center justify-center gap-2 rounded-lg bg-primary-500 px-5 py-2.5 text-sm font-semibold text-white hover:bg-primary-600 shadow-md"
+            >
+              <Plus className="size-5" />
+              Add School
+            </button>
+          )}
+
         </div>
       </PageHeader>
 
@@ -138,7 +157,9 @@ return (
           {schools.length === 0 ? (
             <div className="py-12 text-center md:py-20">
               <p className="mb-6 text-xl text-text-body-light dark:text-text-muted-dark md:text-2xl">
-                No schools found. Start by adding a new school.
+                {userRole === 'ADMIN' 
+                ? 'No schools found. Start by adding a new school.' 
+                : 'You are not currently assigned to any schools.'}
               </p>
             </div>
           ) : (

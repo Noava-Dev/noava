@@ -58,7 +58,7 @@ export function SchoolCard({ id, name, admins, createdAt, onEdit, onDelete, onCl
         <button 
             onClick={(e) => {
               e.stopPropagation();
-              onEdit?.(id)
+              onDelete?.(id)
             }}
             className="rounded-lg p-2 text-muted-foreground hover:bg-destructive/10 hover:text-destructive">
           <Trash className="size-4" />

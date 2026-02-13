@@ -11,7 +11,7 @@ namespace noava.Controllers.Schools
 {
     //Changed the controller slightly because i had issues with the role enforcing
     //later on this allow anonymous should be removed
-    [AllowAnonymous]
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class SchoolsController : ControllerBase
@@ -53,6 +53,7 @@ namespace noava.Controllers.Schools
         }
 
         [HttpPost]
+        [Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> CreateSchool([FromBody] SchoolRequestDto request)
         {
             try
@@ -110,6 +111,7 @@ namespace noava.Controllers.Schools
 
         //only delete one admin at a time
         [HttpDelete("{id:int}/admins/{clerkId}")]
+        [Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> RemoveSchoolAdmin(int id, string clerkId)
         {
             //no null check? school should have one minimum schooladmin

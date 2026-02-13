@@ -92,6 +92,10 @@ export default function AppRoutes() {
 
         {/* Settings */}
         <Route path="/settings" element={<SettingsPage />} />
+
+        {/* Schools */}
+        <Route path="schools" element={<SchoolsPage />} />
+        <Route path="schoolClassrooms/:id" element={<SchoolClassrooms/>} />
       </Route>
 
       {/* Admin Routes */}
@@ -99,10 +103,6 @@ export default function AppRoutes() {
         <Route path="/admin">
           {/* Dashboard */}
           <Route path="dashboard" element={<AdminDashboard />} />
-
-          {/* Schools */}
-          <Route path="schools" element={<SchoolsPage />} />
-          <Route path="schoolClassrooms/:id" element={<SchoolClassrooms/>} />
 
         </Route>
       </Route>
