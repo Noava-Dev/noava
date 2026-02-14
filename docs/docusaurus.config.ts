@@ -5,9 +5,9 @@ import type * as Preset from '@docusaurus/preset-classic';
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const config: Config = {
-  title: 'My Site',
-  tagline: 'Dinosaurs are cool',
-  favicon: 'img/favicon.ico',
+  title: 'NoavaDocs',
+  tagline: 'Flashcards built for schools and classrooms',
+  favicon: 'img/noava-logo-blue-nobg.png',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
   future: {
@@ -22,8 +22,8 @@ const config: Config = {
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'facebook', // Usually your GitHub org/user name.
-  projectName: 'docusaurus', // Usually your repo name.
+  organizationName: 'Noava', // Usually your GitHub org/user name.
+  projectName: 'noava', // Usually your repo name.
 
   onBrokenLinks: 'throw',
 
@@ -41,7 +41,6 @@ const config: Config = {
       {
         docs: {
           sidebarPath: './sidebars.ts',
-          // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
             'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
@@ -52,7 +51,6 @@ const config: Config = {
             type: ['rss', 'atom'],
             xslt: true,
           },
-          // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
             'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
@@ -75,10 +73,10 @@ const config: Config = {
       respectPrefersColorScheme: true,
     },
     navbar: {
-      title: 'My Site',
+      title: 'NoavaDocs',
       logo: {
-        alt: 'My Site Logo',
-        src: 'img/logo.svg',
+        alt: 'Noava Logo',
+        src: 'img/noava-logo-blue-nobg.png',
       },
       items: [
         {
@@ -89,7 +87,12 @@ const config: Config = {
         },
         {to: '/blog', label: 'Blog', position: 'left'},
         {
-          href: 'https://github.com/facebook/docusaurus',
+          to: 'http://localhost:5173',
+          label: 'Noava',
+          position: 'left'
+        },
+        {
+          href: 'https://github.com/Noava-Dev/noava',
           label: 'GitHub',
           position: 'right',
         },
@@ -102,25 +105,20 @@ const config: Config = {
           title: 'Docs',
           items: [
             {
-              label: 'Tutorial',
-              to: '/docs/intro',
-            },
-          ],
-        },
-        {
-          title: 'Community',
-          items: [
-            {
-              label: 'Stack Overflow',
-              href: 'https://stackoverflow.com/questions/tagged/docusaurus',
+              label: 'Schools',
+              to: '/docs/schools',
             },
             {
-              label: 'Discord',
-              href: 'https://discordapp.com/invite/docusaurus',
+              label: 'Classrooms',
+              to: '/docs/classrooms',
             },
             {
-              label: 'X',
-              href: 'https://x.com/docusaurus',
+              label: 'Decks',
+              to: '/docs/decks',
+            },
+            {
+              label: 'Flashcards',
+              to: '/docs/flashcards',
             },
           ],
         },
@@ -138,7 +136,7 @@ const config: Config = {
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+      copyright: `Copyright © ${new Date().getFullYear()} Noava. Built with Docusaurus.`,
     },
     prism: {
       theme: prismThemes.github,

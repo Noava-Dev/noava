@@ -1,25 +1,46 @@
-yangshun:
-  name: Yangshun Tay
-  title: Ex-Meta Staff Engineer, Co-founder GreatFrontEnd
-  url: https://linkedin.com/in/yangshun
-  image_url: https://github.com/yangshun.png
-  page: true
+cedric:
+  name: Cedric Pas
+  title: Developer
+  url: https://github.com/TomeIDK
+  image_url: https://github.com/TomeIdk.png
+  page: 
+    permalink: 'all-cedic-articles'
   socials:
-    x: yangshunz
-    linkedin: yangshun
-    github: yangshun
-    newsletter: https://www.greatfrontend.com
+    linkedin: cedric-pas
+    github: TomeIDK
 
-slorber:
-  name: Sébastien Lorber
-  title: Docusaurus maintainer
-  url: https://sebastienlorber.com
-  image_url: https://github.com/slorber.png
+brent:
+  name: Brent
+  title: Developer
+  url: https://github.com/brentvanroelen
+  image_url: https://github.com/brentvanroelen.png
   page:
     # customize the url of the author page at /blog/authors/<permalink>
-    permalink: '/all-sebastien-lorber-articles'
+    permalink: '/all-brent-articles'
   socials:
-    x: sebastienlorber
-    linkedin: sebastienlorber
-    github: slorber
-    newsletter: https://thisweekinreact.com
+    linkedin: brent-vanroelen-98691a294
+    github: brentvanroelen
+    
+youmni:
+  name: Youmni
+  title: Developer
+  url: https://github.com/youmni
+  image_url: https://github.com/youmni.png
+  page:
+    # customize the url of the author page at /blog/authors/<permalink>
+    permalink: '/all-youmni-articles'
+  socials:
+    linkedin: youmni-malha-0a54972a3
+    github: youmni
+
+luna:
+  name: Luna D'Heere
+  title: Developer
+  url: https://github.com/LunaDHeere
+  image_url: https://github.com/LunaDHeere.png
+  page:
+    # customize the url of the author page at /blog/authors/<permalink>
+    permalink: '/all-luna-articles'
+  socials:
+    linkedin: luna-dheere
+    github: LunaDHeere
