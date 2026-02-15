@@ -4,15 +4,17 @@
  */
 
 .heroBanner {
-  padding: 4rem 0;
+  padding: 8rem 0;
   text-align: center;
   position: relative;
   overflow: hidden;
+  background-color: var(--color-primary-100);
+  color: var(--color-text-title-light);
 }
 
 @media screen and (max-width: 996px) {
   .heroBanner {
-    padding: 2rem;
+    padding: 7.5rem 0rem;
   }
 }
 
@@ -20,4 +22,19 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.getStartedButton {
+  background-color: var(--color-primary-700);
+  color: white; /* text color */
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.7em 1.5em;
+  font-weight: 600;
+  transition: background-color 0.2s ease;
+}
+
+.getStartedButton:hover {
+  background-color: var(--color-primary-600);
+  text-decoration: none;
 }

@@ -5,8 +5,8 @@ import type * as Preset from '@docusaurus/preset-classic';
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const config: Config = {
-  title: 'NoavaDocs',
-  tagline: 'Flashcards built for schools and classrooms',
+  title: 'Getting started with Noava',
+  tagline: 'Learn how to set up, configure and use Noava, the platform built for teachers to create study materials and for students to learn.',
   favicon: 'img/noava-logo-blue-nobg.png',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
@@ -73,7 +73,7 @@ const config: Config = {
       respectPrefersColorScheme: true,
     },
     navbar: {
-      title: 'NoavaDocs',
+      title: 'Noava Docs',
       logo: {
         alt: 'Noava Logo',
         src: 'img/noava-logo-blue-nobg.png',

@@ -19,6 +19,8 @@
   --color-text-title-light: #111827;
   --color-text-body-light: #374151;
   --color-background-app-light: #FDFEFF;
+
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
@@ -95,4 +97,8 @@
 .theme-doc-sidebar-container::-webkit-scrollbar-thumb {
   background: #D1D5DB;
   border-radius: 10px;
+}
+
+.first-paragraph {
+  margin-top: 1rem;
 }

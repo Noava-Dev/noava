@@ -1,0 +1,6 @@
+.readMore {
+    color: var(--color-primary-800);
+}
+.readMore:hover {
+  color: var(--color-primary-400);
+}

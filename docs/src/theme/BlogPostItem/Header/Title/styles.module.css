@@ -1,0 +1,20 @@
+.title {
+  font-size: 3rem;
+}
+
+/**
+  Blog post title should be smaller on smaller devices
+**/
+@media (max-width: 576px) {
+  .title {
+    font-size: 2rem;
+  }
+}
+
+h2 a{
+  color: var(--color-text-title-light);
+}
+
+h2 a:hover{
+  color: var(--color-primary-400)
+}
