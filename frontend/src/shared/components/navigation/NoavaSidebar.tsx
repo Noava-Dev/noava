@@ -14,6 +14,7 @@ import {
   LuLogOut,
   LuSettings,
   LuUsers,
+  LuSchool
 } from 'react-icons/lu';
 import { RiShieldUserLine } from 'react-icons/ri';
 import { useUserRole } from '../../../hooks/useUserRole';
@@ -21,6 +22,8 @@ import { SignOutButton, useClerk, useUser } from '@clerk/clerk-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { notificationService } from '../../../services/NotificationService';
+import { useSchoolService } from '../../../services/SchoolService';
+import type { SchoolDto } from '../../../models/School';
 
 type NoavaSidebarProps = {
   onNavigate?: () => void;
@@ -34,6 +37,9 @@ function NoavaSidebar({ className, onNavigate }: NoavaSidebarProps) {
   const navigate = useNavigate();
   const location = useLocation();
   const { getCount } = notificationService();
+  const [schools, setSchools] = useState<SchoolDto[]>([]);
+  const [isSchoolAdmin, setIsSchoolAdmin] = useState(false);
+  const schoolService = useSchoolService();
 
   const [notificationCount, setNotificationCount] = useState<number>(0);
 
@@ -52,6 +58,31 @@ function NoavaSidebar({ className, onNavigate }: NoavaSidebarProps) {
     }
     fetchNotificationCount();
   }, []);
+
+  useEffect(() => {
+console.log('userRole:', userRole);
+  console.log('user?.id:', user?.id);
+  console.log('schools:', schools);
+  async function fetchSchools() {
+    if (!user) return;
+    try {
+      const data = await schoolService.getAll();
+      setSchools(data);
+
+      if (user && userRole !== 'ADMIN') {
+        const adminSchools = data.filter(s =>
+          s.admins?.some(a => a.clerkId === user.id)
+        );
+        setIsSchoolAdmin(adminSchools.length > 0);
+      }
+    } catch (error) {
+      console.error("Failed to fetch schools for sidebar", error);
+      setIsSchoolAdmin(false);
+    }
+  }
+
+  fetchSchools();
+}, [user, userRole]);
 
   return (
     <Sidebar
@@ -103,6 +134,19 @@ function NoavaSidebar({ className, onNavigate }: NoavaSidebarProps) {
             className="font-semibold cursor-pointer">
             Classrooms
           </SidebarItem>
+
+          {(userRole === 'ADMIN' || isSchoolAdmin) && (
+            <SidebarItem
+              icon={LuSchool}
+              active={location.pathname === '/schools'}
+              onClick={() => {
+                navigate('/schools');
+                onNavigate?.();
+              }}
+              className="font-semibold cursor-pointer">
+              Schools
+            </SidebarItem>
+          )}
 
           <SidebarItem
             icon={LuCircleHelp}

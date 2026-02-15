@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using noava.Data;
@@ -11,9 +12,11 @@ using noava.Data;
 namespace noava.Migrations
 {
     [DbContext(typeof(NoavaDbContext))]
-    partial class NoavaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260211145722_AddSchoolIdToClassroomsTable")]
+    partial class AddSchoolIdToClassroomsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -297,10 +300,6 @@ namespace noava.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("character varying(1000)");
 
-                    b.Property<string>("JoinCode")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<string>("Language")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -334,36 +333,33 @@ namespace noava.Migrations
                         new
                         {
                             DeckId = 1,
-                            CreatedAt = new DateTime(2026, 2, 12, 9, 30, 30, 141, DateTimeKind.Utc).AddTicks(7294),
+                            CreatedAt = new DateTime(2026, 2, 11, 14, 57, 21, 520, DateTimeKind.Utc).AddTicks(3921),
                             Description = "Franse woorden voor beginners",
-                            JoinCode = "",
                             Language = "Frans",
                             Title = "Frans Woordenschat",
-                            UpdatedAt = new DateTime(2026, 2, 12, 9, 30, 30, 141, DateTimeKind.Utc).AddTicks(7295),
+                            UpdatedAt = new DateTime(2026, 2, 11, 14, 57, 21, 520, DateTimeKind.Utc).AddTicks(3922),
                             UserId = "user_38TGbnbcmzK7uZAbaABqTtzQtvz",
                             Visibility = 0
                         },
                         new
                         {
                             DeckId = 2,
-                            CreatedAt = new DateTime(2026, 2, 12, 9, 30, 30, 141, DateTimeKind.Utc).AddTicks(7297),
+                            CreatedAt = new DateTime(2026, 2, 11, 14, 57, 21, 520, DateTimeKind.Utc).AddTicks(3928),
                             Description = "Engelse grammatica oefeningen",
-                            JoinCode = "",
                             Language = "Engels",
                             Title = "Engels Grammatica",
-                            UpdatedAt = new DateTime(2026, 2, 12, 9, 30, 30, 141, DateTimeKind.Utc).AddTicks(7298),
+                            UpdatedAt = new DateTime(2026, 2, 11, 14, 57, 21, 520, DateTimeKind.Utc).AddTicks(3929),
                             UserId = "user_38TGbnbcmzK7uZAbaABqTtzQtvz",
                             Visibility = 2
                         },
                         new
                         {
                             DeckId = 3,
-                            CreatedAt = new DateTime(2026, 2, 12, 9, 30, 30, 141, DateTimeKind.Utc).AddTicks(7300),
+                            CreatedAt = new DateTime(2026, 2, 11, 14, 57, 21, 520, DateTimeKind.Utc).AddTicks(3933),
                             Description = "Spaanse zinnen voor dagelijks gebruik",
-                            JoinCode = "",
                             Language = "Spaans",
                             Title = "Spaans Conversatie",
-                            UpdatedAt = new DateTime(2026, 2, 12, 9, 30, 30, 141, DateTimeKind.Utc).AddTicks(7300),
+                            UpdatedAt = new DateTime(2026, 2, 11, 14, 57, 21, 520, DateTimeKind.Utc).AddTicks(3934),
                             UserId = "user_38TGbnbcmzK7uZAbaABqTtzQtvz",
                             Visibility = 1
                         });

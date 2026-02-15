@@ -19,6 +19,7 @@ import NotificationPage from './pages/Notification/Notification';
 import Loading from './shared/components/loading/Loading';
 import FlashcardDetail from './pages/Flashcards/FlashcardDetail';
 import Dashboard from './pages/Dashboard/Dashboard';
+import SchoolClassrooms from './pages/SchoolClassrooms/SchoolClassrooms';
 import WriteReview from './pages/Review/WriteReview';
 import ReverseReview from './pages/Review/ReverseReview';
 
@@ -91,6 +92,10 @@ export default function AppRoutes() {
 
         {/* Settings */}
         <Route path="/settings" element={<SettingsPage />} />
+
+        {/* Schools */}
+        <Route path="schools" element={<SchoolsPage />} />
+        <Route path="schools/:id/classrooms" element={<SchoolClassrooms/>} />
       </Route>
 
       {/* Admin Routes */}
@@ -99,8 +104,6 @@ export default function AppRoutes() {
           {/* Dashboard */}
           <Route path="dashboard" element={<AdminDashboard />} />
 
-          {/* Schools */}
-          <Route path="schools" element={<SchoolsPage />} />
         </Route>
       </Route>
 

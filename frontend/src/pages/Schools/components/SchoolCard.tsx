@@ -12,15 +12,21 @@ type SchoolAdminDto = {
 };
 
 type SchoolCardProps = {
+  id: number;
   name: string;
   description?: string;
   admins: SchoolAdminDto[];
   createdAt: Date;
+  onEdit?: (id: number) => void;
+  onDelete?: (id: number) => void;
+  onClick?: (id: number) => void;
 };
 
-export function SchoolCard({ name, admins, createdAt }: SchoolCardProps) {
+export function SchoolCard({ id, name, admins, createdAt, onEdit, onDelete, onClick }: SchoolCardProps) {
   return (
-    <div className="rounded-lg border border-border bg-card p-5 shadow-sm hover:shadow-sm flex justify-between">
+    <div 
+        onClick={() => onClick?.(id)}
+        className="rounded-lg border border-border bg-card p-5 shadow-sm hover:shadow-sm flex justify-between cursor-pointer">
       <div className="flex items-start gap-4">
         <div className="flex size-12 items-center justify-center rounded-lg bg-background-app-light">
           <SchoolBuilding className="size-6" />
@@ -41,10 +47,20 @@ export function SchoolCard({ name, admins, createdAt }: SchoolCardProps) {
       </div>
 
       <div className="flex items-center gap-1">
-        <button className="rounded-lg p-2 text-muted-foreground hover:bg-muted hover:text-foreground">
+        <button 
+            onClick={(e) => {
+              e.stopPropagation();
+              onEdit?.(id)
+            }}
+            className="rounded-lg p-2 text-muted-foreground hover:bg-muted hover:text-foreground">
           <Pencil className="size-4" />
         </button>
-        <button className="rounded-lg p-2 text-muted-foreground hover:bg-destructive/10 hover:text-destructive">
+        <button 
+            onClick={(e) => {
+              e.stopPropagation();
+              onDelete?.(id)
+            }}
+            className="rounded-lg p-2 text-muted-foreground hover:bg-destructive/10 hover:text-destructive">
           <Trash className="size-4" />
         </button>
       </div>

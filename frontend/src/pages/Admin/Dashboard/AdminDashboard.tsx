@@ -18,7 +18,7 @@ function AdminDashboard() {
           </div>
 
           <div className="flex justify-end">
-            <Button as={Link} to="/admin/schools">
+            <Button as={Link} to="/schools">
               <LuPlus className="w-5 h-5 mr-2" />
               Create School
             </Button>

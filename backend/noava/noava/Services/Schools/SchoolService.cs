@@ -1,7 +1,9 @@
-﻿using noava.DTOs.Clerk;
+﻿using noava.DTOs.Classrooms;
+using noava.DTOs.Clerk;
 using noava.DTOs.Schools;
 using noava.Mappers.Schools;
 using noava.Models;
+using noava.Repositories.Classrooms;
 using noava.Repositories.Schools;
 using noava.Repositories.Users;
 using noava.Shared;
@@ -12,11 +14,13 @@ namespace noava.Services.Schools
     {
         private readonly ISchoolRepository _schoolRepository;
         private readonly IClerkService _clerkService;
+        private readonly IClassroomRepository _classroomRepository;
 
-        public SchoolService(ISchoolRepository schoolRepository, IClerkService clerkService)
+        public SchoolService(ISchoolRepository schoolRepository, IClerkService clerkService, IClassroomRepository classroomRepository)
         {
             _schoolRepository = schoolRepository;
             _clerkService = clerkService;
+            _classroomRepository = classroomRepository;
         }
 
         // gets all unique clerk users for a list of schools. used to map user objects based on clerk id in the school dto's (clerkid: userobject)
@@ -36,10 +40,10 @@ namespace noava.Services.Schools
         public async Task<List<SchoolResponseDto>> GetAllSchoolsAsync()
         {
             var schools = await _schoolRepository.GetAllSchoolsAsync();
-
             var clerkUsers = await GetClerkUsersForSchoolAsync(schools);
 
-            var schoolDtos = schools.Select(school => school.ToDetailsDto(clerkUsers)).ToList();
+            var schoolDtos = schools.Select(school => 
+                school.ToDetailsDto(clerkUsers, school.Classrooms?.ToList() ?? [])).ToList();
 
             return schoolDtos;
         }
@@ -53,9 +57,9 @@ namespace noava.Services.Schools
                 throw new KeyNotFoundException("School not found.");
             } else
             {
+                var classrooms = await _schoolRepository.GetClassroomsBySchoolIdAsync(id);
                 var clerkUsers = await GetClerkUsersForSchoolAsync(new List<School> { school });
-                var schoolDto = school.ToDetailsDto(clerkUsers);
-                return schoolDto;
+                return school.ToDetailsDto(clerkUsers, classrooms);
             }
         }
 
@@ -67,15 +71,17 @@ namespace noava.Services.Schools
             foreach (var email in request.SchoolAdminEmails.Distinct())
             {
                 var user = await _clerkService.GetUserByEmailAsync(email);
-
-                if (user != null)
+                if (user == null)
                 {
-                    schoolAdmins.Add(new SchoolAdmin
-                    {
-                        ClerkId = user.ClerkId
-                    });
+                    Console.WriteLine($"Clerk user not found for email: {email}");
+                }
+                else
+                {
+                    Console.WriteLine($"Clerk found: {user.ClerkId} for {email}");
+                    schoolAdmins.Add(new SchoolAdmin { ClerkId = user.ClerkId });
                 }
             }
+
 
             if (schoolAdmins.Count == 0)
             {
@@ -92,12 +98,56 @@ namespace noava.Services.Schools
             var school = await _schoolRepository.GetSchoolByIdAsync(schoolId);
 
             if (school == null)
-            {
                 throw new KeyNotFoundException("School not found.");
-            }
+            
+            if (request.SchoolAdminEmails == null)
+                throw new ArgumentException("Admin list cannot be null.");
+
 
             school.Name = request.SchoolName.Trim();
             school.UpdatedAt = DateTime.UtcNow;
+
+            //ADMINS
+            var requestedClerkIds = new List<string>();
+
+            foreach (var email in request.SchoolAdminEmails.Distinct())
+            {
+                var user = await _clerkService.GetUserByEmailAsync(email);
+
+                if (user == null)
+                    throw new KeyNotFoundException($"User with email {email} not found.");
+
+                requestedClerkIds.Add(user.ClerkId);
+            }
+            var currentAdmins = school.SchoolAdmins.ToList();
+            var currentClerkIds = currentAdmins
+                .Select(a => a.ClerkId)
+                .ToList();
+
+            //REMOVE ADMINS
+
+            var adminsToRemove = currentAdmins
+                .Where(a => !requestedClerkIds.Contains(a.ClerkId))
+                .ToList();
+
+            foreach (var admin in adminsToRemove)
+            {
+                school.SchoolAdmins.Remove(admin);
+            }
+
+            //ADD NEW ADMINS
+            var clerkIdsToAdd = requestedClerkIds
+                .Where(id => !currentClerkIds.Contains(id))
+                .ToList();
+
+            foreach (var clerkId in clerkIdsToAdd)
+            {
+                school.SchoolAdmins.Add(new SchoolAdmin
+                {
+                    SchoolId = school.Id,
+                    ClerkId = clerkId
+                });
+            }
 
             return await _schoolRepository.UpdateSchoolAsync(school);
         }
@@ -139,6 +189,12 @@ namespace noava.Services.Schools
         {
             var schoolAdmin = await _schoolRepository.GetSchoolAdminAsync(schoolId, clerkId);
             await _schoolRepository.RemoveAdminAsync(schoolAdmin);
+        }
+
+        public async Task<List<SchoolClassroomResponseDto>> GetClassroomsForSchoolAsync(int schoolId)
+        {
+            var classrooms = await _schoolRepository.GetClassroomsBySchoolIdAsync(schoolId);
+            return classrooms.Select(c => c.ToClassroomSummaryDto()).ToList();
         }
     }
 }

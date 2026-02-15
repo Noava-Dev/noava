@@ -9,6 +9,9 @@ namespace noava.Models
         public ICollection<SchoolAdmin> SchoolAdmins { get; set; } = new List<SchoolAdmin>();
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+
+        //CLASSROOMS
+        public ICollection<Classroom>? Classrooms { get; set; } = new List<Classroom>();
     }
 
 }
