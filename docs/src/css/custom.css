@@ -102,3 +102,60 @@
 .first-paragraph {
   margin-top: 1rem;
 }
+/* Grid layout */
+.folderButtons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+/* Card button */
+.folderButton {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+
+  padding: 1.5rem;
+  border-radius: 18px;
+
+  background: var(--color-primary-100);
+  color: var(--color-text-title-light);
+  text-decoration: none;
+
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+/* Hover effect */
+.folderButton:hover {
+  background: var(--color-primary-200);
+  border-color: var(--color-primary-400);
+  transform: translateY(-3px);
+}
+
+/* Icon / logo */
+.folderIcon {
+  font-size: 2.4rem;   /* 🔥 Bigger logo */
+  line-height: 1;
+}
+
+/* Text wrapper */
+.folderContent {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Title */
+.folderTitle {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+/* Description */
+.folderDescription {
+  font-size: 0.95rem;
+  color: var(--color-text-body-light);
+  line-height: 1.4;
+}

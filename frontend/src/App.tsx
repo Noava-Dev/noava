@@ -21,6 +21,7 @@ function App() {
     '/faq',
     '/sign-up',
     '/sign-in',
+    '/docs'
   ];
   const showSidebar = !routesWithoutSidebar.includes(location.pathname);
 

@@ -47,6 +47,19 @@ export default function AppRoutes() {
           </div>
         }
       />
+      <Route
+  path="/docs/*"
+  element={
+    //using an iframe so that it doesn't need to start up the seperate
+    //docs site
+    <iframe
+      src="http://localhost:3000"
+      style={{ width: '100%', height: '100vh', border: 'none' }}
+    />
+  }
+/>
+
+
 
       {/* Authenticated Routes */}
       <Route
