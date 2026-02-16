@@ -11,6 +11,7 @@ using noava.Repositories.FAQs;
 using noava.Repositories.Implementations;
 using noava.Repositories.Notifications;
 using noava.Repositories.Schools;
+using noava.Repositories.StudySessions;
 using noava.Repositories.Users;
 using noava.Services;
 using noava.Services.Cards;
@@ -20,6 +21,7 @@ using noava.Services.FAQs;
 using noava.Services.Implementations;
 using noava.Services.Notifications;
 using noava.Services.Schools;
+using noava.Services.StudySessions;
 using noava.Services.Users;
 using noava.Shared;
 using System.Security.Claims;
@@ -60,6 +62,8 @@ namespace noava
             builder.Services.AddScoped<IClassroomService, ClassroomService>();
             builder.Services.AddScoped<IBlobService, BlobService>();
             builder.Services.AddScoped<ICardImportService, CardImportService>();
+            builder.Services.AddScoped<IStudySessionRepository, StudySessionRepository>();
+            builder.Services.AddScoped<IStudySessionService, StudySessionService>();
 
             // External Service Registrations
             builder.Services.AddHttpClient();

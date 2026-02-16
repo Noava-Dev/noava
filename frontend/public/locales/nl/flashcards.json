@@ -57,7 +57,12 @@
     "flipMode": "Draai Modus",
     "reverseReview": "Omgekeerde Modus",
     "backToClassroom": "Terug naar {{name}}",
-    "importFromFile": "Importeren via bestand"
+    "importFromFile": "Importeren via bestand",
+    "longTermReview": "Lange Termijn Review",
+    "longTermWrite": "Lange Termijn Schrijven",
+    "longTermFlip": "Lange Termijn Omdraaien",
+    "longTermReverse": "Lange Termijn Omgekeerd",
+    "learn": "Leren"
   },
   "quickReview": {
     "startReview": "Quick Review",
@@ -78,6 +83,7 @@
     "playVoiceAssistant": "Afspelen met spraakassistent",
     "noCards": "Geen kaarten gevonden",
     "error": "Fout bij het laden van kaarten",
+    "exitConfirm": "Weet je zeker dat je wilt stoppen? Je voortgang wordt opgeslagen.",
     "complete": {
       "title": "Review Voltooid!",
       "message": "Je hebt alle kaarten doorgenomen",
@@ -96,6 +102,19 @@
     "subtitle": "Importeer je gegevens van overal. We ondersteunen CSV en Excel. Lees onze documentatie voor meer informatie over formaten.",
     "upload": "Bestand uploaden",
     "supported": "Ondersteunde bestanden: "
+  },
+  "longTerm": {
+    "mode": "Lange Termijn Review",
+    "writeMode": "Schrijfmodus",
+    "typeAnswer": "Typ hier je antwoord...",
+    "checkAnswer": "Controleer Antwoord",
+    "correctAnswer": "Correct Antwoord",
+    "yourAnswer": "Jouw Antwoord",
+    "markIncorrect": "Markeer als Fout",
+    "markCorrect": "Markeer als Correct",
+    "correct": "Correct",
+    "incorrect": "Fout",
+    "accuracy": "Nauwkeurigheid"
   },
   "search": { "label": "Zoeken" }
 }

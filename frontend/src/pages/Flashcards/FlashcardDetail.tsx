@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { Button, Dropdown, DropdownItem } from 'flowbite-react';
+import { Badge, Button, Dropdown, DropdownItem } from 'flowbite-react';
 import {
   HiPlus,
   HiPlay,
@@ -336,10 +336,47 @@ function FlashcardDetail() {
 
                 {/* Study Now */}
 
-                <Button size="lg" disabled={totalCards === 0}>
-                  <HiPlay className="mr-2 size-5" />
-                  {t('flashcardDetail.studyNow')}
-                </Button>
+              <Dropdown
+                label=""
+                dismissOnClick={true}
+                renderTrigger={() => (
+                  <Button size="lg" disabled={totalCards === 0}>
+                    <HiPlay className="mr-2 size-5" />
+                    {t('flashcardDetail.studyNow')}
+                    <HiChevronDown className="w-4 h-4 ml-1" />
+                  </Button>
+                )}>
+
+                {/* Long-Term Review  */}
+                <DropdownItem
+                  className="flex items-center justify-between"
+                  onClick={() => navigate(`/decks/${deckId}/longTermReview`)}>
+                  <div className="flex items-center">
+                    <HiPencil className="w-4 h-4 mr-2" />
+                    {t('flashcardDetail.longTermWrite')}
+                  </div>
+                </DropdownItem>
+
+                {/* Long-Term Review - Flip Mode */}
+                <DropdownItem
+                  className="flex items-center justify-between"
+                  onClick={() => navigate(`/decks/${deckId}/longTermFlipReview`)}>
+                  <div className="flex items-center">
+                    <HiPlay className="w-4 h-4 mr-2" />
+                    {t('flashcardDetail.longTermFlip')}
+                  </div>
+                </DropdownItem>
+
+                {/* Long-Term Review - Reverse Mode */}
+                <DropdownItem
+                  className="flex items-center justify-between"
+                  onClick={() => navigate(`/decks/${deckId}/longTermReverseReview`)}>
+                  <div className="flex items-center">
+                    <HiRefresh className="w-4 h-4 mr-2" />
+                    {t('flashcardDetail.longTermReverse')}
+                  </div>
+                </DropdownItem>
+              </Dropdown>
 
                 <Dropdown
                   label=""

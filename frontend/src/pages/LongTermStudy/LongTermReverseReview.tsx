@@ -1,0 +1,421 @@
+import { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { Button, Progress, Badge } from 'flowbite-react';
+import { HiX, HiVolumeUp, HiPlay, HiCheck } from 'react-icons/hi';
+import { useTranslation } from 'react-i18next';
+import { useDeckService } from '../../services/DeckService';
+import { useFlashcardService } from '../../services/FlashcardService';
+import { useStudySessionService } from '../../services/StudySessionService';
+import { useToast } from '../../contexts/ToastContext';
+import { useAzureBlobService } from '../../services/AzureBlobService';
+import { BulkReviewMode } from '../../models/Flashcard';
+import { getLanguageCode } from '../../shared/utils/speechHelpers';
+import ConfirmationModal from '../../shared/components/ConfirmModal';
+import type { Deck } from '../../models/Deck';
+import type { Flashcard } from '../../models/Flashcard';
+
+interface CardWithUrls extends Flashcard {
+  frontImageUrl?: string | null;
+  backImageUrl?: string | null;
+  frontAudioUrl?: string | null;
+  backAudioUrl?: string | null;
+}
+
+function LongTermReverseReview() {
+  const { deckId } = useParams<{ deckId: string }>();
+  const navigate = useNavigate();
+  const { t } = useTranslation('flashcards');
+  const deckService = useDeckService();
+  const flashcardService = useFlashcardService();
+  const studySessionService = useStudySessionService();
+  const azureBlobService = useAzureBlobService();
+  const { showError } = useToast();
+
+  const [deck, setDeck] = useState<Deck | null>(null);
+  const [cards, setCards] = useState<CardWithUrls[]>([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [sessionId, setSessionId] = useState<number | null>(null);
+  const [isFlipped, setIsFlipped] = useState(false);
+
+  
+  const [cardsReviewed, setCardsReviewed] = useState(0);
+  const [correctAnswers, setCorrectAnswers] = useState(0);
+
+
+  const [showExitModal, setShowExitModal] = useState(false);
+
+  useEffect(() => {
+    if (deckId) {
+      initializeSession();
+    }
+  }, [deckId]);
+
+  useEffect(() => {
+    return () => {
+      window.speechSynthesis.cancel();
+    };
+  }, [currentIndex]);
+
+  const initializeSession = async () => {
+    try {
+      setLoading(true);
+
+      const [deckData, cardsData] = await Promise.all([
+        deckService.getById(Number(deckId)),
+        flashcardService.getBulkReviewCards([Number(deckId)], BulkReviewMode.ShuffleAll),
+      ]);
+
+      if (cardsData.length === 0) {
+        showError(t('quickReview.noCards'), t('quickReview.error'));
+        navigate(`/decks/${deckId}/cards`);
+        return;
+      }
+
+
+      const cardsWithUrls = await Promise.all(
+        cardsData.map(async (card) => {
+          const frontImageUrl = card.frontImage
+            ? await azureBlobService.getSasUrl('card-images', card.frontImage).catch(() => null)
+            : null;
+          const backImageUrl = card.backImage
+            ? await azureBlobService.getSasUrl('card-images', card.backImage).catch(() => null)
+            : null;
+          const frontAudioUrl = card.frontAudio
+            ? await azureBlobService.getSasUrl('card-audio', card.frontAudio).catch(() => null)
+            : null;
+          const backAudioUrl = card.backAudio
+            ? await azureBlobService.getSasUrl('card-audio', card.backAudio).catch(() => null)
+            : null;
+
+          return { ...card, frontImageUrl, backImageUrl, frontAudioUrl, backAudioUrl };
+        })
+      );
+
+      setDeck(deckData);
+      setCards(cardsWithUrls);
+
+
+      const session = await studySessionService.startSession(Number(deckId));
+      setSessionId(session.sessionId);
+    } catch (error) {
+      console.error('Error initializing session:', error);
+      showError(t('common:toast.error'), t('quickReview.error'));
+      navigate(`/decks/${deckId}/cards`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleFlip = () => {
+    window.speechSynthesis.cancel();
+    setIsSpeaking(false);
+    setIsFlipped(!isFlipped);
+  };
+
+  const handleNext = (isCorrect: boolean) => {
+    setCardsReviewed(cardsReviewed + 1);
+    if (isCorrect) {
+      setCorrectAnswers(correctAnswers + 1);
+    }
+
+    if (currentIndex < cards.length - 1) {
+      setCurrentIndex(currentIndex + 1);
+      setIsFlipped(false);
+    } else {
+      handleEndSession();
+    }
+  };
+
+  const handleEndSession = async () => {
+    if (!sessionId) return;
+
+    try {
+      await studySessionService.endSession(sessionId, {
+        totalCardsReviewed: cardsReviewed + 1,
+        correctAnswers: correctAnswers,
+      });
+      navigate(`/decks/${deckId}/cards`);
+    } catch (error) {
+      console.error('Error ending session:', error);
+      navigate(`/decks/${deckId}/cards`);
+    }
+  };
+
+  const handleExit = () => {
+    setShowExitModal(true);
+  };
+
+  const confirmExit = async () => {
+    if (sessionId) {
+      try {
+        await studySessionService.endSession(sessionId, {
+          totalCardsReviewed: cardsReviewed,
+          correctAnswers: correctAnswers,
+        });
+      } catch (error) {
+        console.error('Error ending session:', error);
+      }
+    }
+    navigate(`/decks/${deckId}/cards`);
+  };
+
+  const handlePlayAudio = (side: 'back' | 'front', e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+
+    const currentCard = cards[currentIndex];
+    const audioUrl = side === 'back' ? currentCard.backAudioUrl : currentCard.frontAudioUrl;
+    const text = side === 'back' ? currentCard.backText : currentCard.frontText;
+
+    if (audioUrl) {
+      const audio = new Audio(audioUrl);
+      audio.play().catch((err) => console.error('Failed to play audio:', err));
+    } else if (deck && currentCard.hasVoiceAssistant && text) {
+      speakText(text, deck.language);
+    }
+  };
+
+  const speakText = (text: string, deckLanguage: string) => {
+    window.speechSynthesis.cancel();
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = getLanguageCode(deckLanguage);
+    utterance.rate = 1.0;
+    utterance.pitch = 1.0;
+    utterance.volume = 1.0;
+
+    utterance.onstart = () => setIsSpeaking(true);
+    utterance.onend = () => setIsSpeaking(false);
+    utterance.onerror = () => setIsSpeaking(false);
+
+    window.speechSynthesis.speak(utterance);
+  };
+
+  const shouldShowAudioButton = (side: 'back' | 'front'): boolean => {
+    const currentCard = cards[currentIndex];
+    if (!currentCard) return false;
+
+    if (side === 'back') {
+      return !!(currentCard.backAudioUrl || currentCard.hasVoiceAssistant);
+    } else {
+      return !!(currentCard.frontAudioUrl || currentCard.hasVoiceAssistant);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-background-app-light dark:bg-background-app-dark">
+        <div className="text-center">
+          <div className="w-12 h-12 mx-auto mb-4 border-b-2 rounded-full animate-spin border-cyan-500"></div>
+          <p className="text-gray-600 dark:text-gray-400">{t('common:app.loading')}</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!deck || cards.length === 0) {
+    return null;
+  }
+
+  const currentCard = cards[currentIndex];
+  const progress = (cardsReviewed / cards.length) * 100;
+
+  return (
+    <div className="flex min-h-screen bg-background-app-light dark:bg-background-app-dark">
+        <div className="container max-w-4xl px-4 py-6 mx-auto md:py-8">
+          {/* Header */}
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-4">
+              <button
+                onClick={handleExit}
+                className="p-2 transition-colors rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800">
+                <HiX className="w-6 h-6 text-gray-600 dark:text-gray-400" />
+              </button>
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+                  {deck.title}
+                </h1>
+                <div className="flex gap-2 mt-1">
+                  <Badge color="success">
+                    {t('longTerm.mode')}
+                  </Badge>
+                  <Badge color="purple">
+                    <HiPlay className="w-3 h-3 mr-1" />
+                    {t('flashcardDetail.reverseReview')}
+                  </Badge>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Progress */}
+          <div className="mb-6">
+            <div className="flex justify-between mb-2 text-sm text-gray-600 dark:text-gray-400">
+              <span>{t('quickReview.progress')}</span>
+              <span>
+                {cardsReviewed} / {cards.length}
+              </span>
+            </div>
+            <Progress progress={progress} color="green" size="lg" />
+          </div>
+
+          {/* Card */}
+          <div className="mb-6 perspective-1000">
+            <div
+              className={`
+                relative w-full h-96 
+                transition-transform duration-500 
+                transform-style-3d cursor-pointer 
+                ${isFlipped ? 'rotate-y-180' : ''}
+              `}
+              style={{
+                WebkitFontSmoothing: 'antialiased',
+                MozOsxFontSmoothing: 'grayscale',
+              }}
+              onClick={handleFlip}
+              key={currentCard.cardId}>
+              {/* Front (showing back content in reverse mode) */}
+              <div 
+                className="absolute inset-0 backface-hidden"
+                style={{ transform: 'translateZ(1px)' }}>
+                <div className="relative flex flex-col items-center justify-center w-full h-full p-8 antialiased bg-background-surface-light border-2 border-gray-200 shadow-xl dark:bg-background-surface-dark rounded-2xl dark:border-gray-700">
+                  {shouldShowAudioButton('back') && (
+                    <button
+                      onClick={(e) => handlePlayAudio('back', e)}
+                      className={`absolute z-10 p-3 text-white transition-colors rounded-full shadow-lg top-4 right-4 ${
+                        isSpeaking ? 'bg-cyan-600' : 'bg-cyan-500 hover:bg-cyan-600'
+                      }`}>
+                      <HiVolumeUp className={`w-5 h-5 ${isSpeaking ? 'animate-pulse' : ''}`} />
+                    </button>
+                  )}
+
+                  <div className="mb-4 text-sm font-semibold tracking-wide uppercase text-cyan-500">
+                    {t('flashcardModal.back')}
+                  </div>
+
+                  {currentCard.backImageUrl && (
+                    <div className="flex justify-center w-full mb-4">
+                      <img
+                        src={currentCard.backImageUrl}
+                        alt="Back"
+                        className="object-contain max-w-full rounded-lg max-h-40"
+                      />
+                    </div>
+                  )}
+
+                  <div className="flex items-center justify-center flex-1 w-full px-4 text-center">
+                    <p className="text-2xl font-bold text-gray-900 break-words md:text-3xl dark:text-white">
+                      {currentCard.backText}
+                    </p>
+                  </div>
+
+                  <div className="mt-6 text-sm text-gray-500 dark:text-gray-400">
+                    {t('flashcardModal.clickToFlip')}
+                  </div>
+                </div>
+              </div>
+
+              {/* Back (showing front content in reverse mode) */}
+              {isFlipped && (
+                <div 
+                  className="absolute inset-0 backface-hidden rotate-y-180"
+                  style={{ transform: 'rotateY(180deg) translateZ(1px)' }}>
+                  <div className="relative flex flex-col items-center justify-center w-full h-full p-8 antialiased bg-background-surface-light border-2 border-gray-200 shadow-xl dark:bg-background-surface-dark rounded-2xl dark:border-gray-700">
+                    {shouldShowAudioButton('front') && (
+                      <button
+                        onClick={(e) => handlePlayAudio('front', e)}
+                        className={`absolute z-10 p-3 text-white transition-colors rounded-full shadow-lg top-4 right-4 ${
+                          isSpeaking ? 'bg-cyan-600' : 'bg-cyan-500 hover:bg-cyan-600'
+                        }`}>
+                        <HiVolumeUp className={`w-5 h-5 ${isSpeaking ? 'animate-pulse' : ''}`} />
+                      </button>
+                    )}
+
+                    <div className="mb-4 text-sm font-semibold tracking-wide text-yellow-500 uppercase">
+                      {t('flashcardModal.front')}
+                    </div>
+
+                    {currentCard.frontImageUrl && (
+                      <div className="flex justify-center w-full mb-4">
+                        <img
+                          src={currentCard.frontImageUrl}
+                          alt="Front"
+                          className="object-contain max-w-full rounded-lg max-h-40"
+                        />
+                      </div>
+                    )}
+
+                    <div className="flex items-center justify-center flex-1 w-full px-4 text-center">
+                      <p className="text-2xl font-bold text-gray-900 break-words md:text-3xl dark:text-white">
+                        {currentCard.frontText}
+                      </p>
+                    </div>
+
+                    <div className="mt-6 text-sm text-gray-500 dark:text-gray-400">
+                      {t('flashcardModal.clickToFlip')}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Actions */}
+          <div className="space-y-3">
+            {isFlipped && (
+              <div className="flex gap-3 mb-4">
+                <Button
+                  size="lg"
+                  className="flex-1 !bg-transparent !border-2 !border-red-600 !text-red-600 hover:!bg-red-50 dark:!text-red-400 dark:!border-red-400 dark:hover:!bg-red-950 font-semibold transition-all"
+                  onClick={() => handleNext(false)}>
+                  <HiX className="w-5 h-5 mr-2" />
+                  {t('longTerm.markIncorrect')}
+                </Button>
+                <Button
+                  size="lg"
+                  className="flex-1 !bg-transparent !border-2 !border-green-600 !text-green-600 hover:!bg-green-50 dark:!text-green-400 dark:!border-green-400 dark:hover:!bg-green-950 font-semibold transition-all"
+                  onClick={() => handleNext(true)}>
+                  <HiCheck className="w-5 h-5 mr-2" />
+                  {t('longTerm.markCorrect')}
+                </Button>
+              </div>
+            )}
+          </div>
+
+          {/* Stats */}
+          {cardsReviewed > 0 && (
+            <div className="p-4 rounded-lg bg-background-subtle-light dark:bg-background-subtle-dark">
+              <div className="flex justify-around text-center">
+                <div>
+                  <p className="text-2xl font-bold text-green-500">{correctAnswers}</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">{t('longTerm.correct')}</p>
+                </div>
+                <div>
+                  <p className="text-2xl font-bold text-red-500">{cardsReviewed - correctAnswers}</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">{t('longTerm.incorrect')}</p>
+                </div>
+                <div>
+                  <p className="text-2xl font-bold text-cyan-500">
+                    {cardsReviewed > 0 ? Math.round((correctAnswers / cardsReviewed) * 100) : 0}%
+                  </p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">{t('longTerm.accuracy')}</p>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
+      {/* Exit Confirmation Modal */}
+      <ConfirmationModal
+        show={showExitModal}
+        title={t('common:actions.confirm')}
+        message={t('quickReview.exitConfirm')}
+        onConfirm={confirmExit}
+        onCancel={() => setShowExitModal(false)}
+      />
+    </div>
+  );
+}
+
+export default LongTermReverseReview;

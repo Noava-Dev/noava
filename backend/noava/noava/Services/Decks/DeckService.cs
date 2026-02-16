@@ -495,12 +495,6 @@ namespace noava.Services
 
             return deck.ToResponseDto();
         }
-
-
-
-
-
-
     }
    }
 

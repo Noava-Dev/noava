@@ -275,7 +275,7 @@ function QuickReview() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900">
+      <div className="flex items-center justify-center min-h-screen bg-background-app-light dark:bg-background-app-dark">
         <div className="text-center">
           <div className="w-12 h-12 mx-auto mb-4 border-b-2 rounded-full animate-spin border-cyan-500"></div>
           <p className="text-gray-600 dark:text-gray-400">
@@ -295,7 +295,7 @@ function QuickReview() {
   const isComplete = session.completedCards === session.cards.length;
 
   return (
-    <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="flex min-h-screen bg-background-app-light dark:bg-background-app-dark">
       <main className="flex-1 w-full">
         <div className="container max-w-4xl px-4 py-6 mx-auto md:py-8">
           {/* Header */}

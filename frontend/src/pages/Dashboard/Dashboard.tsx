@@ -102,7 +102,7 @@ function Dashboard() {
 
   return (
     <>
-      <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
+      <div className="flex min-h-screen bg-background-app-light dark:bg-background-app-dark">
         <div className="flex-1 w-full ml-0">
           <PageHeader>
             {/* Hero Section */}
