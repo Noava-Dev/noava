@@ -21,6 +21,17 @@ namespace noava.Services
             return _boxIntervals.TryGetValue(boxNumber, out var days) ? days : 1;
         }
 
+        // get box number corresponding to interval
+        public int GetBoxFromInterval(int intervalDays)
+        {
+            return _boxIntervals
+                .Where(kv => kv.Value <= intervalDays)
+                .OrderByDescending(kv => kv.Key)
+                .Select(kv => kv.Key)
+                .DefaultIfEmpty(1)
+                .First();
+        }
+
         // determine next box based on current box and correctness
         public int GetNextBox(int currentBox, bool isCorrect)
         {
