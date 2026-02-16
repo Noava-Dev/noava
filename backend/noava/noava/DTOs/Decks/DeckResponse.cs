@@ -15,5 +15,6 @@ namespace noava.DTOs.Decks
         public string? CoverImageBlobName { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
+        public List<DeckClassroomInfoDto> Classrooms { get; set; } = [];
     }
 }

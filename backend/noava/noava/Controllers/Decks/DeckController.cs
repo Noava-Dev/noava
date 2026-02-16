@@ -263,7 +263,7 @@ namespace noava.Controllers
             {
                 return NotFound(ex.Message);
             }
-            catch (UnauthorizedAccessException ex)
+            catch (UnauthorizedAccessException)
             {
                 return Forbid();
             }

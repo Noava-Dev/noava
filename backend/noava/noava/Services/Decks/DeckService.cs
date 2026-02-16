@@ -69,7 +69,13 @@ namespace noava.Services
                     // User created the deck
                     d.UserId == userId ||
                     // OR user has access via DeckUsers (owner OR invited)
-                    d.DeckUsers.Any(du => du.ClerkId == userId))
+                    d.DeckUsers.Any(du => du.ClerkId == userId) ||
+                    // classroom deck
+                    d.ClassroomDecks.Any(cd =>
+                        cd.Classroom!.ClassroomUsers
+                            .Any(cu => cu.UserId == userId)))
+                .Include(d => d.ClassroomDecks)
+                    .ThenInclude(cd=> cd.Classroom)
                 .OrderByDescending(d => d.CreatedAt)
                 .AsQueryable();
 
@@ -77,22 +83,11 @@ namespace noava.Services
             {
                 query = query.Take(limit.Value);
             }
+            var decks = await query.ToListAsync();
 
-            return await query
-                .Select(d => new DeckResponse
-                {
-                    DeckId = d.DeckId,
-                    UserId = d.UserId,
-                    Title = d.Title,
-                    Description = d.Description,
-                    Language = d.Language,
-                    Visibility = d.Visibility,
-                    CoverImageBlobName = d.CoverImageBlobName,
-                    JoinCode = d.JoinCode,
-                    CreatedAt = d.CreatedAt,
-                    UpdatedAt = d.UpdatedAt
-                })
-                .ToListAsync();
+            return decks.Select(d => d.ToResponseDto()).ToList();
+            //used to have a query but the query stopped the "shared with me" section from showing up
+            //the above code is much shorter as well.
         }
 
 

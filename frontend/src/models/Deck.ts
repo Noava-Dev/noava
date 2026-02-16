@@ -4,6 +4,11 @@ export enum DeckVisibility {
   Private = 'Private',
 }
 
+export interface ClassroomInfo {
+  id: number;
+  name: string;
+}
+
 export interface Deck {
   deckId: number;
   userId: string;
@@ -15,6 +20,7 @@ export interface Deck {
   joinCode: string;
   createdAt: string;
   updatedAt: string;
+  classrooms?: ClassroomInfo[];
 }
 
 export interface DeckRequest {

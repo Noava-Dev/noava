@@ -55,6 +55,7 @@ function DecksPage() {
       setLoading(true);
 
       const data = await deckService.getMyDecks();
+      console.log('Fetched decks:', data);
 
       setDecks(data);
     } catch (error) {
@@ -156,6 +157,8 @@ function DecksPage() {
       deck.language?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+
+
   const sortedDecks = [...filteredDecks].sort((a, b) => {
     const dateA = new Date(a.createdAt).getTime();
     const dateB = new Date(b.createdAt).getTime();
@@ -164,7 +167,24 @@ function DecksPage() {
 
   // Split decks into owned and shared
   const ownedDecks = sortedDecks.filter(deck => deck.userId === user?.id);
-  const sharedDecks = sortedDecks.filter(deck => deck.userId !== user?.id);
+  const sharedDecks = sortedDecks.filter(deck => deck.userId !== user?.id && (!deck.classrooms || deck.classrooms.length === 0));
+  const classroomDecks = sortedDecks.filter(deck => deck.userId !== user?.id && deck.classrooms && deck.classrooms.length > 0);
+
+  const classroomGroups = classroomDecks.reduce((acc, deck) => {
+    deck.classrooms?.forEach((classroom) => {
+      if (!acc[classroom.id]) {
+        acc[classroom.id] = {
+          name: classroom.name,
+          decks: [],
+        };
+      }
+
+      acc[classroom.id].decks.push(deck);
+    });
+
+    return acc;
+  }, {} as Record<number, { name: string; decks: Deck[] }>);
+
 
   if (loading) {
     return <Skeleton />;
@@ -320,6 +340,32 @@ function DecksPage() {
                     </div>
                   </div>
                 )}
+                              
+              {/* Classroom Decks Section */}
+              {Object.keys(classroomGroups).map((classroomId) => {
+                const classroom = classroomGroups[Number(classroomId)];
+                return (
+                  <div key={classroomId}>
+                    <h2 className="mb-1 text-2xl font-bold text-text-title-light dark:text-text-title-dark">
+                      {t('sections.classroomDecks')} {/* Main Section Title */}
+                    </h2>
+                    <p className="mb-6 text-sm font-medium text-text-muted-light dark:text-text-muted-dark">
+                      {classroom.name} {/* Classroom Name */}
+                    </p>
+                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:gap-6">
+                      {classroom.decks.map((deck) => (
+                        <DeckCard
+                          key={deck.deckId}
+                          deck={deck}
+                          onEdit={handleEdit}
+                          onDelete={handleDelete}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
+
               </div>
             ) : searchTerm ? (
               <EmptyState
