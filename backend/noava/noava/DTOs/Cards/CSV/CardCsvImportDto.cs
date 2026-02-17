@@ -1,4 +1,4 @@
-﻿namespace noava.DTOs.Cards
+﻿namespace noava.DTOs.Cards.CSV
 {
     public class CardCsvImportDto
     {

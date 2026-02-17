@@ -9,7 +9,7 @@ using DocumentFormat.OpenXml.Drawing;
 using System.ComponentModel;
 using noava.Exceptions;
 
-namespace noava.Services.Implementations
+namespace noava.Services.StudySessions
 {
     public class StudySessionService : IStudySessionService
     {

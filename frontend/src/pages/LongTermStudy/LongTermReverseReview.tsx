@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button, Progress, Badge } from 'flowbite-react';
 import { HiX, HiVolumeUp, HiPlay, HiCheck } from 'react-icons/hi';
@@ -6,9 +6,11 @@ import { useTranslation } from 'react-i18next';
 import { useDeckService } from '../../services/DeckService';
 import { useFlashcardService } from '../../services/FlashcardService';
 import { useStudySessionService } from '../../services/StudySessionService';
+import { useCardInteractionService } from '../../services/CardInteractionService';
 import { useToast } from '../../contexts/ToastContext';
 import { useAzureBlobService } from '../../services/AzureBlobService';
 import { BulkReviewMode } from '../../models/Flashcard';
+import { StudyMode } from '../../models/CardInteraction';
 import { getLanguageCode } from '../../shared/utils/speechHelpers';
 import ConfirmationModal from '../../shared/components/ConfirmModal';
 import type { Deck } from '../../models/Deck';
@@ -28,6 +30,7 @@ function LongTermReverseReview() {
   const deckService = useDeckService();
   const flashcardService = useFlashcardService();
   const studySessionService = useStudySessionService();
+  const cardInteractionService = useCardInteractionService();
   const azureBlobService = useAzureBlobService();
   const { showError } = useToast();
 
@@ -45,14 +48,22 @@ function LongTermReverseReview() {
 
 
   const [showExitModal, setShowExitModal] = useState(false);
+  
+  // Timer for response time
+  const [cardStartTime, setCardStartTime] = useState<number>(Date.now());
+  
+  const initialized = useRef(false);
 
   useEffect(() => {
-    if (deckId) {
+    if (deckId && !initialized.current) {
+      initialized.current = true;
       initializeSession();
     }
   }, [deckId]);
 
   useEffect(() => {
+    setCardStartTime(Date.now());
+    setIsFlipped(false);
     return () => {
       window.speechSynthesis.cancel();
     };
@@ -114,7 +125,47 @@ function LongTermReverseReview() {
     setIsFlipped(!isFlipped);
   };
 
-  const handleNext = (isCorrect: boolean) => {
+  const recordCardInteraction = async (isCorrect: boolean) => {
+    if (!sessionId || !deckId) return;
+
+    const currentCard = cards[currentIndex];
+    const responseTime = Date.now() - cardStartTime;
+
+    const requestData = {
+      Timestamp: new Date().toISOString(),
+      IsCorrect: isCorrect,
+      ResponseTimeMs: responseTime,
+      StudyMode: StudyMode.SPACED,
+    };
+
+    console.log('Recording interaction:', {
+      sessionId,
+      deckId: Number(deckId),
+      cardId: currentCard.cardId,
+      requestData,
+    });
+
+    try {
+      await cardInteractionService.recordInteraction(
+        sessionId,
+        Number(deckId),
+        currentCard.cardId,
+        requestData
+      );
+    } catch (error: any) {
+      console.error('Error recording card interaction:', error);
+      console.error('Request was:', requestData);
+      if (error.response) {
+        console.error('Backend response:', error.response.data);
+        console.error('Status:', error.response.status);
+      }
+    }
+  };
+
+  const handleNext = async (isCorrect: boolean) => {
+
+    await recordCardInteraction(isCorrect);
+
     setCardsReviewed(cardsReviewed + 1);
     if (isCorrect) {
       setCorrectAnswers(correctAnswers + 1);
@@ -133,7 +184,7 @@ function LongTermReverseReview() {
 
     try {
       await studySessionService.endSession(sessionId, {
-        totalCardsReviewed: cardsReviewed + 1,
+        totalCardsReviewed: cardsReviewed,
         correctAnswers: correctAnswers,
       });
       navigate(`/decks/${deckId}/cards`);

@@ -43,9 +43,6 @@ namespace noava.Data.Configurations.Cards
             builder.Property(d => d.StudyMode)
                 .IsRequired();
 
-            builder.Property(d => d.InteractionType)
-                .IsRequired();
-
             builder.Property(d => d.IntervalBefore)
                 .IsRequired();
 

@@ -1,4 +1,5 @@
 ﻿using noava.DTOs.Cards;
+using noava.DTOs.Cards.CSV;
 using noava.Models;
 
 namespace noava.Mappers.Cards

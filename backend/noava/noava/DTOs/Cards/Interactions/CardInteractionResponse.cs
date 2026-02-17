@@ -1,4 +1,6 @@
-namespace noava.DTOs.CardInteractions
+using noava.Models.Enums;
+
+namespace noava.DTOs.Cards.Interactions
 {
     public class CardInteractionResponse
     {
@@ -8,7 +10,10 @@ namespace noava.DTOs.CardInteractions
         public int? SessionId { get; set; }
         public bool IsCorrect { get; set; }
         public DateTime ReviewedAt { get; set; }
-        public int Box { get; set; }
-        public DateTime? NextReviewDate { get; set; }
+        public StudyMode StudyMode { get; set; }
+        public int IntervalBefore { get; set; } // in days
+        public int IntervalAfter { get; set; } // in days
+        public DateTime DueAtBefore { get; set; }
+        public DateTime DueAtAfter { get; set; }
     }
 }

@@ -48,6 +48,9 @@ namespace noava
             builder.Services.AddScoped<IDeckUserRepository, DeckUserRepository>();
             builder.Services.AddScoped<IDeckInvitationRepository, DeckInvitationRepository>();
             builder.Services.AddScoped<ISchoolRepository, SchoolRepository>();
+            builder.Services.AddScoped<ICardInteractionRepository, CardInteractionRepository>();
+            builder.Services.AddScoped<ICardProgressRepository, CardProgressRepository>();
+            builder.Services.AddScoped<IStudySessionRepository, StudySessionRepository>();
 
             // Service Registrations
             builder.Services.AddScoped<IFaqService, FaqService>();
@@ -62,8 +65,8 @@ namespace noava
             builder.Services.AddScoped<IClassroomService, ClassroomService>();
             builder.Services.AddScoped<IBlobService, BlobService>();
             builder.Services.AddScoped<ICardImportService, CardImportService>();
-            builder.Services.AddScoped<IStudySessionRepository, StudySessionRepository>();
             builder.Services.AddScoped<IStudySessionService, StudySessionService>();
+            builder.Services.AddScoped<ICardInteractionService, CardInteractionService>();
 
             // External Service Registrations
             builder.Services.AddHttpClient();
