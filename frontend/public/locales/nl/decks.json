@@ -126,5 +126,9 @@
     "success": "Uitnodiging succesvol verstuurd",
     "error": "Kon uitnodiging niet versturen",
     "invalidEmail": "Voer een geldig e-mailadres in"
+  },
+  "copy": {
+    "title": "Deck kopiëren",
+    "message": "Weet je zeker dat je dit deck wilt kopiëren? Dit kan even duren."
   }
 }

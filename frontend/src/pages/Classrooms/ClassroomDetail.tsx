@@ -377,8 +377,8 @@ return (
       {/* Confirm Copy Modal */}
       <ConfirmModal
         show={copyModalOpened}
-        title={t('decks.copy.title')}
-        message={t('decks.copy.message')}
+        title={t('decks:copy.title')}
+        message={t('decks:copy.message')}
         confirmLabel={isCopying ? t('common:actions.copying') : t('common:actions.copy')}
         cancelLabel={t('common:actions.cancel')}
         confirmColor="green"
