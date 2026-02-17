@@ -51,7 +51,16 @@ namespace noava.Controllers
             return Ok(decks);
         }
 
+        [HttpGet("user/all/classrooms")]
+        public async Task<ActionResult<List<DeckResponse>>> GetUserDecksByClassrooms()
+        {
+            var userId = _userService.GetUserId(User);
+            if (userId == null)
+                return Unauthorized();
 
+            var decks = await _deckService.GetUserDecksByClassroomsAsync(userId);
+            return Ok(decks);
+        }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<DeckResponse>> GetDeck(int id)

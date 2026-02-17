@@ -19,13 +19,6 @@ namespace noava.Mappers.Decks
                 JoinCode = action.JoinCode,
                 CreatedAt = action.CreatedAt,
                 UpdatedAt = action.UpdatedAt,
-                Classrooms = action.ClassroomDecks
-                    .Select(cd => new DeckClassroomInfoDto
-                    {
-                        Id = cd.ClassroomId,
-                        Name = cd.Classroom.Name
-                    })
-                    .ToList()
             };
         }
 

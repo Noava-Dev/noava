@@ -69,13 +69,7 @@ namespace noava.Services
                     // User created the deck
                     d.UserId == userId ||
                     // OR user has access via DeckUsers (owner OR invited)
-                    d.DeckUsers.Any(du => du.ClerkId == userId) ||
-                    // classroom deck
-                    d.ClassroomDecks.Any(cd =>
-                        cd.Classroom!.ClassroomUsers
-                            .Any(cu => cu.UserId == userId)))
-                .Include(d => d.ClassroomDecks)
-                    .ThenInclude(cd=> cd.Classroom)
+                    d.DeckUsers.Any(du => du.ClerkId == userId))
                 .OrderByDescending(d => d.CreatedAt)
                 .AsQueryable();
 
@@ -88,6 +82,37 @@ namespace noava.Services
             return decks.Select(d => d.ToResponseDto()).ToList();
             //used to have a query but the query stopped the "shared with me" section from showing up
             //the above code is much shorter as well.
+        }
+
+        public async Task<List<DeckClassroomInfoDto>> GetUserDecksByClassroomsAsync(string userId)
+        {
+            var decks = await _context.Decks
+                .Include(d => d.ClassroomDecks)
+                    .ThenInclude(cd => cd.Classroom)
+                        .ThenInclude(c => c.ClassroomUsers)
+                .Include(d => d.DeckUsers)
+                .Where(d =>
+                    d.UserId == userId || d.DeckUsers.Any(du => du.ClerkId == userId) ||
+                    d.ClassroomDecks.Any(cd => cd.Classroom.ClassroomUsers.Any(cu => cu.UserId == userId))
+                )
+                .ToListAsync();
+
+
+            var classroomGroups = decks
+                .SelectMany(d => d.ClassroomDecks
+                    .Where(cd => cd.Classroom != null)
+                    .Select(cd => new { cd.Classroom, Deck = d }))
+                .GroupBy(x => x.Classroom.Id)
+                .Select(g => new DeckClassroomInfoDto
+                {
+                    Id = g.Key,
+                    Name = g.First().Classroom?.Name ?? "Unknown Classroom",
+                    //.GroupBy(d => d.DeckId).Select(g2 => g2.First()) makes sure no duplicate classrooms show up in the decks page
+                    Decks = g.Select(x => x.Deck.ToResponseDto()).GroupBy(d => d.DeckId).Select(g2 => g2.First()).ToList()
+                })
+                .ToList();
+
+            return classroomGroups;
         }
 
 

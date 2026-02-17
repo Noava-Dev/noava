@@ -7,6 +7,7 @@ export enum DeckVisibility {
 export interface ClassroomInfo {
   id: number;
   name: string;
+  decks: Deck[];
 }
 
 export interface Deck {
