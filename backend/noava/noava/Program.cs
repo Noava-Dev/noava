@@ -68,6 +68,7 @@ namespace noava
             // External Service Registrations
             builder.Services.AddHttpClient();
             builder.Services.AddScoped<IClerkService, ClerkService>();
+            builder.Services.AddScoped<IAggregateStatisticsService, AggregateStatisticsService>();
             builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
             // Add services to the container.
