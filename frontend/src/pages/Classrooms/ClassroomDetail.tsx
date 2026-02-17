@@ -14,12 +14,14 @@ import { useClassroomService } from '../../services/ClassroomService';
 import { useToast } from '../../contexts/ToastContext';
 import type { ClassroomResponse } from '../../models/Classroom';
 import type { Deck } from '../../models/Deck';
+import { useDeckService } from '../../services/DeckService';
 
 function ClassroomDetailPage() {
   const { classroomId } = useParams();
   const id = Number(classroomId);
   const { t } = useTranslation('classrooms');
   const classroomSvc = useClassroomService();
+  const deckService = useDeckService();
   const navigate = useNavigate();
   const { showError, showSuccess } = useToast();
 
@@ -32,8 +34,11 @@ function ClassroomDetailPage() {
   const [bulkWriteReviewModalOpened, setBulkWriteReviewModalOpened] = useState(false);
   const [bulkReverseReviewModalOpened, setBulkReverseReviewModalOpened] = useState(false);
   const [deleteModalOpened, setDeleteModalOpened] = useState(false);
+  const [copyModalOpened, setCopyModalOpened] = useState(false);
   const [deckToDelete, setDeckToDelete] = useState<number | null>(null);
+  const [deckToCopy, setDeckToCopy] = useState<number | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isCopying, setIsCopying] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -63,6 +68,28 @@ function ClassroomDetailPage() {
       showError(t('common:toast.error'), t('decks.loadError'));
     } finally {
       setDecksLoading(false);
+    }
+  };
+
+  const handleCopy = (deckId: number) => {
+    setDeckToCopy(deckId)
+    setCopyModalOpened(true);
+  };
+
+  const handleConfirmCopy = async () => {
+    if (!deckToCopy) return;
+
+    setIsCopying(true);
+
+    try {
+      await deckService.copy(deckToCopy);
+      showSuccess(t('decks:copySuccess'), t('common:toast.success'));
+    } catch (error) {
+      showError(t('common:toast.error'), t('decks:copyError'));
+    } finally {
+      setIsCopying(false);
+      setCopyModalOpened(false);
+      setDeckToCopy(null);
     }
   };
 
@@ -252,6 +279,7 @@ return (
                 <DeckCard
                   key={deck.deckId}
                   deck={deck}
+                  onCopy={handleCopy}
                   onView={handleView}
                   onDelete={handleDelete}
                   showEdit={false}
@@ -344,6 +372,18 @@ return (
         confirmColor="red"
         onConfirm={handleConfirmDelete}
         onCancel={handleCancelDelete}
+      />
+
+      {/* Confirm Copy Modal */}
+      <ConfirmModal
+        show={copyModalOpened}
+        title={t('decks.copy.title')}
+        message={t('decks.copy.message')}
+        confirmLabel={isCopying ? t('common:actions.copying') : t('common:actions.copy')}
+        cancelLabel={t('common:actions.cancel')}
+        confirmColor="green"
+        onConfirm={handleConfirmCopy}
+        onCancel={() => setCopyModalOpened(false)}
       />
     </div>
   </div>

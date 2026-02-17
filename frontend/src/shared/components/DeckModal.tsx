@@ -102,21 +102,21 @@ function DeckModal({ isOpen, onClose, onSubmit, deck }: DeckModalProps) {
 
       // Backend security update: expects format {GUID}_{extension} (underscore, not dot)
       // Convert blob name from "uuid.ext" to "uuid_ext"
-      let cleanBlobName = finalBlobName;
-      if (cleanBlobName) {
-        // Replace the last dot with underscore (e.g., "uuid.jpg" -> "uuid_jpg")
-        const lastDotIndex = cleanBlobName.lastIndexOf('.');
-        if (lastDotIndex !== -1) {
-          cleanBlobName = cleanBlobName.substring(0, lastDotIndex) + '_' + cleanBlobName.substring(lastDotIndex + 1);
-        }
-      }
+      // let cleanBlobName = finalBlobName;
+      // if (cleanBlobName) {
+      //   // Replace the last dot with underscore (e.g., "uuid.jpg" -> "uuid_jpg")
+      //   const lastDotIndex = cleanBlobName.lastIndexOf('.');
+      //   if (lastDotIndex !== -1) {
+      //     cleanBlobName = cleanBlobName.substring(0, lastDotIndex) + '_' + cleanBlobName.substring(lastDotIndex + 1);
+      //   }
+      // }
 
       const deckData: DeckRequest = {
         title: title.trim(),
         description: description.trim() || undefined,
         language: language.trim(),
         visibility,
-        coverImageBlobName: cleanBlobName,
+        coverImageBlobName: finalBlobName,
       };
 
       onSubmit(deckData);

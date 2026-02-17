@@ -150,7 +150,7 @@ namespace noava.Controllers
         public async Task<ActionResult<DeckResponse>> InviteUserByEmail(
        int deckId,
        [FromQuery] string email,
-       [FromQuery] bool isOwner = false)  // ← ADD: Default false
+       [FromQuery] bool isOwner = false)
         {
             if (string.IsNullOrWhiteSpace(email))
                 return BadRequest("Email is required.");
@@ -273,6 +273,17 @@ namespace noava.Controllers
             }
         }
 
+        [HttpPost("{deckId:int}/copy")]
+        public async Task<ActionResult<DeckResponse>> CopyDeck(int deckId)
+        {
+            var userId = _userService.GetUserId(User);
+            if (userId == null)
+                return Unauthorized();
+
+            var deck = await _deckService.CopyDeckAsync(deckId, userId);
+
+            return Ok(deck);
+        }
 
     }
 }
