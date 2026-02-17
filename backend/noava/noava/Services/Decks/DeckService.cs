@@ -14,6 +14,11 @@ using System.Security.Cryptography;
 using System.Text.Json;
 using noava.Data;
 using Microsoft.EntityFrameworkCore;
+using Azure.Core;
+using noava.Models.Requests;
+using Azure.Storage.Blobs.Models;
+using System.ComponentModel;
+using Azure;
 
 namespace noava.Services
 {
@@ -496,11 +501,63 @@ namespace noava.Services
             return deck.ToResponseDto();
         }
 
+        public async Task<DeckResponse> CopyDeckAsync(int deckId, string userId)
+        {
+            var deck = await _repository.GetByIdAsync(deckId)
+                ?? throw new KeyNotFoundException("Deck not found");
 
+            string? newBlobName = null;
 
+            try
+            {
+                if (deck.CoverImageBlobName != null) {
+                    var containerClient = await _blobService.EnsureContainer(new EnsureContainerRequest
+                    {
+                        ContainerName = "deck-images",
+                        AccessType = PublicAccessType.None
+                    });
 
+                    var copyFileRequest = new CopyFileRequest
+                    {
+                        Container = containerClient,
+                        SourceBlobName = deck.CoverImageBlobName,
+                        DestinationBlobName = $"{Guid.NewGuid()}{Path.GetExtension(deck.CoverImageBlobName).ToLowerInvariant()}"
+                    };
 
+                    await _blobService.CopyFile(copyFileRequest);
+                    newBlobName = copyFileRequest.DestinationBlobName;
+                }
+            }
+            catch (Exception)
+            {
+                deck.CoverImageBlobName = null;
+            }
 
+            var copy = new Deck
+            {
+                Title = $"Copy of {deck.Title}",
+                Description = deck.Description,
+                Language = deck.Language,
+                Visibility = deck.Visibility,
+                CoverImageBlobName = newBlobName,
+                UserId = userId,
+                JoinCode = GenerateJoinCode()
+            };
+
+            var createdDeck = await _repository.CreateAsync(copy);
+
+            var deckUser = new DeckUser
+            {
+                ClerkId = userId,
+                DeckId = createdDeck.DeckId,
+                IsOwner = true,
+                AddedAt = DateTime.UtcNow
+            };
+
+            await _deckUserRepo.AddAsync(deckUser);
+
+            return createdDeck.ToResponseDto();
+        }
     }
-   }
+}
 

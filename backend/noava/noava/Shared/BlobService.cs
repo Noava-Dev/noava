@@ -2,6 +2,8 @@
 using Azure.Storage.Blobs.Models;
 using Azure.Storage.Sas;
 using noava.Models.BlobStorage;
+using noava.Models.Requests;
+using System.ComponentModel;
 
 namespace noava.Shared
 {
@@ -102,6 +104,16 @@ namespace noava.Shared
 
             sasBuilder.SetPermissions(request.Permission);
             return blobClient.GenerateSasUri(sasBuilder).ToString();
+        }
+
+        public async Task CopyFile(CopyFileRequest request)
+        {
+            var sourceBlob = request.Container.GetBlobClient(request.SourceBlobName);
+            if (!await sourceBlob.ExistsAsync()) throw new InvalidOperationException("Source blob does not exist");
+
+            var destinationBlob = request.Container.GetBlobClient(request.DestinationBlobName);
+
+            await destinationBlob.SyncCopyFromUriAsync(sourceBlob.Uri);
         }
 
     }
