@@ -28,10 +28,19 @@
   --color-text-title-dark: #F3F4F6;
   --color-text-body-dark: #D1D5DB;
   --color-background-app-dark: #111827;
+  --color-background-surface-dark: #1F2937;
+}
+.mainPage{
+  background-color: light-dark(var(--color-primary-300), var(--color-background-surface-dark));
 }
 
 .menu {
   padding: 10px 0;
+  background-color: light-dark(var(--color-background-app-light), var(--color-background-surface-dark));
+}
+
+.navbar-sidebar__brand {
+  background-color: light-dark(var(--color-background-app-light), var(--color-background-surface-dark));
 }
 
 .menu__list-item {
@@ -42,7 +51,6 @@
   display: flex;
   align-items: center;
   font-weight: 600;
-  color: var(--color-text-body-light);
   border-radius: 10px;
   margin: 0.2em 0.5em;
   padding: 0.7em 1em;
@@ -54,15 +62,15 @@
   color: var(--color-primary-500);
 }
 
-.menu__link--active {
-  background-color: #E6EFFB;
-  color: var(--color-primary-500);
-  border-left: 1em;
+.menu__list-item-collapsible--active{
+  background-color: light-dark(var(--color-primary-200), var(--color-primary-700));
+  border-radius: 2em;
+  color: light-dark(var(--color-primary-600), var(--color-primary-300));
 }
 
 .menu__list-item-collapsible > .menu__link {
   font-weight: 700;
-  color: var(--color-text-title-light);
+  color: light-dark(var(--color-text-title-light), var(--color-text-title-dark));
 }
 
 .menu__caret:before {
@@ -82,7 +90,7 @@
 }
 
 [data-theme='dark'] .menu__link--active {
-  background-color: #1F2937;
+  background-color: var(--color-primary-700);
 }
 
 [data-theme='dark']
@@ -99,10 +107,18 @@
   border-radius: 10px;
 }
 
+.docs-wrapper {
+  background-color: var(--color-background-app-light);
+}
+
+[data-theme= "dark"] .docMainContainer_TBSr {
+  background-color: var(--color-background-app-dark);
+}
+
 .first-paragraph {
   margin-top: 1rem;
 }
-/* Grid layout */
+
 .folderButtons {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -110,7 +126,6 @@
   margin-top: 2rem;
 }
 
-/* Card button */
 .folderButton {
   display: flex;
   align-items: flex-start;
@@ -127,33 +142,28 @@
   border: 1px solid transparent;
 }
 
-/* Hover effect */
 .folderButton:hover {
   background: var(--color-primary-200);
   border-color: var(--color-primary-400);
   transform: translateY(-3px);
 }
 
-/* Icon / logo */
 .folderIcon {
-  font-size: 2.4rem;   /* 🔥 Bigger logo */
+  font-size: 2.4rem;
   line-height: 1;
 }
 
-/* Text wrapper */
 .folderContent {
   display: flex;
   flex-direction: column;
 }
 
-/* Title */
 .folderTitle {
   font-size: 1.2rem;
   font-weight: 700;
   margin-bottom: 0.25rem;
 }
 
-/* Description */
 .folderDescription {
   font-size: 0.95rem;
   color: var(--color-text-body-light);

@@ -2,6 +2,10 @@
   max-width: inherit !important;
 }
 
+:global(.avatar__name a) {
+  color: var(--color-primary-400);
+}
+
 .imageOnlyAuthorRow {
   display: flex;
   flex-flow: row wrap;

@@ -12,11 +12,18 @@
   color: var(--color-text-title-light);
 }
 
+[data-theme='dark'] .heroBanner {
+  background-color: var(--color-background-app-dark);
+  color: var(--color-text-title-dark);
+}
+
 @media screen and (max-width: 996px) {
   .heroBanner {
     padding: 7.5rem 0rem;
   }
 }
+
+
 
 .buttons {
   display: flex;

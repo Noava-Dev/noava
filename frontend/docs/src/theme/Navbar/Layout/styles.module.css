@@ -7,13 +7,16 @@
 }
 
 .customNavbar {
-  background-color: var(--color-background-app-light);
   border-bottom: 1px solid var(--color-border);
   padding: 0.75rem 2rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
   height: 4.2rem;
+}
+
+[data-theme="dark"] .customNavbar {
+  background-color: var(--color-background-surface-dark);
 }
 
 /* Logo image */
@@ -25,8 +28,9 @@
 
 /* Title text */
 .customNavbar :global(.navbar__title) {
-  font-size: 1.2rem;   /* bigger title */
+  font-size: 1.2rem; 
   font-weight: 500;
   color: var(--color-text-title-light);
   line-height: 1;
+  color: light-dark(var(--color-text-title-light), var(--color-text-title-dark));
 }
