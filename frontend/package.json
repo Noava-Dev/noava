@@ -11,7 +11,7 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "start:docs": "cd docs && npm start",
+    "start:docs": "cd docs && npm start -- --no-open",
     "dev": "concurrently \"npm run dev:frontend\" \"npm run start:docs\""
   },
   "dependencies": {
