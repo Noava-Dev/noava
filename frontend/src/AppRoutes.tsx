@@ -22,6 +22,10 @@ import Dashboard from './pages/Dashboard/Dashboard';
 import SchoolClassrooms from './pages/SchoolClassrooms/SchoolClassrooms';
 import WriteReview from './pages/Review/WriteReview';
 import ReverseReview from './pages/Review/ReverseReview';
+import TermsOfService from './pages/Legal/TermsOfService/TermsOfService';
+import Privacy from './pages/Legal/Privacy/Privacy';
+import Guidelines from './pages/Legal/Guidelines/Guidelines';
+import Copyright from './pages/Legal/Copyright/Copyright';
 
 export default function AppRoutes() {
   return (
@@ -30,6 +34,10 @@ export default function AppRoutes() {
       <Route path="/" element={<Home />} />
       <Route path="/not-found" element={<NotFound />} />
       <Route path="/faq" element={<FAQ />} />
+      <Route path="/privacy" element={<Privacy />} />
+      <Route path="/terms-of-service" element={<TermsOfService />} />
+      <Route path="/guidelines" element={<Guidelines />} />
+      <Route path="/copyright" element={<Copyright />} />
 
       {/* Authentication */}
       <Route
@@ -60,7 +68,10 @@ export default function AppRoutes() {
         <Route path="/decks/:deckId/cards" element={<FlashcardDetail />} />
         <Route path="/decks/:deckId/quickReview" element={<QuickReview />} />
         <Route path="/decks/:deckId/writeReview" element={<WriteReview />} />
-        <Route path="/decks/:deckId/reverseReview" element={<ReverseReview />} />
+        <Route
+          path="/decks/:deckId/reverseReview"
+          element={<ReverseReview />}
+        />
         <Route path="/decks/:deckId/review" element={<QuickReview />} />
         <Route path="/decks/review" element={<QuickReview />} />
         <Route path="/decks/writeReview" element={<WriteReview />} />
@@ -95,7 +106,7 @@ export default function AppRoutes() {
 
         {/* Schools */}
         <Route path="schools" element={<SchoolsPage />} />
-        <Route path="schools/:id/classrooms" element={<SchoolClassrooms/>} />
+        <Route path="schools/:id/classrooms" element={<SchoolClassrooms />} />
       </Route>
 
       {/* Admin Routes */}
@@ -103,7 +114,6 @@ export default function AppRoutes() {
         <Route path="/admin">
           {/* Dashboard */}
           <Route path="dashboard" element={<AdminDashboard />} />
-
         </Route>
       </Route>
 
