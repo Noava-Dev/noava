@@ -14,9 +14,10 @@
       "title": "Study Time",
       "tooltip": "Total time spent studying flashcards this week"
     },
-    "cardsdue": {
-      "title": "Cards Due",
-      "tooltip": "Cards scheduled for review today based on spaced repetition algorithm"
+    "lastreview": {
+      "title": "Last Review",
+      "tooltip": "The date of your most recent flashcard review session",
+      "never": "Never"
     }
   },
   "decks": {

@@ -18,7 +18,10 @@ import {
 import { HiChevronRight } from 'react-icons/hi';
 import { useNavigate } from 'react-router-dom';
 import { useDeckService } from '../../services/DeckService';
+import { useStatisticsService } from '../../services/StatisticsService';
+import { formatDateToEuropean } from '../../services/DateService';
 import type { DeckRequest, Deck } from '../../models/Deck';
+import type { DashboardStatistics } from '../../models/Statistics';
 import { useEffect, useState } from 'react';
 import { useToast } from '../../contexts/ToastContext';
 import DeckCard from '../../shared/components/DeckCard';
@@ -29,7 +32,9 @@ function Dashboard() {
   const { t } = useTranslation('dashboard');
   const navigate = useNavigate();
   const deckService = useDeckService();
+  const statisticsService = useStatisticsService();
   const [decks, setDecks] = useState<Deck[]>([]);
+  const [statistics, setStatistics] = useState<DashboardStatistics>({} as DashboardStatistics);
   const [loading, setLoading] = useState(true);
   const { showSuccess, showError } = useToast();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -37,16 +42,18 @@ function Dashboard() {
   const [deleteDeckId, setDeleteDeckId] = useState<number | null>(null);
 
   useEffect(() => {
-    fetchDecks();
+    fetchData();
   }, []);
 
-  const fetchDecks = async () => {
+  const fetchData = async () => {
     try {
       setLoading(true);
-
-      const data = await deckService.getMyDecks(4);
-
-      setDecks(data);
+      const [decksData, statsData] = await Promise.all([
+        deckService.getMyDecks(4),
+        statisticsService.getGeneralStatistics(),
+      ]);
+      setDecks(decksData);
+      setStatistics(statsData);
     } catch (error) {
       showError(t('toast.loadError'), t('toast.loadError'));
     } finally {
@@ -67,7 +74,7 @@ function Dashboard() {
       showSuccess(t('toast.updateSuccess'), t('toast.updateSuccess'));
       setIsModalOpen(false);
       setEditingDeck(undefined);
-      fetchDecks();
+      fetchData();
     } catch (error) {
       showError(t('toast.updateError'), t('toast.updateError'));
     }
@@ -83,7 +90,7 @@ function Dashboard() {
     try {
       await deckService.delete(deleteDeckId);
       showSuccess(t('toast.deleteSuccess'), t('toast.deleteSuccess'));
-      fetchDecks();
+      fetchData();
     } catch (error) {
       showError(t('toast.deleteError'), t('toast.deleteError'));
     } finally {
@@ -129,26 +136,26 @@ function Dashboard() {
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
                   <DashboardStatCard
                     title={t('statcard.cardsreviewed.title')}
-                    value="1,247"
+                    value={statistics.cardsReviewed.toString()}
                     tooltip={t('statcard.cardsreviewed.tooltip')}
                     icon={LuBrain}
                   />
                   <DashboardStatCard
                     title={t('statcard.accuracyrate.title')}
-                    value="84%"
+                    value={`${Math.round(statistics.accuracyRate)}%`}
                     tooltip={t('statcard.accuracyrate.tooltip')}
                     icon={LuTarget}
                   />
                   <DashboardStatCard
                     title={t('statcard.studytime.title')}
-                    value="12,5h"
+                    value={`${statistics.timeSpentHours}h`}
                     tooltip={t('statcard.studytime.tooltip')}
                     icon={LuClock}
                   />
                   <DashboardStatCard
-                    title={t('statcard.cardsdue.title')}
-                    value="45"
-                    tooltip={t('statcard.cardsdue.tooltip')}
+                    title={t('statcard.lastreview.title')}
+                    value={statistics?.lastRevieweDate ? formatDateToEuropean(statistics.lastRevieweDate) : t('statcard.lastreview.never')}
+                    tooltip={t('statcard.lastreview.tooltip')}
                     icon={LuTrendingUp}
                   />
                 </div>

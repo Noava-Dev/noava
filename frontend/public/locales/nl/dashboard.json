@@ -14,9 +14,10 @@
       "title": "Studietijd",
       "tooltip": "Totale tijd die je deze week aan het studeren van flashcards hebt besteed"
     },
-    "cardsdue": {
-      "title": "Te herhalen kaarten",
-      "tooltip": "Kaarten die vandaag gepland staan voor herhaling op basis van het spaced repetition-algoritme"
+    "lastreview": {
+      "title": "Laatste review",
+      "tooltip": "De datum van je meest recente flashcard review sessie",
+      "never": "Nooit"
     }
   },
   "decks": {
