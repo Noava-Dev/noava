@@ -6,7 +6,7 @@ namespace noava.Mappers.Cards
 {
     public static class CardInteractionMapper
     {
-        public static CardInteractionResponse ToResponse(CardInteractions cardInteraction)
+        public static CardInteractionResponse ToResponse(CardInteraction cardInteraction)
         {
             return new CardInteractionResponse
             {
@@ -24,9 +24,9 @@ namespace noava.Mappers.Cards
             };
         }
 
-        public static CardInteractions ToEntity(int studySessionId, int deckId, int cardId, string userId, CardInteractionRequest cardInteraction, CardInteractionIntervalRequest intervalRequest)
+        public static CardInteraction ToEntity(int studySessionId, int deckId, int cardId, string userId, CardInteractionRequest cardInteraction, CardInteractionIntervalRequest intervalRequest)
         {
-            return new CardInteractions
+            return new CardInteraction
             {
                 CardId = cardId,
                 DeckId = deckId,

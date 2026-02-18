@@ -17,7 +17,7 @@ namespace noava.Shared
             _leitnerBoxService = leitnerBoxService;
         }
 
-        public async Task UpdateStatsAsync(IEnumerable<CardInteractions> interactions, StudySessions? session = null, CancellationToken ct = default)
+        public async Task UpdateStatsAsync(IEnumerable<CardInteraction> interactions, StudySession? session = null, CancellationToken ct = default)
         {
             if (!interactions.Any()) return;
 
@@ -60,7 +60,7 @@ namespace noava.Shared
             return Task.CompletedTask;
         }
 
-        private async Task UpdateDeckUserStatisticsAsync(IEnumerable<CardInteractions> interactions, StudySessions? session, CancellationToken ct = default)
+        private async Task UpdateDeckUserStatisticsAsync(IEnumerable<CardInteraction> interactions, StudySession? session, CancellationToken ct = default)
         {
             var groups = interactions.GroupBy(i => new { i.ClerkId, i.DeckId });
 
@@ -108,12 +108,12 @@ namespace noava.Shared
             await _dbContext.SaveChangesAsync(ct);
         }
 
-        private async Task UpdateClassroomUserStatisticsAsync(IEnumerable<CardInteractions> interactions, StudySessions? session, CancellationToken ct = default)
+        private async Task UpdateClassroomUserStatisticsAsync(IEnumerable<CardInteraction> interactions, StudySession? session, CancellationToken ct = default)
         {
 
         }
 
-        private async Task UpdateClassroomDeckStatisticsAsync(IEnumerable<CardInteractions> interactions, StudySessions? session, CancellationToken ct = default)
+        private async Task UpdateClassroomDeckStatisticsAsync(IEnumerable<CardInteraction> interactions, StudySession? session, CancellationToken ct = default)
         {
 
         }

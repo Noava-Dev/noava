@@ -65,9 +65,6 @@ namespace noava.Services.Cards
                 DueAtAfter = dueAfter
             };
 
-            var x = request.ResponseTimeMs; // breakpoint hier
-
-
             var interactionEntity = CardInteractionMapper.ToEntity(
                 studySessionId,
                 deckId,

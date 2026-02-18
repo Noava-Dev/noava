@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using noava.Data;
+using noava.Models;
 
 namespace noava.Repositories.StudySessions
 {
@@ -12,13 +13,13 @@ namespace noava.Repositories.StudySessions
             _context = context;
         }
 
-        public async Task<Models.StudySessions?> GetByIdAsync(int sessionId)
+        public async Task<StudySession?> GetByIdAsync(int sessionId)
         {
             return await _context.StudySessions
                 .FirstOrDefaultAsync(s => s.Id == sessionId);
         }
 
-        public async Task<List<Models.StudySessions>> GetByUserIdAsync(string userId)
+        public async Task<List<StudySession>> GetByUserIdAsync(string userId)
         {
             return await _context.StudySessions
                 .Where(s => s.ClerkId == userId)
@@ -26,7 +27,7 @@ namespace noava.Repositories.StudySessions
                 .ToListAsync();
         }
 
-        public async Task<List<Models.StudySessions>> GetByDeckIdAsync(int deckId)
+        public async Task<List<StudySession>> GetByDeckIdAsync(int deckId)
         {
             return await _context.StudySessions
                 .Where(s => s.DeckId == deckId)
@@ -34,14 +35,14 @@ namespace noava.Repositories.StudySessions
                 .ToListAsync();
         }
 
-        public async Task<Models.StudySessions> CreateAsync(Models.StudySessions session)
+        public async Task<StudySession> CreateAsync(StudySession session)
         {
             _context.StudySessions.Add(session);
             await _context.SaveChangesAsync();
             return session;
         }
 
-        public async Task<Models.StudySessions> UpdateAsync(Models.StudySessions session)
+        public async Task<StudySession> UpdateAsync(StudySession session)
         {
             _context.StudySessions.Update(session);
             await _context.SaveChangesAsync();

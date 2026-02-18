@@ -1,4 +1,3 @@
-using Microsoft.EntityFrameworkCore;
 using noava.Data;
 using noava.Models;
 
@@ -13,7 +12,7 @@ namespace noava.Repositories.Cards
             _context = context;
         }
 
-        public async Task<CardInteractions> CreateAsync(CardInteractions interaction)
+        public async Task<CardInteraction> CreateAsync(CardInteraction interaction)
         {
             await _context.CardInteractions.AddAsync(interaction);
             await _context.SaveChangesAsync();

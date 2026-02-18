@@ -38,7 +38,7 @@ namespace noava.Services.StudySessions
             var cards = await _deckRepository.GetByDeckIdAsync(deckId);
             var cardCount = cards.Count;
 
-            var session = new Models.StudySessions
+            var session = new Models.StudySession
             {
                 DeckId = deckId,
                 ClerkId = userId,

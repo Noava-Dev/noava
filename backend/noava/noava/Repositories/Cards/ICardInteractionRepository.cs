@@ -4,6 +4,6 @@ namespace noava.Repositories.Cards
 {
     public interface ICardInteractionRepository
     {
-        Task<CardInteractions> CreateAsync(CardInteractions interaction);
+        Task<CardInteraction> CreateAsync(CardInteraction interaction);
     }
 }

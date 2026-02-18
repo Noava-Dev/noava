@@ -4,11 +4,11 @@ namespace noava.Repositories.StudySessions
 {
     public interface IStudySessionRepository
     {
-        Task<Models.StudySessions?> GetByIdAsync(int sessionId);
-        Task<List<Models.StudySessions>> GetByUserIdAsync(string userId);
-        Task<List<Models.StudySessions>> GetByDeckIdAsync(int deckId);
-        Task<Models.StudySessions> CreateAsync(Models.StudySessions session);
-        Task<Models.StudySessions> UpdateAsync(Models.StudySessions session);
+        Task<StudySession?> GetByIdAsync(int sessionId);
+        Task<List<StudySession>> GetByUserIdAsync(string userId);
+        Task<List<StudySession>> GetByDeckIdAsync(int deckId);
+        Task<StudySession> CreateAsync(StudySession session);
+        Task<StudySession> UpdateAsync(StudySession session);
         Task<bool> DeleteAsync(int sessionId);
     }
 }

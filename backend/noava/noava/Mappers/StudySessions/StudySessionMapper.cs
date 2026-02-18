@@ -4,7 +4,7 @@ namespace noava.Mappers.StudySessions
 {
     public static class StudySessionMapper
     {
-        public static StudySessionResponse ToResponseDto(this Models.StudySessions session)
+        public static StudySessionResponse ToResponseDto(this Models.StudySession session)
         {
             return new StudySessionResponse
             {
@@ -16,7 +16,7 @@ namespace noava.Mappers.StudySessions
             };
         }
 
-        public static List<StudySessionResponse> ToResponseDtoList(this IEnumerable<Models.StudySessions> sessions)
+        public static List<StudySessionResponse> ToResponseDtoList(this IEnumerable<Models.StudySession> sessions)
         {
             return sessions.Select(s => s.ToResponseDto()).ToList();
         }
