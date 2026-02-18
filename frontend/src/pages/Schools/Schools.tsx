@@ -120,7 +120,7 @@ const handleCardClick = (id: number) => {
 if (loading) { 
   return ( 
   <div className="flex items-center justify-center min-h-screen bg-background-app-light dark:bg-background-app-dark">
-    <Loading size="lg" center text="Loading schools..." /> 
+    <Loading size="lg"/> 
   </div> 
   ); 
 }

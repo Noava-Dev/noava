@@ -2,8 +2,11 @@ import { Button } from 'flowbite-react';
 import { LuPlus } from 'react-icons/lu';
 import PageHeader from '../../../shared/components/PageHeader';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 function AdminDashboard() {
+  const { t } = useTranslation('adminDashboard');
+
   return (
     <>
       <header>
@@ -13,7 +16,7 @@ function AdminDashboard() {
               Admin Dashboard
             </h1>
             <p className="text-text-body-light dark:text-text-body-dark">
-              Welcome to the Noava Admin Dashboard
+              Welcome to the Noava Admin Dashboard.
             </p>
           </div>
 

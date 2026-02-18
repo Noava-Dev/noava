@@ -131,7 +131,12 @@ const NotificationPage = () => {
             <div className="container px-4 mx-auto max-w-7xl">
               {notifications.length === 0 ? (
                 <div className="text-center text-text-muted-light dark:text-text-muted-dark">
-                  {t('empty')}
+                  <div className="font-semibold text-lg md:text-xl mb-2">
+                    {t('empty.title')}
+                  </div>
+                  <div>
+                    {t('empty.message')}
+                  </div>
                 </div>
               ) : (
                 <div className="space-y-4">
