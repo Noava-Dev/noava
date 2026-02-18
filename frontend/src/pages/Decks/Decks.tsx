@@ -7,6 +7,7 @@ import {
   Select,
   Dropdown,
   DropdownItem,
+  Tooltip,
 } from 'flowbite-react';
 import { Modal } from 'flowbite-react';
 import { HiPlus, HiPlay, HiPencil, HiRefresh, HiChevronDown } from 'react-icons/hi';
@@ -221,53 +222,63 @@ function DecksPage() {
 
               <div className="flex flex-col gap-3 sm:flex-row">
                 {decks.length > 0 && (
-                  <Dropdown
-                    label=""
-                    dismissOnClick={true}
-                    renderTrigger={() => (
-                      <Button size="lg" className="w-full border-none bg-cyan-500 hover:bg-cyan-600 md:w-fit">
-                        <HiPlay className="w-5 h-5 mr-2" />
-                        {t('bulkReview.button')}
-                        <HiChevronDown className="w-4 h-4 ml-1" />
-                      </Button>
-                    )}
-                  >
-                    <DropdownItem
-                      icon={HiPlay}
-                      onClick={() => setBulkReviewModalOpened(true)}
-                    >
-                      {t('reviewModes.flipMode')}
-                    </DropdownItem>
-                    <DropdownItem
-                      icon={HiPencil}
-                      onClick={() => setBulkWriteReviewModalOpened(true)}
-                    >
-                      {t('reviewModes.writeReview')}
-                    </DropdownItem>
-                    <DropdownItem
-                      icon={HiRefresh}
-                      onClick={() => setBulkReverseReviewModalOpened(true)}
-                    >
-                      {t('reviewModes.reverseReview')}
-                    </DropdownItem>
-                  </Dropdown>
+                  <div className="w-full md:w-fit">
+                    <Tooltip content={t('common:tooltips.bulkReview')}>
+                      <Dropdown
+                        label=""
+                        dismissOnClick={true}
+                        renderTrigger={() => (
+                          <Button size="lg" className="w-full border-none bg-cyan-500 hover:bg-cyan-600 md:w-fit">
+                            <HiPlay className="w-5 h-5 mr-2" />
+                            {t('bulkReview.button')}
+                            <HiChevronDown className="w-4 h-4 ml-1" />
+                          </Button>
+                        )}
+                      >
+                        <DropdownItem
+                          icon={HiPlay}
+                          onClick={() => setBulkReviewModalOpened(true)}
+                        >
+                          {t('reviewModes.flipMode')}
+                        </DropdownItem>
+                        <DropdownItem
+                          icon={HiPencil}
+                          onClick={() => setBulkWriteReviewModalOpened(true)}
+                        >
+                          {t('reviewModes.writeReview')}
+                        </DropdownItem>
+                        <DropdownItem
+                          icon={HiRefresh}
+                          onClick={() => setBulkReverseReviewModalOpened(true)}
+                        >
+                          {t('reviewModes.reverseReview')}
+                        </DropdownItem>
+                      </Dropdown>
+                    </Tooltip>
+                  </div>
                 )}
-                <Button
-                
-                  onClick={() => setJoinCodeModalOpen(true)}
-                  size="lg"
-                  color="gray"
-                  className="w-full border-none md:w-fit">
-                    <TbDoorEnter className="mr-2 size-5" />
-                  {t('joinCode.button')}
-                </Button>
-                <Button
-                  onClick={() => setIsModalOpen(true)}
-                  size="lg"
-                  className="w-full border-none md:w-fit bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800">
-                  <HiPlus className="w-5 h-5 mr-2" />
-                  {t('createButton')}
-                </Button>
+                <div className="w-full md:w-fit">
+                  <Tooltip content={t('common:tooltips.joinDeckByCode')}>
+                    <Button
+                      onClick={() => setJoinCodeModalOpen(true)}
+                      size="lg"
+                      color="gray"
+                      className="w-full border-none md:w-fit">
+                      {t('joinCode.button')}
+                    </Button>
+                  </Tooltip>
+                </div>
+                <div className="w-full md:w-fit">
+                  <Tooltip content={t('common:tooltips.createDeck')}>
+                    <Button
+                      onClick={() => setIsModalOpen(true)}
+                      size="lg"
+                      className="w-full border-none md:w-fit bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800">
+                      <HiPlus className="w-5 h-5 mr-2" />
+                      {t('createButton')}
+                    </Button>
+                  </Tooltip>
+                </div>
               </div>
             </div>
           </div>

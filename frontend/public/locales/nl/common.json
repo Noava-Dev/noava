@@ -97,5 +97,30 @@
       "shared": "Iedereen met de link kan dit deck zien",
       "public": "Iedereen kan dit deck zien"
     }
+  },
+  "tooltips": {
+    "createDeck": "Maak een nieuw flashcard deck aan",
+    "editDeck": "Bewerk deck instellingen",
+    "deleteDeck": "Verwijder dit deck permanent",
+    "joinDeckByCode": "Sluit je aan bij een deck met een uitnodigingscode",
+    "bulkReview": "Begin met het bestuderen van meerdere decks tegelijk",
+    "createFlashcard": "Voeg een nieuwe flashcard toe aan dit deck",
+    "editFlashcard": "Bewerk flashcard inhoud",
+    "deleteFlashcard": "Verwijder deze flashcard",
+    "importCards": "Importeer flashcards vanuit een CSV of Excel bestand",
+    "manageOwners": "Beheer deck eigenaren en gedeelde gebruikers",
+    "createClassroom": "Maak een nieuwe klas aan voor je studenten",
+    "joinClassroom": "Sluit je aan bij een klas met een toegangscode",
+    "addDeckToClassroom": "Voeg een bestaand deck toe aan deze klas",
+    "inviteMember": "Nodig studenten of docenten uit via e-mail",
+    "themeToggle": "Schakel tussen lichte en donkere modus",
+    "voiceAssistant": "Schakel tekst-naar-spraak in voor deze flashcard",
+    "markAsOwner": "Geef volledige eigenaarrechten aan deze gebruiker",
+    "notifications": "Bekijk je meldingen en uitnodigingen",
+    "searchDecks": "Zoek decks op titel, beschrijving of taal",
+    "sortDecks": "Wijzig de volgorde van decks",
+    "deckVisibility": "Bepaal wie dit deck kan zien en gebruiken",
+    "reviewModes": "Kies hoe je deze kaarten wilt bestuderen",
+    "flipCard": "Klik om de flashcard om te draaien"
   }
 }

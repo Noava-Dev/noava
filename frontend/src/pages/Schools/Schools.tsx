@@ -11,6 +11,7 @@ import { useNavigate} from 'react-router-dom';
 import { useUser } from '@clerk/clerk-react';
 import { useUserRole } from '../../hooks/useUserRole';
 import ConfirmModal from '../../shared/components/ConfirmModal';
+import { Tooltip } from 'flowbite-react';
 
 export default function SchoolsPage() {
   const navigate = useNavigate();
@@ -141,16 +142,20 @@ return (
           </div>
 
           {userRole === 'ADMIN' && (
-            <button
-              onClick={() => {
-                setIsModalOpen(true);
-                setEditingSchool(null);
-              }}
-              className="flex items-center justify-center gap-2 rounded-lg bg-primary-500 px-5 py-2.5 text-sm font-semibold text-white hover:bg-primary-600 shadow-md"
-            >
-              <Plus className="size-5" />
-              Add School
-            </button>
+            <div className="w-full md:w-fit">
+              <Tooltip content="Create a new school for your institution">
+                <button
+                  onClick={() => {
+                    setIsModalOpen(true);
+                    setEditingSchool(null);
+                  }}
+                  className="flex items-center justify-center gap-2 rounded-lg bg-primary-500 px-5 py-2.5 text-sm font-semibold text-white hover:bg-primary-600 shadow-md"
+                >
+                  <Plus className="size-5" />
+                  Add School
+                </button>
+              </Tooltip>
+            </div>
           )}
 
         </div>

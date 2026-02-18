@@ -4,7 +4,7 @@ import PageHeader from '../../shared/components/PageHeader';
 import NoavaFooter from '../../shared/components/navigation/NoavaFooter';
 import Loading from '../../shared/components/loading/Loading';
 import { HiArrowLeft } from 'react-icons/hi';
-import { Button } from 'flowbite-react';
+import { Button, Tooltip } from 'flowbite-react';
 import { useClassroomService } from '../../services/ClassroomService';
 import MembersTable from './components/MembersTable';
 import EditMemberModal from './components/EditMemberModal';
@@ -169,12 +169,16 @@ export default function MembersPage() {
 
               {classroom?.permissions?.canEdit && (
                 <div className="flex-shrink-0">
-                  <Button
-                    size="sm"
-                    onClick={() => setShowInvite(true)}
-                    className="inline-flex items-center gap-2">
-                    {t('common:actions.invite', 'Invite')}
-                  </Button>
+                  <div className="w-full md:w-fit">
+                    <Tooltip content={t('common:tooltips.inviteMember')}>
+                      <Button
+                        size="sm"
+                        onClick={() => setShowInvite(true)}
+                        className="inline-flex items-center gap-2">
+                        {t('common:actions.invite', 'Invite')}
+                      </Button>
+                    </Tooltip>
+                  </div>
                 </div>
               )}
             </div>

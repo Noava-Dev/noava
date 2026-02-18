@@ -119,8 +119,16 @@ function ImportCardsModal({
               </div>
             </div>
             {/* Actions */}
-            <div className="flex gap-3 pt-6">
-              <Button type="submit" className="flex-1" disabled={uploading}>
+            <div className="flex flex-col-reverse gap-3 pt-6 sm:flex-row">
+              <Button
+                color="gray"
+                onClick={onClose}
+                disabled={uploading}
+                type="button"
+                className="w-full sm:w-auto">
+                {t('common:actions.cancel')}
+              </Button>
+              <Button type="submit" className="w-full sm:flex-1" disabled={uploading}>
                 {uploading ? (
                   <>
                     <HiUpload className="mr-2 size-5 animate-spin" />
@@ -129,13 +137,6 @@ function ImportCardsModal({
                 ) : (
                   'Upload'
                 )}
-              </Button>
-              <Button
-                color="gray"
-                onClick={onClose}
-                disabled={uploading}
-                type="button">
-                {t('common:actions.cancel')}
               </Button>
             </div>
           </form>
