@@ -24,6 +24,7 @@ import type { Deck, DeckRequest } from '../../models/Deck';
 import Skeleton from '../../shared/components/loading/Skeleton';
 import EmptyState from '../../shared/components/EmptyState';
 import { useUser } from '@clerk/clerk-react';
+import ConfirmModal from '../../shared/components/ConfirmModal';
 import { TbDoorEnter } from 'react-icons/tb';
 
 function DecksPage() {
@@ -46,6 +47,9 @@ function DecksPage() {
   const [joinCodeModalOpen, setJoinCodeModalOpen] = useState(false);
   const [joinCode, setJoinCode] = useState('');
   const [joiningDeck, setJoiningDeck] = useState(false);
+  const [copyModalOpened, setCopyModalOpened] = useState(false);
+  const [deckToCopy, setDeckToCopy] = useState<number | null>(null);
+  const [isCopying, setIsCopying] = useState(false);
 
   useEffect(() => {
     fetchDecks();
@@ -62,6 +66,29 @@ function DecksPage() {
       showError(t('toast.loadError'), 'Error');
     } finally {
       setLoading(false);
+    }
+  };
+
+    const handleCopy = (deckId: number) => {
+    setDeckToCopy(deckId)
+    setCopyModalOpened(true);
+  };
+
+  const handleConfirmCopy = async () => {
+    if (!deckToCopy) return;
+
+    setIsCopying(true);
+
+    try {
+      await deckService.copy(deckToCopy);
+      showSuccess(t('decks:copySuccess'), t('common:toast.success'));
+      await fetchDecks();
+    } catch (error) {
+      showError(t('common:toast.error'), t('decks:copyError'));
+    } finally {
+      setIsCopying(false);
+      setCopyModalOpened(false);
+      setDeckToCopy(null);
     }
   };
 
@@ -297,6 +324,7 @@ function DecksPage() {
                         <DeckCard
                           key={deck.deckId}
                           deck={deck}
+                          onCopy={handleCopy}
                           onEdit={handleEdit}
                           onDelete={handleDelete}
                         />
@@ -316,6 +344,7 @@ function DecksPage() {
                         <DeckCard
                           key={deck.deckId}
                           deck={deck}
+                          onCopy={handleCopy}
                           onEdit={handleEdit}
                           onDelete={handleDelete}
                         />
@@ -435,6 +464,18 @@ function DecksPage() {
             </div>
           </ModalFooter>
         </Modal>
+
+                {/* Confirm Copy Modal */}
+                <ConfirmModal
+                  show={copyModalOpened}
+                  title={t('copy.title')}
+                  message={t('copy.message')}
+                  confirmLabel={isCopying ? t('common:actions.copying') : t('common:actions.copy')}
+                  cancelLabel={t('common:actions.cancel')}
+                  confirmColor="green"
+                  onConfirm={handleConfirmCopy}
+                  onCancel={() => setCopyModalOpened(false)}
+                />
 
         <NoavaFooter />
       </div>

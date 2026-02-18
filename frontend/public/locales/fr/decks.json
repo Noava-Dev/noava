@@ -126,5 +126,9 @@
     "success": "Invitation envoyée avec succès",
     "error": "Échec de l'envoi de l'invitation",
     "invalidEmail": "Veuillez entrer une adresse e-mail valide"
+  },
+  "copy": {
+    "title": "Copier le deck",
+    "message": "Êtes-vous sûr de vouloir copier ce deck ? Cela peut prendre un certain temps."
   }
 }

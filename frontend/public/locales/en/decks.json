@@ -126,5 +126,9 @@
     "success": "Invitation sent successfully",
     "error": "Failed to send invitation",
     "invalidEmail": "Please enter a valid email address"
+  },
+  "copy": {
+    "title": "Copy Deck",
+    "message": "Are you sure you want to copy this deck? This may take a while."
   }
 }

@@ -1,5 +1,5 @@
 import { Dropdown, DropdownItem, DropdownDivider, Badge } from 'flowbite-react';
-import { HiDotsVertical, HiPencil, HiTrash } from 'react-icons/hi';
+import { HiClipboardCopy, HiDotsVertical, HiPencil, HiTrash } from 'react-icons/hi';
 import { useTranslation } from 'react-i18next';
 import { useState, useEffect } from 'react';
 import { useAzureBlobService } from '../../services/AzureBlobService';
@@ -12,6 +12,7 @@ import {
 
 interface DeckCardProps {
   deck: Deck;
+  onCopy: (deckId: number) => void;
   onEdit?: (deck: Deck) => void;
   onDelete?: (deckId: number) => void;
   onView?: (deckId: number) => void;  
@@ -20,6 +21,7 @@ interface DeckCardProps {
 
 function DeckCard({ 
   deck, 
+  onCopy,
   onEdit, 
   onDelete, 
   onView,  
@@ -95,6 +97,10 @@ function DeckCard({
                 <HiDotsVertical className="w-4 h-4 text-white sm:h-5 sm:w-5" />
               </button>
             )}>
+                {/* Copy deck */}
+                <DropdownItem icon={HiClipboardCopy} onClick={() => onCopy(deck.deckId)}>
+                  {t('common:actions.copy')}
+                </DropdownItem>
             {/* Only show edit if showEdit is true */}
             {showEdit && onEdit && (
               <>
