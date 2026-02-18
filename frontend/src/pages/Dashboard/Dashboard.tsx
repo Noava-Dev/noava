@@ -48,7 +48,7 @@ function Dashboard() {
 
       setDecks(data);
     } catch (error) {
-      showError(t('toast.loadError'), t('toast.loadError'));
+      showError(t('toast.loadError'), 'Error');
     } finally {
       setLoading(false);
     }
@@ -64,12 +64,12 @@ function Dashboard() {
 
     try {
       await deckService.update(editingDeck.deckId, deckData);
-      showSuccess(t('toast.updateSuccess'), t('toast.updateSuccess'));
+      showSuccess('Success', t('toast.updateSuccess'));
       setIsModalOpen(false);
       setEditingDeck(undefined);
       fetchDecks();
     } catch (error) {
-      showError(t('toast.updateError'), t('toast.updateError'));
+      showError(t('toast.updateError'), 'Error');
     }
   };
 
@@ -82,10 +82,10 @@ function Dashboard() {
 
     try {
       await deckService.delete(deleteDeckId);
-      showSuccess(t('toast.deleteSuccess'), t('toast.deleteSuccess'));
+      showSuccess('Success', t('toast.deleteSuccess'));
       fetchDecks();
     } catch (error) {
-      showError(t('toast.deleteError'), t('toast.deleteError'));
+      showError(t('toast.deleteError'), 'Error');
     } finally {
       setDeleteDeckId(null);
     }

@@ -13,7 +13,7 @@ import type {
   ClassroomResponse,
   ClassroomRequest,
 } from '../../models/Classroom';
-import { useToast } from '../../contexts/ToastContext';
+import FormErrorMessage from './validation/FormErrorMessage';
 
 interface ClassroomModalProps {
   isOpen: boolean;
@@ -28,11 +28,11 @@ function ClassroomModal({
   onSubmit,
   classroom,
 }: ClassroomModalProps) {
-  const { t } = useTranslation('classrooms');
-  const { showError } = useToast();
+  const { t } = useTranslation(['classrooms', 'errors']);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [joinCode, setJoinCode] = useState('');
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   useEffect(() => {
     if (classroom) {
@@ -48,8 +48,22 @@ function ClassroomModal({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name || !description)
-      return showError(t('app.error'), t('toast.nameAndDescriptionRequired'));
+    
+    const newErrors: { [key: string]: string } = {};
+
+    if (!name.trim()) {
+      newErrors.name = t('errors:validation.name.required');
+    }
+
+    if (!description.trim()) {
+      newErrors.description = t('errors:validation.description.required');
+    }
+
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length > 0) {
+      return;
+    }
 
     onSubmit({ name, description });
   };
@@ -72,7 +86,7 @@ function ClassroomModal({
 
         {/* Body */}
         <ModalBody>
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} noValidate className="space-y-4">
             <div className="flex flex-col gap-2">
               <Label htmlFor="name">{t('modal.nameLabel')} *</Label>
               <TextInput
@@ -81,6 +95,7 @@ function ClassroomModal({
                 onChange={(e) => setName(e.target.value)}
                 required
               />
+              {errors.name && <FormErrorMessage text={errors.name} />}
             </div>
 
             <div className="flex flex-col gap-2">
@@ -92,6 +107,7 @@ function ClassroomModal({
                 onChange={(e) => setDescription(e.target.value)}
                 required
               />
+              {errors.description && <FormErrorMessage text={errors.description} />}
             </div>
 
             <div className="flex gap-3 pt-4">

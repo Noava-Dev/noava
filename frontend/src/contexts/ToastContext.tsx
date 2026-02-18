@@ -11,11 +11,11 @@ interface ToastData {
 }
 
 interface ToastContextType {
-  showSuccess: (message: string, title: string) => void;
-  showError: (message: string, title: string) => void;
-  showWarning: (message: string, title: string) => void;
-  showInfo: (message: string, title: string) => void;
-  showToast: (type: ToastType, message: string, title: string) => void;
+  showSuccess: (title: string, message: string) => void;
+  showError: (title: string, message: string) => void;
+  showWarning: (title: string, message: string) => void;
+  showInfo: (title: string, message: string) => void;
+  showToast: (type: ToastType, title: string, message: string) => void;
 }
 
 const ToastContext = createContext<ToastContextType | undefined>(undefined);
@@ -23,15 +23,15 @@ const ToastContext = createContext<ToastContextType | undefined>(undefined);
 export function ToastProvider({ children }: { children: ReactNode }) {
   const [toast, setToast] = useState<ToastData | null>(null);
 
-  const showToast = (type: ToastType, message: string, title: string) => {
+  const showToast = (type: ToastType, title: string, message: string) => {
     setToast({ type, message, title });
     setTimeout(() => setToast(null), 4000); // Auto-hide after 4 seconds
   };
 
-  const showSuccess = (message: string, title: string) => showToast('success', message, title);
-  const showError = (message: string, title: string) => showToast('error', message, title);
-  const showWarning = (message: string, title: string) => showToast('warning', message, title);
-  const showInfo = (message: string, title: string) => showToast('info', message, title);
+  const showSuccess = (title: string, message: string) => showToast('success', title, message);
+  const showError = (title: string, message: string) => showToast('error', title, message);
+  const showWarning = (title: string, message: string) => showToast('warning', title, message);
+  const showInfo = (title: string, message: string) => showToast('info', title, message);
 
   return (
     <ToastContext.Provider value={{ showSuccess, showError, showWarning, showInfo, showToast }}>

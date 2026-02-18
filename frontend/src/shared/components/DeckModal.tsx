@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { HiUpload } from 'react-icons/hi';
 import { DeckVisibility, Deck, DeckRequest } from '../../models/Deck';
 import { useAzureBlobService } from '../../services/AzureBlobService';
-import { useToast } from '../../contexts/ToastContext';
+import FormErrorMessage from './validation/FormErrorMessage';
 interface DeckModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -23,7 +23,7 @@ interface DeckModalProps {
 }
 
 function DeckModal({ isOpen, onClose, onSubmit, deck }: DeckModalProps) {
-  const { t } = useTranslation('decks');
+  const { t } = useTranslation(['decks', 'errors']);
   const azureBlobService = useAzureBlobService();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -37,7 +37,7 @@ function DeckModal({ isOpen, onClose, onSubmit, deck }: DeckModalProps) {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
-  const { showError } = useToast();
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   useEffect(() => {
     if (deck) {
@@ -80,15 +80,21 @@ function DeckModal({ isOpen, onClose, onSubmit, deck }: DeckModalProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    const newErrors: { [key: string]: string } = {};
 
     // Validation
     if (!title.trim()) {
-      showError(t('toast.error'), t('modal.titleRequired'));
-      return;
+      newErrors.title = t('errors:validation.title.required');
     }
 
     if (!language) {
-      showError(t('toast.error'), t('modal.languageRequired'));
+      newErrors.language = t('errors:validation.language.required');
+    }
+
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length > 0) {
       return;
     }
 
@@ -129,7 +135,7 @@ function DeckModal({ isOpen, onClose, onSubmit, deck }: DeckModalProps) {
       setImagePreview(null);
       setImageFile(null);
     } catch (error) {
-      showError(t('toast.uploadError'), t('toast.uploadError'));
+      showError(t('toast.uploadError'), 'Error');
     } finally {
       setUploading(false);
     }
@@ -139,8 +145,6 @@ function DeckModal({ isOpen, onClose, onSubmit, deck }: DeckModalProps) {
     switch (visibility) {
       case DeckVisibility.Private:
         return t('common:visibility.visibilityHelp.private');
-      case DeckVisibility.Shared:
-        return t('common:visibility.visibilityHelp.shared');
       case DeckVisibility.Public:
         return t('common:visibility.visibilityHelp.public');
     }
@@ -163,7 +167,7 @@ function DeckModal({ isOpen, onClose, onSubmit, deck }: DeckModalProps) {
         </ModalHeader>
         {/* Body */}
         <ModalBody>
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} noValidate className="space-y-4">
             {/* Title */}
             <div className="flex flex-col gap-2">
               <Label htmlFor="title">{t('modal.titleLabel')} *</Label>
@@ -176,6 +180,7 @@ function DeckModal({ isOpen, onClose, onSubmit, deck }: DeckModalProps) {
                 required
                 disabled={uploading}
               />
+              {errors.title && <FormErrorMessage text={errors.title} />}
             </div>
 
             {/* Language */}
@@ -207,6 +212,7 @@ function DeckModal({ isOpen, onClose, onSubmit, deck }: DeckModalProps) {
                   {t('languages.italian')}
                 </option>
               </Select>
+              {errors.language && <FormErrorMessage text={errors.language} />}
             </div>
 
             {/* Description */}
@@ -263,9 +269,6 @@ function DeckModal({ isOpen, onClose, onSubmit, deck }: DeckModalProps) {
                 <option value={DeckVisibility.Private}>
                   {t('common:visibility.private')}
                 </option>
-                <option value={DeckVisibility.Shared}>
-                  {t('common:visibility.shared')}
-                </option>
                 <option value={DeckVisibility.Public}>
                   {t('common:visibility.public')}
                 </option>
@@ -305,3 +308,7 @@ function DeckModal({ isOpen, onClose, onSubmit, deck }: DeckModalProps) {
 }
 
 export default DeckModal;
+function showError(arg0: string, arg1: string) {
+  throw new Error('Function not implemented.');
+}
+
