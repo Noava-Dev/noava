@@ -375,11 +375,10 @@ function LongTermFlipReview() {
               </div>
 
               {/* Back*/}
-              {isFlipped && (
-                <div 
-                  className="absolute inset-0 backface-hidden rotate-y-180"
-                  style={{ transform: 'rotateY(180deg) translateZ(1px)' }}>
-                  <div className="relative flex flex-col items-center justify-center w-full h-full p-8 antialiased bg-background-surface-light border-2 border-gray-200 shadow-xl dark:bg-background-surface-dark rounded-2xl dark:border-gray-700">
+              <div 
+                className="absolute inset-0 backface-hidden rotate-y-180"
+                style={{ transform: 'rotateY(180deg) translateZ(1px)' }}>
+                <div className="relative flex flex-col items-center justify-center w-full h-full p-8 antialiased bg-background-surface-light border-2 border-gray-200 shadow-xl dark:bg-background-surface-dark rounded-2xl dark:border-gray-700">
                     {shouldShowAudioButton('back') && (
                       <button
                         onClick={(e) => handlePlayAudio('back', e)}
@@ -415,7 +414,6 @@ function LongTermFlipReview() {
                     </div>
                   </div>
                 </div>
-              )}
             </div>
           </div>
 
