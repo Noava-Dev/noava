@@ -94,14 +94,14 @@ function ClassroomModal({
               />
             </div>
 
-            <div className="flex gap-3 pt-4">
-              <Button type="submit" className="flex-1">
+            <div className="flex flex-col-reverse gap-3 pt-4 sm:flex-row">
+              <Button color="gray" onClick={onClose} type="button" className="w-full sm:w-auto">
+                {t('common:actions.cancel')}
+              </Button>
+              <Button type="submit" className="w-full sm:flex-1">
                 {classroom
                   ? t('common:actions.update')
                   : t('common:actions.create')}
-              </Button>
-              <Button color="gray" onClick={onClose} type="button">
-                {t('common:actions.cancel')}
               </Button>
             </div>
           </form>

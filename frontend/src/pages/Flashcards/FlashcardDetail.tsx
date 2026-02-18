@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { Button, Dropdown, DropdownItem } from 'flowbite-react';
+import { Button, Dropdown, DropdownItem, Tooltip } from 'flowbite-react';
 import {
   HiPlus,
   HiPlay,
@@ -321,19 +321,23 @@ function FlashcardDetail() {
                 {/* Create/Import cards button - only for owners/creator */}
                 {/* Create/Import cards button */}
                 {canEdit && (
-                <DropdownButton
-                  size="lg"
-                  onClickMain={() => {
-                    setSelectedFlashcard(undefined);
-                    setIsModalOpen(true);
-                  }}
-                  icon={HiPlus}
-                  text={t('flashcardDetail.addCard')}
-                  className="w-full">
-                  <DropdownItem onClick={() => setShowImportModal(true)}>
-                    {t('flashcardDetail.importFromFile')}
-                  </DropdownItem>
-                </DropdownButton>
+                <Tooltip content={t('common:tooltips.createFlashcard')}>
+                  <DropdownButton
+                    size="lg"
+                    onClickMain={() => {
+                      setSelectedFlashcard(undefined);
+                      setIsModalOpen(true);
+                    }}
+                    icon={HiPlus}
+                    text={t('flashcardDetail.addCard')}
+                    className="w-full">
+                    <Tooltip content={t('common:tooltips.importCards')} placement="left">
+                      <DropdownItem onClick={() => setShowImportModal(true)}>
+                        {t('flashcardDetail.importFromFile')}
+                      </DropdownItem>
+                    </Tooltip>
+                  </DropdownButton>
+                </Tooltip>
                 )}
 
                 {/* Study Now */}
@@ -343,45 +347,49 @@ function FlashcardDetail() {
                   {t('flashcardDetail.studyNow')}
                 </Button>
 
-                <Dropdown
-                  label=""
-                  dismissOnClick={true}
-                  renderTrigger={() => (
-                    <Button size="lg" className="bg-cyan-500 hover:bg-cyan-600" disabled={totalCards === 0}>
-                      <HiPlay className="w-5 h-5 mr-2" />
-                      {t('flashcardDetail.quickReview')}
-                      <HiChevronDown className="w-4 h-4 ml-1" />
-                    </Button>
-                  )}>
-                  <DropdownItem
-                    icon={HiPlay}
-                    onClick={() => navigate(`/decks/${deckId}/quickReview`)}>
-                    {t('flashcardDetail.flipMode')}
-                  </DropdownItem>
-                  <DropdownItem
-                    icon={HiPencil}
-                    onClick={() => navigate(`/decks/${deckId}/writeReview`)}>
-                    {t('flashcardDetail.writeReview')}
-                  </DropdownItem>
-                  <DropdownItem
-                    icon={HiRefresh}
-                    onClick={() => navigate(`/decks/${deckId}/reverseReview`)}>
-                    {t('flashcardDetail.reverseReview')}
-                  </DropdownItem>
-                </Dropdown>
+                <Tooltip content={t('common:tooltips.reviewModes')}>
+                  <Dropdown
+                    label=""
+                    dismissOnClick={true}
+                    renderTrigger={() => (
+                      <Button size="lg" className="bg-cyan-500 hover:bg-cyan-600" disabled={totalCards === 0}>
+                        <HiPlay className="w-5 h-5 mr-2" />
+                        {t('flashcardDetail.quickReview')}
+                        <HiChevronDown className="w-4 h-4 ml-1" />
+                      </Button>
+                    )}>
+                    <DropdownItem
+                      icon={HiPlay}
+                      onClick={() => navigate(`/decks/${deckId}/quickReview`)}>
+                      {t('flashcardDetail.flipMode')}
+                    </DropdownItem>
+                    <DropdownItem
+                      icon={HiPencil}
+                      onClick={() => navigate(`/decks/${deckId}/writeReview`)}>
+                      {t('flashcardDetail.writeReview')}
+                    </DropdownItem>
+                    <DropdownItem
+                      icon={HiRefresh}
+                      onClick={() => navigate(`/decks/${deckId}/reverseReview`)}>
+                      {t('flashcardDetail.reverseReview')}
+                    </DropdownItem>
+                  </Dropdown>
+                </Tooltip>
               </div>
 
        
               {/*  Only show Manage Access button for creator */}
               {isCreator && (
                 <div className="grid grid-cols-1 gap-3 md:block">
-                  <Button
-                    size="lg"
-                    className="bg-gradient-to-r from-secondary-600 to-secondary-700 hover:shadow-sm hover:border-border"
-                    onClick={() => setManageOwnersOpened(true)}>
-                    <HiUserGroup className="mr-2 size-5" />
-                    {t('decks:ownership.manageAccess')}
-                  </Button>
+                  <Tooltip content={t('common:tooltips.manageOwners')}>
+                    <Button
+                      size="lg"
+                      className="bg-gradient-to-r from-secondary-600 to-secondary-700 hover:shadow-sm hover:border-border"
+                      onClick={() => setManageOwnersOpened(true)}>
+                      <HiUserGroup className="mr-2 size-5" />
+                      {t('decks:ownership.manageAccess')}
+                    </Button>
+                  </Tooltip>
                 </div>
               )}
             </div>

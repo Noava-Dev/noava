@@ -3,14 +3,14 @@ import {
   Modal,
   ModalHeader,
   ModalBody,
-  ModalFooter,
   Button,
   Label,
   TextInput,
   Checkbox,
+  Tooltip,
 } from 'flowbite-react';
 import { useTranslation } from 'react-i18next';
-import { useDeckInvitationService } from '../../services/DeckInvitationService';
+
 
 interface InviteUserModalProps {
   isOpen: boolean;
@@ -24,16 +24,12 @@ export const InviteUserModal = ({
   isOpen,
   onClose,
   onInvite,
-  itemType,
   itemName,
-  deckId,
-  deckTitle,
 }: InviteUserModalProps) => {
   const { t } = useTranslation(['decks', 'common']);
   const [email, setEmail] = useState('');
   const [isOwner, setIsOwner] = useState(false);
-  const deckInvitationService = useDeckInvitationService();
-  const [userId, setUserId] = useState('');
+
 
   const [loading, setLoading] = useState(false);
 
@@ -78,26 +74,28 @@ export const InviteUserModal = ({
           </div>
 
           <div className="space-y-2">
-            <div className="flex items-center gap-2">
-              <Checkbox
-                id="isOwner"
-                checked={isOwner}
-                onChange={(e) => setIsOwner(e.target.checked)}
-              />
-              <Label htmlFor="isOwner" className="font-medium">
-                {t('decks:invite.ownerLabel')}
-              </Label>
-            </div>
+            <Tooltip content={t('common:tooltips.markAsOwner')}>
+              <div className="flex items-center gap-2">
+                <Checkbox
+                  id="isOwner"
+                  checked={isOwner}
+                  onChange={(e) => setIsOwner(e.target.checked)}
+                />
+                <Label htmlFor="isOwner" className="font-medium">
+                  {t('decks:invite.ownerLabel')}
+                </Label>
+              </div>
+            </Tooltip>
             <p className="text-xs text-gray-500 dark:text-gray-400 ml-6">
               {t('decks:invite.ownerHelp')}
             </p>
           </div>
 
-          <div className="flex justify-end gap-2 pt-4">
-            <Button color="gray" onClick={handleClose} disabled={loading} type="button">
+          <div className="flex flex-col-reverse gap-2 pt-4 sm:flex-row sm:justify-end">
+            <Button color="gray" onClick={handleClose} disabled={loading} type="button" className="w-full sm:w-auto">
               {t('common:actions.cancel')}
             </Button>
-            <Button type="submit" disabled={loading}>
+            <Button type="submit" disabled={loading} className="w-full sm:w-auto">
               {loading ? t('decks:invite.inviting') : t('decks:invite.inviteButton')}
             </Button>
           </div>

@@ -3,7 +3,7 @@ import { HiDotsVertical, HiPencil, HiTrash } from 'react-icons/hi';
 import { useTranslation } from 'react-i18next';
 import { useState, useEffect } from 'react';
 import { useAzureBlobService } from '../../services/AzureBlobService';
-import type { Deck } from '../../models/Deck';
+import type { Deck, DeckVisibility } from '../../models/Deck';
 import { useNavigate } from 'react-router-dom';
 import {
   getVisibilityLabel,
@@ -123,8 +123,8 @@ function DeckCard({
             <span className="px-2 py-1 text-xs font-medium tracking-wide text-white uppercase border rounded-full bg-white/20 backdrop-blur-md sm:px-3 border-white/30">
               {deck.language}
             </span>
-            <Badge color={getVisibilityBadgeColor(deck.visibility)}>
-              {getVisibilityLabel(deck.visibility, t)}
+            <Badge color={getVisibilityBadgeColor(deck.visibility as DeckVisibility)}>
+              {getVisibilityLabel(deck.visibility as DeckVisibility, t)}
             </Badge>
           </div>
           <h3 className="mb-1 text-lg font-bold text-white sm:text-xl md:text-2xl sm:mb-2 drop-shadow-lg line-clamp-2">

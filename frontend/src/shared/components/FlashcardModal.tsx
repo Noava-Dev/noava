@@ -9,6 +9,7 @@ import {
   ModalBody,
   Modal,
   HelperText,
+  Tooltip,
 } from 'flowbite-react';
 import { useState, useEffect, useRef } from 'react';
 import { HiUpload, HiVolumeUp, HiPhotograph } from 'react-icons/hi';
@@ -523,28 +524,30 @@ function FlashcardModal({
                 </div>
 
                {/* Voice Assistant Toggle */}
-                <div className="p-4 rounded-lg border border-border dark:border-border-dark bg-background-subtle-light dark:bg-background-subtle-dark">
-                  <label className="flex items-start gap-3 cursor-pointer">
-                    <Checkbox
-                      id="voiceAssistant"
-                      checked={hasVoiceAssistant}
-                      onChange={(e) => setHasVoiceAssistant(e.target.checked)}
-                      disabled={uploading}
-                      className="mt-1"
-                    />
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2">
-                        <HiVolumeUp className="w-4 h-4 text-primary-600 dark:text-primary-400" />
-                        <span className="text-sm font-medium text-text-title-light dark:text-text-title-dark">
-                          {t('flashcardModal.enableVoiceAssistant')}
-                        </span>
+                <Tooltip content={t('common:tooltips.voiceAssistant')}>
+                  <div className="p-4 rounded-lg border border-border dark:border-border-dark bg-background-subtle-light dark:bg-background-subtle-dark">
+                    <label className="flex items-start gap-3 cursor-pointer">
+                      <Checkbox
+                        id="voiceAssistant"
+                        checked={hasVoiceAssistant}
+                        onChange={(e) => setHasVoiceAssistant(e.target.checked)}
+                        disabled={uploading}
+                        className="mt-1"
+                      />
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2">
+                          <HiVolumeUp className="w-4 h-4 text-primary-600 dark:text-primary-400" />
+                          <span className="text-sm font-medium text-text-title-light dark:text-text-title-dark">
+                            {t('flashcardModal.enableVoiceAssistant')}
+                          </span>
+                        </div>
+                        <p className="mt-1 text-xs text-text-muted-light dark:text-text-muted-dark">
+                          {t('flashcardModal.voiceAssistantHelp')}
+                        </p>
                       </div>
-                      <p className="mt-1 text-xs text-text-muted-light dark:text-text-muted-dark">
-                        {t('flashcardModal.voiceAssistantHelp')}
-                      </p>
-                    </div>
-                  </label>
-                </div>
+                    </label>
+                  </div>
+                </Tooltip>
               </div>
 
             )}
@@ -713,8 +716,16 @@ function FlashcardModal({
                   Create more
                 </Label>
               </div>
-              <div className="flex gap-3 pt-4">
-                <Button type="submit" className="flex-1" disabled={uploading}>
+              <div className="flex flex-col-reverse gap-3 pt-4 sm:flex-row">
+                <Button
+                  color="gray"
+                  onClick={onClose}
+                  disabled={uploading}
+                  type="button"
+                  className="w-full sm:w-auto">
+                  {t('common:actions.cancel')}
+                </Button>
+                <Button type="submit" className="w-full sm:flex-1" disabled={uploading}>
                   {uploading ? (
                     <>
                       <HiUpload className="mr-2 size-5 animate-spin" />
@@ -725,13 +736,6 @@ function FlashcardModal({
                   ) : (
                     t('flashcardModal.createButton')
                   )}
-                </Button>
-                <Button
-                  color="gray"
-                  onClick={onClose}
-                  disabled={uploading}
-                  type="button">
-                  {t('common:actions.cancel')}
                 </Button>
               </div>
             </div>

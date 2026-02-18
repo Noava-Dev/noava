@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Button, Dropdown, DropdownItem } from 'flowbite-react';
+import { Button, Dropdown, DropdownItem, Tooltip } from 'flowbite-react';
 import { useTranslation } from 'react-i18next';
 import { HiPlus, HiPlay, HiPencil, HiRefresh, HiChevronDown } from 'react-icons/hi';
 import PageHeader from '../../shared/components/PageHeader';
@@ -215,14 +215,16 @@ return (
                     >
                       {t('members.title')}
                     </Button>
-                    <Button
-                      size="lg"
-                      className="w-full md:w-fit"
-                      onClick={() => setAddDeckModalOpened(true)}
-                    >
-                      <HiPlus className="w-5 h-5 mr-2" />
-                      {t('decks.addDeck')}
-                    </Button>
+                    <Tooltip content={t('common:tooltips.addDeckToClassroom')}>
+                      <Button
+                        size="lg"
+                        className="w-full md:w-fit"
+                        onClick={() => setAddDeckModalOpened(true)}
+                      >
+                        <HiPlus className="w-5 h-5 mr-2" />
+                        {t('decks.addDeck')}
+                      </Button>
+                    </Tooltip>
                   </>
                 )}
               </div>

@@ -148,11 +148,14 @@ return (
             </div>
 
             {/* Action Buttons */}
-            <div className="flex justify-end gap-3 pt-2">
+            <div className="flex flex-col-reverse gap-3 pt-2 sm:flex-row sm:justify-end">
+                <Button className="bg-primary-500 w-full sm:w-auto" onClick={onClose} disabled={loading}>
+                    Cancel
+                </Button>
               <Button 
                     type="submit" 
                     disabled={loading || !name.trim()}
-                    className="bg-primary-400"
+                    className="bg-primary-400 w-full sm:w-auto"
                 >
                 {loading ? (
                     <>
@@ -166,11 +169,6 @@ return (
                 )
               }
                 </Button>
-                <Button className="bg-primary-500" onClick={onClose} disabled={loading}>
-                    Cancel
-                </Button>
-                
-                
             </div>
             
             </form>

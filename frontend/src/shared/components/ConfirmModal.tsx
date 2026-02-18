@@ -49,11 +49,11 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
         )}
       </ModalBody>
       <ModalFooter>
-        <div className="flex justify-end w-full gap-3">
-          <Button color={cancelColor as any} onClick={onCancel} size="sm">
+        <div className="flex flex-col-reverse w-full gap-3 sm:flex-row sm:justify-end">
+          <Button color={cancelColor as any} onClick={onCancel} size="sm" className="w-full sm:w-auto">
             {cancelText}
           </Button>
-          <Button color={confirmColor as any} onClick={onConfirm} size="sm">
+          <Button color={confirmColor as any} onClick={onConfirm} size="sm" className="w-full sm:w-auto">
             {confirmText}
           </Button>
         </div>

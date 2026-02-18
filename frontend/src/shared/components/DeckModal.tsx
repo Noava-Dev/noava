@@ -44,8 +44,8 @@ function DeckModal({ isOpen, onClose, onSubmit, deck }: DeckModalProps) {
       setTitle(deck.title);
       setDescription(deck.description || '');
       setLanguage(deck.language || '');
-      setVisibility(deck.visibility);
-      setCoverImageBlobName(deck.coverImageBlobName);
+      setVisibility(deck.visibility as DeckVisibility);
+      setCoverImageBlobName(deck.coverImageBlobName ?? undefined);
 
       if (deck.coverImageBlobName) {
         azureBlobService
@@ -276,8 +276,16 @@ function DeckModal({ isOpen, onClose, onSubmit, deck }: DeckModalProps) {
             </div>
 
             {/* Actions */}
-            <div className="flex gap-3 pt-4">
-              <Button type="submit" className="flex-1" disabled={uploading}>
+            <div className="flex flex-col-reverse gap-3 pt-4 sm:flex-row">
+              <Button
+                color="gray"
+                onClick={onClose}
+                disabled={uploading}
+                type="button"
+                className="w-full sm:w-auto">
+                {t('common:actions.cancel')}
+              </Button>
+              <Button type="submit" className="w-full sm:flex-1" disabled={uploading}>
                 {uploading ? (
                   <>
                     <HiUpload className="mr-2 size-5 animate-spin" />
@@ -288,13 +296,6 @@ function DeckModal({ isOpen, onClose, onSubmit, deck }: DeckModalProps) {
                 ) : (
                   t('modal.createButton')
                 )}
-              </Button>
-              <Button
-                color="gray"
-                onClick={onClose}
-                disabled={uploading}
-                type="button">
-                {t('common:actions.cancel')}
               </Button>
             </div>
           </form>
