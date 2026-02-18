@@ -88,5 +88,10 @@ export const useDeckService = () => {
           );
           return response.data;
         },
+
+        async copy(deckId: number): Promise<Deck> {
+          const response = await api.post<Deck>(`/deck/${deckId}/copy`,);
+          return response.data;
+        },
       };
 };

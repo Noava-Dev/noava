@@ -44,7 +44,9 @@
     "show": "Show",
     "back": "Back",
     "uploading": "Uploading...",
-    "done": "Done"
+    "done": "Done",
+    "copy": "Copy",
+    "copying": "Copying..."
   },
   "validation": {
     "required": "This field is required",

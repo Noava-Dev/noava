@@ -18,10 +18,10 @@ function NoavaFooter() {
         <div className="flex flex-col items-center w-full gap-4 lg:flex-row lg:justify-between lg:items-center">
           <FooterBrand href="/" src={Logo} alt="Noava Logo" name="Noava" className="flex-shrink-0" />
           <FooterLinkGroup className="flex flex-wrap justify-center gap-4 sm:gap-6">
-            <NavigationLink href="/about" text="About" />
+            <NavigationLink href="/guidelines" text="Guidelines" />
             <NavigationLink href="/privacy" text="Privacy Policy" />
-            <NavigationLink href="/licensing" text="Licensing" />
-            <NavigationLink href="/contact" text="Contact" />
+            <NavigationLink href="/terms-of-service" text="Terms of Service" />
+            <NavigationLink href="/copyright" text="Copyright" />
           </FooterLinkGroup>
           <div className="flex-shrink-0">
             <ThemeButton />

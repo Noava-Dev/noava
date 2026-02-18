@@ -44,7 +44,9 @@
     "show": "Afficher",
     "back": "Retour",
     "uploading": "Téléchargement en cours...",
-    "done": "Terminé"
+    "done": "Terminé",
+    "copy": "Copier",
+    "copying": "Copie en cours..."
   },
   "validation": {
     "required": "Ce champ est requis",

@@ -40,7 +40,7 @@ export default function SchoolsPage() {
         setSchools(filteredSchools)
       }
     } catch (error) {
-      showError('Error loading schools', 'Please check your connection.');
+      showError('Error', 'Failed to load schools. Please check your connection.');
     } finally {
       setLoading(false);
     }
@@ -63,7 +63,7 @@ const handleCreateSchool = async (data: {
           schoolAdminEmails: data.adminEmails
         })
 
-        showSuccess( "School updated", `${data.name} was updated successfully.` );
+        showSuccess('Success', `${data.name} was updated successfully.`);
 
       }else{
         await schoolService.create({
@@ -71,13 +71,13 @@ const handleCreateSchool = async (data: {
         schoolAdminEmails: data.adminEmails
       });
 
-      showSuccess('School created', `${data.name} was added successfully.`);
+      showSuccess('Success', `${data.name} was added successfully.`);
     }
       setIsModalOpen(false);
       setEditingSchool(null);
       await fetchSchools();
     } catch (error) {
-      showError('Create failed', 'Could not create school.');
+      showError('Error', 'Failed to create school.');
     }
   };
 
@@ -102,12 +102,12 @@ const confirmDeleteSchool = async () => {
   try {
     await schoolService.delete(deleteSchool.id);
     showSuccess(
-      "School deleted",
-      `${deleteSchool.schoolName} was removed successfully.`
+      'Success',
+      `${deleteSchool.schoolName} was deleted successfully.`
     );
     await fetchSchools();
   } catch {
-    showError("Delete failed", "Could not delete school.");
+    showError('Error', 'Failed to delete school.');
   } finally {
     setDeleteSchool(null);
   }

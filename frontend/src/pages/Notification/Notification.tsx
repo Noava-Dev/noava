@@ -38,7 +38,7 @@ const NotificationPage = () => {
       }
       if (typeof parsed === 'object' && parsed !== null) return parsed;
     } catch (e) {
-      showError(t('common:app.error'), t('errors.params'));
+      showError(t('errors.params'), t('common:app.error'));
     }
     return {};
   }
@@ -54,7 +54,7 @@ const NotificationPage = () => {
       setNotifications(data);
     } catch (error) {
       setNotifications([]);
-      showError(t('common:app.error'), t('errors.fetch'));
+      showError(t('errors.fetch'), t('common:app.error'));
     } finally {
       setLoading(false);
     }
@@ -69,7 +69,7 @@ const NotificationPage = () => {
       await service.deleteNotification(id);
     } catch (error) {
       setNotifications(previous);
-      showError(t('common:app.error'), t('errors.delete'));
+      showError(t('errors.delete'), t('common:app.error'));
     } finally {
       setProcessingId(null);
     }
@@ -87,7 +87,7 @@ const NotificationPage = () => {
         const joinedDeck = await deckService.joinByCode(joinCode);
         
         // Show success message
-        showSuccess(t('common:toast.success'), t('notification:joined.success'));
+        showSuccess(t('notification:joined.success'), t('common:toast.success'));
         
         // Navigate to the deck or refresh the page
         window.location.reload(); // Force refresh to update deck list
@@ -98,7 +98,7 @@ const NotificationPage = () => {
       await service.deleteNotification(notification.id);
       setNotifications((prev) => prev.filter((n) => n.id !== notification.id));
     } catch (error) {
-      showError(t('common:app.error'), t('errors.action'));
+      showError(t('errors.action'), t('common:app.error'));
     } finally {
       setProcessingId(null);
     }

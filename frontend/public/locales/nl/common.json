@@ -44,7 +44,9 @@
     "show": "Tonen",
     "back": "Terug",
     "uploading": "Bezig met uploaden...",
-    "done": "Klaar"
+    "done": "Klaar",
+    "copy": "Kopiëren",
+    "copying": "Bezig met kopiëren..."
   },
   "validation": {
     "required": "Dit veld is verplicht",
