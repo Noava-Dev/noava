@@ -1,0 +1,36 @@
+﻿using Microsoft.EntityFrameworkCore;
+using noava.Data;
+using noava.DTOs.Statistics;
+using noava.Models;
+using noava.Models.AggregateStatistics;
+using System;
+
+namespace noava.Repositories.Statistics
+{
+    public class StatisticsRepository : IStatisticsRepository
+    {
+        private readonly NoavaDbContext _context;
+
+        public StatisticsRepository(NoavaDbContext context)
+        {
+            _context = context;
+        }
+
+        public async Task<DeckUserStatistics?> GetByDeckAndUserAsync(int deckId, string userId)
+        {
+            return await _context.DeckUserStatistics
+                .Include(d => d.Deck)
+                .Include(d => d.User)
+                .FirstOrDefaultAsync(d => d.DeckId == deckId && d.ClerkId == userId);
+        }
+
+        public async Task<List<DeckUserStatistics>> GetGeneralStatsAsync(string userId)
+        {
+            return await _context.DeckUserStatistics
+                .Include(d => d.Deck)
+                .Include(d => d.User)
+                .Where(d => d.ClerkId == userId)
+                .ToListAsync();
+        }
+    }
+}

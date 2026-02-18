@@ -11,6 +11,7 @@ using noava.Repositories.FAQs;
 using noava.Repositories.Implementations;
 using noava.Repositories.Notifications;
 using noava.Repositories.Schools;
+using noava.Repositories.Statistics;
 using noava.Repositories.StudySessions;
 using noava.Repositories.Users;
 using noava.Services;
@@ -21,6 +22,8 @@ using noava.Services.FAQs;
 using noava.Services.Implementations;
 using noava.Services.Notifications;
 using noava.Services.Schools;
+using noava.Services.Statistics.Decks;
+using noava.Services.Statistics.General;
 using noava.Services.StudySessions;
 using noava.Services.Users;
 using noava.Shared;
@@ -51,6 +54,7 @@ namespace noava
             builder.Services.AddScoped<ICardInteractionRepository, CardInteractionRepository>();
             builder.Services.AddScoped<ICardProgressRepository, CardProgressRepository>();
             builder.Services.AddScoped<IStudySessionRepository, StudySessionRepository>();
+            builder.Services.AddScoped<IStatisticsRepository, StatisticsRepository>();
 
             // Service Registrations
             builder.Services.AddScoped<IFaqService, FaqService>();
@@ -67,6 +71,8 @@ namespace noava
             builder.Services.AddScoped<ICardImportService, CardImportService>();
             builder.Services.AddScoped<IStudySessionService, StudySessionService>();
             builder.Services.AddScoped<ICardInteractionService, CardInteractionService>();
+            builder.Services.AddScoped<IStatsService, StatsService>();
+            builder.Services.AddScoped<IDeckStatsService, DeckStatsService>();
 
             // External Service Registrations
             builder.Services.AddHttpClient();
