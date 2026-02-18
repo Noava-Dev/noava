@@ -45,7 +45,7 @@ function ClassroomsPage() {
       const data = await classroomSvc.getAllForUser();
       setClassrooms(data);
     } catch (error) {
-      showError(t('app.error'), t('toast.loadError'));
+      showError(t('toast.loadError'), t('app.error'));
     } finally {
       setLoading(false);
     }
@@ -54,11 +54,11 @@ function ClassroomsPage() {
   const handleCreate = async (payload: any) => {
     try {
       await classroomSvc.create(payload);
-      showSuccess(t('toast.createSuccess'), t('toast.createSuccess'));
+      showSuccess(t('toast.createSuccess'), 'Success');
       setIsModalOpen(false);
       fetchClassrooms();
     } catch (error) {
-      showError(t('app.error'), t('toast.createError'));
+      showError(t('toast.createError'), t('app.error'));
     }
   };
 
@@ -66,12 +66,12 @@ function ClassroomsPage() {
     if (!editingClassroom) return;
     try {
       await classroomSvc.update(editingClassroom.id, payload);
-      showSuccess(t('toast.updateSuccess'), t('toast.updateSuccess'));
+      showSuccess(t('toast.updateSuccess'), 'Success');
       setIsModalOpen(false);
       setEditingClassroom(undefined);
       fetchClassrooms();
     } catch (error) {
-      showError(t('app.error'), t('toast.updateError'));
+      showError(t('toast.updateError'), t('app.error'));
     }
   };
 
@@ -81,10 +81,10 @@ function ClassroomsPage() {
     if (deleteId === null) return;
     try {
       await classroomSvc.delete(deleteId);
-      showSuccess(t('toast.deleteSuccess'), t('toast.deleteSuccess'));
+      showSuccess(t('toast.deleteSuccess'), 'Success');
       fetchClassrooms();
     } catch (error) {
-      showError(t('app.error'), t('toast.deleteError'));
+      showError(t('toast.deleteError'), t('app.error'));
     } finally {
       setDeleteId(null);
     }
@@ -98,10 +98,10 @@ function ClassroomsPage() {
     if (requestCodeId === null) return;
     try {
       await classroomSvc.updateJoinCode(requestCodeId);
-      showSuccess(t('toast.requestCodeSuccess'), t('toast.requestCodeSuccess'));
+      showSuccess(t('toast.requestCodeSuccess'), 'Success');
       fetchClassrooms();
     } catch (error) {
-      showError(t('app.error'), t('toast.requestCodeError'));
+      showError(t('toast.requestCodeError'), t('app.error'));
     } finally {
       setRequestCodeId(null);
     }

@@ -25,6 +25,7 @@ import Skeleton from '../../shared/components/loading/Skeleton';
 import EmptyState from '../../shared/components/EmptyState';
 import { useUser } from '@clerk/clerk-react';
 import ConfirmModal from '../../shared/components/ConfirmModal';
+import { TbDoorEnter } from 'react-icons/tb';
 
 function DecksPage() {
   const { t } = useTranslation('decks');
@@ -62,7 +63,7 @@ function DecksPage() {
 
       setDecks(data);
     } catch (error) {
-      showError(t('toast.loadError'), t('toast.loadError'));
+      showError(t('toast.loadError'), 'Error');
     } finally {
       setLoading(false);
     }
@@ -94,11 +95,11 @@ function DecksPage() {
   const handleCreate = async (deckData: DeckRequest) => {
     try {
       await deckService.create(deckData);
-      showSuccess(t('toast.createSuccess'), t('toast.createSuccess'));
+      showSuccess('Success', t('toast.createSuccess'));
       setIsModalOpen(false);
       fetchDecks();
     } catch (error) {
-      showError(t('toast.createError'), t('toast.createError'));
+      showError(t('toast.createError'), 'Error');
     }
   };
 
@@ -107,7 +108,7 @@ function DecksPage() {
 
     try {
       await deckService.update(editingDeck.deckId, deckData);
-      showSuccess(t('toast.updateSuccess'), t('toast.updateSuccess'));
+      showSuccess('Success', t('toast.updateSuccess'));
       setIsModalOpen(false);
       setEditingDeck(undefined);
       fetchDecks();
@@ -115,7 +116,7 @@ function DecksPage() {
       if (error.response?.status === 404 || error.response?.status === 403) {
         navigate('/not-found', { replace: true });
       } else {
-        showError(t('toast.updateError'), t('toast.updateError'));
+        showError(t('toast.updateError'), 'Error');
       }
     }
   };
@@ -129,13 +130,13 @@ function DecksPage() {
 
     try {
       await deckService.delete(deleteDeckId);
-      showSuccess(t('toast.deleteSuccess'), t('toast.deleteSuccess'));
+      showSuccess('Success', t('toast.deleteSuccess'));
       fetchDecks();
     } catch (error: any) {
       if (error.response?.status === 404 || error.response?.status === 403) {
         navigate('/not-found', { replace: true });
       } else {
-        showError(t('toast.deleteError'), t('toast.deleteError'));
+        showError(t('toast.deleteError'), 'Error');
       }
     } finally {
       setDeleteDeckId(null);
@@ -158,19 +159,19 @@ function DecksPage() {
 
   const handleJoinByCode = async () => {
     if (!joinCode.trim()) {
-      showError(t('common:toast.error'), t('joinCode.empty'));
+      showError(t('joinCode.empty'), t('common:toast.error'));
       return;
     }
 
     try {
       setJoiningDeck(true);
       await deckService.joinByCode(joinCode.trim());
-      showSuccess(t('common:toast.success'), t('joinCode.success'));
+      showSuccess('Success', t('joinCode.success'));
       setJoinCodeModalOpen(false);
       setJoinCode('');
       fetchDecks();
     } catch (error) {
-      showError(t('common:toast.error'), t('joinCode.error'));
+      showError(t('joinCode.error'), t('common:toast.error'));
     } finally {
       setJoiningDeck(false);
     }
@@ -252,10 +253,12 @@ function DecksPage() {
                   </Dropdown>
                 )}
                 <Button
+                
                   onClick={() => setJoinCodeModalOpen(true)}
                   size="lg"
                   color="gray"
                   className="w-full border-none md:w-fit">
+                    <TbDoorEnter className="mr-2 size-5" />
                   {t('joinCode.button')}
                 </Button>
                 <Button

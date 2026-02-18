@@ -33,8 +33,8 @@ function ImportCardsModal({
   const { showError, showSuccess } = useToast();
   const [file, setFile] = useState<File | null>(null);
   const flashcardService = useFlashcardService();
-  const [error, setError] = useState<string>('');
-  const { t } = useTranslation('flashcards');
+  const { t } = useTranslation(['flashcards', 'errors']);
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -44,21 +44,28 @@ function ImportCardsModal({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    
+    const newErrors: { [key: string]: string } = {};
 
     if (!file) {
-      setError('Please select a file to upload');
+      newErrors.file = t('errors:validation.file.required');
+    }
+
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length > 0) {
       return;
     }
+    
     try {
       setUploading(true);
       const count = await flashcardService.createBulk(Number(deckId), file);
-      showSuccess(`${count} cards imported successfully`, 'Success');
+      showSuccess('Success', `${count} cards imported successfully`);
       onClose();
 
       onSubmit();
     } catch (error: any) {
-      setError((error as Error).message);
+      setErrors({ file: (error as Error).message });
     } finally {
       setUploading(false);
     }
@@ -69,7 +76,7 @@ function ImportCardsModal({
       <div className="bg-background-app-light dark:bg-background-surface-dark">
         <ModalHeader>{t('importCardsModal.header')}</ModalHeader>
         <ModalBody>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} noValidate>
             <div className="flex flex-col gap-6 mb-4">
               <div className="flex flex-col items-center gap-1 pb-4 text-center border-b border-border dark:border-border-dark">
                 <FaCloudUploadAlt className="size-24 dark:text-primary-500 text-primary-700" />
@@ -92,7 +99,7 @@ function ImportCardsModal({
               <HelperText className="mt-1 ml-1">
                 {t('importCardsModal.supported')}.csv, .xls, .xlsx
               </HelperText>
-              {error && <FormErrorMessage text={error} />}
+              {errors.file && <FormErrorMessage text={errors.file} />}
             </div>
             {/* Supported file types */}
             <div className="flex justify-center gap-2">
