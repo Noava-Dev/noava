@@ -25,6 +25,12 @@ namespace noava.Mappers.Cards
                 HasVoiceAssistant = card.HasVoiceAssistant
             };
         }
+        public static List<CardResponse> ToResponseList(this IEnumerable<Card> cards)
+        {
+            return cards
+                .Select(ToResponse)
+                .ToList();
+        }
 
         // Request DTO => Entity
         public static Card ToEntity(CardRequest request, int deckId)

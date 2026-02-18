@@ -1,6 +1,6 @@
 ﻿namespace noava.Models
 {
-    public class StudySessions
+    public class StudySession
     {
         public int Id { get; set; }
         public string ClerkId { get; set; } = string.Empty;

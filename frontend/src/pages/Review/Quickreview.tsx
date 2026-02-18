@@ -7,7 +7,7 @@ import { useDeckService } from '../../services/DeckService';
 import { useFlashcardService } from '../../services/FlashcardService';
 import { useToast } from '../../contexts/ToastContext';
 import { useAzureBlobService } from '../../services/AzureBlobService';
-import { BulkReviewMode } from '../../models/Flashcard';
+import { ReviewMode } from '../../models/Flashcard';
 import { getLanguageCode } from '../../shared/utils/speechHelpers';
 import type { Deck } from '../../models/Deck';
 import type { ReviewSession } from '../../models/ReviewSessions';
@@ -39,12 +39,12 @@ function QuickReview() {
 
     if (deckIdsParam) {
       const deckIds = deckIdsParam.split(',').map(Number);
-      const mode = modeParam ? Number(modeParam) : BulkReviewMode.ShuffleAll;
+      const mode = modeParam ? Number(modeParam) : ReviewMode.ShuffleAll;
       setIsBulkReview(true);
       initializeSession(deckIds, mode);
     } else if (deckId) {
       setIsBulkReview(false);
-      initializeSession([Number(deckId)], BulkReviewMode.ShuffleAll);
+      initializeSession([Number(deckId)], ReviewMode.ShuffleAll);
     }
   }, [deckId, classroomId, searchParams]);
 
@@ -102,7 +102,7 @@ function QuickReview() {
     }
   }, [session?.currentIndex]);
 
-  const initializeSession = async (deckIds: number[], mode: BulkReviewMode) => {
+  const initializeSession = async (deckIds: number[], mode: ReviewMode) => {
     try {
       setLoading(true);
 

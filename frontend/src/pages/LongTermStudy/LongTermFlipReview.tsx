@@ -9,7 +9,7 @@ import { useStudySessionService } from '../../services/StudySessionService';
 import { useCardInteractionService } from '../../services/CardInteractionService';
 import { useToast } from '../../contexts/ToastContext';
 import { useAzureBlobService } from '../../services/AzureBlobService';
-import { BulkReviewMode } from '../../models/Flashcard';
+import { ReviewMode } from '../../models/Flashcard';
 import { StudyMode } from '../../models/CardInteraction';
 import { getLanguageCode } from '../../shared/utils/speechHelpers';
 import ConfirmationModal from '../../shared/components/ConfirmModal';
@@ -32,8 +32,7 @@ function LongTermFlipReview() {
   const studySessionService = useStudySessionService();
   const cardInteractionService = useCardInteractionService();
   const azureBlobService = useAzureBlobService();
-  const { showError } = useToast();
-
+  const { showError, showInfo } = useToast();
   const [deck, setDeck] = useState<Deck | null>(null);
   const [cards, setCards] = useState<CardWithUrls[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -41,17 +40,10 @@ function LongTermFlipReview() {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [sessionId, setSessionId] = useState<number | null>(null);
   const [isFlipped, setIsFlipped] = useState(false);
-
-
   const [cardsReviewed, setCardsReviewed] = useState(0);
   const [correctAnswers, setCorrectAnswers] = useState(0);
-
-
   const [showExitModal, setShowExitModal] = useState(false);
-  
-  // Timer for response time
   const [cardStartTime, setCardStartTime] = useState<number>(Date.now());
-  
   const initialized = useRef(false);
 
   useEffect(() => {
@@ -75,11 +67,11 @@ function LongTermFlipReview() {
 
       const [deckData, cardsData] = await Promise.all([
         deckService.getById(Number(deckId)),
-        flashcardService.getBulkReviewCards([Number(deckId)], BulkReviewMode.ShuffleAll),
+        flashcardService.getSpacedRepetitionCards(Number(deckId), ReviewMode.ShuffleAll),
       ]);
 
       if (cardsData.length === 0) {
-        showError(t('quickReview.noCards'), t('quickReview.error'));
+        showInfo(t('longTerm.noCardsToReview'), t('longTerm.mode'));
         navigate(`/decks/${deckId}/cards`);
         return;
       }
@@ -105,7 +97,6 @@ function LongTermFlipReview() {
 
       setDeck(deckData);
       setCards(cardsWithUrls);
-
 
       const session = await studySessionService.startSession(Number(deckId));
       setSessionId(session.sessionId);
@@ -162,7 +153,6 @@ function LongTermFlipReview() {
   };
 
   const handleNext = async (isCorrect: boolean) => {
-    // Record interaction before moving to next card
     await recordCardInteraction(isCorrect);
 
     setCardsReviewed(cardsReviewed + 1);

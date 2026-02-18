@@ -1,6 +1,6 @@
 ﻿namespace noava.Models.Enums
 {
-    public enum BulkReviewMode
+    public enum ReviewMode
     {
         None,
         ShufflePerDeck,

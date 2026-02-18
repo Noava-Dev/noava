@@ -114,7 +114,8 @@
     "markCorrect": "Markeer als Correct",
     "correct": "Correct",
     "incorrect": "Fout",
-    "accuracy": "Nauwkeurigheid"
+    "accuracy": "Nauwkeurigheid",
+    "noCardsToReview": "Er zijn op dit moment geen kaarten die moeten worden bekeken. Blijf regelmatig studeren!"
   },
   "search": { "label": "Zoeken" }
 }

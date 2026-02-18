@@ -113,7 +113,8 @@
     "markCorrect": "Marquer comme correct",
     "correct": "Correct",
     "incorrect": "Incorrect",
-    "accuracy": "Précision"
+    "accuracy": "Précision",
+    "noCardsToReview": "Aucune carte n'est prévue pour révision pour le moment. Continuez à étudier régulièrement !"
   },
   "search": { "label": "Rechercher" }
 }

@@ -9,7 +9,7 @@ import { useStudySessionService } from '../../services/StudySessionService';
 import { useCardInteractionService } from '../../services/CardInteractionService';
 import { useToast } from '../../contexts/ToastContext';
 import { useAzureBlobService } from '../../services/AzureBlobService';
-import { BulkReviewMode } from '../../models/Flashcard';
+import { ReviewMode } from '../../models/Flashcard';
 import { StudyMode } from '../../models/CardInteraction';
 import { getLanguageCode } from '../../shared/utils/speechHelpers';
 import ConfirmationModal from '../../shared/components/ConfirmModal';
@@ -32,7 +32,7 @@ function LongTermReverseReview() {
   const studySessionService = useStudySessionService();
   const cardInteractionService = useCardInteractionService();
   const azureBlobService = useAzureBlobService();
-  const { showError } = useToast();
+  const { showError, showInfo } = useToast();
 
   const [deck, setDeck] = useState<Deck | null>(null);
   const [cards, setCards] = useState<CardWithUrls[]>([]);
@@ -75,11 +75,11 @@ function LongTermReverseReview() {
 
       const [deckData, cardsData] = await Promise.all([
         deckService.getById(Number(deckId)),
-        flashcardService.getBulkReviewCards([Number(deckId)], BulkReviewMode.ShuffleAll),
+        flashcardService.getSpacedRepetitionCards(Number(deckId), ReviewMode.ShuffleAll),
       ]);
 
       if (cardsData.length === 0) {
-        showError(t('quickReview.noCards'), t('quickReview.error'));
+        showInfo(t('longTerm.noCardsToReview'), t('longTerm.mode'));
         navigate(`/decks/${deckId}/cards`);
         return;
       }

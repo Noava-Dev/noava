@@ -2,7 +2,7 @@
 
 namespace noava.Models
 {
-    public class CardInteractions
+    public class CardInteraction
     {
         public int Id { get; set; }
         public int CardId { get; set; }
