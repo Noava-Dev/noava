@@ -25,6 +25,7 @@ import type { DashboardStatistics } from '../../models/Statistics';
 import { useEffect, useState } from 'react';
 import { useToast } from '../../contexts/ToastContext';
 import DeckCard from '../../shared/components/DeckCard';
+import DeckStatisticsModal from '../../shared/components/DeckStatisticsModal';
 import Loading from '../../shared/components/loading/Loading';
 import DeckModal from '../../shared/components/DeckModal';
 
@@ -40,6 +41,8 @@ function Dashboard() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingDeck, setEditingDeck] = useState<Deck | undefined>(undefined);
   const [deleteDeckId, setDeleteDeckId] = useState<number | null>(null);
+  const [analyticsModalOpen, setAnalyticsModalOpen] = useState(false);
+  const [analyticsDeck, setAnalyticsDeck] = useState<Deck | null>(null);
 
   useEffect(() => {
     fetchData();
@@ -64,6 +67,16 @@ function Dashboard() {
   const handleEdit = (deck: Deck) => {
     setEditingDeck(deck);
     setIsModalOpen(true);
+  };
+
+  const handleAnalytics = (deck: Deck) => {
+    setAnalyticsDeck(deck);
+    setAnalyticsModalOpen(true);
+  };
+
+  const handleCloseAnalyticsModal = () => {
+    setAnalyticsModalOpen(false);
+    setAnalyticsDeck(null);
   };
 
   const handleUpdate = async (deckData: DeckRequest) => {
@@ -142,7 +155,7 @@ function Dashboard() {
                   />
                   <DashboardStatCard
                     title={t('statcard.accuracyrate.title')}
-                    value={`${Math.round(statistics.accuracyRate)}%`}
+                    value={statistics ? `${Math.round(statistics.accuracyRate)}%` : '0%'}
                     tooltip={t('statcard.accuracyrate.tooltip')}
                     icon={LuTarget}
                   />
@@ -184,6 +197,7 @@ function Dashboard() {
                           deck={deck}
                           onEdit={handleEdit}
                           onDelete={handleDelete}
+                          onAnalytics={handleAnalytics}
                         />
                       ))}
                     </div>
@@ -207,6 +221,13 @@ function Dashboard() {
             onClose={handleCloseModal}
             onSubmit={handleUpdate}
             deck={editingDeck}
+          />
+
+          {/* Deck Statistics Modal */}
+          <DeckStatisticsModal
+            show={analyticsModalOpen}
+            onClose={handleCloseAnalyticsModal}
+            deck={analyticsDeck}
           />
 
           {/* Delete Confirmation Modal */}

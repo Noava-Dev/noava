@@ -7,7 +7,7 @@
       "tooltip": "Nombre total de révisions de cartes que vous avez effectuées sur l’ensemble des paquets"
     },
     "accuracyrate": {
-      "title": "Taux de réussite",
+      "title": "Précision",
       "tooltip": "Pourcentage de cartes auxquelles vous avez répondu correctement dès la première tentative"
     },
     "studytime": {

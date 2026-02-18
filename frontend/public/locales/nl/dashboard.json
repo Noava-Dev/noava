@@ -7,7 +7,7 @@
       "tooltip": "Totaal aantal flashcard-herhalingen dat je hebt voltooid over alle decks heen"
     },
     "accuracyrate": {
-      "title": "Nauwkeurigheidspercentage",
+      "title": "Nauwkeurigheid",
       "tooltip": "Percentage kaarten dat je bij de eerste poging correct hebt beantwoord"
     },
     "studytime": {

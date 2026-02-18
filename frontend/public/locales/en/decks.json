@@ -126,5 +126,16 @@
     "success": "Invitation sent successfully",
     "error": "Failed to send invitation",
     "invalidEmail": "Please enter a valid email address"
+  },
+  "analytics": {
+    "title": "Deck Analytics",
+    "timeSpent": "Time Spent",
+    "avgMastery": "Avg Mastery",
+    "correctCards": "Correct Cards",
+    "avgResponseTime": "Avg Response Time",
+    "noData": {
+      "title": "No Statistics Available",
+      "description": "Start reviewing this deck to see your progress and statistics."
+    }
   }
 }

@@ -7,7 +7,7 @@
       "tooltip": "Total number of flashcard reviews you've completed across all decks"
     },
     "accuracyrate": {
-      "title": "Accuracy Rate",
+      "title": "Accuracy",
       "tooltip": "Percentage of cards you answered correctly on the first attempt"
     },
     "studytime": {
