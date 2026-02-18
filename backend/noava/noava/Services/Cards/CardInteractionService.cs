@@ -3,6 +3,8 @@ using noava.DTOs.Cards.Progress;
 using noava.Mappers.Cards;
 using noava.Models;
 using noava.Repositories.Cards;
+using noava.Repositories.StudySessions;
+using noava.Shared;
 
 namespace noava.Services.Cards
 {
@@ -11,15 +13,21 @@ namespace noava.Services.Cards
         private readonly ICardInteractionRepository _interactionRepo;
         private readonly ICardProgressRepository _progressRepo;
         private readonly ILeitnerBoxService _leitner;
+        private readonly IAggregateStatisticsService _aggregateStats;
+        private readonly IStudySessionRepository _studySessionRepo;
 
         public CardInteractionService(
             ICardInteractionRepository interactionRepo,
             ICardProgressRepository progressRepo,
-            ILeitnerBoxService leitner)
+            ILeitnerBoxService leitner,
+            IAggregateStatisticsService aggregateStatisticsService,
+            IStudySessionRepository studySessionRepository)
         {
             _interactionRepo = interactionRepo;
             _progressRepo = progressRepo;
             _leitner = leitner;
+            _aggregateStats = aggregateStatisticsService;
+            _studySessionRepo = studySessionRepository;
         }
 
         public async Task<CardProgressResponse> CreateCardInteractionAsync(
@@ -75,6 +83,10 @@ namespace noava.Services.Cards
             );
 
             await _interactionRepo.CreateAsync(interactionEntity);
+
+            var interactions = new List<CardInteraction> { interactionEntity };
+            var studySession = await _studySessionRepo.GetByIdAsync(studySessionId);
+            await _aggregateStats.UpdateStatsAsync(interactions, studySession);
 
             return new CardProgressResponse
             {
