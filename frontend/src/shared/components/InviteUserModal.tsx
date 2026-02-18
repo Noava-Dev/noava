@@ -38,20 +38,25 @@ export const InviteUserModal = ({
   const deckInvitationService = useDeckInvitationService();
   const [userId, setUserId] = useState('');
   const [loading, setLoading] = useState(false);
-  const [validationError, setValidationError] = useState<string>('');
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setValidationError('');
+    
+    const newErrors: { [key: string]: string } = {};
     
     if (!email.trim()) {
-      setValidationError(t('errors:validation.email.required'));
-      return;
+      newErrors.email = t('errors:validation.email.required');
+    } else {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        newErrors.email = t('errors:validation.email.invalid');
+      }
     }
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      setValidationError(t('errors:validation.email.invalid'));
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length > 0) {
       return;
     }
 
@@ -71,7 +76,7 @@ export const InviteUserModal = ({
   const handleClose = () => {
     setEmail('');
     setIsOwner(false);
-    setValidationError('');
+    setErrors({});
     onClose();
   };
 
@@ -79,7 +84,6 @@ export const InviteUserModal = ({
     <Modal show={isOpen} onClose={handleClose} size="md">
       <ModalHeader>{t('decks:invite.title', { deckName: itemName })}</ModalHeader>
       <ModalBody>
-        {validationError && <FormErrorMessage text={validationError} />}
         <form onSubmit={handleSubmit} noValidate className="space-y-4">
           <div>
             <Label htmlFor="email">{t('decks:invite.emailLabel')}</Label>
@@ -91,6 +95,7 @@ export const InviteUserModal = ({
               placeholder={t('decks:invite.emailPlaceholder')}
               required
             />
+            {errors.email && <FormErrorMessage text={errors.email} />}
           </div>
 
           <div className="space-y-2">

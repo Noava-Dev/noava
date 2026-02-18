@@ -37,7 +37,7 @@ function DeckModal({ isOpen, onClose, onSubmit, deck }: DeckModalProps) {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
-  const [validationError, setValidationError] = useState<string>('');
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   useEffect(() => {
     if (deck) {
@@ -80,16 +80,21 @@ function DeckModal({ isOpen, onClose, onSubmit, deck }: DeckModalProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setValidationError('');
+    
+    const newErrors: { [key: string]: string } = {};
 
     // Validation
     if (!title.trim()) {
-      setValidationError(t('errors:validation.title.required'));
-      return;
+      newErrors.title = t('errors:validation.title.required');
     }
 
     if (!language) {
-      setValidationError(t('errors:validation.language.required'));
+      newErrors.language = t('errors:validation.language.required');
+    }
+
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length > 0) {
       return;
     }
 
@@ -162,7 +167,6 @@ function DeckModal({ isOpen, onClose, onSubmit, deck }: DeckModalProps) {
         </ModalHeader>
         {/* Body */}
         <ModalBody>
-          {validationError && <FormErrorMessage text={validationError} />}
           <form onSubmit={handleSubmit} noValidate className="space-y-4">
             {/* Title */}
             <div className="flex flex-col gap-2">
@@ -176,6 +180,7 @@ function DeckModal({ isOpen, onClose, onSubmit, deck }: DeckModalProps) {
                 required
                 disabled={uploading}
               />
+              {errors.title && <FormErrorMessage text={errors.title} />}
             </div>
 
             {/* Language */}
@@ -207,6 +212,7 @@ function DeckModal({ isOpen, onClose, onSubmit, deck }: DeckModalProps) {
                   {t('languages.italian')}
                 </option>
               </Select>
+              {errors.language && <FormErrorMessage text={errors.language} />}
             </div>
 
             {/* Description */}
@@ -302,3 +308,7 @@ function DeckModal({ isOpen, onClose, onSubmit, deck }: DeckModalProps) {
 }
 
 export default DeckModal;
+function showError(arg0: string, arg1: string) {
+  throw new Error('Function not implemented.');
+}
+

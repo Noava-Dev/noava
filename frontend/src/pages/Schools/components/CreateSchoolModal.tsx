@@ -29,7 +29,7 @@ const [name, setName] = useState(initialData?.name ?? "");
 const [adminInput, setAdminInput] = useState("");
 const [adminEmails, setAdminEmails] = useState<string[]>(initialData?.adminEmails ?? [])
 const [loading, setLoading] = useState(false);
-const [validationError, setValidationError] = useState<string>('');
+const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
 useEffect(() => { 
   if (initialData){ 
@@ -47,25 +47,22 @@ useEffect(() => {
 
 const handleAddAdmin = (e?: React.MouseEvent) => {
   if (e) e.preventDefault();
-  setValidationError('');
-
+  
+  const newErrors: { [key: string]: string } = {};
   const email = adminInput.trim();
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   if (!email) {
-    setValidationError(t('validation.email.required'));
-    setAdminInput(""); 
-    return;
+    newErrors.adminEmail = t('validation.email.required');
+  } else if (!emailRegex.test(email)) {
+    newErrors.adminEmail = t('validation.email.invalid');
+  } else if (adminEmails.includes(email)) {
+    newErrors.adminEmail = t('validation.email.duplicate');
   }
 
-  if (!emailRegex.test(email)) {
-    setValidationError(t('validation.email.invalid'));
-    setAdminInput("");
-    return;
-  }
+  setErrors(newErrors);
 
-  if (adminEmails.includes(email)) {
-    setValidationError(t('validation.email.duplicate'));
+  if (Object.keys(newErrors).length > 0) {
     setAdminInput("");
     return;
   }
@@ -80,15 +77,20 @@ const handleAddAdmin = (e?: React.MouseEvent) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setValidationError('');
+    
+    const newErrors: { [key: string]: string } = {};
     
     if (!name.trim()) {
-      setValidationError(t('validation.school.name'));
-      return;
+      newErrors.name = t('validation.school.name');
     }
 
     if (adminEmails.length === 0) {
-      setValidationError(t('validation.school.minAdmins'));
+      newErrors.admins = t('validation.school.minAdmins');
+    }
+
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length > 0) {
       return;
     }
 
@@ -121,9 +123,6 @@ return (
       </ModalHeader>
       <ModalBody>
         <div className="space-y-6">
-
-            {validationError && <FormErrorMessage text={validationError} />}
-
             <form onSubmit={handleSubmit} noValidate className="space-y-6">
             
             {/* School Name Input */}
@@ -137,6 +136,7 @@ return (
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 />
+                {errors.name && <FormErrorMessage text={errors.name} />}
             </div>
 
             {/* Admin Email Input */}
@@ -154,6 +154,7 @@ return (
                 value={adminInput}
                 onChange={(e) => setAdminInput(e.target.value)}
                 />
+                {errors.adminEmail && <FormErrorMessage text={errors.adminEmail} />}
                 <Button className="rounded-lg h-6 w-12 py-4 bg-primary-500 my-3"
                         type="button" onClick={handleAddAdmin} disabled={!adminInput.trim()}>
                 Add
@@ -172,6 +173,7 @@ return (
                 </div>
               ))}
             </div>
+            {errors.admins && <FormErrorMessage text={errors.admins} />}
 
             {/* Action Buttons */}
             <div className="flex justify-end gap-3 pt-2">

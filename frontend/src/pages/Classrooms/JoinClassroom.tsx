@@ -12,17 +12,23 @@ export default function JoinClassroom() {
   const { t } = useTranslation(['classrooms', 'errors']);
   const [code, setCode] = useState('');
   const [loading, setLoading] = useState(false);
-  const [validationError, setValidationError] = useState<string>('');
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const classroomSvc = useClassroomService();
   const navigate = useNavigate();
   const { showSuccess, showError } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setValidationError('');
+    
+    const newErrors: { [key: string]: string } = {};
 
     if (!code.trim()) {
-      setValidationError(t('errors:validation.code.empty'));
+      newErrors.code = t('errors:validation.code.empty');
+    }
+
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length > 0) {
       return;
     }
 
@@ -59,7 +65,6 @@ export default function JoinClassroom() {
         <section className="min-h-screen py-8 bg-background-app-light dark:bg-background-app-dark md:py-12">
           <div className="container max-w-3xl px-4 mx-auto">
             <Card>
-              {validationError && <FormErrorMessage text={validationError} />}
               <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4">
                 <div>
                   <div className="block mb-2">
@@ -72,6 +77,7 @@ export default function JoinClassroom() {
                     onChange={(e) => setCode(e.target.value)}
                     required
                   />
+                  {errors.code && <FormErrorMessage text={errors.code} />}
                 </div>
 
                 <div className="flex items-center gap-3">

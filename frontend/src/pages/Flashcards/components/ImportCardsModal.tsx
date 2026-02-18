@@ -34,7 +34,7 @@ function ImportCardsModal({
   const [file, setFile] = useState<File | null>(null);
   const flashcardService = useFlashcardService();
   const { t } = useTranslation(['flashcards', 'errors']);
-  const [validationError, setValidationError] = useState<string>('');
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -44,12 +44,19 @@ function ImportCardsModal({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setValidationError('');
+    
+    const newErrors: { [key: string]: string } = {};
 
     if (!file) {
-      setValidationError(t('errors:validation.file.required'));
+      newErrors.file = t('errors:validation.file.required');
+    }
+
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length > 0) {
       return;
     }
+    
     try {
       setUploading(true);
       const count = await flashcardService.createBulk(Number(deckId), file);
@@ -58,7 +65,7 @@ function ImportCardsModal({
 
       onSubmit();
     } catch (error: any) {
-      setValidationError((error as Error).message);
+      setErrors({ file: (error as Error).message });
     } finally {
       setUploading(false);
     }
@@ -69,7 +76,6 @@ function ImportCardsModal({
       <div className="bg-background-app-light dark:bg-background-surface-dark">
         <ModalHeader>{t('importCardsModal.header')}</ModalHeader>
         <ModalBody>
-          {validationError && <FormErrorMessage text={validationError} />}
           <form onSubmit={handleSubmit} noValidate>
             <div className="flex flex-col gap-6 mb-4">
               <div className="flex flex-col items-center gap-1 pb-4 text-center border-b border-border dark:border-border-dark">
@@ -93,6 +99,7 @@ function ImportCardsModal({
               <HelperText className="mt-1 ml-1">
                 {t('importCardsModal.supported')}.csv, .xls, .xlsx
               </HelperText>
+              {errors.file && <FormErrorMessage text={errors.file} />}
             </div>
             {/* Supported file types */}
             <div className="flex justify-center gap-2">

@@ -32,7 +32,7 @@ function FlashcardModal({
 }: FlashcardModalProps) {
   const { t } = useTranslation(['flashcards', 'errors']);
   const azureBlobService = useAzureBlobService();
-  const [validationError, setValidationError] = useState<string>('');
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   // State for form fields
   const [frontText, setFrontText] = useState('');
@@ -219,16 +219,21 @@ function FlashcardModal({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setValidationError('');
+    
+    const newErrors: { [key: string]: string } = {};
 
     // Frontend validation
     if (!frontText.trim()) {
-      setValidationError(t('errors:validation.flashcard.frontText'));
-      return;
+      newErrors.frontText = t('errors:validation.flashcard.frontText');
     }
 
     if (!backText.trim()) {
-      setValidationError(t('errors:validation.flashcard.backText'));
+      newErrors.backText = t('errors:validation.flashcard.backText');
+    }
+
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length > 0) {
       return;
     }
 
@@ -348,8 +353,6 @@ function FlashcardModal({
 
         {/* Body */}
         <ModalBody>
-          {validationError && <FormErrorMessage text={validationError} />}
-          
           <form onSubmit={handleSubmit} noValidate className="space-y-6">
             {/* Preview Section */}
             <div className="p-6 rounded-lg bg-background-subtle-light dark:bg-background-app-dark">
@@ -452,6 +455,7 @@ function FlashcardModal({
                       required
                       disabled={uploading}
                     />
+                    {errors.frontText && <FormErrorMessage text={errors.frontText} />}
                   </div>
                 </div>
 
@@ -584,6 +588,7 @@ function FlashcardModal({
                       required
                       disabled={uploading}
                     />
+                    {errors.backText && <FormErrorMessage text={errors.backText} />}
                   </div>
                 </div>
 

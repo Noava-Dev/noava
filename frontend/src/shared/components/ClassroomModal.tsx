@@ -32,7 +32,7 @@ function ClassroomModal({
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [joinCode, setJoinCode] = useState('');
-  const [validationError, setValidationError] = useState<string>('');
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   useEffect(() => {
     if (classroom) {
@@ -48,15 +48,20 @@ function ClassroomModal({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setValidationError('');
+    
+    const newErrors: { [key: string]: string } = {};
 
     if (!name.trim()) {
-      setValidationError(t('errors:validation.name.required'));
-      return;
+      newErrors.name = t('errors:validation.name.required');
     }
 
     if (!description.trim()) {
-      setValidationError(t('errors:validation.description.required'));
+      newErrors.description = t('errors:validation.description.required');
+    }
+
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length > 0) {
       return;
     }
 
@@ -81,7 +86,6 @@ function ClassroomModal({
 
         {/* Body */}
         <ModalBody>
-          {validationError && <FormErrorMessage text={validationError} />}
           <form onSubmit={handleSubmit} noValidate className="space-y-4">
             <div className="flex flex-col gap-2">
               <Label htmlFor="name">{t('modal.nameLabel')} *</Label>
@@ -91,6 +95,7 @@ function ClassroomModal({
                 onChange={(e) => setName(e.target.value)}
                 required
               />
+              {errors.name && <FormErrorMessage text={errors.name} />}
             </div>
 
             <div className="flex flex-col gap-2">
@@ -102,6 +107,7 @@ function ClassroomModal({
                 onChange={(e) => setDescription(e.target.value)}
                 required
               />
+              {errors.description && <FormErrorMessage text={errors.description} />}
             </div>
 
             <div className="flex gap-3 pt-4">
