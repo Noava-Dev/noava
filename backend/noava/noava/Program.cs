@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using noava.Data;
+using noava.Data.Seeders;
 using noava.Exceptions;
 using noava.Repositories;
 using noava.Repositories.Cards;
@@ -126,6 +127,17 @@ namespace noava
             builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
+
+            // seed faqs
+            using (var scope = app.Services.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<NoavaDbContext>();
+
+                if (app.Environment.IsDevelopment())
+                    dbContext.Database.Migrate();
+
+                FAQSeeder.SeedOrUpdateFAQs(dbContext);
+            }
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
