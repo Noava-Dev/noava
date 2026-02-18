@@ -295,8 +295,7 @@ function QuickReview() {
   const isComplete = session.completedCards === session.cards.length;
 
   return (
-    <div className="flex min-h-screen bg-background-app-light dark:bg-background-app-dark">
-      <main className="flex-1 w-full">
+    <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
         <div className="container max-w-4xl px-4 py-6 mx-auto md:py-8">
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
@@ -403,10 +402,9 @@ function QuickReview() {
                   </div>
 
                   {/* Back*/}
-                  {isFlipped && (
-                    <div 
-                      className="absolute inset-0 backface-hidden rotate-y-180"
-                      style={{ transform: 'rotateY(180deg) translateZ(1px)' }}>
+                  <div 
+                    className="absolute inset-0 backface-hidden rotate-y-180"
+                    style={{ transform: 'rotateY(180deg) translateZ(1px)' }}>
                       <div className="flex flex-col items-center justify-center w-full h-full p-8 antialiased bg-white border-2 border-gray-200 shadow-xl dark:bg-gray-800 rounded-2xl dark:border-gray-700">
                         {shouldShowAudioButton('back') && (
                           <button
@@ -444,9 +442,8 @@ function QuickReview() {
                         </div>
                       </div>
                     </div>
-                  )}
+                  </div>
                 </div>
-              </div>
 
               {/* Actions */}
               <div className="flex justify-center gap-4">
@@ -502,7 +499,6 @@ function QuickReview() {
             </div>
           )}
         </div>
-      </main>
     </div>
   );
 }

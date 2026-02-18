@@ -396,10 +396,9 @@ function ReverseReview() {
                   </div>
 
                   {/* Front side*/}
-                  {isFlipped && (
-                    <div 
-                      className="absolute inset-0 backface-hidden rotate-y-180"
-                      style={{ transform: 'rotateY(180deg) translateZ(1px)' }}>
+                  <div 
+                    className="absolute inset-0 backface-hidden rotate-y-180"
+                    style={{ transform: 'rotateY(180deg) translateZ(1px)' }}>
                       <div className="flex flex-col items-center justify-center w-full h-full p-8 antialiased bg-white border-2 border-gray-200 shadow-xl dark:bg-gray-800 rounded-2xl dark:border-gray-700">
                         {shouldShowAudioButton('front') && (
                           <button
@@ -437,9 +436,8 @@ function ReverseReview() {
                         </div>
                       </div>
                     </div>
-                  )}
+                  </div>
                 </div>
-              </div>
 
               {/* Actions */}
               <div className="flex justify-center gap-4">
