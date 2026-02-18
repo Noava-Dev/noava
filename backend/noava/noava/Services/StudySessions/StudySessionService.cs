@@ -35,16 +35,13 @@ namespace noava.Services.StudySessions
             if (!hasAccess)
                 throw new UnauthorizedException("You don't have access to this deck.");
 
-            var cards = await _deckRepository.GetByDeckIdAsync(deckId);
-            var cardCount = cards.Count;
-
             var session = new Models.StudySession
             {
                 DeckId = deckId,
                 ClerkId = userId,
                 StartTime = DateTime.UtcNow,
                 EndTime = DateTime.UtcNow,
-                TotalCards = cardCount,
+                TotalCards = 0,
                 CorrectCount = 0,
             };
 

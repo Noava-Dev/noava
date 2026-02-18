@@ -166,26 +166,29 @@ function LongTermReverseReview() {
 
     await recordCardInteraction(isCorrect);
 
-    setCardsReviewed(cardsReviewed + 1);
+    const newCardsReviewed = cardsReviewed + 1;
+    const newCorrectAnswers = isCorrect ? correctAnswers + 1 : correctAnswers;
+
+    setCardsReviewed(newCardsReviewed);
     if (isCorrect) {
-      setCorrectAnswers(correctAnswers + 1);
+      setCorrectAnswers(newCorrectAnswers);
     }
 
     if (currentIndex < cards.length - 1) {
       setCurrentIndex(currentIndex + 1);
       setIsFlipped(false);
     } else {
-      handleEndSession();
+      handleEndSession(newCardsReviewed, newCorrectAnswers);
     }
   };
 
-  const handleEndSession = async () => {
+  const handleEndSession = async (finalCardsReviewed?: number, finalCorrectAnswers?: number) => {
     if (!sessionId) return;
 
     try {
       await studySessionService.endSession(sessionId, {
-        totalCardsReviewed: cardsReviewed,
-        correctAnswers: correctAnswers,
+        totalCardsReviewed: finalCardsReviewed ?? cardsReviewed,
+        correctAnswers: finalCorrectAnswers ?? correctAnswers,
       });
       navigate(`/decks/${deckId}/cards`);
     } catch (error) {

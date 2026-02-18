@@ -181,9 +181,12 @@ function LongTermReview() {
     // Record interaction before moving to next card
     await recordCardInteraction(finalCorrectness);
 
-    setCardsReviewed(cardsReviewed + 1);
+    const newCardsReviewed = cardsReviewed + 1;
+    const newCorrectAnswers = finalCorrectness ? correctAnswers + 1 : correctAnswers;
+
+    setCardsReviewed(newCardsReviewed);
     if (finalCorrectness) {
-      setCorrectAnswers(correctAnswers + 1);
+      setCorrectAnswers(newCorrectAnswers);
     }
 
     if (currentIndex < cards.length - 1) {
@@ -192,17 +195,17 @@ function LongTermReview() {
       setIsAnswerRevealed(false);
       setIsCorrectOverride(null);
     } else {
-      handleEndSession();
+      handleEndSession(newCardsReviewed, newCorrectAnswers);
     }
   };
 
-  const handleEndSession = async () => {
+  const handleEndSession = async (finalCardsReviewed?: number, finalCorrectAnswers?: number) => {
     if (!sessionId) return;
 
     try {
       await studySessionService.endSession(sessionId, {
-        totalCardsReviewed: cardsReviewed,
-        correctAnswers: correctAnswers,
+        totalCardsReviewed: finalCardsReviewed ?? cardsReviewed,
+        correctAnswers: finalCorrectAnswers ?? correctAnswers,
       });
       navigate(`/decks/${deckId}/cards`);
     } catch (error) {
