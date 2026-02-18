@@ -15,6 +15,7 @@ import { HiUpload, HiVolumeUp, HiPhotograph } from 'react-icons/hi';
 import type { Flashcard, CreateFlashcardRequest } from '../../models/Flashcard';
 import { useAzureBlobService } from '../../services/AzureBlobService';
 import { useTranslation } from 'react-i18next';
+import FormErrorMessage from './validation/FormErrorMessage';
 
 interface FlashcardModalProps {
   isOpen: boolean;
@@ -29,8 +30,9 @@ function FlashcardModal({
   onSubmit,
   flashcard,
 }: FlashcardModalProps) {
-  const { t } = useTranslation('flashcards');
+  const { t } = useTranslation(['flashcards', 'errors']);
   const azureBlobService = useAzureBlobService();
+  const [validationError, setValidationError] = useState<string>('');
 
   // State for form fields
   const [frontText, setFrontText] = useState('');
@@ -217,6 +219,18 @@ function FlashcardModal({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setValidationError('');
+
+    // Frontend validation
+    if (!frontText.trim()) {
+      setValidationError(t('errors:validation.flashcard.frontText'));
+      return;
+    }
+
+    if (!backText.trim()) {
+      setValidationError(t('errors:validation.flashcard.backText'));
+      return;
+    }
 
     try {
       setUploading(true);
@@ -334,7 +348,9 @@ function FlashcardModal({
 
         {/* Body */}
         <ModalBody>
-          <form onSubmit={handleSubmit} className="space-y-6">
+          {validationError && <FormErrorMessage text={validationError} />}
+          
+          <form onSubmit={handleSubmit} noValidate className="space-y-6">
             {/* Preview Section */}
             <div className="p-6 rounded-lg bg-background-subtle-light dark:bg-background-app-dark">
               <div className="mb-4 text-sm text-text-muted-light dark:text-text-muted-dark">

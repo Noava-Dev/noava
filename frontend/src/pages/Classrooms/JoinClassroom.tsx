@@ -6,29 +6,33 @@ import PageHeader from '../../shared/components/PageHeader';
 import NoavaFooter from '../../shared/components/navigation/NoavaFooter';
 import { useClassroomService } from '../../services/ClassroomService';
 import { useToast } from '../../contexts/ToastContext';
+import FormErrorMessage from '../../shared/components/validation/FormErrorMessage';
 
 export default function JoinClassroom() {
-  const { t } = useTranslation('classrooms');
+  const { t } = useTranslation(['classrooms', 'errors']);
   const [code, setCode] = useState('');
   const [loading, setLoading] = useState(false);
+  const [validationError, setValidationError] = useState<string>('');
   const classroomSvc = useClassroomService();
   const navigate = useNavigate();
   const { showSuccess, showError } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setValidationError('');
+
     if (!code.trim()) {
-      showError(t('app.error'), t('join.form.empty'));
+      setValidationError(t('errors:validation.code.empty'));
       return;
     }
 
     try {
       setLoading(true);
       await classroomSvc.joinByCode(code.trim());
-      showSuccess(t('join.success'), t('join.success'));
+      showSuccess(t('join.success'), 'Success');
       navigate('/classrooms');
     } catch (err) {
-      showError(t('app.error'), t('join.error'));
+      showError(t('join.error'), t('app.error'));
     } finally {
       setLoading(false);
     }
@@ -55,7 +59,8 @@ export default function JoinClassroom() {
         <section className="min-h-screen py-8 bg-background-app-light dark:bg-background-app-dark md:py-12">
           <div className="container max-w-3xl px-4 mx-auto">
             <Card>
-              <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+              {validationError && <FormErrorMessage text={validationError} />}
+              <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4">
                 <div>
                   <div className="block mb-2">
                     <Label htmlFor="joinCode" />

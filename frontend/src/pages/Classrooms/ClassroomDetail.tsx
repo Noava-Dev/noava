@@ -47,7 +47,7 @@ function ClassroomDetailPage() {
       const data = await classroomSvc.getById(id);
       setClassroom(data);
     } catch (error) {
-      showError(t('common:toast.error'), t('toast.loadError'));
+      showError(t('toast.loadError'), t('common:toast.error'));
     } finally {
       setLoading(false);
     }
@@ -60,7 +60,7 @@ function ClassroomDetailPage() {
       setDecks(data);
     } catch (error) {
       console.error('Error loading decks:', error);
-      showError(t('common:toast.error'), t('decks.loadError'));
+      showError(t('decks.loadError'), t('common:toast.error'));
     } finally {
       setDecksLoading(false);
     }
@@ -89,11 +89,11 @@ function ClassroomDetailPage() {
 
     try {
       await classroomSvc.removeDeck(id, deckToDelete);
-      showSuccess(t('decks.removeSuccess'), t('common:toast.success'));
+      showSuccess('Success', t('decks.removeSuccess'));
       await fetchDecks();
     } catch (error) {
       console.error('Error removing deck:', error);
-      showError(t('common:toast.error'), t('decks.removeError'));
+      showError(t('decks.removeError'), t('common:toast.error'));
     } finally {
       setIsDeleting(false);
       setDeckToDelete(null);
@@ -108,11 +108,11 @@ function ClassroomDetailPage() {
   const handleAddDeckToClassroom = async (deckId: number) => {
     try {
       await classroomSvc.addDeck(id, deckId);
-      showSuccess(t('common:toast.success'), t('decks.addSuccess'));
+      showSuccess('Success', t('decks.addSuccess'));
       await fetchDecks();
     } catch (error) {
       console.error('Error adding deck:', error);
-      showError(t('common:toast.error'), t('decks.addError'));
+      showError(t('decks.addError'), t('common:toast.error'));
       throw error;
     }
   };

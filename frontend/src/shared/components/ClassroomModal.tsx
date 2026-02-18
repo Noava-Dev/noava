@@ -13,7 +13,7 @@ import type {
   ClassroomResponse,
   ClassroomRequest,
 } from '../../models/Classroom';
-import { useToast } from '../../contexts/ToastContext';
+import FormErrorMessage from './validation/FormErrorMessage';
 
 interface ClassroomModalProps {
   isOpen: boolean;
@@ -28,11 +28,11 @@ function ClassroomModal({
   onSubmit,
   classroom,
 }: ClassroomModalProps) {
-  const { t } = useTranslation('classrooms');
-  const { showError } = useToast();
+  const { t } = useTranslation(['classrooms', 'errors']);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [joinCode, setJoinCode] = useState('');
+  const [validationError, setValidationError] = useState<string>('');
 
   useEffect(() => {
     if (classroom) {
@@ -48,8 +48,17 @@ function ClassroomModal({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name || !description)
-      return showError(t('app.error'), t('toast.nameAndDescriptionRequired'));
+    setValidationError('');
+
+    if (!name.trim()) {
+      setValidationError(t('errors:validation.name.required'));
+      return;
+    }
+
+    if (!description.trim()) {
+      setValidationError(t('errors:validation.description.required'));
+      return;
+    }
 
     onSubmit({ name, description });
   };
@@ -72,7 +81,8 @@ function ClassroomModal({
 
         {/* Body */}
         <ModalBody>
-          <form onSubmit={handleSubmit} className="space-y-4">
+          {validationError && <FormErrorMessage text={validationError} />}
+          <form onSubmit={handleSubmit} noValidate className="space-y-4">
             <div className="flex flex-col gap-2">
               <Label htmlFor="name">{t('modal.nameLabel')} *</Label>
               <TextInput

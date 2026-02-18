@@ -112,7 +112,7 @@ function QuickReview() {
       const decksData = await deckService.getByMultipleIds(deckIds);
 
       if (cardsData.length === 0) {
-        showError(t('quickReview.noCards'), t('quickReview.error'));
+        showError(t('quickReview.error'), t('quickReview.noCards'));
         if (isSingleDeck && deckId) {
           navigate(`/decks/${deckId}/cards`);
         } else if (classroomId) {
@@ -144,7 +144,7 @@ function QuickReview() {
       if (error.response?.status === 404 || error.response?.status === 403) {
         navigate('/not-found', { replace: true });
       } else {
-        showError(t('common:toast.error'), t('quickReview.error'));
+        showError(t('quickReview.error'), t('common:toast.error'));
         if (deckIds.length === 1 && deckId) {
           navigate(`/decks/${deckId}/cards`);
         } else if (classroomId) {

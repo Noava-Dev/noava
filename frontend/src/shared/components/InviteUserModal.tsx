@@ -11,13 +11,16 @@ import {
 } from 'flowbite-react';
 import { useTranslation } from 'react-i18next';
 import { useDeckInvitationService } from '../../services/DeckInvitationService';
+import FormErrorMessage from './validation/FormErrorMessage';
 
 interface InviteUserModalProps {
   isOpen: boolean;
   onClose: () => void;
   onInvite: (email: string, isOwner: boolean) => Promise<void>;
-  itemType: string;
+  itemType?: string;
   itemName: string;
+  deckId?: number;
+  deckTitle?: string;
 }
 
 export const InviteUserModal = ({
@@ -29,17 +32,28 @@ export const InviteUserModal = ({
   deckId,
   deckTitle,
 }: InviteUserModalProps) => {
-  const { t } = useTranslation(['decks', 'common']);
+  const { t } = useTranslation(['decks', 'common', 'errors']);
   const [email, setEmail] = useState('');
   const [isOwner, setIsOwner] = useState(false);
   const deckInvitationService = useDeckInvitationService();
   const [userId, setUserId] = useState('');
-
   const [loading, setLoading] = useState(false);
+  const [validationError, setValidationError] = useState<string>('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email.trim()) return;
+    setValidationError('');
+    
+    if (!email.trim()) {
+      setValidationError(t('errors:validation.email.required'));
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setValidationError(t('errors:validation.email.invalid'));
+      return;
+    }
 
     try {
       setLoading(true);
@@ -57,6 +71,7 @@ export const InviteUserModal = ({
   const handleClose = () => {
     setEmail('');
     setIsOwner(false);
+    setValidationError('');
     onClose();
   };
 
@@ -64,7 +79,8 @@ export const InviteUserModal = ({
     <Modal show={isOpen} onClose={handleClose} size="md">
       <ModalHeader>{t('decks:invite.title', { deckName: itemName })}</ModalHeader>
       <ModalBody>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        {validationError && <FormErrorMessage text={validationError} />}
+        <form onSubmit={handleSubmit} noValidate className="space-y-4">
           <div>
             <Label htmlFor="email">{t('decks:invite.emailLabel')}</Label>
             <TextInput

@@ -169,7 +169,7 @@ function FlashcardDetail() {
       if (error.response?.status === 404 || error.response?.status === 403) {
         navigate('/not-found', { replace: true });
       } else {
-        showError(t('flashcardDetail.error'), t('flashcardDetail.error'));
+        showError('Error', 'Failed to load flashcards');
       }
     }
   };

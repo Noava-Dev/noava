@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { Modal, Button, Label, TextInput, ModalBody, ModalHeader, Spinner } from "flowbite-react";
 import { LuX as X } from "react-icons/lu";
+import FormErrorMessage from '../../../shared/components/validation/FormErrorMessage';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   open: boolean;
@@ -22,9 +24,12 @@ export default function CreateSchoolModal({
   initialData
 }: Props) {
 
+const { t } = useTranslation('errors');
 const [name, setName] = useState(initialData?.name ?? "");
 const [adminInput, setAdminInput] = useState("");
 const [adminEmails, setAdminEmails] = useState<string[]>(initialData?.adminEmails ?? [])
+const [loading, setLoading] = useState(false);
+const [validationError, setValidationError] = useState<string>('');
 
 useEffect(() => { 
   if (initialData){ 
@@ -36,22 +41,31 @@ useEffect(() => {
       setAdminEmails([]);
 }}, [initialData, open]);
 
-  const [loading, setLoading] = useState(false);
+
 
   if (!open) return null;
 
 const handleAddAdmin = (e?: React.MouseEvent) => {
   if (e) e.preventDefault();
+  setValidationError('');
 
   const email = adminInput.trim();
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  if (!email || !emailRegex.test(email)) {
+  if (!email) {
+    setValidationError(t('validation.email.required'));
     setAdminInput(""); 
     return;
   }
 
+  if (!emailRegex.test(email)) {
+    setValidationError(t('validation.email.invalid'));
+    setAdminInput("");
+    return;
+  }
+
   if (adminEmails.includes(email)) {
+    setValidationError(t('validation.email.duplicate'));
     setAdminInput("");
     return;
   }
@@ -66,7 +80,17 @@ const handleAddAdmin = (e?: React.MouseEvent) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim() || adminEmails.length === 0) return;
+    setValidationError('');
+    
+    if (!name.trim()) {
+      setValidationError(t('validation.school.name'));
+      return;
+    }
+
+    if (adminEmails.length === 0) {
+      setValidationError(t('validation.school.minAdmins'));
+      return;
+    }
 
     try {
       setLoading(true);
@@ -98,7 +122,9 @@ return (
       <ModalBody>
         <div className="space-y-6">
 
-            <form onSubmit={handleSubmit} className="space-y-6">
+            {validationError && <FormErrorMessage text={validationError} />}
+
+            <form onSubmit={handleSubmit} noValidate className="space-y-6">
             
             {/* School Name Input */}
             <div>
