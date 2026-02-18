@@ -167,26 +167,30 @@ function ClassroomsPage() {
                 {/* Action Buttons */}
                 <div className="flex flex-col gap-3 mt-4 mb-8 md:flex-row md:justify-between md:items-start md:mt-6">
                   {/* Create Classroom */}
-                  <Tooltip content={t('common:tooltips.createClassroom')}>
-                    <Button
-                      onClick={() => setIsModalOpen(true)}
-                      size="lg"
-                      className="w-full md:w-fit bg-gradient-to-r from-primary-600 to-primary-700">
-                      <HiPlus className="mr-2 size-5" />
-                      {t('createButton')}
-                    </Button>
-                  </Tooltip>
+                  <div className="w-full md:w-fit">
+                    <Tooltip content={t('common:tooltips.createClassroom')}>
+                      <Button
+                        onClick={() => setIsModalOpen(true)}
+                        size="lg"
+                        className="w-full md:w-fit bg-gradient-to-r from-primary-600 to-primary-700">
+                        <HiPlus className="mr-2 size-5" />
+                        {t('createButton')}
+                      </Button>
+                    </Tooltip>
+                  </div>
 
                   {/* Join Classroom */}
-                  <Tooltip content={t('common:tooltips.joinClassroom')}>
-                    <Button
-                      onClick={() => navigate('/classrooms/join')}
-                      size="lg"
-                      className="w-full md:w-fit bg-gradient-to-r from-secondary-600 to-secondary-700 hover:shadow-sm hover:border-border">
-                      <TbDoorEnter className="mr-2 size-5" />
-                      {t('joinButton')}
-                    </Button>
-                  </Tooltip>
+                  <div className="w-full md:w-fit">
+                    <Tooltip content={t('common:tooltips.joinClassroom')}>
+                      <Button
+                        onClick={() => navigate('/classrooms/join')}
+                        size="lg"
+                        className="w-full md:w-fit bg-gradient-to-r from-secondary-600 to-secondary-700 hover:shadow-sm hover:border-border">
+                        <TbDoorEnter className="mr-2 size-5" />
+                        {t('joinButton')}
+                      </Button>
+                    </Tooltip>
+                  </div>
                 </div>
               </div>
             </div>

@@ -169,14 +169,16 @@ export default function MembersPage() {
 
               {classroom?.permissions?.canEdit && (
                 <div className="flex-shrink-0">
-                  <Tooltip content={t('common:tooltips.inviteMember')}>
-                    <Button
-                      size="sm"
-                      onClick={() => setShowInvite(true)}
-                      className="inline-flex items-center gap-2">
-                      {t('common:actions.invite', 'Invite')}
-                    </Button>
-                  </Tooltip>
+                  <div className="w-full md:w-fit">
+                    <Tooltip content={t('common:tooltips.inviteMember')}>
+                      <Button
+                        size="sm"
+                        onClick={() => setShowInvite(true)}
+                        className="inline-flex items-center gap-2">
+                        {t('common:actions.invite', 'Invite')}
+                      </Button>
+                    </Tooltip>
+                  </div>
                 </div>
               )}
             </div>

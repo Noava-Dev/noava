@@ -215,16 +215,18 @@ return (
                     >
                       {t('members.title')}
                     </Button>
-                    <Tooltip content={t('common:tooltips.addDeckToClassroom')}>
-                      <Button
-                        size="lg"
-                        className="w-full md:w-fit"
-                        onClick={() => setAddDeckModalOpened(true)}
-                      >
-                        <HiPlus className="w-5 h-5 mr-2" />
-                        {t('decks.addDeck')}
-                      </Button>
-                    </Tooltip>
+                    <div className="w-full md:w-fit">
+                      <Tooltip content={t('common:tooltips.addDeckToClassroom')}>
+                        <Button
+                          size="lg"
+                          className="w-full md:w-fit"
+                          onClick={() => setAddDeckModalOpened(true)}
+                        >
+                          <HiPlus className="w-5 h-5 mr-2" />
+                          {t('decks.addDeck')}
+                        </Button>
+                      </Tooltip>
+                    </div>
                   </>
                 )}
               </div>
