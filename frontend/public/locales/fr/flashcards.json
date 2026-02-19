@@ -57,7 +57,20 @@
     "flipMode": "Mode Retournement",
     "reverseReview": "Mode Inversé",
     "backToClassroom": "Retour à {{name}}",
-    "importFromFile": "Importer depuis un fichier"
+    "importFromFile": "Importer depuis un fichier",
+    "uploadFile": "Télécharger un Fichier",
+    "recordAudio": "Enregistrer l'Audio",
+    "audioUploaded": "Audio téléchargé"
+  },
+  "audioRecorder": {
+    "startRecording": "Démarrer l'Enregistrement",
+    "stopRecording": "Arrêter l'Enregistrement",
+    "recordingComplete": "Enregistrement terminé",
+    "play": "Lire",
+    "playing": "Lecture en cours...",
+    "delete": "Supprimer",
+    "maxDuration": "Maximum {seconds} secondes",
+    "permissionDenied": "Accès au microphone refusé. Veuillez activer les autorisations du microphone dans votre navigateur."
   },
    "quickReview": {
     "startReview": "Révision Rapide",

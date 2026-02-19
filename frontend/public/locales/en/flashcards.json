@@ -28,7 +28,21 @@
     "createButton": "Create Card",
     "uploadError": "Failed to upload media. Please try again.",
      "enableVoiceAssistant": "Enable voice assistant",
-    "voiceAssistantHelp": "Card text will be read aloud if no audio file is uploaded"
+    "voiceAssistantHelp": "Card text will be read aloud if no audio file is uploaded",
+    "uploadFile": "Upload File",
+    "recordAudio": "Record Audio",
+    "audioUploaded": "Audio uploaded"
+    
+  },
+  "audioRecorder": {
+    "startRecording": "Start Recording",
+    "stopRecording": "Stop Recording",
+    "recordingComplete": "Recording complete",
+    "play": "Play",
+    "playing": "Playing...",
+    "delete": "Delete",
+    "maxDuration": "Maximum 15 seconds",
+    "permissionDenied": "Microphone access denied. Please enable microphone permissions in your browser."
   },
   "flashcardDetail": {
     "backToDeck": "Back to Deck",
