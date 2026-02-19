@@ -69,7 +69,7 @@
     "play": "Lire",
     "playing": "Lecture en cours...",
     "delete": "Supprimer",
-    "maxDuration": "Maximum {seconds} secondes",
+    "maxDuration": "Max. 15 secondes",
     "permissionDenied": "Accès au microphone refusé. Veuillez activer les autorisations du microphone dans votre navigateur."
   },
    "quickReview": {

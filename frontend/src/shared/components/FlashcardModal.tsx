@@ -54,6 +54,7 @@ function FlashcardModal({
   const [frontAudioPreview, setFrontAudioPreview] = useState<string | null>(null);
   const [frontAudioBlobName, setFrontAudioBlobName] = useState<string | undefined>(undefined);
   const [recordedFrontAudio, setRecordedFrontAudio] = useState<Blob | null>(null);
+  const [frontAudioTab, setFrontAudioTab] = useState<'upload' | 'record'>('upload');
 
   // Back side media
   const [backImageFile, setBackImageFile] = useState<File | null>(null);
@@ -64,6 +65,7 @@ function FlashcardModal({
   const [backAudioPreview, setBackAudioPreview] = useState<string | null>(null);
   const [backAudioBlobName, setBackAudioBlobName] = useState<string | undefined>(undefined);
   const [recordedBackAudio, setRecordedBackAudio] = useState<Blob | null>(null);
+  const [backAudioTab, setBackAudioTab] = useState<'upload' | 'record'>('upload');
 
   const [hasVoiceAssistant, setHasVoiceAssistant] = useState(
     flashcard?.hasVoiceAssistant || false
@@ -136,6 +138,8 @@ function FlashcardModal({
     }
     setActiveTab('front');
     setIsFlipped(false);
+    setFrontAudioTab('upload');
+    setBackAudioTab('upload');
   }, [flashcard, isOpen]);
 
   const setFrontImageFromFile = (file: File) => {
@@ -549,10 +553,23 @@ function FlashcardModal({
                     </Label>
                   </div>
 
-                  <Tabs variant="underline">
+                  <Tabs
+                    variant="underline"
+                    onActiveTabChange={(index) =>
+                      setFrontAudioTab(index === 0 ? 'upload' : 'record')
+                    }>
                     <TabItem
-                      active
-                      title={t('flashcardModal.uploadFile')}
+                      active={frontAudioTab === 'upload'}
+                      title={
+                        <span
+                          className={`font-semibold ${
+                            frontAudioTab === 'upload'
+                              ? 'text-cyan-400'
+                              : 'text-text-muted-light dark:text-text-muted-dark'
+                          }`}>
+                          {t('flashcardModal.uploadFile')}
+                        </span>
+                      }
                       icon={HiUpload}>
                       <div className="space-y-3">
                         {frontAudioPreview && !recordedFrontAudio && (
@@ -570,7 +587,17 @@ function FlashcardModal({
                     </TabItem>
 
                     <TabItem
-                      title={t('flashcardModal.recordAudio')}
+                      active={frontAudioTab === 'record'}
+                      title={
+                        <span
+                          className={`font-semibold ${
+                            frontAudioTab === 'record'
+                              ? 'text-cyan-400'
+                              : 'text-text-muted-light dark:text-text-muted-dark'
+                          }`}>
+                          {t('flashcardModal.recordAudio')}
+                        </span>
+                      }
                       icon={HiMicrophone}>
                       <AudioRecorder
                         onRecordingComplete={(blob) => {
@@ -728,10 +755,23 @@ function FlashcardModal({
                     </Label>
                   </div>
 
-                  <Tabs variant="underline">
+                  <Tabs
+                    variant="underline"
+                    onActiveTabChange={(index) =>
+                      setBackAudioTab(index === 0 ? 'upload' : 'record')
+                    }>
                     <TabItem
-                      active
-                      title={t('flashcardModal.uploadFile')}
+                      active={backAudioTab === 'upload'}
+                      title={
+                        <span
+                          className={`font-semibold ${
+                            backAudioTab === 'upload'
+                              ? 'text-cyan-400'
+                              : 'text-text-muted-light dark:text-text-muted-dark'
+                          }`}>
+                          {t('flashcardModal.uploadFile')}
+                        </span>
+                      }
                       icon={HiUpload}>
                       <div className="space-y-3">
                         {backAudioPreview && !recordedBackAudio && (
@@ -749,7 +789,17 @@ function FlashcardModal({
                     </TabItem>
 
                     <TabItem
-                      title={t('flashcardModal.recordAudio')}
+                      active={backAudioTab === 'record'}
+                      title={
+                        <span
+                          className={`font-semibold ${
+                            backAudioTab === 'record'
+                              ? 'text-cyan-400'
+                              : 'text-text-muted-light dark:text-text-muted-dark'
+                          }`}>
+                          {t('flashcardModal.recordAudio')}
+                        </span>
+                      }
                       icon={HiMicrophone}>
                       <AudioRecorder
                         onRecordingComplete={(blob) => {

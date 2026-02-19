@@ -40,7 +40,7 @@
     "play": "Afspelen",
     "playing": "Bezig met afspelen...",
     "delete": "Verwijderen",
-    "maxDuration": "Maximaal {seconds} seconden",
+    "maxDuration": "Max. 15 seconden",
     "permissionDenied": "Microfoon toegang geweigerd. Schakel microfoon rechten in via je browser."
   },
   "flashcardDetail": {

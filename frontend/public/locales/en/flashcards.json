@@ -41,7 +41,7 @@
     "play": "Play",
     "playing": "Playing...",
     "delete": "Delete",
-    "maxDuration": "Maximum 15 seconds",
+    "maxDuration": "Max. 15 seconds",
     "permissionDenied": "Microphone access denied. Please enable microphone permissions in your browser."
   },
   "flashcardDetail": {
