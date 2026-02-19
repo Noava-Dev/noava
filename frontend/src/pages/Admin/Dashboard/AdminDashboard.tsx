@@ -1,4 +1,3 @@
-import { useState } from "react"
 import { Button } from "flowbite-react"
 import { LuPlus,
         LuBuilding2 as Building2,
@@ -9,6 +8,7 @@ import { LuPlus,
 import PageHeader from "../../../shared/components/PageHeader"
 import { Tabs, TabItem } from "flowbite-react"
 import SchoolsTab from "../components/schoolsTab"
+import UsersTab from "../components/users-tab"
 
 function FaqTab() {
   return (
@@ -52,26 +52,6 @@ function BlogTab() {
   )
 }
 
-function UsersTab() {
-  return (
-    <div className="rounded-2xl border bg-white p-6 shadow-sm">
-      <div className="flex items-center justify-between">
-        <div>
-          <h3 className="text-lg font-semibold">Users</h3>
-          <p className="text-sm text-gray-500">
-            Manage platform users and roles.
-          </p>
-        </div>
-
-        <Button className="flex items-center gap-2">
-          <LuPlus /> Add User
-        </Button>
-      </div>
-
-      <div className="mt-6 text-sm text-gray-500">User table will go here.</div>
-    </div>
-  )
-}
 
 /* -------------------------------------------------------------------------- */
 /*                              Main Component                                */
