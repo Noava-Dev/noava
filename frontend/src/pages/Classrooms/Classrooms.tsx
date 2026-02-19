@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Select } from 'flowbite-react';
+import { Button, Select, Tooltip } from 'flowbite-react';
 import { HiPlus } from 'react-icons/hi';
 import { useTranslation } from 'react-i18next';
 import NoavaFooter from '../../shared/components/navigation/NoavaFooter';
@@ -45,7 +45,7 @@ function ClassroomsPage() {
       const data = await classroomSvc.getAllForUser();
       setClassrooms(data);
     } catch (error) {
-      showError(t('app.error'), t('toast.loadError'));
+      showError(t('toast.loadError'), t('app.error'));
     } finally {
       setLoading(false);
     }
@@ -54,11 +54,11 @@ function ClassroomsPage() {
   const handleCreate = async (payload: any) => {
     try {
       await classroomSvc.create(payload);
-      showSuccess(t('toast.createSuccess'), t('toast.createSuccess'));
+      showSuccess(t('toast.createSuccess'), 'Success');
       setIsModalOpen(false);
       fetchClassrooms();
     } catch (error) {
-      showError(t('app.error'), t('toast.createError'));
+      showError(t('toast.createError'), t('app.error'));
     }
   };
 
@@ -66,12 +66,12 @@ function ClassroomsPage() {
     if (!editingClassroom) return;
     try {
       await classroomSvc.update(editingClassroom.id, payload);
-      showSuccess(t('toast.updateSuccess'), t('toast.updateSuccess'));
+      showSuccess(t('toast.updateSuccess'), 'Success');
       setIsModalOpen(false);
       setEditingClassroom(undefined);
       fetchClassrooms();
     } catch (error) {
-      showError(t('app.error'), t('toast.updateError'));
+      showError(t('toast.updateError'), t('app.error'));
     }
   };
 
@@ -81,10 +81,10 @@ function ClassroomsPage() {
     if (deleteId === null) return;
     try {
       await classroomSvc.delete(deleteId);
-      showSuccess(t('toast.deleteSuccess'), t('toast.deleteSuccess'));
+      showSuccess(t('toast.deleteSuccess'), 'Success');
       fetchClassrooms();
     } catch (error) {
-      showError(t('app.error'), t('toast.deleteError'));
+      showError(t('toast.deleteError'), t('app.error'));
     } finally {
       setDeleteId(null);
     }
@@ -98,10 +98,10 @@ function ClassroomsPage() {
     if (requestCodeId === null) return;
     try {
       await classroomSvc.updateJoinCode(requestCodeId);
-      showSuccess(t('toast.requestCodeSuccess'), t('toast.requestCodeSuccess'));
+      showSuccess(t('toast.requestCodeSuccess'), 'Success');
       fetchClassrooms();
     } catch (error) {
-      showError(t('app.error'), t('toast.requestCodeError'));
+      showError(t('toast.requestCodeError'), t('app.error'));
     } finally {
       setRequestCodeId(null);
     }
@@ -167,22 +167,30 @@ function ClassroomsPage() {
                 {/* Action Buttons */}
                 <div className="flex flex-col gap-3 mt-4 mb-8 md:flex-row md:justify-between md:items-start md:mt-6">
                   {/* Create Classroom */}
-                  <Button
-                    onClick={() => setIsModalOpen(true)}
-                    size="lg"
-                    className="w-full md:w-fit bg-gradient-to-r from-primary-600 to-primary-700">
-                    <HiPlus className="mr-2 size-5" />
-                    {t('createButton')}
-                  </Button>
+                  <div className="w-full md:w-fit">
+                    <Tooltip content={t('common:tooltips.createClassroom')}>
+                      <Button
+                        onClick={() => setIsModalOpen(true)}
+                        size="lg"
+                        className="w-full md:w-fit bg-gradient-to-r from-primary-600 to-primary-700">
+                        <HiPlus className="mr-2 size-5" />
+                        {t('createButton')}
+                      </Button>
+                    </Tooltip>
+                  </div>
 
                   {/* Join Classroom */}
-                  <Button
-                    onClick={() => navigate('/classrooms/join')}
-                    size="lg"
-                    className="w-full md:w-fit bg-gradient-to-r from-secondary-600 to-secondary-700 hover:shadow-sm hover:border-border">
-                    <TbDoorEnter className="mr-2 size-5" />
-                    {t('joinButton')}
-                  </Button>
+                  <div className="w-full md:w-fit">
+                    <Tooltip content={t('common:tooltips.joinClassroom')}>
+                      <Button
+                        onClick={() => navigate('/classrooms/join')}
+                        size="lg"
+                        className="w-full md:w-fit bg-gradient-to-r from-secondary-600 to-secondary-700 hover:shadow-sm hover:border-border">
+                        <TbDoorEnter className="mr-2 size-5" />
+                        {t('joinButton')}
+                      </Button>
+                    </Tooltip>
+                  </div>
                 </div>
               </div>
             </div>

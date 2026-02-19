@@ -1,0 +1,37 @@
+{
+  "validation": {
+    "required": "Ce champ est obligatoire",
+    "email": {
+      "required": "L'adresse e-mail est obligatoire",
+      "invalid": "Veuillez saisir une adresse e-mail valide",
+      "duplicate": "Cette adresse e-mail a déjà été ajoutée"
+    },
+    "name": {
+      "required": "Le nom est obligatoire"
+    },
+    "title": {
+      "required": "Le titre est obligatoire"
+    },
+    "description": {
+      "required": "La description est obligatoire"
+    },
+    "language": {
+      "required": "La sélection de la langue est obligatoire"
+    },
+    "code": {
+      "required": "Le code est obligatoire",
+      "empty": "Veuillez saisir un code"
+    },
+    "file": {
+      "required": "Veuillez sélectionner un fichier à télécharger"
+    },
+    "flashcard": {
+      "frontText": "Le texte du recto est obligatoire",
+      "backText": "Le texte du verso est obligatoire"
+    },
+    "school": {
+      "name": "Le nom de l'école est obligatoire",
+      "minAdmins": "Au moins une adresse e-mail d'administrateur est requise"
+    }
+  }
+}

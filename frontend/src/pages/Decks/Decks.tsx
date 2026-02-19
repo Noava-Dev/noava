@@ -7,6 +7,7 @@ import {
   Select,
   Dropdown,
   DropdownItem,
+  Tooltip,
 } from 'flowbite-react';
 import { Modal } from 'flowbite-react';
 import { HiPlus, HiPlay, HiPencil, HiRefresh, HiChevronDown } from 'react-icons/hi';
@@ -25,6 +26,8 @@ import type { Deck, DeckRequest } from '../../models/Deck';
 import Skeleton from '../../shared/components/loading/Skeleton';
 import EmptyState from '../../shared/components/EmptyState';
 import { useUser } from '@clerk/clerk-react';
+import ConfirmModal from '../../shared/components/ConfirmModal';
+import { TbDoorEnter } from 'react-icons/tb';
 
 function DecksPage() {
   const { t } = useTranslation('decks');
@@ -48,6 +51,9 @@ function DecksPage() {
   const [joiningDeck, setJoiningDeck] = useState(false);
   const [analyticsModalOpen, setAnalyticsModalOpen] = useState(false);
   const [analyticsDeck, setAnalyticsDeck] = useState<Deck | null>(null);
+  const [copyModalOpened, setCopyModalOpened] = useState(false);
+  const [deckToCopy, setDeckToCopy] = useState<number | null>(null);
+  const [isCopying, setIsCopying] = useState(false);
 
   useEffect(() => {
     fetchDecks();
@@ -61,20 +67,43 @@ function DecksPage() {
 
       setDecks(data);
     } catch (error) {
-      showError(t('toast.loadError'), t('toast.loadError'));
+      showError(t('toast.loadError'), 'Error');
     } finally {
       setLoading(false);
+    }
+  };
+
+    const handleCopy = (deckId: number) => {
+    setDeckToCopy(deckId)
+    setCopyModalOpened(true);
+  };
+
+  const handleConfirmCopy = async () => {
+    if (!deckToCopy) return;
+
+    setIsCopying(true);
+
+    try {
+      await deckService.copy(deckToCopy);
+      showSuccess(t('decks:copySuccess'), t('common:toast.success'));
+      await fetchDecks();
+    } catch (error) {
+      showError(t('common:toast.error'), t('decks:copyError'));
+    } finally {
+      setIsCopying(false);
+      setCopyModalOpened(false);
+      setDeckToCopy(null);
     }
   };
 
   const handleCreate = async (deckData: DeckRequest) => {
     try {
       await deckService.create(deckData);
-      showSuccess(t('toast.createSuccess'), t('toast.createSuccess'));
+      showSuccess('Success', t('toast.createSuccess'));
       setIsModalOpen(false);
       fetchDecks();
     } catch (error) {
-      showError(t('toast.createError'), t('toast.createError'));
+      showError(t('toast.createError'), 'Error');
     }
   };
 
@@ -83,7 +112,7 @@ function DecksPage() {
 
     try {
       await deckService.update(editingDeck.deckId, deckData);
-      showSuccess(t('toast.updateSuccess'), t('toast.updateSuccess'));
+      showSuccess('Success', t('toast.updateSuccess'));
       setIsModalOpen(false);
       setEditingDeck(undefined);
       fetchDecks();
@@ -91,7 +120,7 @@ function DecksPage() {
       if (error.response?.status === 404 || error.response?.status === 403) {
         navigate('/not-found', { replace: true });
       } else {
-        showError(t('toast.updateError'), t('toast.updateError'));
+        showError(t('toast.updateError'), 'Error');
       }
     }
   };
@@ -105,13 +134,13 @@ function DecksPage() {
 
     try {
       await deckService.delete(deleteDeckId);
-      showSuccess(t('toast.deleteSuccess'), t('toast.deleteSuccess'));
+      showSuccess('Success', t('toast.deleteSuccess'));
       fetchDecks();
     } catch (error: any) {
       if (error.response?.status === 404 || error.response?.status === 403) {
         navigate('/not-found', { replace: true });
       } else {
-        showError(t('toast.deleteError'), t('toast.deleteError'));
+        showError(t('toast.deleteError'), 'Error');
       }
     } finally {
       setDeleteDeckId(null);
@@ -144,19 +173,19 @@ function DecksPage() {
 
   const handleJoinByCode = async () => {
     if (!joinCode.trim()) {
-      showError(t('common:toast.error'), t('joinCode.empty'));
+      showError(t('joinCode.empty'), t('common:toast.error'));
       return;
     }
 
     try {
       setJoiningDeck(true);
       await deckService.joinByCode(joinCode.trim());
-      showSuccess(t('common:toast.success'), t('joinCode.success'));
+      showSuccess('Success', t('joinCode.success'));
       setJoinCodeModalOpen(false);
       setJoinCode('');
       fetchDecks();
     } catch (error) {
-      showError(t('common:toast.error'), t('joinCode.error'));
+      showError(t('joinCode.error'), t('common:toast.error'));
     } finally {
       setJoiningDeck(false);
     }
@@ -206,51 +235,63 @@ function DecksPage() {
 
               <div className="flex flex-col gap-3 sm:flex-row">
                 {decks.length > 0 && (
-                  <Dropdown
-                    label=""
-                    dismissOnClick={true}
-                    renderTrigger={() => (
-                      <Button size="lg" className="w-full border-none bg-cyan-500 hover:bg-cyan-600 md:w-fit">
-                        <HiPlay className="w-5 h-5 mr-2" />
-                        {t('bulkReview.button')}
-                        <HiChevronDown className="w-4 h-4 ml-1" />
-                      </Button>
-                    )}
-                  >
-                    <DropdownItem
-                      icon={HiPlay}
-                      onClick={() => setBulkReviewModalOpened(true)}
-                    >
-                      {t('reviewModes.flipMode')}
-                    </DropdownItem>
-                    <DropdownItem
-                      icon={HiPencil}
-                      onClick={() => setBulkWriteReviewModalOpened(true)}
-                    >
-                      {t('reviewModes.writeReview')}
-                    </DropdownItem>
-                    <DropdownItem
-                      icon={HiRefresh}
-                      onClick={() => setBulkReverseReviewModalOpened(true)}
-                    >
-                      {t('reviewModes.reverseReview')}
-                    </DropdownItem>
-                  </Dropdown>
+                  <div className="w-full md:w-fit">
+                    <Tooltip content={t('common:tooltips.bulkReview')}>
+                      <Dropdown
+                        label=""
+                        dismissOnClick={true}
+                        renderTrigger={() => (
+                          <Button size="lg" className="w-full border-none bg-cyan-500 hover:bg-cyan-600 md:w-fit">
+                            <HiPlay className="w-5 h-5 mr-2" />
+                            {t('bulkReview.button')}
+                            <HiChevronDown className="w-4 h-4 ml-1" />
+                          </Button>
+                        )}
+                      >
+                        <DropdownItem
+                          icon={HiPlay}
+                          onClick={() => setBulkReviewModalOpened(true)}
+                        >
+                          {t('reviewModes.flipMode')}
+                        </DropdownItem>
+                        <DropdownItem
+                          icon={HiPencil}
+                          onClick={() => setBulkWriteReviewModalOpened(true)}
+                        >
+                          {t('reviewModes.writeReview')}
+                        </DropdownItem>
+                        <DropdownItem
+                          icon={HiRefresh}
+                          onClick={() => setBulkReverseReviewModalOpened(true)}
+                        >
+                          {t('reviewModes.reverseReview')}
+                        </DropdownItem>
+                      </Dropdown>
+                    </Tooltip>
+                  </div>
                 )}
-                <Button
-                  onClick={() => setJoinCodeModalOpen(true)}
-                  size="lg"
-                  color="gray"
-                  className="w-full border-none md:w-fit">
-                  {t('joinCode.button')}
-                </Button>
-                <Button
-                  onClick={() => setIsModalOpen(true)}
-                  size="lg"
-                  className="w-full border-none md:w-fit bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800">
-                  <HiPlus className="w-5 h-5 mr-2" />
-                  {t('createButton')}
-                </Button>
+                <div className="w-full md:w-fit">
+                  <Tooltip content={t('common:tooltips.joinDeckByCode')}>
+                    <Button
+                      onClick={() => setJoinCodeModalOpen(true)}
+                      size="lg"
+                      color="gray"
+                      className="w-full border-none md:w-fit">
+                      {t('joinCode.button')}
+                    </Button>
+                  </Tooltip>
+                </div>
+                <div className="w-full md:w-fit">
+                  <Tooltip content={t('common:tooltips.createDeck')}>
+                    <Button
+                      onClick={() => setIsModalOpen(true)}
+                      size="lg"
+                      className="w-full border-none md:w-fit bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800">
+                      <HiPlus className="w-5 h-5 mr-2" />
+                      {t('createButton')}
+                    </Button>
+                  </Tooltip>
+                </div>
               </div>
             </div>
           </div>
@@ -307,6 +348,7 @@ function DecksPage() {
                         <DeckCard
                           key={deck.deckId}
                           deck={deck}
+                          onCopy={handleCopy}
                           onEdit={handleEdit}
                           onDelete={handleDelete}
                           onAnalytics={handleAnalytics}
@@ -327,6 +369,7 @@ function DecksPage() {
                         <DeckCard
                           key={deck.deckId}
                           deck={deck}
+                          onCopy={handleCopy}
                           onEdit={handleEdit}
                           onDelete={handleDelete}
                           onAnalytics={handleAnalytics}
@@ -454,6 +497,18 @@ function DecksPage() {
             </div>
           </ModalFooter>
         </Modal>
+
+                {/* Confirm Copy Modal */}
+                <ConfirmModal
+                  show={copyModalOpened}
+                  title={t('copy.title')}
+                  message={t('copy.message')}
+                  confirmLabel={isCopying ? t('common:actions.copying') : t('common:actions.copy')}
+                  cancelLabel={t('common:actions.cancel')}
+                  confirmColor="green"
+                  onConfirm={handleConfirmCopy}
+                  onCancel={() => setCopyModalOpened(false)}
+                />
 
         <NoavaFooter />
       </div>

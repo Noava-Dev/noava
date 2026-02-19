@@ -28,6 +28,7 @@ import DeckCard from '../../shared/components/DeckCard';
 import DeckStatisticsModal from '../../shared/components/DeckStatisticsModal';
 import Loading from '../../shared/components/loading/Loading';
 import DeckModal from '../../shared/components/DeckModal';
+import ConfirmModal from '../../shared/components/ConfirmModal';
 
 function Dashboard() {
   const { t } = useTranslation('dashboard');
@@ -43,6 +44,9 @@ function Dashboard() {
   const [deleteDeckId, setDeleteDeckId] = useState<number | null>(null);
   const [analyticsModalOpen, setAnalyticsModalOpen] = useState(false);
   const [analyticsDeck, setAnalyticsDeck] = useState<Deck | null>(null);
+  const [copyModalOpened, setCopyModalOpened] = useState(false);
+  const [deckToCopy, setDeckToCopy] = useState<number | null>(null);
+  const [isCopying, setIsCopying] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -58,9 +62,31 @@ function Dashboard() {
       setDecks(decksData);
       setStatistics(statsData);
     } catch (error) {
-      showError(t('toast.loadError'), t('toast.loadError'));
+      showError(t('toast.loadError'), 'Error');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleCopy = (deckId: number) => {
+    setDeckToCopy(deckId)
+    setCopyModalOpened(true);
+  };
+
+  const handleConfirmCopy = async () => {
+    if (!deckToCopy) return;
+
+    setIsCopying(true);
+
+    try {
+      await deckService.copy(deckToCopy);
+      showSuccess(t('decks:copySuccess'), t('common:toast.success'));
+    } catch (error) {
+      showError(t('common:toast.error'), t('decks:copyError'));
+    } finally {
+      setIsCopying(false);
+      setCopyModalOpened(false);
+      setDeckToCopy(null);
     }
   };
 
@@ -84,12 +110,12 @@ function Dashboard() {
 
     try {
       await deckService.update(editingDeck.deckId, deckData);
-      showSuccess(t('toast.updateSuccess'), t('toast.updateSuccess'));
+      showSuccess('Success', t('toast.updateSuccess'));
       setIsModalOpen(false);
       setEditingDeck(undefined);
       fetchData();
     } catch (error) {
-      showError(t('toast.updateError'), t('toast.updateError'));
+      showError(t('toast.updateError'), 'Error');
     }
   };
 
@@ -102,10 +128,10 @@ function Dashboard() {
 
     try {
       await deckService.delete(deleteDeckId);
-      showSuccess(t('toast.deleteSuccess'), t('toast.deleteSuccess'));
+      showSuccess('Success', t('toast.deleteSuccess'));
       fetchData();
     } catch (error) {
-      showError(t('toast.deleteError'), t('toast.deleteError'));
+      showError(t('toast.deleteError'), 'Error');
     } finally {
       setDeleteDeckId(null);
     }
@@ -195,6 +221,7 @@ function Dashboard() {
                         <DeckCard
                           key={deck.deckId}
                           deck={deck}
+                          onCopy={handleCopy}
                           onEdit={handleEdit}
                           onDelete={handleDelete}
                           onAnalytics={handleAnalytics}
@@ -251,6 +278,18 @@ function Dashboard() {
               </div>
             </ModalFooter>
           </Modal>
+
+                {/* Confirm Copy Modal */}
+                <ConfirmModal
+                  show={copyModalOpened}
+                  title={t('decks:copy.title')}
+                  message={t('decks:copy.message')}
+                  confirmLabel={isCopying ? t('common:actions.copying') : t('common:actions.copy')}
+                  cancelLabel={t('common:actions.cancel')}
+                  confirmColor="green"
+                  onConfirm={handleConfirmCopy}
+                  onCancel={() => setCopyModalOpened(false)}
+                />
         </div>
       </div>
     </>

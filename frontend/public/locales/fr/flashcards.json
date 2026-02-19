@@ -62,7 +62,20 @@
     "longTermWrite": "Écriture Long Terme",
     "longTermFlip": "Retournement Long Terme",
     "longTermReverse": "Inversé Long Terme",
-    "learn": "Apprendre"
+    "learn": "Apprendre",
+    "uploadFile": "Télécharger un Fichier",
+    "recordAudio": "Enregistrer l'Audio",
+    "audioUploaded": "Audio téléchargé"
+  },
+  "audioRecorder": {
+    "startRecording": "Démarrer l'Enregistrement",
+    "stopRecording": "Arrêter l'Enregistrement",
+    "recordingComplete": "Enregistrement terminé",
+    "play": "Lire",
+    "playing": "Lecture en cours...",
+    "delete": "Supprimer",
+    "maxDuration": "Max. 15 secondes",
+    "permissionDenied": "Accès au microphone refusé. Veuillez activer les autorisations du microphone dans votre navigateur."
   },
    "quickReview": {
     "startReview": "Révision Rapide",
