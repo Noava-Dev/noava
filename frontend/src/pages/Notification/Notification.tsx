@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Card, Button, Spinner, Tooltip } from 'flowbite-react';
+import { Card, Button, Tooltip } from 'flowbite-react';
 import { notificationService } from '../../services/NotificationService';
 import type {
   Notification,
@@ -19,8 +19,6 @@ const NotificationPage = () => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState(true);
   const [processingId, setProcessingId] = useState<number | null>(null);
-
-  const { getToken } = useAuth();
   const service = notificationService();
   const { t } = useTranslation('notification');
   const api = useApi();
@@ -81,19 +79,11 @@ const NotificationPage = () => {
   ) {
     setProcessingId(notification.id);
     try {
-      // Check if this is a deck join action
-      if (action.endpoint.includes('/join/')) {
-        const joinCode = action.endpoint.split('/join/')[1];
-        const joinedDeck = await deckService.joinByCode(joinCode);
-        
-        // Show success message
-        showSuccess(t('notification:joined.success'), t('common:toast.success'));
-        
-        // Navigate to the deck or refresh the page
-        window.location.reload(); // Force refresh to update deck list
-      } else {
-        await api.request({ method: action.method, url: action.endpoint });
-      }
+
+      await api.request({
+        method: action.method,
+        url: `${import.meta.env.VITE_API_BASE_URL}${action.endpoint}`
+      });
 
       await service.deleteNotification(notification.id);
       setNotifications((prev) => prev.filter((n) => n.id !== notification.id));
@@ -143,7 +133,7 @@ const NotificationPage = () => {
                         <div className="flex-1 min-w-0">
                           <div>
                             <div className="text-lg font-semibold text-text-title-light md:text-xl dark:text-text-title-dark">
-                              {t('notifications.genericTitle')}
+                              {t(n.titleKey)}
                             </div>
                             <div className="mt-1 text-xs text-text-muted-light md:text-sm dark:text-text-muted-dark">
                               {formatDateToEuropean(n.createdAt)}

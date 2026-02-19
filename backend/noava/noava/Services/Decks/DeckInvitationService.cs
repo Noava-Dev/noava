@@ -73,6 +73,7 @@ namespace noava.Services.Decks
             {
                 UserId = invitedUser.ClerkId,
                 Type = NotificationType.DeckInvitationReceived,
+                TitleKey = "deck_invitation_received_title",
                 TemplateKey = "deck_invitation_received",
                 ParametersJson = JsonSerializer.Serialize(new
                 {
@@ -86,13 +87,13 @@ namespace noava.Services.Decks
                     new NotificationActionRequestDto
                     {
                         LabelKey = "accept",  
-                        Endpoint = $"/api/deckinvitation/{invitation.InvitationId}/accept",  
+                        Endpoint = $"/deckinvitation/{invitation.InvitationId}/accept",  
                         Method = HttpMethodType.POST  
                     },
                     new NotificationActionRequestDto
                     {
                         LabelKey = "decline",  
-                        Endpoint = $"/api/deckinvitation/{invitation.InvitationId}/decline",  
+                        Endpoint = $"/deckinvitation/{invitation.InvitationId}/decline",  
                         Method = HttpMethodType.POST  
                     }
                 }
@@ -145,7 +146,8 @@ namespace noava.Services.Decks
             var notificationDto = new NotificationRequestDto
             {
                 UserId = invitation.InvitedByClerkId,
-                Type = NotificationType.DeckInvitationAccepted,
+                Type = NotificationType.DeckInvitationAccepted, 
+                TitleKey = "deck_invitation_accepted_title",
                 TemplateKey = "deck_invitation_accepted",
                 ParametersJson = JsonSerializer.Serialize(new
                 {
@@ -181,6 +183,7 @@ namespace noava.Services.Decks
             {
                 UserId = invitation.InvitedByClerkId,
                 Type = NotificationType.DeckInvitationDeclined,
+                TitleKey = "deck_invitation_declined_title",
                 TemplateKey = "deck_invitation_declined",
                 ParametersJson = JsonSerializer.Serialize(new
                 {
