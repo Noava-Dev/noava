@@ -13,5 +13,12 @@
     "title": "Taal",
     "description": "Kies je voorkeurstaal",
     "tooltip": "Selecteer de taal van de app-interface."
+  },
+  "emailPreferences": {
+    "title": "Notificatie Voorkeuren",
+    "description": "Kies hoe je notificaties wilt ontvangen",
+    "tooltip": "Selecteer of je notificaties via e-mail en in-app wilt ontvangen, of alleen in-app.",
+    "emailAndApp": "E-mail & In-App",
+    "appOnly": "Alleen In-App"
   }
 }

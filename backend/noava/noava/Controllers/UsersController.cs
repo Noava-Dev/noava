@@ -7,6 +7,7 @@ namespace noava.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -16,7 +17,6 @@ namespace noava.Controllers
             _userService = userService;
         }
 
-        [Authorize]
         [HttpGet("me")]
         public async Task<IActionResult> SyncUser()
         {
@@ -31,6 +31,30 @@ namespace noava.Controllers
                 user.ClerkId,
                 Role = user.Role.ToString()
             });
+        }
+
+        [HttpGet("email-preferences")]
+        public async Task<IActionResult> GetEmailPreferences()
+        {
+            var clerkId = _userService.GetUserId(User);
+            if (clerkId == null)
+                return Unauthorized();
+
+            var receiveEmails = await _userService.GetUserEmailNotificationsPreference(clerkId);
+
+            return Ok(receiveEmails);
+        }
+
+        [HttpPut("email-preferences")]
+        public async Task<IActionResult> UpdateEmailPreferences([FromBody] bool receive)
+        {
+            var clerkId = _userService.GetUserId(User);
+            if (clerkId == null)
+                return Unauthorized();
+
+            await _userService.UpdateReceiveNotificationEmails(clerkId, receive);
+
+            return Ok();
         }
     }
 }

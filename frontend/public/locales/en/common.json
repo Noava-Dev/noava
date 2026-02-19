@@ -85,7 +85,8 @@
   },
   "toast": {
     "success": "Success",
-    "error": "Error"
+    "error": "Error",
+    "settingsUpdated": "Settings updated successfully"
   },
   "visibility": {
     "label": "Visibility",

@@ -10,10 +10,8 @@ import { useTranslation } from 'react-i18next';
 import { useApi } from '../../hooks/useApi';
 import { formatDateToEuropean } from '../../services/DateService';
 import { useToast } from '../../contexts/ToastContext';
-import { useAuth } from '@clerk/clerk-react';
 import PageHeader from '../../shared/components/PageHeader';
 import Loading from '../../shared/components/loading/Loading';
-import { useDeckService } from '../../services/DeckService';
 
 const NotificationPage = () => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
@@ -22,7 +20,6 @@ const NotificationPage = () => {
   const service = notificationService();
   const { t } = useTranslation('notification');
   const api = useApi();
-  const deckService = useDeckService();
   const { showError, showSuccess } = useToast();
 
   function parseParams(data?: any): Record<string, unknown> {

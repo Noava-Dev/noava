@@ -85,7 +85,8 @@
   },
   "toast": {
     "success": "Succes",
-    "error": "Fout"
+    "error": "Fout",
+    "settingsUpdated": "Instellingen succesvol bijgewerkt"
   },
   "visibility": {
     "label": "Zichtbaarheid",
