@@ -175,7 +175,7 @@ namespace noava.Controllers
         }
 
 
-        [HttpPost("join/{joinCode}")]
+        [HttpPost("join/{joinCode}/{isOwner}")]
         public async Task<ActionResult<DeckResponse>> JoinByCode(
             string joinCode,
             [FromQuery] bool isOwner = false)  
