@@ -14,6 +14,12 @@ using System.Security.Cryptography;
 using System.Text.Json;
 using noava.Data;
 using Microsoft.EntityFrameworkCore;
+using Azure.Core;
+using noava.Models.Requests;
+using Azure.Storage.Blobs.Models;
+using System.ComponentModel;
+using Azure;
+using noava.Repositories.Cards;
 
 namespace noava.Services
 {
@@ -24,6 +30,7 @@ namespace noava.Services
         private readonly IBlobService _blobService;
         private readonly IClerkService _clerkService;
         private readonly INotificationService _notificationService;
+        private readonly ICardRepository _cardRepo;
         private readonly NoavaDbContext _context;
 
         public DeckService(
@@ -32,6 +39,7 @@ namespace noava.Services
             IDeckUserRepository deckUserRepo,
             IClerkService clerkService,
             INotificationService notificationService,
+            ICardRepository cardRepository,
             NoavaDbContext context)
         {
             _repository = repository;
@@ -39,6 +47,7 @@ namespace noava.Services
             _deckUserRepo = deckUserRepo;
             _clerkService = clerkService;
             _notificationService = notificationService;
+            _cardRepo = cardRepository;
             _context = context;
         }
 
@@ -48,7 +57,7 @@ namespace noava.Services
                 return true;
 
 
-            var parts = blobName.Split('_', 2);
+            var parts = blobName.Split('.', 2);
             if (parts.Length != 2) return false;
 
             return Guid.TryParse(parts[0], out _);
@@ -495,6 +504,111 @@ namespace noava.Services
 
             return deck.ToResponseDto();
         }
+
+        public async Task<DeckResponse> CopyDeckAsync(int deckId, string userId)
+        {
+            var deck = await _repository.GetByIdAsync(deckId)
+                ?? throw new KeyNotFoundException("Deck not found");
+
+            string? newBlobName = null;
+
+                // copy deck cover image
+                if (deck.CoverImageBlobName != null) {
+                    var containerClient = await _blobService.EnsureContainer(new EnsureContainerRequest
+                    {
+                        ContainerName = "deck-images",
+                        AccessType = PublicAccessType.None
+                    });
+
+                    var copyFileRequest = new CopyFileRequest
+                    {
+                        Container = containerClient,
+                        SourceBlobName = deck.CoverImageBlobName,
+                        DestinationBlobName = $"{Guid.NewGuid()}{Path.GetExtension(deck.CoverImageBlobName).ToLowerInvariant()}"
+                    };
+
+                    await _blobService.CopyFile(copyFileRequest);
+                    newBlobName = copyFileRequest.DestinationBlobName;
+                }
+
+            // create copy
+            var copy = new Deck
+            {
+                Title = $"Copy of {deck.Title}",
+                Description = deck.Description,
+                Language = deck.Language,
+                Visibility = deck.Visibility,
+                CoverImageBlobName = newBlobName,
+                UserId = userId,
+                JoinCode = GenerateJoinCode()
+            };
+
+            var copiedDeck = await _repository.CreateAsync(copy);
+
+            var deckUser = new DeckUser
+            {
+                ClerkId = userId,
+                DeckId = copiedDeck.DeckId,
+                IsOwner = true,
+                AddedAt = DateTime.UtcNow
+            };
+
+            await _deckUserRepo.AddAsync(deckUser);
+
+            // copy cards
+            var originalCards = await _cardRepo.GetByDeckIdAsync(deckId);
+
+            var newCards = new List<Card>();
+
+            foreach (var c in originalCards)
+            {
+                var newCard = new Card
+                {
+                    DeckId = copiedDeck.DeckId,
+                    FrontText = c.FrontText,
+                    BackText = c.BackText,
+                    Memo = c.Memo,
+                    HasVoiceAssistant = c.HasVoiceAssistant,
+                    FrontImage = c.FrontImage == null ? null : await CopyMedia("card-images", c.FrontImage),
+                    BackImage = c.BackImage == null ? null : await CopyMedia("card-images", c.BackImage),
+                    FrontAudio = c.FrontAudio == null ? null : await CopyMedia("card-audio", c.FrontAudio),
+                    BackAudio = c.BackAudio == null ? null : await CopyMedia("card-audio", c.BackAudio),
+                };
+
+                newCards.Add(newCard);
+            }
+
+            await _cardRepo.CreateBulkAsync(newCards);
+            return copiedDeck.ToResponseDto();
+        }
+
+        private async Task<string?> CopyMedia(string containerName, string sourceBlobName)
+        {
+            try
+            {
+                // copy deck cover image
+                var containerClient = await _blobService.EnsureContainer(new EnsureContainerRequest
+                {
+                    ContainerName = containerName,
+                    AccessType = PublicAccessType.None
+                });
+
+                var copyFileRequest = new CopyFileRequest
+                {
+                    Container = containerClient,
+                    SourceBlobName = sourceBlobName,
+                    DestinationBlobName = $"{Guid.NewGuid()}{Path.GetExtension(sourceBlobName).ToLowerInvariant()}"
+                };
+
+                await _blobService.CopyFile(copyFileRequest);
+
+                return copyFileRequest.DestinationBlobName;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
     }
-   }
+}
 

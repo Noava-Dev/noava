@@ -137,5 +137,9 @@
       "title": "Nog Geen Statistieken",
       "description": "Begin met het bekijken van dit deck om je voortgang en statistieken te zien."
     }
+  },
+  "copy": {
+    "title": "Deck kopiëren",
+    "message": "Weet je zeker dat je dit deck wilt kopiëren? Dit kan even duren."
   }
 }

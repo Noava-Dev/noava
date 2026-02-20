@@ -19,6 +19,10 @@ function App() {
     '/',
     '/not-found',
     '/faq',
+    '/guidelines',
+    '/terms-of-service',
+    '/privacy',
+    '/copyright',
     '/sign-up',
     '/sign-in',
   ];

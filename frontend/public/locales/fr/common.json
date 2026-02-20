@@ -45,7 +45,9 @@
     "back": "Retour",
     "analytics": "Statistiques",
     "uploading": "Téléchargement en cours...",
-    "done": "Terminé"
+    "done": "Terminé",
+    "copy": "Copier",
+    "copying": "Copie en cours..."
   },
   "validation": {
     "required": "Ce champ est requis",
@@ -96,5 +98,30 @@
       "shared": "Toute personne disposant du lien peut voir ce paquet",
       "public": "Tout le monde peut voir ce paquet"
     }
+  },
+  "tooltips": {
+    "createDeck": "Créer un nouveau paquet de cartes mémoire",
+    "editDeck": "Modifier les paramètres du paquet",
+    "deleteDeck": "Supprimer définitivement ce paquet",
+    "joinDeckByCode": "Rejoindre un paquet avec un code d'invitation",
+    "bulkReview": "Commencer à réviser plusieurs paquets à la fois",
+    "createFlashcard": "Ajouter une nouvelle carte mémoire à ce paquet",
+    "editFlashcard": "Modifier le contenu de la carte mémoire",
+    "deleteFlashcard": "Supprimer cette carte mémoire",
+    "importCards": "Importer des cartes mémoire depuis un fichier CSV ou Excel",
+    "manageOwners": "Gérer les propriétaires et les utilisateurs partagés du paquet",
+    "createClassroom": "Créer une nouvelle classe pour vos étudiants",
+    "joinClassroom": "Rejoindre une classe avec un code d'accès",
+    "addDeckToClassroom": "Ajouter un paquet existant à cette classe",
+    "inviteMember": "Inviter des étudiants ou des enseignants par e-mail",
+    "themeToggle": "Basculer entre le mode clair et sombre",
+    "voiceAssistant": "Activer la synthèse vocale pour cette carte",
+    "markAsOwner": "Accorder les autorisations de propriétaire complet à cet utilisateur",
+    "notifications": "Voir vos notifications et invitations",
+    "searchDecks": "Rechercher des paquets par titre, description ou langue",
+    "sortDecks": "Modifier l'ordre des paquets",
+    "deckVisibility": "Contrôler qui peut voir et accéder à ce paquet",
+    "reviewModes": "Choisir comment vous voulez étudier ces cartes",
+    "flipCard": "Cliquer pour retourner la carte mémoire"
   }
 }
