@@ -17,7 +17,7 @@ function EmptyState({
   return (
     <div className="flex flex-col items-center">
       <div className="mb-6">
-        <LuFrown className="w-16 h-16 mx-auto opacity-50 text-text-muted-light md:w-24 md:h-24 dark:text-text-body-light" />
+        <LuFrown className="w-16 h-16 mx-auto opacity-50 text-text-muted-light md:w-24 md:h-24 dark:text-text-muted-dark" />
       </div>
       <p className="mb-3 text-xl font-semibold text-text-body-light dark:text-text-title-dark md:text-2xl">
         {title}

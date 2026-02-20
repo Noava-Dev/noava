@@ -5,13 +5,14 @@ import { useStatisticsService } from '../../services/StatisticsService';
 import { formatDateToEuropean } from '../../services/DateService';
 import type { DeckStatistics } from '../../models/Statistics';
 import type { Deck } from '../../models/Deck';
-import { 
-  LuBrain, 
-  LuTarget, 
-  LuClock, 
+import {
+  LuBrain,
+  LuTarget,
+  LuClock,
   LuTrendingUp
 } from 'react-icons/lu';
 import { HiChartBar } from 'react-icons/hi';
+import EmptyState from './EmptyState';
 
 interface DeckStatisticsModalProps {
   show: boolean;
@@ -38,7 +39,7 @@ function DeckStatisticsModal({ show, onClose, deck }: DeckStatisticsModalProps) 
     try {
       setLoading(true);
       const data = await statisticsService.getDeckStatistics(deck.deckId);
-      
+
       if (data.cardsReviewed === 0) {
         setHasData(false);
       } else {
@@ -56,22 +57,22 @@ function DeckStatisticsModal({ show, onClose, deck }: DeckStatisticsModalProps) 
   const formatTime = (seconds: number): string => {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
-    
+
     if (hours > 0) {
       return `${hours}h ${minutes}m`;
     }
     return `${minutes}m`;
   };
 
-  const StatCard = ({ 
-    icon: Icon, 
-    label, 
-    value, 
-    color = 'text-primary-500' 
-  }: { 
-    icon: any; 
-    label: string; 
-    value: string | number; 
+  const StatCard = ({
+    icon: Icon,
+    label,
+    value,
+    color = 'text-primary-500'
+  }: {
+    icon: any;
+    label: string;
+    value: string | number;
     color?: string;
   }) => (
     <div className="p-4 rounded-lg bg-background-subtle-light dark:bg-background-subtle-dark">
@@ -183,7 +184,12 @@ function DeckStatisticsModal({ show, onClose, deck }: DeckStatisticsModalProps) 
               </div>
             </div>
           </div>
-        ) : null}
+        ) : <EmptyState
+          title={t('decks:analytics.noData.title')}
+          description={t('decks:analytics.noData.description')}
+          buttonOnClick={onClose}
+          clearButtonText={t('common:actions.close')}
+        />}
       </ModalBody>
     </Modal>
   );

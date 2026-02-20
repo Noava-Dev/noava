@@ -133,7 +133,7 @@
     "correctCards": "Cartes correctes",
     "avgResponseTime": "Temps de réponse moy.",
     "noData": {
-      "title": "Aucune statistique disponible",
+      "title": "Pas Encore de Statistiques",
       "description": "Commencez à réviser ce deck pour voir vos progrès et statistiques."
     }  }
 }

@@ -15,6 +15,8 @@ import { getLanguageCode } from '../../shared/utils/speechHelpers';
 import ConfirmationModal from '../../shared/components/ConfirmModal';
 import type { Deck } from '../../models/Deck';
 import type { Flashcard } from '../../models/Flashcard';
+import { FiRepeat } from 'react-icons/fi';
+import { FaRepeat } from 'react-icons/fa6';
 
 interface CardWithUrls extends Flashcard {
   frontImageUrl?: string | null;
@@ -309,11 +311,10 @@ function LongTermReview() {
                   {deck.title}
                 </h1>
                 <div className="flex gap-2 mt-1">
-                  <Badge color="success">
+                  <Badge color="success" icon={FaRepeat}>
                     {t('longTerm.mode')}
                   </Badge>
-                  <Badge color="cyan">
-                    <HiPlay className="w-3 h-3 mr-1" />
+                  <Badge color="cyan" icon={HiPlay}>
                     {t('longTerm.writeMode')}
                   </Badge>
                 </div>

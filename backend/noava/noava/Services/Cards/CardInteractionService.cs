@@ -85,8 +85,7 @@ namespace noava.Services.Cards
             await _interactionRepo.CreateAsync(interactionEntity);
 
             var interactions = new List<CardInteraction> { interactionEntity };
-            var studySession = await _studySessionRepo.GetByIdAsync(studySessionId);
-            await _aggregateStats.UpdateStatsAsync(interactions, studySession);
+            await _aggregateStats.UpdateInteractionStatsAsync(interactions);
 
             return new CardProgressResponse
             {

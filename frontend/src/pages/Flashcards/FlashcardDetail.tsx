@@ -32,6 +32,7 @@ import BackButton from '../../shared/components/navigation/BackButton';
 import PageHeader from '../../shared/components/PageHeader';
 import DropdownButton from '../../shared/components/DropdownButton';
 import ImportCardsModal from './components/ImportCardsModal';
+import Skeleton from '../../shared/components/loading/Skeleton';
 
 interface FlashcardWithImages extends Flashcard {
   frontImageUrl?: string | null;
@@ -248,24 +249,7 @@ function FlashcardDetail() {
   };
 
   if (loading) {
-    return (
-      <div className="flex min-h-screen bg-background-app-light dark:bg-background-app-dark">
-        <main className="flex-1 w-full ml-0 md:ml-64">
-          <div className="container max-w-6xl px-4 py-8 mx-auto">
-            <div className="animate-pulse">
-              <div className="h-12 mb-8 rounded bg-background-surface-light dark:bg-background-surface-dark w-96"></div>
-              <div className="space-y-4">
-                {[1, 2, 3].map((i) => (
-                  <div
-                    key={i}
-                    className="h-32 rounded bg-background-surface-light dark:bg-background-surface-dark"></div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </main>
-      </div>
-    );
+    return <Skeleton />;
   }
 
   if (!deck) {

@@ -17,7 +17,7 @@ namespace noava.Shared
             _leitnerBoxService = leitnerBoxService;
         }
 
-        public async Task UpdateStatsAsync(IEnumerable<CardInteraction> interactions, StudySession? session = null, CancellationToken ct = default)
+        public async Task UpdateInteractionStatsAsync(IEnumerable<CardInteraction> interactions, CancellationToken ct = default)
         {
             if (!interactions.Any()) return;
 
@@ -25,9 +25,9 @@ namespace noava.Shared
 
             try
             {
-                await UpdateDeckUserStatisticsAsync(interactions, session, ct);
-                await UpdateClassroomUserStatisticsAsync(interactions, session, ct);
-                await UpdateClassroomDeckStatisticsAsync(interactions, session, ct);
+                await UpdateDeckUserInteractionStatisticsAsync(interactions, ct);
+                await UpdateClassroomUserStatisticsAsync(interactions, ct);
+                await UpdateClassroomDeckStatisticsAsync(interactions, ct);
             }
             catch (OperationCanceledException)
             {
@@ -35,6 +35,25 @@ namespace noava.Shared
                 return;
             }
 
+            await transaction.CommitAsync(ct);
+        }
+
+        public async Task UpdateStudySessionStatsAsync(StudySession session, CancellationToken ct = default)
+        {
+            if (session == null) 
+                return;
+
+            using var transaction = await _dbContext.Database.BeginTransactionAsync(ct);
+
+            try
+            {
+                await UpdateDeckUserStudySessionStatisticsAsync(session, ct);
+            }
+            catch (OperationCanceledException)
+            {
+                // don't know what to do yet, also this isn't properly implemented yet so this will likely never throw
+                return;
+            }
 
             await transaction.CommitAsync(ct);
         }
@@ -60,7 +79,7 @@ namespace noava.Shared
             return Task.CompletedTask;
         }
 
-        private async Task UpdateDeckUserStatisticsAsync(IEnumerable<CardInteraction> interactions, StudySession? session, CancellationToken ct = default)
+        private async Task UpdateDeckUserInteractionStatisticsAsync(IEnumerable<CardInteraction> interactions, CancellationToken ct = default)
         {
             var groups = interactions.GroupBy(i => new { i.ClerkId, i.DeckId });
 
@@ -78,16 +97,9 @@ namespace noava.Shared
                         ClerkId = group.Key.ClerkId
                     };
 
-
-
                 stat.CardsReviewed += group.Count();
 
                 stat.CorrectCards += group.Count(i => i.IsCorrect);
-
-                if (session != null && session.ClerkId == group.Key.ClerkId && session.DeckId == group.Key.DeckId)
-                {
-                    stat.TimeSpentSeconds += (int)(session.EndTime - session.StartTime).TotalSeconds;
-                }
 
                 stat.AvgResponseTimeMs = (int)((stat.AvgResponseTimeMs * (stat.CardsReviewed - group.Count()) + group.Sum(i => i.ResponseTimeMs)) / stat.CardsReviewed);
 
@@ -108,12 +120,26 @@ namespace noava.Shared
             await _dbContext.SaveChangesAsync(ct);
         }
 
-        private async Task UpdateClassroomUserStatisticsAsync(IEnumerable<CardInteraction> interactions, StudySession? session, CancellationToken ct = default)
+        private async Task UpdateDeckUserStudySessionStatisticsAsync(StudySession session, CancellationToken ct = default)
+        {
+            var stat = await _dbContext.DeckUserStatistics
+                .FirstOrDefaultAsync(s => s.DeckId == session.DeckId && s.ClerkId == session.ClerkId, ct);
+
+            if (session != null && stat != null)
+            {
+                stat.TimeSpentSeconds += (int)(session.EndTime - session.StartTime).TotalSeconds;
+            }
+
+            ct.ThrowIfCancellationRequested();
+            await _dbContext.SaveChangesAsync(ct);
+        }
+
+        private async Task UpdateClassroomUserStatisticsAsync(IEnumerable<CardInteraction> interactions, CancellationToken ct = default)
         {
 
         }
 
-        private async Task UpdateClassroomDeckStatisticsAsync(IEnumerable<CardInteraction> interactions, StudySession? session, CancellationToken ct = default)
+        private async Task UpdateClassroomDeckStatisticsAsync(IEnumerable<CardInteraction> interactions, CancellationToken ct = default)
         {
 
         }

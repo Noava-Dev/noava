@@ -8,6 +8,7 @@ using noava.Models.Enums;
 using DocumentFormat.OpenXml.Drawing;
 using System.ComponentModel;
 using noava.Exceptions;
+using noava.Shared;
 
 namespace noava.Services.StudySessions
 {
@@ -15,14 +16,16 @@ namespace noava.Services.StudySessions
     {
         private readonly IStudySessionRepository _sessionRepository;  
         private readonly IDeckRepository _deckRepository;
+        private readonly IAggregateStatisticsService _aggregateStatisticsService;
 
         public StudySessionService(
             IStudySessionRepository sessionRepository,  
             IDeckRepository deckRepository,
-            IDeckUserRepository deckUserRepository)
+            IAggregateStatisticsService aggregateStatisticsService)
         {
             _sessionRepository = sessionRepository; 
             _deckRepository = deckRepository;
+            _aggregateStatisticsService = aggregateStatisticsService;
         }
 
         public async Task<StudySessionResponse> StartSessionAsync(int deckId, string userId)
@@ -62,8 +65,9 @@ namespace noava.Services.StudySessions
             session.TotalCards = request.TotalCardsReviewed;
             session.CorrectCount = request.CorrectAnswers;
 
-            var updatedSession = await _sessionRepository.UpdateAsync(session);  
+            var updatedSession = await _sessionRepository.UpdateAsync(session);
 
+            await _aggregateStatisticsService.UpdateStudySessionStatsAsync(updatedSession);
             return updatedSession.ToResponseDto();
         }
 

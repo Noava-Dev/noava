@@ -15,6 +15,7 @@ import { getLanguageCode } from '../../shared/utils/speechHelpers';
 import ConfirmationModal from '../../shared/components/ConfirmModal';
 import type { Deck } from '../../models/Deck';
 import type { Flashcard } from '../../models/Flashcard';
+import { FaRepeat } from 'react-icons/fa6';
 
 interface CardWithUrls extends Flashcard {
   frontImageUrl?: string | null;
@@ -266,194 +267,191 @@ function LongTermFlipReview() {
 
   return (
     <div className="flex min-h-screen bg-background-app-light dark:bg-background-app-dark">
-        <div className="container max-w-4xl px-4 py-6 mx-auto md:py-8">
-          {/* Header */}
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-4">
-              <button
-                onClick={handleExit}
-                className="p-2 transition-colors rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800">
-                <HiX className="w-6 h-6 text-gray-600 dark:text-gray-400" />
-              </button>
-              <div>
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                  {deck.title}
-                </h1>
-                <div className="flex gap-2 mt-1">
-                  <Badge color="success">
-                    {t('longTerm.mode')}
-                  </Badge>
-                  <Badge color="cyan">
-                    <HiPlay className="w-3 h-3 mr-1" />
-                    {t('flashcardDetail.flipMode')}
-                  </Badge>
-                </div>
+      <div className="container max-w-4xl px-4 py-6 mx-auto md:py-8">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-4">
+            <button
+              onClick={handleExit}
+              className="p-2 transition-colors rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800">
+              <HiX className="w-6 h-6 text-gray-600 dark:text-gray-400" />
+            </button>
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+                {deck.title}
+              </h1>
+
+              <div className="flex gap-2 mt-1">
+                <Badge color="success" icon={FaRepeat}>
+                  {t('longTerm.mode')}
+                </Badge>
+                <Badge color="cyan" icon={HiPlay}>
+                  {t('flashcardDetail.flipMode')}
+                </Badge>
               </div>
             </div>
           </div>
+        </div>
 
-          {/* Progress */}
-          <div className="mb-6">
-            <div className="flex justify-between mb-2 text-sm text-gray-600 dark:text-gray-400">
-              <span>{t('quickReview.progress')}</span>
-              <span>
-                {cardsReviewed} / {cards.length}
-              </span>
-            </div>
-            <Progress progress={progress} color="green" size="lg" />
+        {/* Progress */}
+        <div className="mb-6">
+          <div className="flex justify-between mb-2 text-sm text-gray-600 dark:text-gray-400">
+            <span>{t('quickReview.progress')}</span>
+            <span>
+              {cardsReviewed} / {cards.length}
+            </span>
           </div>
+          <Progress progress={progress} color="green" size="lg" />
+        </div>
 
-          {/* Card */}
-          <div className="mb-6 perspective-1000">
-            <div
-              className={`
+        {/* Card */}
+        <div className="mb-6 perspective-1000">
+          <div
+            className={`
                 relative w-full h-96 
                 transition-transform duration-500 
                 transform-style-3d cursor-pointer 
                 ${isFlipped ? 'rotate-y-180' : ''}
               `}
-              style={{
-                WebkitFontSmoothing: 'antialiased',
-                MozOsxFontSmoothing: 'grayscale',
-              }}
-              onClick={handleFlip}
-              key={currentCard.cardId}>
-              {/* Front */}
-              <div 
-                className="absolute inset-0 backface-hidden"
-                style={{ transform: 'translateZ(1px)' }}>
-                <div className="relative flex flex-col items-center justify-center w-full h-full p-8 antialiased bg-background-surface-light border-2 border-gray-200 shadow-xl dark:bg-background-surface-dark rounded-2xl dark:border-gray-700">
-                  {shouldShowAudioButton('front') && (
-                    <button
-                      onClick={(e) => handlePlayAudio('front', e)}
-                      className={`absolute z-10 p-3 text-white transition-colors rounded-full shadow-lg top-4 right-4 ${
-                        isSpeaking ? 'bg-cyan-600' : 'bg-cyan-500 hover:bg-cyan-600'
+            style={{
+              WebkitFontSmoothing: 'antialiased',
+              MozOsxFontSmoothing: 'grayscale',
+            }}
+            onClick={handleFlip}
+            key={currentCard.cardId}>
+            {/* Front */}
+            <div
+              className="absolute inset-0 backface-hidden"
+              style={{ transform: 'translateZ(1px)' }}>
+              <div className="relative flex flex-col items-center justify-center w-full h-full p-8 antialiased bg-background-surface-light border-2 border-gray-200 shadow-xl dark:bg-background-surface-dark rounded-2xl dark:border-gray-700">
+                {shouldShowAudioButton('front') && (
+                  <button
+                    onClick={(e) => handlePlayAudio('front', e)}
+                    className={`absolute z-10 p-3 text-white transition-colors rounded-full shadow-lg top-4 right-4 ${isSpeaking ? 'bg-cyan-600' : 'bg-cyan-500 hover:bg-cyan-600'
                       }`}>
-                      <HiVolumeUp className={`w-5 h-5 ${isSpeaking ? 'animate-pulse' : ''}`} />
-                    </button>
-                  )}
+                    <HiVolumeUp className={`w-5 h-5 ${isSpeaking ? 'animate-pulse' : ''}`} />
+                  </button>
+                )}
 
-                  <div className="mb-4 text-sm font-semibold tracking-wide uppercase text-cyan-500">
-                    {t('flashcardModal.front')}
+                <div className="mb-4 text-sm font-semibold tracking-wide uppercase text-cyan-500">
+                  {t('flashcardModal.front')}
+                </div>
+
+                {currentCard.frontImageUrl && (
+                  <div className="flex justify-center w-full mb-4">
+                    <img
+                      src={currentCard.frontImageUrl}
+                      alt="Front"
+                      className="object-contain max-w-full rounded-lg max-h-40"
+                    />
                   </div>
+                )}
 
-                  {currentCard.frontImageUrl && (
-                    <div className="flex justify-center w-full mb-4">
-                      <img
-                        src={currentCard.frontImageUrl}
-                        alt="Front"
-                        className="object-contain max-w-full rounded-lg max-h-40"
-                      />
-                    </div>
-                  )}
+                <div className="flex items-center justify-center flex-1 w-full px-4 text-center">
+                  <p className="text-2xl font-bold text-gray-900 break-words md:text-3xl dark:text-white">
+                    {currentCard.frontText}
+                  </p>
+                </div>
 
-                  <div className="flex items-center justify-center flex-1 w-full px-4 text-center">
-                    <p className="text-2xl font-bold text-gray-900 break-words md:text-3xl dark:text-white">
-                      {currentCard.frontText}
+                {currentCard.memo && (
+                  <div className="w-full p-3 mt-4 border border-yellow-200 rounded-lg bg-yellow-50 dark:bg-yellow-900/20 dark:border-yellow-800">
+                    <p className="text-sm text-yellow-800 dark:text-yellow-200">
+                      {currentCard.memo}
                     </p>
                   </div>
+                )}
 
-                  {currentCard.memo && (
-                    <div className="w-full p-3 mt-4 border border-yellow-200 rounded-lg bg-yellow-50 dark:bg-yellow-900/20 dark:border-yellow-800">
-                      <p className="text-sm text-yellow-800 dark:text-yellow-200">
-                        {currentCard.memo}
-                      </p>
-                    </div>
-                  )}
-
-                  <div className="mt-6 text-sm text-gray-500 dark:text-gray-400">
-                    {t('flashcardModal.clickToFlip')}
-                  </div>
+                <div className="mt-6 text-sm text-gray-500 dark:text-gray-400">
+                  {t('flashcardModal.clickToFlip')}
                 </div>
               </div>
+            </div>
 
-              {/* Back*/}
-              <div 
-                className="absolute inset-0 backface-hidden rotate-y-180"
-                style={{ transform: 'rotateY(180deg) translateZ(1px)' }}>
-                <div className="relative flex flex-col items-center justify-center w-full h-full p-8 antialiased bg-background-surface-light border-2 border-gray-200 shadow-xl dark:bg-background-surface-dark rounded-2xl dark:border-gray-700">
-                    {shouldShowAudioButton('back') && (
-                      <button
-                        onClick={(e) => handlePlayAudio('back', e)}
-                        className={`absolute z-10 p-3 text-white transition-colors rounded-full shadow-lg top-4 right-4 ${
-                          isSpeaking ? 'bg-yellow-600' : 'bg-yellow-500 hover:bg-yellow-600'
-                        }`}>
-                        <HiVolumeUp className={`w-5 h-5 ${isSpeaking ? 'animate-pulse' : ''}`} />
-                      </button>
-                    )}
+            {/* Back*/}
+            <div
+              className="absolute inset-0 backface-hidden rotate-y-180"
+              style={{ transform: 'rotateY(180deg) translateZ(1px)' }}>
+              <div className="relative flex flex-col items-center justify-center w-full h-full p-8 antialiased bg-background-surface-light border-2 border-gray-200 shadow-xl dark:bg-background-surface-dark rounded-2xl dark:border-gray-700">
+                {shouldShowAudioButton('back') && (
+                  <button
+                    onClick={(e) => handlePlayAudio('back', e)}
+                    className={`absolute z-10 p-3 text-white transition-colors rounded-full shadow-lg top-4 right-4 ${isSpeaking ? 'bg-yellow-600' : 'bg-yellow-500 hover:bg-yellow-600'
+                      }`}>
+                    <HiVolumeUp className={`w-5 h-5 ${isSpeaking ? 'animate-pulse' : ''}`} />
+                  </button>
+                )}
 
-                    <div className="mb-4 text-sm font-semibold tracking-wide text-yellow-500 uppercase">
-                      {t('flashcardModal.back')}
-                    </div>
-
-                    {currentCard.backImageUrl && (
-                      <div className="flex justify-center w-full mb-4">
-                        <img
-                          src={currentCard.backImageUrl}
-                          alt="Back"
-                          className="object-contain max-w-full rounded-lg max-h-40"
-                        />
-                      </div>
-                    )}
-
-                    <div className="flex items-center justify-center flex-1 w-full px-4 text-center">
-                      <p className="text-2xl font-bold text-gray-900 break-words md:text-3xl dark:text-white">
-                        {currentCard.backText}
-                      </p>
-                    </div>
-
-                    <div className="mt-6 text-sm text-gray-500 dark:text-gray-400">
-                      {t('flashcardModal.clickToFlip')}
-                    </div>
-                  </div>
+                <div className="mb-4 text-sm font-semibold tracking-wide text-yellow-500 uppercase">
+                  {t('flashcardModal.back')}
                 </div>
+
+                {currentCard.backImageUrl && (
+                  <div className="flex justify-center w-full mb-4">
+                    <img
+                      src={currentCard.backImageUrl}
+                      alt="Back"
+                      className="object-contain max-w-full rounded-lg max-h-40"
+                    />
+                  </div>
+                )}
+
+                <div className="flex items-center justify-center flex-1 w-full px-4 text-center">
+                  <p className="text-2xl font-bold text-gray-900 break-words md:text-3xl dark:text-white">
+                    {currentCard.backText}
+                  </p>
+                </div>
+
+                <div className="mt-6 text-sm text-gray-500 dark:text-gray-400">
+                  {t('flashcardModal.clickToFlip')}
+                </div>
+              </div>
             </div>
           </div>
-
-          {/* Actions */}
-          <div className="space-y-3">
-            {isFlipped && (
-              <div className="flex gap-3 mb-4">
-                <Button
-                  size="lg"
-                  className="flex-1 !bg-transparent !border-2 !border-red-600 !text-red-600 hover:!bg-red-50 dark:!text-red-400 dark:!border-red-400 dark:hover:!bg-red-950 font-semibold transition-all"
-                  onClick={() => handleNext(false)}>
-                  <HiX className="w-5 h-5 mr-2" />
-                  {t('longTerm.markIncorrect')}
-                </Button>
-                <Button
-                  size="lg"
-                  className="flex-1 !bg-transparent !border-2 !border-green-600 !text-green-600 hover:!bg-green-50 dark:!text-green-400 dark:!border-green-400 dark:hover:!bg-green-950 font-semibold transition-all"
-                  onClick={() => handleNext(true)}>
-                  <HiCheck className="w-5 h-5 mr-2" />
-                  {t('longTerm.markCorrect')}
-                </Button>
-              </div>
-            )}
-          </div>
-
-          {/* Stats */}
-          {cardsReviewed > 0 && (
-            <div className="p-4 rounded-lg bg-background-subtle-light dark:bg-background-subtle-dark">
-              <div className="flex justify-around text-center">
-                <div>
-                  <p className="text-2xl font-bold text-green-500">{correctAnswers}</p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">{t('longTerm.correct')}</p>
-                </div>
-                <div>
-                  <p className="text-2xl font-bold text-red-500">{cardsReviewed - correctAnswers}</p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">{t('longTerm.incorrect')}</p>
-                </div>
-                <div>
-                  <p className="text-2xl font-bold text-cyan-500">
-                    {cardsReviewed > 0 ? Math.round((correctAnswers / cardsReviewed) * 100) : 0}%
-                  </p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">{t('longTerm.accuracy')}</p>
-                </div>
-              </div>
+        </div>
+        {/* Actions */}
+        <div className="space-y-3">
+          {isFlipped && (
+            <div className="flex gap-3 mb-4">
+              <Button
+                size="lg"
+                className="flex-1 !bg-transparent !border-2 !border-red-600 !text-red-600 hover:!bg-red-50 dark:!text-red-400 dark:!border-red-400 dark:hover:!bg-red-950 font-semibold transition-all"
+                onClick={() => handleNext(false)}>
+                <HiX className="w-5 h-5 mr-2" />
+                {t('longTerm.markIncorrect')}
+              </Button>
+              <Button
+                size="lg"
+                className="flex-1 !bg-transparent !border-2 !border-green-600 !text-green-600 hover:!bg-green-50 dark:!text-green-400 dark:!border-green-400 dark:hover:!bg-green-950 font-semibold transition-all"
+                onClick={() => handleNext(true)}>
+                <HiCheck className="w-5 h-5 mr-2" />
+                {t('longTerm.markCorrect')}
+              </Button>
             </div>
           )}
         </div>
+
+        {/* Stats */}
+        {cardsReviewed > 0 && (
+          <div className="p-4 rounded-lg bg-background-subtle-light dark:bg-background-subtle-dark">
+            <div className="flex justify-around text-center">
+              <div>
+                <p className="text-2xl font-bold text-green-500">{correctAnswers}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">{t('longTerm.correct')}</p>
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-red-500">{cardsReviewed - correctAnswers}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">{t('longTerm.incorrect')}</p>
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-cyan-500">
+                  {cardsReviewed > 0 ? Math.round((correctAnswers / cardsReviewed) * 100) : 0}%
+                </p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">{t('longTerm.accuracy')}</p>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
 
       {/* Exit Confirmation Modal */}
       <ConfirmationModal

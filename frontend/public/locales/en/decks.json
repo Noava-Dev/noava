@@ -134,7 +134,7 @@
     "correctCards": "Correct Cards",
     "avgResponseTime": "Avg Response Time",
     "noData": {
-      "title": "No Statistics Available",
+      "title": "No Statistics Yet",
       "description": "Start reviewing this deck to see your progress and statistics."
     }
   }
