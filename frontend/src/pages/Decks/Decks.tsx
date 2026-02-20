@@ -17,6 +17,7 @@ import NoavaFooter from '../../shared/components/navigation/NoavaFooter';
 import PageHeader from '../../shared/components/PageHeader';
 import DeckCard from '../../shared/components/DeckCard';
 import DeckModal from '../../shared/components/DeckModal';
+import DeckStatisticsModal from '../../shared/components/DeckStatisticsModal';
 import { BulkReviewModal } from '../../shared/components/BulkReviewModal';
 import Searchbar from '../../shared/components/Searchbar';
 import { useDeckService } from '../../services/DeckService';
@@ -48,6 +49,8 @@ function DecksPage() {
   const [joinCodeModalOpen, setJoinCodeModalOpen] = useState(false);
   const [joinCode, setJoinCode] = useState('');
   const [joiningDeck, setJoiningDeck] = useState(false);
+  const [analyticsModalOpen, setAnalyticsModalOpen] = useState(false);
+  const [analyticsDeck, setAnalyticsDeck] = useState<Deck | null>(null);
   const [copyModalOpened, setCopyModalOpened] = useState(false);
   const [deckToCopy, setDeckToCopy] = useState<number | null>(null);
   const [isCopying, setIsCopying] = useState(false);
@@ -151,6 +154,16 @@ function DecksPage() {
   const handleEdit = (deck: Deck) => {
     setEditingDeck(deck);
     setIsModalOpen(true);
+  };
+
+  const handleAnalytics = (deck: Deck) => {
+    setAnalyticsDeck(deck);
+    setAnalyticsModalOpen(true);
+  };
+
+  const handleCloseAnalyticsModal = () => {
+    setAnalyticsModalOpen(false);
+    setAnalyticsDeck(null);
   };
 
   const handleCloseModal = () => {
@@ -338,6 +351,7 @@ function DecksPage() {
                           onCopy={handleCopy}
                           onEdit={handleEdit}
                           onDelete={handleDelete}
+                          onAnalytics={handleAnalytics}
                         />
                       ))}
                     </div>
@@ -358,6 +372,7 @@ function DecksPage() {
                           onCopy={handleCopy}
                           onEdit={handleEdit}
                           onDelete={handleDelete}
+                          onAnalytics={handleAnalytics}
                         />
                       ))}
                     </div>
@@ -452,6 +467,13 @@ function DecksPage() {
           decks={decks}
           classroomId={null}
           reviewType="reverse"
+        />
+
+        {/* Deck Statistics Modal */}
+        <DeckStatisticsModal
+          show={analyticsModalOpen}
+          onClose={handleCloseAnalyticsModal}
+          deck={analyticsDeck}
         />
 
         {/* Delete Confirmation Modal */}

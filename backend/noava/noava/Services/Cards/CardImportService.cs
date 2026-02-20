@@ -1,7 +1,7 @@
 ﻿using ClosedXML.Excel;
 using CsvHelper;
 using CsvHelper.Configuration;
-using noava.DTOs.Cards;
+using noava.DTOs.Cards.CSV;
 using noava.Models;
 using noava.Repositories.Cards;
 using noava.Repositories.Decks;

@@ -1,6 +1,4 @@
-﻿using noava.Exceptions;
-
-namespace noava.Exceptions
+﻿namespace noava.Exceptions
 {
     public class UnauthorizedException : ApiException
     {

@@ -22,6 +22,9 @@ import Dashboard from './pages/Dashboard/Dashboard';
 import SchoolClassrooms from './pages/SchoolClassrooms/SchoolClassrooms';
 import WriteReview from './pages/Review/WriteReview';
 import ReverseReview from './pages/Review/ReverseReview';
+import LongTermReview from './pages/LongTermStudy/LongTermReview';
+import LongTermFlipReview from './pages/LongTermStudy/LongTermFlipReview';
+import LongTermReverseReview from './pages/LongTermStudy/LongTermReverseReview';
 import TermsOfService from './pages/Legal/TermsOfService/TermsOfService';
 import Privacy from './pages/Legal/Privacy/Privacy';
 import Guidelines from './pages/Legal/Guidelines/Guidelines';
@@ -76,6 +79,9 @@ export default function AppRoutes() {
         <Route path="/decks/review" element={<QuickReview />} />
         <Route path="/decks/writeReview" element={<WriteReview />} />
         <Route path="/decks/reverseReview" element={<ReverseReview />} />
+        <Route path="/decks/:deckId/longTermReview" element={<LongTermReview />} />
+        <Route path="/decks/:deckId/longTermFlipReview" element={<LongTermFlipReview />} />
+        <Route path="/decks/:deckId/longTermReverseReview" element={<LongTermReverseReview />} />
 
         {/* Classrooms */}
         <Route path="/classrooms" element={<Classrooms />} />

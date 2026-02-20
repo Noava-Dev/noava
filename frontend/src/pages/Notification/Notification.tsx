@@ -12,6 +12,8 @@ import { formatDateToEuropean } from '../../services/DateService';
 import { useToast } from '../../contexts/ToastContext';
 import PageHeader from '../../shared/components/PageHeader';
 import Loading from '../../shared/components/loading/Loading';
+import { useDeckService } from '../../services/DeckService';
+import EmptyState from '../../shared/components/EmptyState';
 
 const NotificationPage = () => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
@@ -117,9 +119,12 @@ const NotificationPage = () => {
           <section className="min-h-screen py-8 bg-background-app-light dark:bg-background-app-dark md:py-12">
             <div className="container px-4 mx-auto max-w-7xl">
               {notifications.length === 0 ? (
-                <div className="text-center text-text-muted-light dark:text-text-muted-dark">
-                  {t('empty')}
-                </div>
+                <EmptyState 
+                  title={t('empty.title')}
+                  description={t('empty.message')}
+                  buttonOnClick={()=> {}}
+                  clearButtonText={t('common:actions.back')}
+                  />
               ) : (
                 <div className="space-y-4">
                   {notifications.map((n) => (
