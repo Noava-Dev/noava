@@ -147,6 +147,7 @@ function ClassroomModal({
                 id="name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+                placeholder={t('modal.namePlaceholder', 'Enter classroom name')}
                 required
               />
               {errors.name && <FormErrorMessage text={errors.name} />}
@@ -159,6 +160,7 @@ function ClassroomModal({
                 rows={3}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
+                placeholder={t('modal.descriptionPlaceholder', 'Enter classroom description')}
                 required
               />
               {errors.description && <FormErrorMessage text={errors.description} />}
@@ -190,14 +192,14 @@ function ClassroomModal({
               </p>
             </div>
 
-            <div className="flex flex-col-reverse gap-3 pt-4 sm:flex-row">
-              <Button color="gray" onClick={onClose} type="button" className="w-full sm:w-auto" disabled={uploading}>
-                {t('common:actions.cancel')}
-              </Button>
+            <div className="flex flex-col gap-3 pt-4 sm:flex-row">
               <Button type="submit" className="w-full sm:flex-1" disabled={uploading}>
                 {uploading ? t('common:actions.uploading', 'Uploading...') : (classroom
                   ? t('common:actions.update')
                   : t('common:actions.create'))}
+              </Button>
+              <Button color="gray" onClick={onClose} type="button" className="w-full sm:w-auto" disabled={uploading}>
+                {t('common:actions.cancel')}
               </Button>
             </div>
           </form>

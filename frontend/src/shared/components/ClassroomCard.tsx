@@ -84,6 +84,7 @@ function ClassroomCard({
             <Dropdown
               label=""
               dismissOnClick={true}
+              className="min-w-max"
               renderTrigger={() => (
                 <button className="p-1.5 sm:p-2 rounded-lg bg-black/30 hover:bg-black/50 backdrop-blur-sm transition-all">
                   <HiDotsVertical className="w-4 h-4 text-white sm:h-5 sm:w-5" />
@@ -92,14 +93,16 @@ function ClassroomCard({
               {classroom.permissions.canEdit && (
                 <DropdownItem
                   icon={HiPencil}
-                  onClick={() => onEdit?.(classroom)}>
+                  onClick={() => onEdit?.(classroom)}
+                  className="whitespace-nowrap">
                   {t('common:actions.edit')}
                 </DropdownItem>
               )}
               {classroom.permissions.canEdit && (
                 <DropdownItem
                   icon={HiRefresh}
-                  onClick={() => onRequestNewCode?.(classroom.id)}>
+                  onClick={() => onRequestNewCode?.(classroom.id)}
+                  className="whitespace-nowrap">
                   {t('card.regenerateCode')}
                 </DropdownItem>
               )}

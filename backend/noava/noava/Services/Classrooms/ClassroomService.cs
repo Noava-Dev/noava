@@ -121,6 +121,7 @@ namespace noava.Services.Classrooms
 
             classroom.Name = classroomDto.Name;
             classroom.Description = classroomDto.Description;
+            classroom.CoverImageBlobName = classroomDto.CoverImageBlobName;
 
             await _classroomRepository.UpdateAsync(classroom);
 
