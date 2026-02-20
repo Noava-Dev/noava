@@ -19,20 +19,27 @@ namespace noava.Services.Classrooms
         private readonly IClassroomRepository _classroomRepository;
         private readonly IClerkService _clerkService;
         private readonly INotificationService _notificationService;
-
+        private readonly IBlobService _blobService;
 
         public ClassroomService(
             IClassroomRepository classroomRepository,
             IClerkService clerkService,
-            INotificationService notificationService)
+            INotificationService notificationService,
+            IBlobService blobService)
         {
             _classroomRepository = classroomRepository;
             _clerkService = clerkService;
             _notificationService = notificationService;
+            _blobService = blobService;
         }
 
         public async Task<ClassroomResponseDto> CreateAsync(ClassroomRequestDto classroomDto, string userId)
         {
+            if (!IsValidBlobName(classroomDto.CoverImageBlobName))
+            {
+                throw new ArgumentException("Invalid cover image blob name format.");
+            }
+
             var classroom = classroomDto.ToEntity();
             classroom.JoinCode = GenerateClassroomCode();
 
@@ -380,6 +387,18 @@ namespace noava.Services.Classrooms
                 .TrimEnd('=')
                 .Replace('+', '-')
                 .Replace('/', '_');
+        }
+
+        private bool IsValidBlobName(string? blobName)
+        {
+            if (string.IsNullOrEmpty(blobName))
+                return true;
+
+
+            var parts = blobName.Split('.', 2);
+            if (parts.Length != 2) return false;
+
+            return Guid.TryParse(parts[0], out _);
         }
     }
 }
