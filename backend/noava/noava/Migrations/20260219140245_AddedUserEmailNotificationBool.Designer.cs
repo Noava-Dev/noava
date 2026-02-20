@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using noava.Data;
@@ -11,9 +12,11 @@ using noava.Data;
 namespace noava.Migrations
 {
     [DbContext(typeof(NoavaDbContext))]
-    partial class NoavaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260219140245_AddedUserEmailNotificationBool")]
+    partial class AddedUserEmailNotificationBool
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -181,7 +184,7 @@ namespace noava.Migrations
                     b.ToTable("Cards");
                 });
 
-            modelBuilder.Entity("noava.Models.CardInteraction", b =>
+            modelBuilder.Entity("noava.Models.CardInteractions", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -204,6 +207,9 @@ namespace noava.Migrations
 
                     b.Property<DateTime>("DueAtBefore")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("InteractionType")
+                        .HasColumnType("integer");
 
                     b.Property<int>("IntervalAfter")
                         .HasColumnType("integer");
@@ -240,6 +246,8 @@ namespace noava.Migrations
 
                     b.ToTable("CardInteractions", t =>
                         {
+                            t.HasCheckConstraint("CK_CardInteractions_DueAtBefore_DueAtAfter", "\"DueAtAfter\" >= \"DueAtBefore\"");
+
                             t.HasCheckConstraint("CK_CardInteractions_ResponseTimeMs_NonNegative", "\"ResponseTimeMs\" >= 0");
                         });
                 });
@@ -685,7 +693,7 @@ namespace noava.Migrations
                     b.ToTable("SchoolAdmins");
                 });
 
-            modelBuilder.Entity("noava.Models.StudySession", b =>
+            modelBuilder.Entity("noava.Models.StudySessions", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -811,7 +819,7 @@ namespace noava.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("noava.Models.CardInteraction", b =>
+            modelBuilder.Entity("noava.Models.CardInteractions", b =>
                 {
                     b.HasOne("noava.Models.Card", null)
                         .WithMany()
@@ -831,7 +839,7 @@ namespace noava.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("noava.Models.StudySession", null)
+                    b.HasOne("noava.Models.StudySessions", null)
                         .WithMany()
                         .HasForeignKey("StudySessionId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -997,7 +1005,7 @@ namespace noava.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("noava.Models.StudySession", b =>
+            modelBuilder.Entity("noava.Models.StudySessions", b =>
                 {
                     b.HasOne("noava.Models.User", null)
                         .WithMany()

@@ -1,25 +1,29 @@
-﻿using noava.DTOs.Decks;
-using noava.DTOs.Notifications;
+﻿using Azure;
+using Azure.Core;
+using Azure.Storage.Blobs.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using noava.Data;
 using noava.DTOs.Clerk;
+using noava.DTOs.Decks;
+using noava.DTOs.Notifications;
 using noava.Mappers.Decks;
 using noava.Models;
 using noava.Models.BlobStorage;
 using noava.Models.Enums;
+using noava.Models.Requests;
 using noava.Repositories;
+using noava.Repositories.Cards;
 using noava.Repositories.Decks;
+using noava.Repositories.Users;
 using noava.Services.Decks;
+using noava.Services.Emails;
 using noava.Services.Notifications;
+using noava.Services.Users;
 using noava.Shared;
+using System.ComponentModel;
 using System.Security.Cryptography;
 using System.Text.Json;
-using noava.Data;
-using Microsoft.EntityFrameworkCore;
-using Azure.Core;
-using noava.Models.Requests;
-using Azure.Storage.Blobs.Models;
-using System.ComponentModel;
-using Azure;
-using noava.Repositories.Cards;
 
 namespace noava.Services
 {
@@ -31,6 +35,9 @@ namespace noava.Services
         private readonly IClerkService _clerkService;
         private readonly INotificationService _notificationService;
         private readonly ICardRepository _cardRepo;
+        private readonly IEmailService _emailService;
+        private readonly IConfiguration _configuration;
+        private readonly IUserRepository _userRepository;
         private readonly NoavaDbContext _context;
 
         public DeckService(
@@ -40,6 +47,9 @@ namespace noava.Services
             IClerkService clerkService,
             INotificationService notificationService,
             ICardRepository cardRepository,
+            IEmailService emailService,
+            IConfiguration configuration,
+            IUserRepository userRepository,
             NoavaDbContext context)
         {
             _repository = repository;
@@ -48,6 +58,9 @@ namespace noava.Services
             _clerkService = clerkService;
             _notificationService = notificationService;
             _cardRepo = cardRepository;
+            _emailService = emailService;
+            _configuration = configuration;
+            _userRepository = userRepository;
             _context = context;
         }
 
@@ -317,6 +330,7 @@ namespace noava.Services
             var notification = new NotificationRequestDto
             {
                 Type = NotificationType.DeckInvitationReceived,
+                TitleKey = "notifications.items.deck.invite.received.title",
                 TemplateKey = "notifications.items.deck.invite.received",
                 UserId = invitedUser.ClerkId,
                 ParametersJson = parametersJson,
@@ -332,6 +346,25 @@ namespace noava.Services
             };
 
             await _notificationService.CreateNotificationAsync(notification);
+
+            var htmlTemplate = await EmailTemplateHelper.GetNotificationEmailAsync(
+                $"{ToFriendlyString(NotificationType.DeckInvitationReceived)}!",
+                "You have a notification waiting in Noava.",
+                "/notifications",
+                _configuration
+            );
+
+            var user = await _clerkService.GetUserAsync(invitedUser.ClerkId);
+            var notifications = await _userRepository.GetByClerkIdAsync(invitedUser.ClerkId);
+
+            if (user != null && notifications?.ReceiveNotificationEmails == true)
+            {
+                await _emailService.SendNotificationEmailAsync(
+                    user.Email,
+                    "You have a new Noava notification",
+                    htmlTemplate
+                );
+            }
 
             return deck.ToResponseDto();
         }
@@ -608,6 +641,10 @@ namespace noava.Services
             {
                 return null;
             }
+        }
+        public static string ToFriendlyString(NotificationType type)
+        {
+            return System.Text.RegularExpressions.Regex.Replace(type.ToString(), "(\\B[A-Z])", " $1");
         }
     }
 }

@@ -19,6 +19,7 @@ using noava.Services;
 using noava.Services.Cards;
 using noava.Services.Classrooms;
 using noava.Services.Decks;
+using noava.Services.Emails;
 using noava.Services.FAQs;
 using noava.Services.Implementations;
 using noava.Services.Notifications;
@@ -70,6 +71,7 @@ namespace noava
             builder.Services.AddScoped<IClassroomService, ClassroomService>();
             builder.Services.AddScoped<IBlobService, BlobService>();
             builder.Services.AddScoped<ICardImportService, CardImportService>();
+            builder.Services.AddScoped<IEmailService, EmailService>();
             builder.Services.AddScoped<IStudySessionService, StudySessionService>();
             builder.Services.AddScoped<ICardInteractionService, CardInteractionService>();
             builder.Services.AddScoped<IStatsService, StatsService>();

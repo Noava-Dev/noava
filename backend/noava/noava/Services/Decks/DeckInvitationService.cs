@@ -4,7 +4,10 @@ using noava.Models;
 using noava.Models.Enums;
 using noava.Repositories.Decks;
 using noava.Repositories.Users;
+using noava.Services.Emails;
 using noava.Services.Notifications;
+using noava.Services.Users;
+using noava.Shared;
 using System.Text.Json;
 
 namespace noava.Services.Decks
@@ -16,19 +19,28 @@ namespace noava.Services.Decks
         private readonly IDeckRepository _deckRepo;
         private readonly IUserRepository _userRepo;
         private readonly INotificationService _notificationService;
+        private readonly IEmailService _emailService;
+        private readonly IConfiguration _configuration;
+        private readonly IClerkService _clerkService;
 
         public DeckInvitationService(
             IDeckInvitationRepository invitationRepo,
             IDeckUserRepository userDeckRepo,
             IDeckRepository deckRepo,
             IUserRepository userRepo,
-            INotificationService notificationService)
+            INotificationService notificationService,
+            IEmailService emailService,
+            IConfiguration configuration,
+            IClerkService clerkService)
         {
             _invitationRepo = invitationRepo;
             _userDeckRepo = userDeckRepo;
             _deckRepo = deckRepo;
             _userRepo = userRepo;
             _notificationService = notificationService;
+            _emailService = emailService;
+            _configuration = configuration;
+            _clerkService = clerkService;
         }
 
         public async Task<DeckInvitationResponse> InviteUserAsync(int deckId, string clerkId, string invitedByClerkId)
@@ -49,7 +61,6 @@ namespace noava.Services.Decks
             if (alreadyOwner)
                 throw new InvalidOperationException("User already has access to this deck");
 
-            // Change: Check for existing invite by ClerkId, not Email
             var existingInvite = await _invitationRepo.ExistsAsync(deckId, invitedUser.ClerkId);
             if (existingInvite)
                 throw new InvalidOperationException("User already has a pending invitation");
@@ -64,15 +75,13 @@ namespace noava.Services.Decks
 
             await _invitationRepo.AddAsync(invitation);
 
-          
-
-        var invitedBy = await _userRepo.GetByClerkIdAsync(invitedByClerkId);
-
+            var invitedBy = await _userRepo.GetByClerkIdAsync(invitedByClerkId);
  
             var notificationDto = new NotificationRequestDto
             {
                 UserId = invitedUser.ClerkId,
                 Type = NotificationType.DeckInvitationReceived,
+                TitleKey = "deck_invitation_received_title",
                 TemplateKey = "deck_invitation_received",
                 ParametersJson = JsonSerializer.Serialize(new
                 {
@@ -86,19 +95,39 @@ namespace noava.Services.Decks
                     new NotificationActionRequestDto
                     {
                         LabelKey = "accept",  
-                        Endpoint = $"/api/deckinvitation/{invitation.InvitationId}/accept",  
+                        Endpoint = $"/deckinvitation/{invitation.InvitationId}/accept",  
                         Method = HttpMethodType.POST  
                     },
                     new NotificationActionRequestDto
                     {
                         LabelKey = "decline",  
-                        Endpoint = $"/api/deckinvitation/{invitation.InvitationId}/decline",  
+                        Endpoint = $"/deckinvitation/{invitation.InvitationId}/decline",  
                         Method = HttpMethodType.POST  
                     }
                 }
             };
 
             await _notificationService.CreateNotificationAsync(notificationDto);
+
+
+            var htmlTemplate = await EmailTemplateHelper.GetNotificationEmailAsync(
+                $"{ToFriendlyString(NotificationType.DeckInvitationReceived)}!",
+                "You have a notification waiting in Noava.",
+                "/notifications",
+                _configuration
+            );
+
+            var user = await _clerkService.GetUserAsync(invitation.InvitedByClerkId);
+            var notifications = await _userRepo.GetByClerkIdAsync(invitation.InvitedByClerkId);
+
+            if (user != null && notifications?.ReceiveNotificationEmails == true)
+            {
+                await _emailService.SendNotificationEmailAsync(
+                    user.Email,
+                    "You have a new Noava notification",
+                    htmlTemplate
+                );
+            }
 
             return MapToResponse(invitation, deck);
         }
@@ -145,7 +174,8 @@ namespace noava.Services.Decks
             var notificationDto = new NotificationRequestDto
             {
                 UserId = invitation.InvitedByClerkId,
-                Type = NotificationType.DeckInvitationAccepted,
+                Type = NotificationType.DeckInvitationAccepted, 
+                TitleKey = "deck_invitation_accepted_title",
                 TemplateKey = "deck_invitation_accepted",
                 ParametersJson = JsonSerializer.Serialize(new
                 {
@@ -157,6 +187,25 @@ namespace noava.Services.Decks
             };
 
             await _notificationService.CreateNotificationAsync(notificationDto);
+
+            var htmlTemplate = await EmailTemplateHelper.GetNotificationEmailAsync(
+                $"{ToFriendlyString(NotificationType.DeckInvitationReceived)}!",
+                "You have a notification waiting in Noava.",
+                "/notifications",
+                _configuration
+            );
+
+            var user = await _clerkService.GetUserAsync(invitation.InvitedByClerkId);
+            var notifications = await _userRepo.GetByClerkIdAsync(invitation.InvitedByClerkId);
+
+            if (user != null && notifications?.ReceiveNotificationEmails == true)
+            {
+                await _emailService.SendNotificationEmailAsync(
+                    user.Email,
+                    "You have a new Noava notification",
+                    htmlTemplate
+                );
+            }
 
             return MapToResponse(invitation, invitation.Deck!);
         }
@@ -181,6 +230,7 @@ namespace noava.Services.Decks
             {
                 UserId = invitation.InvitedByClerkId,
                 Type = NotificationType.DeckInvitationDeclined,
+                TitleKey = "deck_invitation_declined_title",
                 TemplateKey = "deck_invitation_declined",
                 ParametersJson = JsonSerializer.Serialize(new
                 {
@@ -192,6 +242,25 @@ namespace noava.Services.Decks
             };
 
             await _notificationService.CreateNotificationAsync(notificationDto);
+
+            var htmlTemplate = await EmailTemplateHelper.GetNotificationEmailAsync(
+                $"{ToFriendlyString(NotificationType.DeckInvitationReceived)}!",
+                "You have a notification waiting in Noava.",
+                "/notifications",
+                _configuration
+            );
+
+            var user = await _clerkService.GetUserAsync(invitation.InvitedByClerkId);
+            var notifications = await _userRepo.GetByClerkIdAsync(invitation.InvitedByClerkId);
+
+            if (user != null && notifications?.ReceiveNotificationEmails == true)
+            {
+                await _emailService.SendNotificationEmailAsync(
+                    user.Email,
+                    "You have a new Noava notification",
+                    htmlTemplate
+                );
+            }
 
             return MapToResponse(invitation, invitation.Deck!);
         }
@@ -228,6 +297,11 @@ namespace noava.Services.Decks
                 InvitedAt = invitation.InvitedAt,
                 RespondedAt = invitation.RespondedAt
             };
+        }
+
+        public static string ToFriendlyString(NotificationType type)
+        {
+            return System.Text.RegularExpressions.Regex.Replace(type.ToString(), "(\\B[A-Z])", " $1");
         }
     }
 }

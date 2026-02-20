@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using noava.Data;
@@ -11,9 +12,11 @@ using noava.Data;
 namespace noava.Migrations
 {
     [DbContext(typeof(NoavaDbContext))]
-    partial class NoavaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260219104029_AddedTitleToNotifications")]
+    partial class AddedTitleToNotifications
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -181,7 +184,7 @@ namespace noava.Migrations
                     b.ToTable("Cards");
                 });
 
-            modelBuilder.Entity("noava.Models.CardInteraction", b =>
+            modelBuilder.Entity("noava.Models.CardInteractions", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -204,6 +207,9 @@ namespace noava.Migrations
 
                     b.Property<DateTime>("DueAtBefore")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("InteractionType")
+                        .HasColumnType("integer");
 
                     b.Property<int>("IntervalAfter")
                         .HasColumnType("integer");
@@ -240,6 +246,8 @@ namespace noava.Migrations
 
                     b.ToTable("CardInteractions", t =>
                         {
+                            t.HasCheckConstraint("CK_CardInteractions_DueAtBefore_DueAtAfter", "\"DueAtAfter\" >= \"DueAtBefore\"");
+
                             t.HasCheckConstraint("CK_CardInteractions_ResponseTimeMs_NonNegative", "\"ResponseTimeMs\" >= 0");
                         });
                 });
@@ -434,36 +442,36 @@ namespace noava.Migrations
                         new
                         {
                             DeckId = 1,
-                            CreatedAt = new DateTime(2026, 2, 19, 14, 2, 45, 444, DateTimeKind.Utc).AddTicks(7325),
+                            CreatedAt = new DateTime(2026, 2, 19, 10, 40, 28, 745, DateTimeKind.Utc).AddTicks(4405),
                             Description = "Franse woorden voor beginners",
                             JoinCode = "",
                             Language = "Frans",
                             Title = "Frans Woordenschat",
-                            UpdatedAt = new DateTime(2026, 2, 19, 14, 2, 45, 444, DateTimeKind.Utc).AddTicks(7325),
+                            UpdatedAt = new DateTime(2026, 2, 19, 10, 40, 28, 745, DateTimeKind.Utc).AddTicks(4407),
                             UserId = "user_38TGbnbcmzK7uZAbaABqTtzQtvz",
                             Visibility = 0
                         },
                         new
                         {
                             DeckId = 2,
-                            CreatedAt = new DateTime(2026, 2, 19, 14, 2, 45, 444, DateTimeKind.Utc).AddTicks(7327),
+                            CreatedAt = new DateTime(2026, 2, 19, 10, 40, 28, 745, DateTimeKind.Utc).AddTicks(4413),
                             Description = "Engelse grammatica oefeningen",
                             JoinCode = "",
                             Language = "Engels",
                             Title = "Engels Grammatica",
-                            UpdatedAt = new DateTime(2026, 2, 19, 14, 2, 45, 444, DateTimeKind.Utc).AddTicks(7328),
+                            UpdatedAt = new DateTime(2026, 2, 19, 10, 40, 28, 745, DateTimeKind.Utc).AddTicks(4414),
                             UserId = "user_38TGbnbcmzK7uZAbaABqTtzQtvz",
                             Visibility = 2
                         },
                         new
                         {
                             DeckId = 3,
-                            CreatedAt = new DateTime(2026, 2, 19, 14, 2, 45, 444, DateTimeKind.Utc).AddTicks(7330),
+                            CreatedAt = new DateTime(2026, 2, 19, 10, 40, 28, 745, DateTimeKind.Utc).AddTicks(4418),
                             Description = "Spaanse zinnen voor dagelijks gebruik",
                             JoinCode = "",
                             Language = "Spaans",
                             Title = "Spaans Conversatie",
-                            UpdatedAt = new DateTime(2026, 2, 19, 14, 2, 45, 444, DateTimeKind.Utc).AddTicks(7330),
+                            UpdatedAt = new DateTime(2026, 2, 19, 10, 40, 28, 745, DateTimeKind.Utc).AddTicks(4419),
                             UserId = "user_38TGbnbcmzK7uZAbaABqTtzQtvz",
                             Visibility = 1
                         });
@@ -685,7 +693,7 @@ namespace noava.Migrations
                     b.ToTable("SchoolAdmins");
                 });
 
-            modelBuilder.Entity("noava.Models.StudySession", b =>
+            modelBuilder.Entity("noava.Models.StudySessions", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -732,9 +740,6 @@ namespace noava.Migrations
                 {
                     b.Property<string>("ClerkId")
                         .HasColumnType("text");
-
-                    b.Property<bool>("ReceiveNotificationEmails")
-                        .HasColumnType("boolean");
 
                     b.Property<string>("Role")
                         .IsRequired()
@@ -811,7 +816,7 @@ namespace noava.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("noava.Models.CardInteraction", b =>
+            modelBuilder.Entity("noava.Models.CardInteractions", b =>
                 {
                     b.HasOne("noava.Models.Card", null)
                         .WithMany()
@@ -831,7 +836,7 @@ namespace noava.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("noava.Models.StudySession", null)
+                    b.HasOne("noava.Models.StudySessions", null)
                         .WithMany()
                         .HasForeignKey("StudySessionId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -997,7 +1002,7 @@ namespace noava.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("noava.Models.StudySession", b =>
+            modelBuilder.Entity("noava.Models.StudySessions", b =>
                 {
                     b.HasOne("noava.Models.User", null)
                         .WithMany()
