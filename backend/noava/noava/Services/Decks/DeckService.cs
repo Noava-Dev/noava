@@ -38,7 +38,6 @@ namespace noava.Services
         private readonly IEmailService _emailService;
         private readonly IConfiguration _configuration;
         private readonly IUserRepository _userRepository;
-        private readonly NoavaDbContext _context;
 
         public DeckService(
             IDeckRepository repository,
@@ -49,8 +48,7 @@ namespace noava.Services
             ICardRepository cardRepository,
             IEmailService emailService,
             IConfiguration configuration,
-            IUserRepository userRepository,
-            NoavaDbContext context)
+            IUserRepository userRepository)
         {
             _repository = repository;
             _blobService = blobService;
@@ -61,7 +59,6 @@ namespace noava.Services
             _emailService = emailService;
             _configuration = configuration;
             _userRepository = userRepository;
-            _context = context;
         }
 
         private bool IsValidBlobName(string? blobName)
@@ -86,35 +83,8 @@ namespace noava.Services
 
         public async Task<List<DeckResponse>> GetUserDecksAsync(string userId, int? limit = null)
         {
-            var query = _context.Decks
-                .Where(d =>
-                    // User created the deck
-                    d.UserId == userId ||
-                    // OR user has access via DeckUsers (owner OR invited)
-                    d.DeckUsers.Any(du => du.ClerkId == userId))
-                .OrderByDescending(d => d.CreatedAt)
-                .AsQueryable();
-
-            if (limit.HasValue)
-            {
-                query = query.Take(limit.Value);
-            }
-
-            return await query
-                .Select(d => new DeckResponse
-                {
-                    DeckId = d.DeckId,
-                    UserId = d.UserId,
-                    Title = d.Title,
-                    Description = d.Description,
-                    Language = d.Language,
-                    Visibility = d.Visibility,
-                    CoverImageBlobName = d.CoverImageBlobName,
-                    JoinCode = d.JoinCode,
-                    CreatedAt = d.CreatedAt,
-                    UpdatedAt = d.UpdatedAt
-                })
-                .ToListAsync();
+            var decks = await _repository.GetUserDecksWithAccessAsync(userId, limit);
+            return decks.Select(d => d.ToResponseDto()).ToList();
         }
 
 
@@ -286,47 +256,41 @@ namespace noava.Services
             return authorizedDecks.ToResponseDtoList();
         }
 
-        public async Task<DeckResponse> InviteUserByEmailAsync(int deckId, string userId, string email, bool isOwner)  // ← ADD isOwner
+        public async Task<DeckResponse> InviteUserByEmailAsync(int deckId, string userId, string email, bool isOwner)
         {
             var deck = await _repository.GetByIdAsync(deckId)
                 ?? throw new KeyNotFoundException("Deck not found.");
 
-            // Check if user is creator
             if (deck.UserId != userId)
                 throw new UnauthorizedAccessException("Only the deck creator can invite users.");
 
-            // Get invited user from Clerk
             var invitedUser = await _clerkService.GetUserByEmailAsync(email)
                 ?? throw new KeyNotFoundException("User with this email not found.");
 
-            // Check if user is already a member
-            var existingMember = await _deckUserRepo.GetByDeckAndUserAsync(deckId, invitedUser.ClerkId);
+            var existingMember = await _repository.GetByDeckAndUserAsync(deckId, invitedUser.ClerkId);
+
             if (existingMember != null)
             {
-                // Update their owner status if different
                 if (existingMember.IsOwner != isOwner)
                 {
                     existingMember.IsOwner = isOwner;
-                    await _context.SaveChangesAsync();
+                    await _repository.UpdateDeckUserAsync(existingMember);  
                 }
                 return deck.ToResponseDto();
             }
 
-            // Get owner info
             var owner = await _clerkService.GetUserAsync(userId)
                 ?? throw new KeyNotFoundException("Inviting user not found.");
 
             var ownerFullName = $"{owner.FirstName} {owner.LastName}".Trim();
 
-            // Create notification parameters
             var parametersJson = JsonSerializer.Serialize(new
             {
                 deckTitle = deck.Title,
                 ownerName = ownerFullName,
-                isOwner = isOwner  // ← ADD: Include in notification
+                isOwner = isOwner
             });
 
-            // Send notification with join link
             var notification = new NotificationRequestDto
             {
                 Type = NotificationType.DeckInvitationReceived,
@@ -339,10 +303,12 @@ namespace noava.Services
             new NotificationActionRequestDto
             {
                 LabelKey = "notifications.items.deck.invite.actions.accept",
-                Endpoint = $"/deck/join/{deck.JoinCode}?isOwner={isOwner}",  // ← ADD: Pass isOwner in URL
+                Endpoint = $"/deck/join/{deck.JoinCode}/{isOwner}",  
                 Method = HttpMethodType.POST
-            }
-        }
+
+
+                    }
+                }
             };
 
             await _notificationService.CreateNotificationAsync(notification);
@@ -369,10 +335,8 @@ namespace noava.Services
             return deck.ToResponseDto();
         }
 
-        public async Task<DeckResponse> JoinByJoinCodeAsync(string joinCode, string userId, bool isOwner = false)  // ← ADD isOwner
+        public async Task<DeckResponse> JoinByJoinCodeAsync(string joinCode, string userId, bool isOwner = false)
         {
-           
-
             var deck = await _repository.GetByJoinCodeAsync(joinCode);
 
             if (deck == null)
@@ -380,35 +344,27 @@ namespace noava.Services
                 throw new KeyNotFoundException("Invalid join code.");
             }
 
-
-            // Check if already has access
-            var existingMember = await _deckUserRepo.GetByDeckAndUserAsync(deck.DeckId, userId);
+            var existingMember = await _repository.GetByDeckAndUserAsync(deck.DeckId, userId);
 
             if (existingMember != null)
             {
-
-
-                // Update owner status if different
                 if (existingMember.IsOwner != isOwner)
                 {
                     existingMember.IsOwner = isOwner;
-                    await _context.SaveChangesAsync();
-
+                    await _repository.UpdateDeckUserAsync(existingMember); 
                 }
             }
             else
             {
-
                 var deckUser = new DeckUser
                 {
                     ClerkId = userId,
                     DeckId = deck.DeckId,
-                    IsOwner = isOwner,  // ← USE the parameter
+                    IsOwner = isOwner,
                     AddedAt = DateTime.UtcNow
                 };
 
                 await _deckUserRepo.AddAsync(deckUser);
-
             }
 
             return deck.ToResponseDto();

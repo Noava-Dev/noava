@@ -22,6 +22,8 @@ namespace noava.Repositories.Decks
         Task<bool> HasAccessAsync(int deckId, string userId);
         Task AddAsync(DeckUser deckUser);
         Task RemoveAsync(DeckUser deckUser);
+        Task<List<Deck>> GetUserDecksWithAccessAsync(string userId, int? limit = null);
+        Task UpdateDeckUserAsync(DeckUser deckUser);
 
     }
 }
