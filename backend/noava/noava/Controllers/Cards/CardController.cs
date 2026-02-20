@@ -47,7 +47,7 @@ namespace noava.Controllers.Cards
         [HttpGet("bulk-review")]
         public async Task<ActionResult<List<CardResponse>>> GetBulkReviewCards(
             [FromQuery] List<int> deckIds,
-            [FromQuery] BulkReviewMode mode)
+            [FromQuery] ReviewMode mode)
         {
             var userId = _userService.GetUserId(User);
             if (userId == null) return Unauthorized();
@@ -57,6 +57,22 @@ namespace noava.Controllers.Cards
 
             var cards = await _cardService.GetBulkReviewCardsAsync(
                 deckIds,
+                userId,
+                mode
+            );
+
+            return Ok(cards);
+        }
+
+        [HttpGet("{deckId}/spaced")]
+        public async Task<ActionResult<List<CardResponse>>> GetAllCardsByDeckIdLongterm(int deckId, [FromQuery] ReviewMode mode)
+        {
+            var userId = _userService.GetUserId(User);
+            if (userId == null) 
+                return Unauthorized();
+
+            var cards = await _cardService.GetAllCardsLongtermAsync(
+                deckId,
                 userId,
                 mode
             );

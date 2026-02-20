@@ -1,4 +1,5 @@
 ﻿using noava.DTOs.Cards;
+using noava.DTOs.Cards.CSV;
 using noava.Models;
 
 namespace noava.Mappers.Cards
@@ -23,6 +24,12 @@ namespace noava.Mappers.Cards
                 UpdatedAt = card.UpdatedAt,
                 HasVoiceAssistant = card.HasVoiceAssistant
             };
+        }
+        public static List<CardResponse> ToResponseList(this IEnumerable<Card> cards)
+        {
+            return cards
+                .Select(ToResponse)
+                .ToList();
         }
 
         // Request DTO => Entity

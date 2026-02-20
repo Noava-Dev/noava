@@ -1,5 +1,5 @@
 import { Dropdown, DropdownItem, DropdownDivider, Badge } from 'flowbite-react';
-import { HiClipboardCopy, HiDotsVertical, HiPencil, HiTrash } from 'react-icons/hi';
+import { HiDotsVertical, HiPencil, HiTrash, HiChartBar, HiClipboardCopy } from 'react-icons/hi';
 import { useTranslation } from 'react-i18next';
 import { useState, useEffect } from 'react';
 import { useAzureBlobService } from '../../services/AzureBlobService';
@@ -16,6 +16,7 @@ interface DeckCardProps {
   onEdit?: (deck: Deck) => void;
   onDelete?: (deckId: number) => void;
   onView?: (deckId: number) => void;  
+  onAnalytics?: (deck: Deck) => void;
   showEdit?: boolean;  
 }
 
@@ -25,6 +26,7 @@ function DeckCard({
   onEdit, 
   onDelete, 
   onView,  
+  onAnalytics,
   showEdit = true  
 }: DeckCardProps) {
   const { t } = useTranslation('decks');
@@ -106,6 +108,16 @@ function DeckCard({
               <>
                 <DropdownItem icon={HiPencil} onClick={() => onEdit(deck)}>
                   {t('common:actions.edit')}
+                </DropdownItem>
+                <DropdownDivider />
+              </>
+            )}
+            
+            {/* Always show analytics if onAnalytics is provided */}
+            {onAnalytics && (
+              <>
+                <DropdownItem icon={HiChartBar} onClick={() => onAnalytics(deck)}>
+                  {t('common:actions.analytics')}
                 </DropdownItem>
                 <DropdownDivider />
               </>

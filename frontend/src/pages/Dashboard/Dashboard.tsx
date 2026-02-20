@@ -18,10 +18,14 @@ import {
 import { HiChevronRight } from 'react-icons/hi';
 import { useNavigate } from 'react-router-dom';
 import { useDeckService } from '../../services/DeckService';
+import { useStatisticsService } from '../../services/StatisticsService';
+import { formatDateToEuropean } from '../../services/DateService';
 import type { DeckRequest, Deck } from '../../models/Deck';
+import type { DashboardStatistics } from '../../models/Statistics';
 import { useEffect, useState } from 'react';
 import { useToast } from '../../contexts/ToastContext';
 import DeckCard from '../../shared/components/DeckCard';
+import DeckStatisticsModal from '../../shared/components/DeckStatisticsModal';
 import Loading from '../../shared/components/loading/Loading';
 import DeckModal from '../../shared/components/DeckModal';
 import ConfirmModal from '../../shared/components/ConfirmModal';
@@ -30,28 +34,33 @@ function Dashboard() {
   const { t } = useTranslation('dashboard');
   const navigate = useNavigate();
   const deckService = useDeckService();
+  const statisticsService = useStatisticsService();
   const [decks, setDecks] = useState<Deck[]>([]);
+  const [statistics, setStatistics] = useState<DashboardStatistics>({} as DashboardStatistics);
   const [loading, setLoading] = useState(true);
   const { showSuccess, showError } = useToast();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingDeck, setEditingDeck] = useState<Deck | undefined>(undefined);
   const [deleteDeckId, setDeleteDeckId] = useState<number | null>(null);
+  const [analyticsModalOpen, setAnalyticsModalOpen] = useState(false);
+  const [analyticsDeck, setAnalyticsDeck] = useState<Deck | null>(null);
   const [copyModalOpened, setCopyModalOpened] = useState(false);
   const [deckToCopy, setDeckToCopy] = useState<number | null>(null);
   const [isCopying, setIsCopying] = useState(false);
 
-
   useEffect(() => {
-    fetchDecks();
+    fetchData();
   }, []);
 
-  const fetchDecks = async () => {
+  const fetchData = async () => {
     try {
       setLoading(true);
-
-      const data = await deckService.getMyDecks(4);
-
-      setDecks(data);
+      const [decksData, statsData] = await Promise.all([
+        deckService.getMyDecks(4),
+        statisticsService.getGeneralStatistics(),
+      ]);
+      setDecks(decksData);
+      setStatistics(statsData);
     } catch (error) {
       showError(t('toast.loadError'), 'Error');
     } finally {
@@ -86,6 +95,16 @@ function Dashboard() {
     setIsModalOpen(true);
   };
 
+  const handleAnalytics = (deck: Deck) => {
+    setAnalyticsDeck(deck);
+    setAnalyticsModalOpen(true);
+  };
+
+  const handleCloseAnalyticsModal = () => {
+    setAnalyticsModalOpen(false);
+    setAnalyticsDeck(null);
+  };
+
   const handleUpdate = async (deckData: DeckRequest) => {
     if (!editingDeck) return;
 
@@ -94,7 +113,7 @@ function Dashboard() {
       showSuccess('Success', t('toast.updateSuccess'));
       setIsModalOpen(false);
       setEditingDeck(undefined);
-      fetchDecks();
+      fetchData();
     } catch (error) {
       showError(t('toast.updateError'), 'Error');
     }
@@ -110,7 +129,7 @@ function Dashboard() {
     try {
       await deckService.delete(deleteDeckId);
       showSuccess('Success', t('toast.deleteSuccess'));
-      fetchDecks();
+      fetchData();
     } catch (error) {
       showError(t('toast.deleteError'), 'Error');
     } finally {
@@ -129,7 +148,7 @@ function Dashboard() {
 
   return (
     <>
-      <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
+      <div className="flex min-h-screen bg-background-app-light dark:bg-background-app-dark">
         <div className="flex-1 w-full ml-0">
           <PageHeader>
             {/* Hero Section */}
@@ -156,26 +175,26 @@ function Dashboard() {
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
                   <DashboardStatCard
                     title={t('statcard.cardsreviewed.title')}
-                    value="1,247"
+                    value={statistics.cardsReviewed.toString()}
                     tooltip={t('statcard.cardsreviewed.tooltip')}
                     icon={LuBrain}
                   />
                   <DashboardStatCard
                     title={t('statcard.accuracyrate.title')}
-                    value="84%"
+                    value={statistics ? `${Math.round(statistics.accuracyRate)}%` : '0%'}
                     tooltip={t('statcard.accuracyrate.tooltip')}
                     icon={LuTarget}
                   />
                   <DashboardStatCard
                     title={t('statcard.studytime.title')}
-                    value="12,5h"
+                    value={`${statistics.timeSpentHours}h`}
                     tooltip={t('statcard.studytime.tooltip')}
                     icon={LuClock}
                   />
                   <DashboardStatCard
-                    title={t('statcard.cardsdue.title')}
-                    value="45"
-                    tooltip={t('statcard.cardsdue.tooltip')}
+                    title={t('statcard.lastreview.title')}
+                    value={statistics?.lastRevieweDate ? formatDateToEuropean(statistics.lastRevieweDate) : t('statcard.lastreview.never')}
+                    tooltip={t('statcard.lastreview.tooltip')}
                     icon={LuTrendingUp}
                   />
                 </div>
@@ -205,6 +224,7 @@ function Dashboard() {
                           onCopy={handleCopy}
                           onEdit={handleEdit}
                           onDelete={handleDelete}
+                          onAnalytics={handleAnalytics}
                         />
                       ))}
                     </div>
@@ -228,6 +248,13 @@ function Dashboard() {
             onClose={handleCloseModal}
             onSubmit={handleUpdate}
             deck={editingDeck}
+          />
+
+          {/* Deck Statistics Modal */}
+          <DeckStatisticsModal
+            show={analyticsModalOpen}
+            onClose={handleCloseAnalyticsModal}
+            deck={analyticsDeck}
           />
 
           {/* Delete Confirmation Modal */}

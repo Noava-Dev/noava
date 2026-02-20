@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { Button, Dropdown, DropdownItem, Tooltip } from 'flowbite-react';
+import { Badge, Button, Dropdown, DropdownItem, Tooltip } from 'flowbite-react';
 import {
   HiPlus,
   HiPlay,
@@ -32,6 +32,7 @@ import BackButton from '../../shared/components/navigation/BackButton';
 import PageHeader from '../../shared/components/PageHeader';
 import DropdownButton from '../../shared/components/DropdownButton';
 import ImportCardsModal from './components/ImportCardsModal';
+import Skeleton from '../../shared/components/loading/Skeleton';
 
 interface FlashcardWithImages extends Flashcard {
   frontImageUrl?: string | null;
@@ -248,24 +249,7 @@ function FlashcardDetail() {
   };
 
   if (loading) {
-    return (
-      <div className="flex min-h-screen bg-background-app-light dark:bg-background-app-dark">
-        <main className="flex-1 w-full ml-0 md:ml-64">
-          <div className="container max-w-6xl px-4 py-8 mx-auto">
-            <div className="animate-pulse">
-              <div className="h-12 mb-8 rounded bg-background-surface-light dark:bg-background-surface-dark w-96"></div>
-              <div className="space-y-4">
-                {[1, 2, 3].map((i) => (
-                  <div
-                    key={i}
-                    className="h-32 rounded bg-background-surface-light dark:bg-background-surface-dark"></div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </main>
-      </div>
-    );
+    return <Skeleton />;
   }
 
   if (!deck) {
@@ -344,10 +328,47 @@ function FlashcardDetail() {
 
                 {/* Study Now */}
 
-                <Button size="lg" disabled={totalCards === 0}>
-                  <HiPlay className="mr-2 size-5" />
-                  {t('flashcardDetail.studyNow')}
-                </Button>
+              <Dropdown
+                label=""
+                dismissOnClick={true}
+                renderTrigger={() => (
+                  <Button size="lg" disabled={totalCards === 0}>
+                    <HiPlay className="mr-2 size-5" />
+                    {t('flashcardDetail.studyNow')}
+                    <HiChevronDown className="w-4 h-4 ml-1" />
+                  </Button>
+                )}>
+
+                {/* Long-Term Review  */}
+                <DropdownItem
+                  className="flex items-center justify-between"
+                  onClick={() => navigate(`/decks/${deckId}/longTermReview`)}>
+                  <div className="flex items-center">
+                    <HiPencil className="w-4 h-4 mr-2" />
+                    {t('flashcardDetail.longTermWrite')}
+                  </div>
+                </DropdownItem>
+
+                {/* Long-Term Review - Flip Mode */}
+                <DropdownItem
+                  className="flex items-center justify-between"
+                  onClick={() => navigate(`/decks/${deckId}/longTermFlipReview`)}>
+                  <div className="flex items-center">
+                    <HiPlay className="w-4 h-4 mr-2" />
+                    {t('flashcardDetail.longTermFlip')}
+                  </div>
+                </DropdownItem>
+
+                {/* Long-Term Review - Reverse Mode */}
+                <DropdownItem
+                  className="flex items-center justify-between"
+                  onClick={() => navigate(`/decks/${deckId}/longTermReverseReview`)}>
+                  <div className="flex items-center">
+                    <HiRefresh className="w-4 h-4 mr-2" />
+                    {t('flashcardDetail.longTermReverse')}
+                  </div>
+                </DropdownItem>
+              </Dropdown>
 
                 <div className="w-full md:w-fit">
                   <Tooltip content={t('common:tooltips.reviewModes')}>

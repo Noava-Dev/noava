@@ -58,6 +58,11 @@
     "reverseReview": "Mode Inversé",
     "backToClassroom": "Retour à {{name}}",
     "importFromFile": "Importer depuis un fichier",
+    "longTermReview": "Révision à Long Terme",
+    "longTermWrite": "Écriture Long Terme",
+    "longTermFlip": "Retournement Long Terme",
+    "longTermReverse": "Inversé Long Terme",
+    "learn": "Apprendre",
     "uploadFile": "Télécharger un Fichier",
     "recordAudio": "Enregistrer l'Audio",
     "audioUploaded": "Audio téléchargé"
@@ -91,6 +96,7 @@
     "playVoiceAssistant": "Lire avec l'assistant vocal",
     "noCards": "Aucune carte trouvée",
     "error": "Erreur lors du chargement des cartes",
+    "exitConfirm": "Êtes-vous sûr de vouloir quitter ? Votre progression sera sauvegardée.",
     "complete": {
       "title": "Révision Terminée!",
       "message": "Vous avez révisé toutes les cartes",
@@ -108,6 +114,20 @@
     "subtitle": "Importez vos données depuis n'importe quelle source. Nous supportons CSV et Excel. Consultez notre documentation pour plus d'informations sur les formats.",
     "upload": "Téléverser le fichier",
     "supported": "Fichiers pris en charge: "
+  },
+  "longTerm": {
+    "mode": "Révision à Long Terme",
+    "writeMode": "Mode Écriture",
+    "typeAnswer": "Tapez votre réponse ici...",
+    "checkAnswer": "Vérifier la réponse",
+    "correctAnswer": "Réponse correcte",
+    "yourAnswer": "Votre réponse",
+    "markIncorrect": "Marquer comme incorrect",
+    "markCorrect": "Marquer comme correct",
+    "correct": "Correct",
+    "incorrect": "Incorrect",
+    "accuracy": "Précision",
+    "noCardsToReview": "Aucune carte n'est prévue pour révision pour le moment. Continuez à étudier régulièrement !"
   },
   "search": { "label": "Rechercher" }
 }
