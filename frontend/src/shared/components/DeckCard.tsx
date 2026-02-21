@@ -1,9 +1,9 @@
 import { Dropdown, DropdownItem, DropdownDivider, Badge } from 'flowbite-react';
-import { HiDotsVertical, HiPencil, HiTrash } from 'react-icons/hi';
+import { HiDotsVertical, HiPencil, HiTrash, HiChartBar, HiClipboardCopy } from 'react-icons/hi';
 import { useTranslation } from 'react-i18next';
 import { useState, useEffect } from 'react';
 import { useAzureBlobService } from '../../services/AzureBlobService';
-import type { Deck } from '../../models/Deck';
+import type { Deck, DeckVisibility } from '../../models/Deck';
 import { useNavigate } from 'react-router-dom';
 import {
   getVisibilityLabel,
@@ -12,17 +12,21 @@ import {
 
 interface DeckCardProps {
   deck: Deck;
+  onCopy: (deckId: number) => void;
   onEdit?: (deck: Deck) => void;
   onDelete?: (deckId: number) => void;
   onView?: (deckId: number) => void;  
+  onAnalytics?: (deck: Deck) => void;
   showEdit?: boolean;  
 }
 
 function DeckCard({ 
   deck, 
+  onCopy,
   onEdit, 
   onDelete, 
   onView,  
+  onAnalytics,
   showEdit = true  
 }: DeckCardProps) {
   const { t } = useTranslation('decks');
@@ -95,11 +99,25 @@ function DeckCard({
                 <HiDotsVertical className="w-4 h-4 text-white sm:h-5 sm:w-5" />
               </button>
             )}>
+                {/* Copy deck */}
+                <DropdownItem icon={HiClipboardCopy} onClick={() => onCopy(deck.deckId)}>
+                  {t('common:actions.copy')}
+                </DropdownItem>
             {/* Only show edit if showEdit is true */}
             {showEdit && onEdit && (
               <>
                 <DropdownItem icon={HiPencil} onClick={() => onEdit(deck)}>
                   {t('common:actions.edit')}
+                </DropdownItem>
+                <DropdownDivider />
+              </>
+            )}
+            
+            {/* Always show analytics if onAnalytics is provided */}
+            {onAnalytics && (
+              <>
+                <DropdownItem icon={HiChartBar} onClick={() => onAnalytics(deck)}>
+                  {t('common:actions.analytics')}
                 </DropdownItem>
                 <DropdownDivider />
               </>
@@ -123,8 +141,8 @@ function DeckCard({
             <span className="px-2 py-1 text-xs font-medium tracking-wide text-white uppercase border rounded-full bg-white/20 backdrop-blur-md sm:px-3 border-white/30">
               {deck.language}
             </span>
-            <Badge color={getVisibilityBadgeColor(deck.visibility)}>
-              {getVisibilityLabel(deck.visibility, t)}
+            <Badge color={getVisibilityBadgeColor(deck.visibility as DeckVisibility)}>
+              {getVisibilityLabel(deck.visibility as DeckVisibility, t)}
             </Badge>
           </div>
           <h3 className="mb-1 text-lg font-bold text-white sm:text-xl md:text-2xl sm:mb-2 drop-shadow-lg line-clamp-2">

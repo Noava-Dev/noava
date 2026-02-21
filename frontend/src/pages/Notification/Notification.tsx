@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Card, Button, Spinner, Tooltip } from 'flowbite-react';
+import { Card, Button, Tooltip } from 'flowbite-react';
 import { notificationService } from '../../services/NotificationService';
 import type {
   Notification,
@@ -10,21 +10,18 @@ import { useTranslation } from 'react-i18next';
 import { useApi } from '../../hooks/useApi';
 import { formatDateToEuropean } from '../../services/DateService';
 import { useToast } from '../../contexts/ToastContext';
-import { useAuth } from '@clerk/clerk-react';
 import PageHeader from '../../shared/components/PageHeader';
 import Loading from '../../shared/components/loading/Loading';
 import { useDeckService } from '../../services/DeckService';
+import EmptyState from '../../shared/components/EmptyState';
 
 const NotificationPage = () => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState(true);
   const [processingId, setProcessingId] = useState<number | null>(null);
-
-  const { getToken } = useAuth();
   const service = notificationService();
   const { t } = useTranslation('notification');
   const api = useApi();
-  const deckService = useDeckService();
   const { showError, showSuccess } = useToast();
 
   function parseParams(data?: any): Record<string, unknown> {
@@ -38,7 +35,7 @@ const NotificationPage = () => {
       }
       if (typeof parsed === 'object' && parsed !== null) return parsed;
     } catch (e) {
-      showError(t('common:app.error'), t('errors.params'));
+      showError(t('errors.params'), t('common:app.error'));
     }
     return {};
   }
@@ -54,7 +51,7 @@ const NotificationPage = () => {
       setNotifications(data);
     } catch (error) {
       setNotifications([]);
-      showError(t('common:app.error'), t('errors.fetch'));
+      showError(t('errors.fetch'), t('common:app.error'));
     } finally {
       setLoading(false);
     }
@@ -69,7 +66,7 @@ const NotificationPage = () => {
       await service.deleteNotification(id);
     } catch (error) {
       setNotifications(previous);
-      showError(t('common:app.error'), t('errors.delete'));
+      showError(t('errors.delete'), t('common:app.error'));
     } finally {
       setProcessingId(null);
     }
@@ -81,24 +78,16 @@ const NotificationPage = () => {
   ) {
     setProcessingId(notification.id);
     try {
-      // Check if this is a deck join action
-      if (action.endpoint.includes('/join/')) {
-        const joinCode = action.endpoint.split('/join/')[1];
-        const joinedDeck = await deckService.joinByCode(joinCode);
-        
-        // Show success message
-        showSuccess(t('common:toast.success'), t('notification:joined.success'));
-        
-        // Navigate to the deck or refresh the page
-        window.location.reload(); // Force refresh to update deck list
-      } else {
-        await api.request({ method: action.method, url: action.endpoint });
-      }
+
+      await api.request({
+        method: action.method,
+        url: `${import.meta.env.VITE_API_BASE_URL}${action.endpoint}`
+      });
 
       await service.deleteNotification(notification.id);
       setNotifications((prev) => prev.filter((n) => n.id !== notification.id));
     } catch (error) {
-      showError(t('common:app.error'), t('errors.action'));
+      showError(t('errors.action'), t('common:app.error'));
     } finally {
       setProcessingId(null);
     }
@@ -130,14 +119,12 @@ const NotificationPage = () => {
           <section className="min-h-screen py-8 bg-background-app-light dark:bg-background-app-dark md:py-12">
             <div className="container px-4 mx-auto max-w-7xl">
               {notifications.length === 0 ? (
-                <div className="text-center text-text-muted-light dark:text-text-muted-dark">
-                  <div className="font-semibold text-lg md:text-xl mb-2">
-                    {t('empty.title')}
-                  </div>
-                  <div>
-                    {t('empty.message')}
-                  </div>
-                </div>
+                <EmptyState 
+                  title={t('empty.title')}
+                  description={t('empty.message')}
+                  buttonOnClick={()=> {}}
+                  clearButtonText={t('common:actions.back')}
+                  />
               ) : (
                 <div className="space-y-4">
                   {notifications.map((n) => (
@@ -148,7 +135,7 @@ const NotificationPage = () => {
                         <div className="flex-1 min-w-0">
                           <div>
                             <div className="text-lg font-semibold text-text-title-light md:text-xl dark:text-text-title-dark">
-                              {t('notifications.genericTitle')}
+                              {t(n.titleKey)}
                             </div>
                             <div className="mt-1 text-xs text-text-muted-light md:text-sm dark:text-text-muted-dark">
                               {formatDateToEuropean(n.createdAt)}

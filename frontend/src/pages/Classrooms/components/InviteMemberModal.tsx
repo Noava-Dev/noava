@@ -55,14 +55,15 @@ const InviteMemberModal: React.FC<InviteMemberModalProps> = ({
         </div>
       </ModalBody>
       <ModalFooter>
-        <div className="flex justify-end w-full gap-3">
-          <Button color="gray" onClick={onClose} size="sm">
+        <div className="flex flex-col-reverse justify-end w-full gap-3 sm:flex-row">
+          <Button color="gray" onClick={onClose} size="sm" className="w-full sm:w-auto">
             {t('common:actions.cancel')}
           </Button>
           <Button
             onClick={handleInvite}
             disabled={!canInvite || loading || !email.trim()}
-            size="sm">
+            size="sm"
+            className="w-full sm:w-auto">
             {t('common:actions.invite')}
           </Button>
         </div>

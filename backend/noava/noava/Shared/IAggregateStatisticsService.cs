@@ -8,6 +8,7 @@ namespace noava.Shared
         Task RecomputeClassroomDeckStatisticsAsync(CancellationToken ct = default);
         Task RecomputeClassroomUserStatisticsAsync(CancellationToken ct = default);
         Task RecomputeDeckUserStatisticsAsync(CancellationToken ct = default);
-        Task UpdateStatsAsync(IEnumerable<CardInteractions> interactions, StudySessions? session, CancellationToken ct = default);
+        Task UpdateInteractionStatsAsync(IEnumerable<CardInteraction> interactions, CancellationToken ct = default);
+        Task UpdateStudySessionStatsAsync(StudySession session, CancellationToken ct = default);
     }
 }

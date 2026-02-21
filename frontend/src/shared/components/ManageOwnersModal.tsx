@@ -80,7 +80,7 @@ export const ManageOwnersModal = ({
         }
       }
       
-      showError(t('common:toast.error'), errorMessage);
+      showError(errorMessage, t('common:toast.error'));
       setUsers([]);
     } finally {
       setLoading(false);
@@ -91,7 +91,7 @@ export const ManageOwnersModal = ({
     if (!deck) return;
     try {
       await deckService.inviteByEmail(deck.deckId, email, isOwner);
-      showSuccess(t('common:toast.success'), t('decks:invite.success'));
+      showSuccess(t('decks:invite.success'), t('common:toast.success'));
       await loadUsers();
       onUpdate();
     } catch (error: any) {
@@ -106,7 +106,7 @@ export const ManageOwnersModal = ({
         }
       }
       
-      showError(t('common:toast.error'), errorMessage);
+      showError(errorMessage, t('common:toast.error'));
     }
   };
 
@@ -116,7 +116,7 @@ export const ManageOwnersModal = ({
     try {
       setRemovingUser(true);
       await deckService.removeUser(deck.deckId, userToRemove.clerkId);
-      showSuccess(t('common:toast.success'), t('decks:owners.removeSuccess'));
+      showSuccess(t('decks:owners.removeSuccess'), t('common:toast.success'));
       await loadUsers();
       onUpdate();
     } catch (error: any) {
@@ -131,7 +131,7 @@ export const ManageOwnersModal = ({
         }
       }
       
-      showError(t('common:toast.error'), errorMessage);
+      showError(errorMessage, t('common:toast.error'));
     } finally {
       setRemovingUser(false);
       setConfirmModalOpen(false);
@@ -149,19 +149,19 @@ export const ManageOwnersModal = ({
 
     try {
       await deckService.inviteByEmail(deck.deckId, targetUser.email, !targetUser.isOwner);
-      showSuccess(t('common:toast.success'), t('decks:owners.updateSuccess'));
+      showSuccess(t('decks:owners.updateSuccess'), t('common:toast.success'));
       await loadUsers();
       onUpdate();
     } catch (error: any) {
       console.error('Error updating user role:', error);
-      showError(t('common:toast.error'), t('decks:owners.updateError'));
+      showError(t('decks:owners.updateError'), t('common:toast.error'));
     }
   };
 
   const handleCopyJoinCode = () => {
     if (deck?.joinCode) {
       navigator.clipboard.writeText(deck.joinCode);
-      showSuccess(t('common:toast.success'), t('decks:owners.codeCopied'));
+      showSuccess(t('decks:owners.codeCopied'), t('common:toast.success'));
     }
   };
 
@@ -173,11 +173,11 @@ export const ManageOwnersModal = ({
     try {
       setUpdatingJoinCode(true);
       await deckService.updateJoinCode(deck.deckId);
-      showSuccess(t('common:toast.success'), t('decks:owners.codeRegenerated'));
+      showSuccess(t('decks:owners.codeRegenerated'), t('common:toast.success'));
       onUpdate();
     } catch (error) {
       console.error('Error updating join code:', error);
-      showError(t('common:toast.error'), t('decks:owners.codeRegenerateError'));
+      showError(t('decks:owners.codeRegenerateError'), t('common:toast.error'));
     } finally {
       setUpdatingJoinCode(false);
     }

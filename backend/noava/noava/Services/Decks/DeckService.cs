@@ -1,19 +1,29 @@
-﻿using noava.DTOs.Decks;
-using noava.DTOs.Notifications;
+﻿using Azure;
+using Azure.Core;
+using Azure.Storage.Blobs.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using noava.Data;
 using noava.DTOs.Clerk;
+using noava.DTOs.Decks;
+using noava.DTOs.Notifications;
 using noava.Mappers.Decks;
 using noava.Models;
 using noava.Models.BlobStorage;
 using noava.Models.Enums;
+using noava.Models.Requests;
 using noava.Repositories;
+using noava.Repositories.Cards;
 using noava.Repositories.Decks;
+using noava.Repositories.Users;
 using noava.Services.Decks;
+using noava.Services.Emails;
 using noava.Services.Notifications;
+using noava.Services.Users;
 using noava.Shared;
+using System.ComponentModel;
 using System.Security.Cryptography;
 using System.Text.Json;
-using noava.Data;
-using Microsoft.EntityFrameworkCore;
 
 namespace noava.Services
 {
@@ -24,7 +34,10 @@ namespace noava.Services
         private readonly IBlobService _blobService;
         private readonly IClerkService _clerkService;
         private readonly INotificationService _notificationService;
-        private readonly NoavaDbContext _context;
+        private readonly ICardRepository _cardRepo;
+        private readonly IEmailService _emailService;
+        private readonly IConfiguration _configuration;
+        private readonly IUserRepository _userRepository;
 
         public DeckService(
             IDeckRepository repository,
@@ -32,14 +45,20 @@ namespace noava.Services
             IDeckUserRepository deckUserRepo,
             IClerkService clerkService,
             INotificationService notificationService,
-            NoavaDbContext context)
+            ICardRepository cardRepository,
+            IEmailService emailService,
+            IConfiguration configuration,
+            IUserRepository userRepository)
         {
             _repository = repository;
             _blobService = blobService;
             _deckUserRepo = deckUserRepo;
             _clerkService = clerkService;
             _notificationService = notificationService;
-            _context = context;
+            _cardRepo = cardRepository;
+            _emailService = emailService;
+            _configuration = configuration;
+            _userRepository = userRepository;
         }
 
         private bool IsValidBlobName(string? blobName)
@@ -48,7 +67,7 @@ namespace noava.Services
                 return true;
 
 
-            var parts = blobName.Split('_', 2);
+            var parts = blobName.Split('.', 2);
             if (parts.Length != 2) return false;
 
             return Guid.TryParse(parts[0], out _);
@@ -64,35 +83,8 @@ namespace noava.Services
 
         public async Task<List<DeckResponse>> GetUserDecksAsync(string userId, int? limit = null)
         {
-            var query = _context.Decks
-                .Where(d =>
-                    // User created the deck
-                    d.UserId == userId ||
-                    // OR user has access via DeckUsers (owner OR invited)
-                    d.DeckUsers.Any(du => du.ClerkId == userId))
-                .OrderByDescending(d => d.CreatedAt)
-                .AsQueryable();
-
-            if (limit.HasValue)
-            {
-                query = query.Take(limit.Value);
-            }
-
-            return await query
-                .Select(d => new DeckResponse
-                {
-                    DeckId = d.DeckId,
-                    UserId = d.UserId,
-                    Title = d.Title,
-                    Description = d.Description,
-                    Language = d.Language,
-                    Visibility = d.Visibility,
-                    CoverImageBlobName = d.CoverImageBlobName,
-                    JoinCode = d.JoinCode,
-                    CreatedAt = d.CreatedAt,
-                    UpdatedAt = d.UpdatedAt
-                })
-                .ToListAsync();
+            var decks = await _repository.GetUserDecksWithAccessAsync(userId, limit);
+            return decks.Select(d => d.ToResponseDto()).ToList();
         }
 
 
@@ -264,50 +256,45 @@ namespace noava.Services
             return authorizedDecks.ToResponseDtoList();
         }
 
-        public async Task<DeckResponse> InviteUserByEmailAsync(int deckId, string userId, string email, bool isOwner)  // ← ADD isOwner
+        public async Task<DeckResponse> InviteUserByEmailAsync(int deckId, string userId, string email, bool isOwner)
         {
             var deck = await _repository.GetByIdAsync(deckId)
                 ?? throw new KeyNotFoundException("Deck not found.");
 
-            // Check if user is creator
             if (deck.UserId != userId)
                 throw new UnauthorizedAccessException("Only the deck creator can invite users.");
 
-            // Get invited user from Clerk
             var invitedUser = await _clerkService.GetUserByEmailAsync(email)
                 ?? throw new KeyNotFoundException("User with this email not found.");
 
-            // Check if user is already a member
-            var existingMember = await _deckUserRepo.GetByDeckAndUserAsync(deckId, invitedUser.ClerkId);
+            var existingMember = await _repository.GetByDeckAndUserAsync(deckId, invitedUser.ClerkId);
+
             if (existingMember != null)
             {
-                // Update their owner status if different
                 if (existingMember.IsOwner != isOwner)
                 {
                     existingMember.IsOwner = isOwner;
-                    await _context.SaveChangesAsync();
+                    await _repository.UpdateDeckUserAsync(existingMember);  
                 }
                 return deck.ToResponseDto();
             }
 
-            // Get owner info
             var owner = await _clerkService.GetUserAsync(userId)
                 ?? throw new KeyNotFoundException("Inviting user not found.");
 
             var ownerFullName = $"{owner.FirstName} {owner.LastName}".Trim();
 
-            // Create notification parameters
             var parametersJson = JsonSerializer.Serialize(new
             {
                 deckTitle = deck.Title,
                 ownerName = ownerFullName,
-                isOwner = isOwner  // ← ADD: Include in notification
+                isOwner = isOwner
             });
 
-            // Send notification with join link
             var notification = new NotificationRequestDto
             {
                 Type = NotificationType.DeckInvitationReceived,
+                TitleKey = "notifications.items.deck.invite.received.title",
                 TemplateKey = "notifications.items.deck.invite.received",
                 UserId = invitedUser.ClerkId,
                 ParametersJson = parametersJson,
@@ -316,21 +303,40 @@ namespace noava.Services
             new NotificationActionRequestDto
             {
                 LabelKey = "notifications.items.deck.invite.actions.accept",
-                Endpoint = $"/deck/join/{deck.JoinCode}?isOwner={isOwner}",  // ← ADD: Pass isOwner in URL
+                Endpoint = $"/deck/join/{deck.JoinCode}/{isOwner}",  
                 Method = HttpMethodType.POST
-            }
-        }
+
+
+                    }
+                }
             };
 
             await _notificationService.CreateNotificationAsync(notification);
 
+            var htmlTemplate = await EmailTemplateHelper.GetNotificationEmailAsync(
+                $"{ToFriendlyString(NotificationType.DeckInvitationReceived)}!",
+                "You have a notification waiting in Noava.",
+                "/notifications",
+                _configuration
+            );
+
+            var user = await _clerkService.GetUserAsync(invitedUser.ClerkId);
+            var notifications = await _userRepository.GetByClerkIdAsync(invitedUser.ClerkId);
+
+            if (user != null && notifications?.ReceiveNotificationEmails == true)
+            {
+                await _emailService.SendNotificationEmailAsync(
+                    user.Email,
+                    "You have a new Noava notification",
+                    htmlTemplate
+                );
+            }
+
             return deck.ToResponseDto();
         }
 
-        public async Task<DeckResponse> JoinByJoinCodeAsync(string joinCode, string userId, bool isOwner = false)  // ← ADD isOwner
+        public async Task<DeckResponse> JoinByJoinCodeAsync(string joinCode, string userId, bool isOwner = false)
         {
-           
-
             var deck = await _repository.GetByJoinCodeAsync(joinCode);
 
             if (deck == null)
@@ -338,35 +344,27 @@ namespace noava.Services
                 throw new KeyNotFoundException("Invalid join code.");
             }
 
-
-            // Check if already has access
-            var existingMember = await _deckUserRepo.GetByDeckAndUserAsync(deck.DeckId, userId);
+            var existingMember = await _repository.GetByDeckAndUserAsync(deck.DeckId, userId);
 
             if (existingMember != null)
             {
-
-
-                // Update owner status if different
                 if (existingMember.IsOwner != isOwner)
                 {
                     existingMember.IsOwner = isOwner;
-                    await _context.SaveChangesAsync();
-
+                    await _repository.UpdateDeckUserAsync(existingMember); 
                 }
             }
             else
             {
-
                 var deckUser = new DeckUser
                 {
                     ClerkId = userId,
                     DeckId = deck.DeckId,
-                    IsOwner = isOwner,  // ← USE the parameter
+                    IsOwner = isOwner,
                     AddedAt = DateTime.UtcNow
                 };
 
                 await _deckUserRepo.AddAsync(deckUser);
-
             }
 
             return deck.ToResponseDto();
@@ -496,11 +494,114 @@ namespace noava.Services
             return deck.ToResponseDto();
         }
 
+        public async Task<DeckResponse> CopyDeckAsync(int deckId, string userId)
+        {
+            var deck = await _repository.GetByIdAsync(deckId)
+                ?? throw new KeyNotFoundException("Deck not found");
 
+            string? newBlobName = null;
 
+                // copy deck cover image
+                if (deck.CoverImageBlobName != null) {
+                    var containerClient = await _blobService.EnsureContainer(new EnsureContainerRequest
+                    {
+                        ContainerName = "deck-images",
+                        AccessType = PublicAccessType.None
+                    });
 
+                    var copyFileRequest = new CopyFileRequest
+                    {
+                        Container = containerClient,
+                        SourceBlobName = deck.CoverImageBlobName,
+                        DestinationBlobName = $"{Guid.NewGuid()}{Path.GetExtension(deck.CoverImageBlobName).ToLowerInvariant()}"
+                    };
 
+                    await _blobService.CopyFile(copyFileRequest);
+                    newBlobName = copyFileRequest.DestinationBlobName;
+                }
 
+            // create copy
+            var copy = new Deck
+            {
+                Title = $"Copy of {deck.Title}",
+                Description = deck.Description,
+                Language = deck.Language,
+                Visibility = deck.Visibility,
+                CoverImageBlobName = newBlobName,
+                UserId = userId,
+                JoinCode = GenerateJoinCode()
+            };
+
+            var copiedDeck = await _repository.CreateAsync(copy);
+
+            var deckUser = new DeckUser
+            {
+                ClerkId = userId,
+                DeckId = copiedDeck.DeckId,
+                IsOwner = true,
+                AddedAt = DateTime.UtcNow
+            };
+
+            await _deckUserRepo.AddAsync(deckUser);
+
+            // copy cards
+            var originalCards = await _cardRepo.GetByDeckIdAsync(deckId);
+
+            var newCards = new List<Card>();
+
+            foreach (var c in originalCards)
+            {
+                var newCard = new Card
+                {
+                    DeckId = copiedDeck.DeckId,
+                    FrontText = c.FrontText,
+                    BackText = c.BackText,
+                    Memo = c.Memo,
+                    HasVoiceAssistant = c.HasVoiceAssistant,
+                    FrontImage = c.FrontImage == null ? null : await CopyMedia("card-images", c.FrontImage),
+                    BackImage = c.BackImage == null ? null : await CopyMedia("card-images", c.BackImage),
+                    FrontAudio = c.FrontAudio == null ? null : await CopyMedia("card-audio", c.FrontAudio),
+                    BackAudio = c.BackAudio == null ? null : await CopyMedia("card-audio", c.BackAudio),
+                };
+
+                newCards.Add(newCard);
+            }
+
+            await _cardRepo.CreateBulkAsync(newCards);
+            return copiedDeck.ToResponseDto();
+        }
+
+        private async Task<string?> CopyMedia(string containerName, string sourceBlobName)
+        {
+            try
+            {
+                // copy deck cover image
+                var containerClient = await _blobService.EnsureContainer(new EnsureContainerRequest
+                {
+                    ContainerName = containerName,
+                    AccessType = PublicAccessType.None
+                });
+
+                var copyFileRequest = new CopyFileRequest
+                {
+                    Container = containerClient,
+                    SourceBlobName = sourceBlobName,
+                    DestinationBlobName = $"{Guid.NewGuid()}{Path.GetExtension(sourceBlobName).ToLowerInvariant()}"
+                };
+
+                await _blobService.CopyFile(copyFileRequest);
+
+                return copyFileRequest.DestinationBlobName;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+        public static string ToFriendlyString(NotificationType type)
+        {
+            return System.Text.RegularExpressions.Regex.Replace(type.ToString(), "(\\B[A-Z])", " $1");
+        }
     }
-   }
+}
 

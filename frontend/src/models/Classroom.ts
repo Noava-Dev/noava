@@ -1,6 +1,7 @@
 export interface ClassroomRequest {
   name: string;
   description: string;
+  coverImageBlobName?: string;
 }
 
 export interface ClassroomResponse {
@@ -8,6 +9,7 @@ export interface ClassroomResponse {
   name: string;
   description: string;
   joinCode: string;
+  coverImageBlobName: string | null;
   permissions: {
     canEdit: boolean;
     canDelete: boolean;

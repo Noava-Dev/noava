@@ -17,7 +17,7 @@ function BackButton({ text, href }: BackButtonProps) {
           color="alternative"
           size="sm"
           onClick={() => navigate(href)}
-          className="flex gap-2 hover:border-border-dark hover:shadow-sm text-text-muted-light dark:text-text-muted-dark"
+          className="flex bg-transparent gap-2 hover:border-border-dark hover:shadow-sm text-text-muted-light dark:text-text-muted-dark"
           outline>
           <HiArrowLeft className="w-4 h-4" />
           {text}

@@ -7,7 +7,7 @@ import { useDeckService } from '../../services/DeckService';
 import { useFlashcardService } from '../../services/FlashcardService';
 import { useToast } from '../../contexts/ToastContext';
 import { useAzureBlobService } from '../../services/AzureBlobService';
-import { BulkReviewMode } from '../../models/Flashcard';
+import { ReviewMode } from '../../models/Flashcard';
 import { getLanguageCode } from '../../shared/utils/speechHelpers';
 import type { Deck } from '../../models/Deck';
 import type { ReviewSession } from '../../models/ReviewSessions';
@@ -39,12 +39,12 @@ function ReverseReview() {
 
     if (deckIdsParam) {
       const deckIds = deckIdsParam.split(',').map(Number);
-      const mode = modeParam ? Number(modeParam) : BulkReviewMode.ShuffleAll;
+      const mode = modeParam ? Number(modeParam) : ReviewMode.ShuffleAll;
       setIsBulkReview(true);
       initializeSession(deckIds, mode);
     } else if (deckId) {
       setIsBulkReview(false);
-      initializeSession([Number(deckId)], BulkReviewMode.ShuffleAll);
+      initializeSession([Number(deckId)], ReviewMode.ShuffleAll);
     }
   }, [deckId, classroomId, searchParams]);
 
@@ -96,7 +96,7 @@ function ReverseReview() {
     }
   }, [session?.currentIndex]);
 
-  const initializeSession = async (deckIds: number[], mode: BulkReviewMode) => {
+  const initializeSession = async (deckIds: number[], mode: ReviewMode) => {
     try {
       setLoading(true);
 
@@ -106,7 +106,7 @@ function ReverseReview() {
       const decksData = await deckService.getByMultipleIds(deckIds);
 
       if (cardsData.length === 0) {
-        showError(t('quickReview.noCards'), t('quickReview.error'));
+        showError(t('quickReview.error'), t('quickReview.noCards'));
         if (isSingleDeck && deckId) {
           navigate(`/decks/${deckId}/cards`);
         } else if (classroomId) {
@@ -138,7 +138,7 @@ function ReverseReview() {
       if (error.response?.status === 404 || error.response?.status === 403) {
         navigate('/not-found', { replace: true });
       } else {
-        showError(t('common:toast.error'), t('quickReview.error'));
+        showError(t('quickReview.error'), t('common:toast.error'));
         if (deckIds.length === 1 && deckId) {
           navigate(`/decks/${deckId}/cards`);
         } else if (classroomId) {
@@ -269,7 +269,7 @@ function ReverseReview() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900">
+      <div className="flex items-center justify-center min-h-screen bg-background-app-light dark:bg-background-app-dark">
         <div className="text-center">
           <div className="w-12 h-12 mx-auto mb-4 border-b-2 rounded-full animate-spin border-cyan-500"></div>
           <p className="text-gray-600 dark:text-gray-400">
@@ -289,7 +289,7 @@ function ReverseReview() {
   const isComplete = session.completedCards === session.cards.length;
 
   return (
-    <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="flex min-h-screen bg-background-app-light dark:bg-background-app-dark">
         <div className="container max-w-4xl px-4 py-6 mx-auto md:py-8">
           {/* Header */}
           <div className="flex items-center justify-between mb-6">

@@ -65,11 +65,24 @@ namespace noava.Services.Cards
             return cards.Select(CardMapper.ToResponse).ToList();
         }
 
+        public async Task<List<CardResponse>> GetAllCardsLongtermAsync(int deckId, string userId, ReviewMode mode)
+        {
+            if (!await CanUserViewDeckAsync(deckId, userId))
+                return new List<CardResponse>();
 
-        public async Task<List<CardResponse>> GetBulkReviewCardsAsync(
-            List<int> deckIds,
-            string userId,
-            BulkReviewMode mode)
+            var today = DateOnly.FromDateTime(DateTime.UtcNow);
+
+            var cards = await _cardRepository
+                .GetDueCardsByDeckIdAsync(deckId, userId, today);
+
+            var strategy = ResolveBulkReviewStrategy(mode);
+
+            cards = strategy.ApplyPerDeck(cards);
+
+            return cards.ToResponseList();
+        }
+
+        public async Task<List<CardResponse>> GetBulkReviewCardsAsync(List<int> deckIds, string userId, ReviewMode mode)
         {
             var result = new List<Card>();
             var strategy = ResolveBulkReviewStrategy(mode);
@@ -209,14 +222,14 @@ namespace noava.Services.Cards
             return list;
         }
 
-        private IBulkReviewStrategy ResolveBulkReviewStrategy(BulkReviewMode mode)
+        private IBulkReviewStrategy ResolveBulkReviewStrategy(ReviewMode mode)
         {
             return mode switch
             {
-                BulkReviewMode.ShufflePerDeck =>
+                ReviewMode.ShufflePerDeck =>
                     new ShufflePerDeckStrategy(Shuffle),
 
-                BulkReviewMode.ShuffleAll =>
+                ReviewMode.ShuffleAll =>
                     new ShuffleAllStrategy(Shuffle),
 
                 _ => new BulkReviewStrategy()

@@ -1,13 +1,14 @@
 import { Toast, ToastToggle } from "flowbite-react";
 import { HiCheck, HiExclamation, HiX, HiInformationCircle } from "react-icons/hi";
 
-/* Simple message
- showSuccess('Saved successfully!');
- showError('Failed to save');
+/* Usage examples:
+ Simple message
+ showSuccess('Success', 'Saved successfully!');
+ showError('Error', 'Failed to save');
 
-  With title
-  showSuccess('FAQ created!', 'Success');
-  showError('Connection failed', 'Error');
+  With descriptive title
+  showSuccess('Success', 'FAQ created successfully!');
+  showError('Connection Error', 'Failed to connect to server');
  */
 interface CustomToastProps {
   type: 'success' | 'error' | 'warning' | 'info';

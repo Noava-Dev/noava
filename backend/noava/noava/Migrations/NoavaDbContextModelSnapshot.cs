@@ -181,7 +181,7 @@ namespace noava.Migrations
                     b.ToTable("Cards");
                 });
 
-            modelBuilder.Entity("noava.Models.CardInteractions", b =>
+            modelBuilder.Entity("noava.Models.CardInteraction", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -204,9 +204,6 @@ namespace noava.Migrations
 
                     b.Property<DateTime>("DueAtBefore")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("InteractionType")
-                        .HasColumnType("integer");
 
                     b.Property<int>("IntervalAfter")
                         .HasColumnType("integer");
@@ -243,8 +240,6 @@ namespace noava.Migrations
 
                     b.ToTable("CardInteractions", t =>
                         {
-                            t.HasCheckConstraint("CK_CardInteractions_DueAtBefore_DueAtAfter", "\"DueAtAfter\" >= \"DueAtBefore\"");
-
                             t.HasCheckConstraint("CK_CardInteractions_ResponseTimeMs_NonNegative", "\"ResponseTimeMs\" >= 0");
                         });
                 });
@@ -311,6 +306,9 @@ namespace noava.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CoverImageBlobName")
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -439,36 +437,36 @@ namespace noava.Migrations
                         new
                         {
                             DeckId = 1,
-                            CreatedAt = new DateTime(2026, 2, 16, 10, 26, 13, 600, DateTimeKind.Utc).AddTicks(816),
+                            CreatedAt = new DateTime(2026, 2, 20, 11, 18, 8, 393, DateTimeKind.Utc).AddTicks(7562),
                             Description = "Franse woorden voor beginners",
                             JoinCode = "",
                             Language = "Frans",
                             Title = "Frans Woordenschat",
-                            UpdatedAt = new DateTime(2026, 2, 16, 10, 26, 13, 600, DateTimeKind.Utc).AddTicks(816),
+                            UpdatedAt = new DateTime(2026, 2, 20, 11, 18, 8, 393, DateTimeKind.Utc).AddTicks(7563),
                             UserId = "user_38TGbnbcmzK7uZAbaABqTtzQtvz",
                             Visibility = 0
                         },
                         new
                         {
                             DeckId = 2,
-                            CreatedAt = new DateTime(2026, 2, 16, 10, 26, 13, 600, DateTimeKind.Utc).AddTicks(819),
+                            CreatedAt = new DateTime(2026, 2, 20, 11, 18, 8, 393, DateTimeKind.Utc).AddTicks(7565),
                             Description = "Engelse grammatica oefeningen",
                             JoinCode = "",
                             Language = "Engels",
                             Title = "Engels Grammatica",
-                            UpdatedAt = new DateTime(2026, 2, 16, 10, 26, 13, 600, DateTimeKind.Utc).AddTicks(819),
+                            UpdatedAt = new DateTime(2026, 2, 20, 11, 18, 8, 393, DateTimeKind.Utc).AddTicks(7566),
                             UserId = "user_38TGbnbcmzK7uZAbaABqTtzQtvz",
                             Visibility = 2
                         },
                         new
                         {
                             DeckId = 3,
-                            CreatedAt = new DateTime(2026, 2, 16, 10, 26, 13, 600, DateTimeKind.Utc).AddTicks(821),
+                            CreatedAt = new DateTime(2026, 2, 20, 11, 18, 8, 393, DateTimeKind.Utc).AddTicks(7568),
                             Description = "Spaanse zinnen voor dagelijks gebruik",
                             JoinCode = "",
                             Language = "Spaans",
                             Title = "Spaans Conversatie",
-                            UpdatedAt = new DateTime(2026, 2, 16, 10, 26, 13, 600, DateTimeKind.Utc).AddTicks(821),
+                            UpdatedAt = new DateTime(2026, 2, 20, 11, 18, 8, 393, DateTimeKind.Utc).AddTicks(7568),
                             UserId = "user_38TGbnbcmzK7uZAbaABqTtzQtvz",
                             Visibility = 1
                         });
@@ -573,64 +571,6 @@ namespace noava.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("FAQs");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Answer = "Noava is a modern platform that helps you manage your business efficiently with cutting-edge technology and user-friendly interfaces.",
-                            FaqKey = "what_is_noava",
-                            Question = "What is Noava?"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Answer = "Simply sign up, configure your preferences, and start using our intuitive dashboard to manage all your operations in one place.",
-                            FaqKey = "how_does_it_work",
-                            Question = "How does it work?"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Answer = "We offer flexible pricing plans starting from €9.99 per month. Visit our pricing page for detailed information about features included in each plan.",
-                            FaqKey = "what_are_the_costs",
-                            Question = "What are the costs?"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Answer = "Yes, you can cancel your subscription at any time without any penalties or hidden fees. Your data will remain accessible for 30 days after cancellation.",
-                            FaqKey = "can_i_cancel_anytime",
-                            Question = "Can I cancel anytime?"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Answer = "Absolutely. We use industry-standard encryption, regular security audits, and comply with GDPR regulations to ensure your data is always protected.",
-                            FaqKey = "is_my_data_secure",
-                            Question = "Is my data secure?"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Answer = "We offer 24/7 email support, live chat during business hours, and comprehensive documentation. Premium plans include priority support and dedicated account managers.",
-                            FaqKey = "support_options_available",
-                            Question = "What support options are available?"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Answer = "Yes, Noava integrates with popular tools like Slack, Google Workspace, Microsoft 365, and many others through our API and pre-built connectors.",
-                            FaqKey = "integration_with_other_tools",
-                            Question = "Can I integrate with other tools?"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Answer = "Yes, we offer a 14-day free trial with full access to all features. No credit card required to start your trial.",
-                            FaqKey = "free_trial",
-                            Question = "Do you offer a free trial?"
-                        });
                 });
 
             modelBuilder.Entity("noava.Models.Notification", b =>
@@ -651,6 +591,10 @@ namespace noava.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("TemplateKey")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("TitleKey")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -744,7 +688,7 @@ namespace noava.Migrations
                     b.ToTable("SchoolAdmins");
                 });
 
-            modelBuilder.Entity("noava.Models.StudySessions", b =>
+            modelBuilder.Entity("noava.Models.StudySession", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -791,6 +735,9 @@ namespace noava.Migrations
                 {
                     b.Property<string>("ClerkId")
                         .HasColumnType("text");
+
+                    b.Property<bool>("ReceiveNotificationEmails")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Role")
                         .IsRequired()
@@ -867,7 +814,7 @@ namespace noava.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("noava.Models.CardInteractions", b =>
+            modelBuilder.Entity("noava.Models.CardInteraction", b =>
                 {
                     b.HasOne("noava.Models.Card", null)
                         .WithMany()
@@ -887,7 +834,7 @@ namespace noava.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("noava.Models.StudySessions", null)
+                    b.HasOne("noava.Models.StudySession", null)
                         .WithMany()
                         .HasForeignKey("StudySessionId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1053,7 +1000,7 @@ namespace noava.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("noava.Models.StudySessions", b =>
+            modelBuilder.Entity("noava.Models.StudySession", b =>
                 {
                     b.HasOne("noava.Models.User", null)
                         .WithMany()

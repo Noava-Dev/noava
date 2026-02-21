@@ -41,7 +41,9 @@ public class GlobalExceptionHandler : IExceptionHandler
             _ => new
             {
                 statusCode,
-                message = "An unexpected error occurred."
+                message = exception.Message,
+                innerException = exception.InnerException?.Message,
+                stackTrace = exception.StackTrace
             }
         };
 

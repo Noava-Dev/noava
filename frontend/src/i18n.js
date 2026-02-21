@@ -17,6 +17,7 @@ i18n
       'decks',
       'flashcards',
       'dashboard',
+      'errors',
     ],
     defaultNS: 'common',
 

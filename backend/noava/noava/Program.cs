@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using noava.Data;
+using noava.Data.Seeders;
 using noava.Exceptions;
 using noava.Repositories;
 using noava.Repositories.Cards;
@@ -11,15 +12,21 @@ using noava.Repositories.FAQs;
 using noava.Repositories.Implementations;
 using noava.Repositories.Notifications;
 using noava.Repositories.Schools;
+using noava.Repositories.Statistics;
+using noava.Repositories.StudySessions;
 using noava.Repositories.Users;
 using noava.Services;
 using noava.Services.Cards;
 using noava.Services.Classrooms;
 using noava.Services.Decks;
+using noava.Services.Emails;
 using noava.Services.FAQs;
 using noava.Services.Implementations;
 using noava.Services.Notifications;
 using noava.Services.Schools;
+using noava.Services.Statistics.Decks;
+using noava.Services.Statistics.General;
+using noava.Services.StudySessions;
 using noava.Services.Users;
 using noava.Shared;
 using System.Security.Claims;
@@ -46,6 +53,10 @@ namespace noava
             builder.Services.AddScoped<IDeckUserRepository, DeckUserRepository>();
             builder.Services.AddScoped<IDeckInvitationRepository, DeckInvitationRepository>();
             builder.Services.AddScoped<ISchoolRepository, SchoolRepository>();
+            builder.Services.AddScoped<ICardInteractionRepository, CardInteractionRepository>();
+            builder.Services.AddScoped<ICardProgressRepository, CardProgressRepository>();
+            builder.Services.AddScoped<IStudySessionRepository, StudySessionRepository>();
+            builder.Services.AddScoped<IStatisticsRepository, StatisticsRepository>();
 
             // Service Registrations
             builder.Services.AddScoped<IFaqService, FaqService>();
@@ -60,6 +71,11 @@ namespace noava
             builder.Services.AddScoped<IClassroomService, ClassroomService>();
             builder.Services.AddScoped<IBlobService, BlobService>();
             builder.Services.AddScoped<ICardImportService, CardImportService>();
+            builder.Services.AddScoped<IEmailService, EmailService>();
+            builder.Services.AddScoped<IStudySessionService, StudySessionService>();
+            builder.Services.AddScoped<ICardInteractionService, CardInteractionService>();
+            builder.Services.AddScoped<IStatsService, StatsService>();
+            builder.Services.AddScoped<IDeckStatsService, DeckStatsService>();
 
             // External Service Registrations
             builder.Services.AddHttpClient();
@@ -126,6 +142,17 @@ namespace noava
             builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
+
+            // seed faqs
+            using (var scope = app.Services.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<NoavaDbContext>();
+
+                if (app.Environment.IsDevelopment())
+                    dbContext.Database.Migrate();
+
+                FAQSeeder.SeedOrUpdateFAQs(dbContext);
+            }
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

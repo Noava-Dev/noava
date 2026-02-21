@@ -11,6 +11,7 @@ namespace noava.Mappers.Notifications
             {
                 Id = notification.Id,
                 Type = notification.Type,
+                TitleKey = notification.TitleKey,
                 TemplateKey = notification.TemplateKey,
                 ParametersJson = notification.ParametersJson ?? string.Empty,
                 Link = notification.Link ?? string.Empty,
@@ -27,6 +28,7 @@ namespace noava.Mappers.Notifications
             {
                 UserId = dto.UserId,
                 Type = dto.Type,
+                TitleKey = dto.TitleKey,
                 TemplateKey = dto.TemplateKey,
                 ParametersJson = dto.ParametersJson,
                 Link = dto.Link,

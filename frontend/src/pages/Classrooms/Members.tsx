@@ -4,7 +4,7 @@ import PageHeader from '../../shared/components/PageHeader';
 import NoavaFooter from '../../shared/components/navigation/NoavaFooter';
 import Loading from '../../shared/components/loading/Loading';
 import { HiArrowLeft } from 'react-icons/hi';
-import { Button } from 'flowbite-react';
+import { Button, Tooltip } from 'flowbite-react';
 import { useClassroomService } from '../../services/ClassroomService';
 import MembersTable from './components/MembersTable';
 import EditMemberModal from './components/EditMemberModal';
@@ -48,7 +48,7 @@ export default function MembersPage() {
       const data = await svc.getById(id);
       setClassroom(data);
     } catch (err) {
-      showError(t('app.error'), t('toast.loadError'));
+      showError(t('toast.loadError'), t('app.error'));
     } finally {
       setLoadingClassroom(false);
     }
@@ -60,7 +60,7 @@ export default function MembersPage() {
       const data = await svc.getUsersByClassroom(id, page, pageSize);
       setMembers(data);
     } catch (err) {
-      showError(t('app.error'), t('toast.loadError'));
+      showError(t('toast.loadError'), t('app.error'));
     } finally {
       setLoadingMembers(false);
     }
@@ -101,14 +101,14 @@ export default function MembersPage() {
     try {
       await svc.setUserRole(id, editMember.clerkId, isTeacher);
       showSuccess(
-        t('members.updateSuccess', 'Member updated'),
-        t('members.updateSuccess', 'Member updated')
+        'Success',
+        t('members.updateSuccess', 'Member updated successfully')
       );
       fetchMembers();
     } catch (err) {
       showError(
-        t('app.error'),
-        t('members.updateError', 'Failed to update member')
+        t('members.updateError', 'Failed to update member'),
+        t('app.error')
       );
     }
   };
@@ -120,14 +120,14 @@ export default function MembersPage() {
     try {
       await svc.removeUser(id, deleteMember.clerkId);
       showSuccess(
-        t('members.deleteSuccess', 'Member removed'),
-        t('members.deleteSuccess', 'Member removed')
+        'Success',
+        t('members.deleteSuccess', 'Member removed successfully')
       );
       fetchMembers();
     } catch (err) {
       showError(
-        t('app.error'),
-        t('members.deleteError', 'Failed to remove member')
+        t('members.deleteError', 'Failed to remove member'),
+        t('app.error')
       );
     } finally {
       setDeleteMember(null);
@@ -138,14 +138,14 @@ export default function MembersPage() {
     try {
       await svc.inviteByEmail(id, email);
       showSuccess(
-        t('members.inviteSuccess', 'Invitation sent'),
-        t('members.inviteSuccess', 'Invitation sent')
+        'Success',
+        t('members.inviteSuccess', 'Invitation sent successfully')
       );
       fetchMembers();
     } catch (err) {
       showError(
-        t('app.error'),
-        t('members.inviteError', 'Failed to send invitation')
+        t('members.inviteError', 'Failed to send invitation'),
+        t('app.error')
       );
     } finally {
       setShowInvite(false);
@@ -169,12 +169,16 @@ export default function MembersPage() {
 
               {classroom?.permissions?.canEdit && (
                 <div className="flex-shrink-0">
-                  <Button
-                    size="sm"
-                    onClick={() => setShowInvite(true)}
-                    className="inline-flex items-center gap-2">
-                    {t('common:actions.invite', 'Invite')}
-                  </Button>
+                  <div className="w-full md:w-fit">
+                    <Tooltip content={t('common:tooltips.inviteMember')}>
+                      <Button
+                        size="sm"
+                        onClick={() => setShowInvite(true)}
+                        className="inline-flex items-center gap-2">
+                        {t('common:actions.invite', 'Invite')}
+                      </Button>
+                    </Tooltip>
+                  </div>
                 </div>
               )}
             </div>

@@ -1,0 +1,37 @@
+{
+  "validation": {
+    "required": "Dit veld is verplicht",
+    "email": {
+      "required": "E-mailadres is verplicht",
+      "invalid": "Voer een geldig e-mailadres in",
+      "duplicate": "Dit e-mailadres is al toegevoegd"
+    },
+    "name": {
+      "required": "Naam is verplicht"
+    },
+    "title": {
+      "required": "Titel is verplicht"
+    },
+    "description": {
+      "required": "Beschrijving is verplicht"
+    },
+    "language": {
+      "required": "Taalselectie is verplicht"
+    },
+    "code": {
+      "required": "Code is verplicht",
+      "empty": "Voer een code in"
+    },
+    "file": {
+      "required": "Selecteer een bestand om te uploaden"
+    },
+    "flashcard": {
+      "frontText": "Voorkant tekst is verplicht",
+      "backText": "Achterkant tekst is verplicht"
+    },
+    "school": {
+      "name": "Schoolnaam is verplicht",
+      "minAdmins": "Minstens één beheerder e-mailadres is verplicht"
+    }
+  }
+}

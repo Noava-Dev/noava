@@ -4,7 +4,7 @@
     {
         public int Id { get; set; }
         public int CardId { get; set; }
-        public string ClerkId { get; set; }
+        public string ClerkId { get; set; } = string.Empty;
         public DateOnly NextReviewDate { get; set; }
         public int BoxNumber { get; set; } = 1;
         public DateTime LastReviewedAt { get; set; } = DateTime.UtcNow;

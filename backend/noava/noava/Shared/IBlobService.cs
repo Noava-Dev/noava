@@ -1,5 +1,6 @@
 ﻿using Azure.Storage.Blobs;
 using noava.Models.BlobStorage;
+using noava.Models.Requests;
 
 namespace noava.Shared
 {
@@ -10,5 +11,6 @@ namespace noava.Shared
         Task DeleteFile(DeleteFileRequest request);
         string GetFileSas(GetFileSasRequest request);
         string GetContainerSas(GetContainerSasRequest request);
+        Task CopyFile(CopyFileRequest request);
     }
 }
