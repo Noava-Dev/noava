@@ -126,5 +126,20 @@
     "success": "Uitnodiging succesvol verstuurd",
     "error": "Kon uitnodiging niet versturen",
     "invalidEmail": "Voer een geldig e-mailadres in"
+  },
+  "analytics": {
+    "title": "Deck Statistieken",
+    "timeSpent": "Bestede Tijd",
+    "avgMastery": "Gem. Beheersing",
+    "correctCards": "Correcte Kaarten",
+    "avgResponseTime": "Gem. Reactietijd",
+    "noData": {
+      "title": "Nog Geen Statistieken",
+      "description": "Begin met het bekijken van dit deck om je voortgang en statistieken te zien."
+    }
+  },
+  "copy": {
+    "title": "Deck kopiëren",
+    "message": "Weet je zeker dat je dit deck wilt kopiëren? Dit kan even duren."
   }
 }

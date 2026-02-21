@@ -4,14 +4,19 @@ import {
   LuGlobe as Globe,
   LuMessageCircleQuestion as Question,
   LuChevronDown as ChevronDown,
+  LuMailCheck as MailCheck,
+  LuMailX as MailX,
 } from 'react-icons/lu';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import PageHeader from '../../shared/components/PageHeader';
 import { SettingsGroup } from './components/SettingsGroup';
 import { useTranslation } from 'react-i18next';
 import { Tooltip, Dropdown, DropdownItem } from 'flowbite-react';
 import { useTheme } from '../../contexts/ThemeContext';
 import NoavaFooter from '../../shared/components/navigation/NoavaFooter';
+import { useUserService } from '../../services/UserService';
+import { useToast } from '../../contexts/ToastContext';
+import Loading from '../../shared/components/loading/Loading';
 
 function SettingsPage() {
   //-------------------change theme------------------------------
@@ -19,6 +24,8 @@ function SettingsPage() {
 
   //--------------------change language-----------------------------
   const { t, i18n } = useTranslation('settings');
+  const { showSuccess, showError } = useToast();
+  const userService = useUserService();
 
   const languageLabels: Record<string, string> = {
     en: 'English',
@@ -29,6 +36,54 @@ function SettingsPage() {
   const [language, setLanguage] = useState(
     localStorage.getItem('preferredLanguage') ?? i18n.language
   );
+
+  //--------------------email preferences-----------------------------
+  const [emailPreferences, setEmailPreferences] = useState<boolean>(false);
+  const [loadingPreferences, setLoadingPreferences] = useState(true);
+  const [updatingPreferences, setUpdatingPreferences] = useState(false);
+
+  useEffect(() => {
+    fetchEmailPreferences();
+  }, []);
+
+  const fetchEmailPreferences = async () => {
+    try {
+      setLoadingPreferences(true);
+      const preferences = await userService.getEmailPreferences();
+      console.log('Fetched email preferences:', preferences);
+      setEmailPreferences(preferences);
+    } catch (error) {
+      console.error('Failed to fetch email preferences:', error);
+      showError(
+        'Failed to load email preferences',
+        t('common:app.error')
+      );
+      setEmailPreferences(false);
+    } finally {
+      setLoadingPreferences(false);
+    }
+  };
+
+  const handleEmailPreferenceChange = async () => {
+    try {
+      setUpdatingPreferences(true);
+      const newValue = !emailPreferences;
+      await userService.updateEmailPreferences(newValue);
+      setEmailPreferences(newValue);
+      showSuccess(
+        t('common:toast.settingsUpdated'),
+        t('common:toast.success')
+      );
+    } catch (error) {
+      console.error('Failed to update email preferences:', error);
+      showError(
+        'Failed to update email preferences',
+        t('common:app.error')
+      );
+    } finally {
+      setUpdatingPreferences(false);
+    }
+  };
 
   const changeLanguage = (lang: string) => {
     i18n.changeLanguage(lang);
@@ -52,28 +107,33 @@ function SettingsPage() {
           </PageHeader>
         </header>
 
-        <div className="flex flex-col items-center mt-4">
-          {/* Theme */}
-          <SettingsGroup
-            title={t('theme.title')}
-            description={t('theme.description')}
-            tooltip={t('theme.tooltip')}
-            groupIcon={theme === 'dark' ? moon : sun}
-            options={[
-              {
-                label: t('theme.light'),
-                icon: sun,
-                active: theme === 'light',
-                onClick: () => theme === 'dark' && toggleTheme(),
-              },
-              {
-                label: t('theme.dark'),
-                icon: moon,
-                active: theme === 'dark',
-                onClick: () => theme === 'light' && toggleTheme(),
-              },
-            ]}
-          />
+        {loadingPreferences ? (
+          <div className="flex items-center justify-center flex-1">
+            <Loading />
+          </div>
+        ) : (
+          <div className="flex flex-col items-center mt-4">
+            {/* Theme */}
+            <SettingsGroup
+              title={t('theme.title')}
+              description={t('theme.description')}
+              tooltip={t('theme.tooltip')}
+              groupIcon={theme === 'dark' ? moon : sun}
+              options={[
+                {
+                  label: t('theme.light'),
+                  icon: sun,
+                  active: theme === 'light',
+                  onClick: () => theme === 'dark' && toggleTheme(),
+                },
+                {
+                  label: t('theme.dark'),
+                  icon: moon,
+                  active: theme === 'dark',
+                  onClick: () => theme === 'light' && toggleTheme(),
+                },
+              ]}
+            />
 
           {/* Language */}
           <div className="flex flex-col justify-between w-5/6 p-6 m-5 border rounded-lg sm:flex-row sm:w-1/2 border-border-strong dark:border-border-dark text-text-title-light bg-background-surface-light dark:bg-background-surface-dark dark:text-text-title-dark">
@@ -123,7 +183,30 @@ function SettingsPage() {
               </DropdownItem>
             </Dropdown>
           </div>
+
+          {/* Email Preferences */}
+          <SettingsGroup
+            title={t('emailPreferences.title')}
+            description={t('emailPreferences.description')}
+            tooltip={t('emailPreferences.tooltip')}
+            groupIcon={emailPreferences ? MailCheck : MailX}
+            options={[
+              {
+                label: t('emailPreferences.emailAndApp'),
+                icon: MailCheck,
+                active: emailPreferences,
+                onClick: () => !emailPreferences && !updatingPreferences && handleEmailPreferenceChange(),
+              },
+              {
+                label: t('emailPreferences.appOnly'),
+                icon: MailX,
+                active: !emailPreferences,
+                onClick: () => emailPreferences && !updatingPreferences && handleEmailPreferenceChange(),
+              },
+            ]}
+          />
         </div>
+        )}
       </div>
       <NoavaFooter />
     </>

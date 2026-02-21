@@ -1,5 +1,5 @@
 import { useApi } from '../hooks/useApi';
-import { BulkReviewMode } from '../models/Flashcard';
+import { ReviewMode } from '../models/Flashcard';
 import type {
   Flashcard,
   CreateFlashcardRequest,
@@ -65,12 +65,20 @@ export const useFlashcardService = () => {
       await api.delete(`/card/${id}`);
     },
 
-    async getBulkReviewCards(deckIds: number[], mode: BulkReviewMode): Promise<Flashcard[]> {
+    async getBulkReviewCards(deckIds: number[], mode: ReviewMode): Promise<Flashcard[]> {
       const params = new URLSearchParams();
       deckIds.forEach(id => params.append('deckIds', id.toString()));
       params.append('mode', mode.toString());
       
       const response = await api.get<Flashcard[]>(`/card/bulk-review?${params.toString()}`);
+      return response.data;
+    },
+
+    async getSpacedRepetitionCards(deckId: number, mode: ReviewMode): Promise<Flashcard[]> {
+      const params = new URLSearchParams();
+      params.append('mode', mode.toString());
+      
+      const response = await api.get<Flashcard[]>(`/card/${deckId}/spaced?${params.toString()}`);
       return response.data;
     },
   };

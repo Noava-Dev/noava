@@ -13,5 +13,12 @@
     "title": "Language",
     "description": "Choose your preferred language",
     "tooltip": "Select your preferred language for the application interface."
+  },
+  "emailPreferences": {
+    "title": "Notification Preferences",
+    "description": "Choose how you want to receive notifications",
+    "tooltip": "Select whether you want to receive notifications via email and in-app, or only in-app.",
+    "emailAndApp": "Email & In-App",
+    "appOnly": "In-App Only"
   }
 }

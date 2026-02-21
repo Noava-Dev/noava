@@ -1,7 +1,7 @@
 ﻿using ClosedXML.Excel;
 using CsvHelper;
 using CsvHelper.Configuration;
-using noava.DTOs.Cards;
+using noava.DTOs.Cards.CSV;
 using noava.Models;
 using noava.Repositories.Cards;
 using noava.Repositories.Decks;
@@ -55,15 +55,15 @@ namespace noava.Services.Cards
             var ws = workbook.Worksheets.First();
 
             var headerRow = ws.Row(1);
-            int frontCol = 0, backCol = 0, memoCol = 0;
+            int frontCol = 0, backCol = 0, memoCol = 0, hasVoiceAssistantCol = 0;
 
-            // read header row and map column numbers
             foreach (var cell in headerRow.CellsUsed())
             {
                 var value = cell.GetString().Trim().ToLower();
                 if (value == "fronttext") frontCol = cell.Address.ColumnNumber;
                 if (value == "backtext") backCol = cell.Address.ColumnNumber;
                 if (value == "memo") memoCol = cell.Address.ColumnNumber;
+                if (value == "hasvoiceassistant") hasVoiceAssistantCol = cell.Address.ColumnNumber;
             }
 
             if (frontCol == 0 || backCol == 0)
@@ -77,6 +77,17 @@ namespace noava.Services.Cards
                 var front = row.Cell(frontCol).GetString().Trim();
                 var back = row.Cell(backCol).GetString().Trim();
                 var memo = memoCol > 0 ? row.Cell(memoCol).GetString().Trim() : null;
+                var hasVoiceAssistant = false;
+
+                if (hasVoiceAssistantCol > 0)
+                {
+                    var raw = row.Cell(hasVoiceAssistantCol).GetString().Trim();
+
+                    if (!string.IsNullOrWhiteSpace(raw))
+                    {
+                        hasVoiceAssistant = !raw.Equals("false", StringComparison.OrdinalIgnoreCase);
+                    }
+                }
 
                 // skip invalid rows
                 if (string.IsNullOrEmpty(front) || string.IsNullOrEmpty(back))
@@ -89,6 +100,7 @@ namespace noava.Services.Cards
                     FrontText = front,
                     BackText = back,
                     Memo = string.IsNullOrEmpty(memo) ? null : memo,
+                    HasVoiceAssistant = hasVoiceAssistant
                 });
             }
 
@@ -120,11 +132,14 @@ namespace noava.Services.Cards
                     throw new InvalidOperationException("CSV must have 'FrontText' and 'BackText' headers.");
                 }
 
+                var raw = row.HasVoiceAssistant?.Trim();
+
                 cards.Add(new Card
                 {
                     FrontText = row.FrontText,
                     BackText = row.BackText,
                     Memo = row.Memo,
+                    HasVoiceAssistant = !string.IsNullOrWhiteSpace(raw) && !raw.Equals("false", StringComparison.OrdinalIgnoreCase)
                 });
             }
 

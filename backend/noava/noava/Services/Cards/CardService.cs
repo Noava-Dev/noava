@@ -6,6 +6,7 @@ using noava.Repositories.Cards;
 using noava.Repositories.Decks;
 using noava.Services.Cards.BulkReview;
 using noava.Shared;
+using noava.Mappers.Cards;
 
 namespace noava.Services.Cards
 {
@@ -28,26 +29,6 @@ namespace noava.Services.Cards
             _blobService = blobService;
         }
 
-        private CardResponse MapToResponse(Card card)
-        {
-            return new CardResponse
-            {
-                CardId = card.Id,
-                DeckId = card.DeckId,
-                FrontText = card.FrontText,
-                BackText = card.BackText,
-                FrontImage = card.FrontImage,
-                FrontAudio = card.FrontAudio,
-                BackImage = card.BackImage,
-                BackAudio = card.BackAudio,
-                Memo = card.Memo,
-                CreatedAt = card.CreatedAt,
-                UpdatedAt = card.UpdatedAt,
-                HasVoiceAssistant = card.HasVoiceAssistant
-            };
-        }
-
-    
         private async Task<bool> CanUserViewDeckAsync(int deckId, string userId)
         {
             var deck = await _deckRepository.GetByIdAsync(deckId);
@@ -81,14 +62,27 @@ namespace noava.Services.Cards
                 return new List<CardResponse>();
 
             var cards = await _cardRepository.GetByDeckIdAsync(deckId);
-            return cards.Select(c => MapToResponse(c)).ToList();
+            return cards.Select(CardMapper.ToResponse).ToList();
         }
 
+        public async Task<List<CardResponse>> GetAllCardsLongtermAsync(int deckId, string userId, ReviewMode mode)
+        {
+            if (!await CanUserViewDeckAsync(deckId, userId))
+                return new List<CardResponse>();
 
-        public async Task<List<CardResponse>> GetBulkReviewCardsAsync(
-            List<int> deckIds,
-            string userId,
-            BulkReviewMode mode)
+            var today = DateOnly.FromDateTime(DateTime.UtcNow);
+
+            var cards = await _cardRepository
+                .GetDueCardsByDeckIdAsync(deckId, userId, today);
+
+            var strategy = ResolveBulkReviewStrategy(mode);
+
+            cards = strategy.ApplyPerDeck(cards);
+
+            return cards.ToResponseList();
+        }
+
+        public async Task<List<CardResponse>> GetBulkReviewCardsAsync(List<int> deckIds, string userId, ReviewMode mode)
         {
             var result = new List<Card>();
             var strategy = ResolveBulkReviewStrategy(mode);
@@ -107,7 +101,7 @@ namespace noava.Services.Cards
 
             result = strategy.ApplyGlobal(result);
 
-            return result.Select(MapToResponse).ToList();
+            return result.Select(CardMapper.ToResponse).ToList();
         }
 
         public async Task<CardResponse?> GetCardByIdAsync(int id, string userId)
@@ -119,7 +113,7 @@ namespace noava.Services.Cards
             if (!await CanUserViewDeckAsync(card.DeckId, userId))
                 return null;
 
-            return MapToResponse(card);
+            return CardMapper.ToResponse(card);
         }
 
 
@@ -129,21 +123,10 @@ namespace noava.Services.Cards
             if (!await CanUserEditDeckAsync(deckId, userId))
                 throw new UnauthorizedAccessException("Not authorized to add cards to this deck");
 
-            var card = new Card
-            {
-                DeckId = deckId,
-                FrontText = request.FrontText,
-                BackText = request.BackText,
-                FrontImage = request.FrontImage,
-                FrontAudio = request.FrontAudio,
-                BackImage = request.BackImage,
-                BackAudio = request.BackAudio,
-                Memo = request.Memo,
-                HasVoiceAssistant = request.HasVoiceAssistant
-            };
+            var card = CardMapper.ToEntity(request, deckId);
 
             var createdCard = await _cardRepository.CreateAsync(card);
-            return MapToResponse(createdCard);
+            return CardMapper.ToResponse(createdCard);
         }
 
 
@@ -183,7 +166,7 @@ namespace noava.Services.Cards
             await CleanupOldBlobs(oldBackImage, newBackImage, "card-images");
             await CleanupOldBlobs(oldBackAudio, newBackAudio, "card-audio");
 
-            return MapToResponse(updatedCard);
+            return CardMapper.ToResponse(updatedCard);
         }
 
         public async Task<bool> DeleteCardAsync(int id, string userId)
@@ -239,14 +222,14 @@ namespace noava.Services.Cards
             return list;
         }
 
-        private IBulkReviewStrategy ResolveBulkReviewStrategy(BulkReviewMode mode)
+        private IBulkReviewStrategy ResolveBulkReviewStrategy(ReviewMode mode)
         {
             return mode switch
             {
-                BulkReviewMode.ShufflePerDeck =>
+                ReviewMode.ShufflePerDeck =>
                     new ShufflePerDeckStrategy(Shuffle),
 
-                BulkReviewMode.ShuffleAll =>
+                ReviewMode.ShuffleAll =>
                     new ShuffleAllStrategy(Shuffle),
 
                 _ => new BulkReviewStrategy()

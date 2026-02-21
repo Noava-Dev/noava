@@ -32,6 +32,10 @@ namespace noava.Data.Configurations.Schools
 
             builder.Property(s => s.UpdatedAt)
                    .IsRequired();
+            builder.HasMany(s => s.Classrooms)
+                .WithOne(c => c.School)
+                .HasForeignKey(c => c.SchoolId)
+                .IsRequired(false);
         }
     }
 }

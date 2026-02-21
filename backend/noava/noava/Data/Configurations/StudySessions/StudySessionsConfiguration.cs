@@ -2,11 +2,11 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using noava.Models;
 
-namespace noava.Data.Configurations.StudySession
+namespace noava.Data.Configurations.StudySessions
 {
-    public class StudySessionsConfiguration : IEntityTypeConfiguration<StudySessions>
+    public class StudySessionsConfiguration : IEntityTypeConfiguration<StudySession>
     {
-        public void Configure(EntityTypeBuilder<StudySessions> builder)
+        public void Configure(EntityTypeBuilder<StudySession> builder)
         {
             builder.HasKey(b => b.Id);
 

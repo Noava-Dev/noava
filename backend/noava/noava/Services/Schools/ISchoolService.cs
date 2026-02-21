@@ -1,4 +1,5 @@
-﻿using noava.DTOs.Schools;
+﻿using noava.DTOs.Classrooms;
+using noava.DTOs.Schools;
 using noava.Models;
 
 namespace noava.Services.Schools
@@ -10,7 +11,12 @@ namespace noava.Services.Schools
         Task<School> CreateSchoolAsync(SchoolRequestDto request);
         Task<School> UpdateSchoolAsync(int schoolId, SchoolRequestDto request);
         Task DeleteSchoolAsync(int id);
+        
+        //ADMINS
         Task AddSchoolAdminAsync(int schoolId, string userEmail);
         Task RemoveSchoolAdminAsync(int schoolId, string clerkId);
+
+        //SCHOOLS
+        Task<List<SchoolClassroomResponseDto>> GetClassroomsForSchoolAsync(int schoolId);
     }
 }

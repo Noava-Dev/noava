@@ -11,8 +11,11 @@ namespace noava.Mappers.Classrooms
             {
                 Name = dto.Name,
                 Description = dto.Description,
+                CoverImageBlobName = dto.CoverImageBlobName ?? null,
+                SchoolId = dto.SchoolId,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
+                
             };
 
             return entity;
@@ -30,13 +33,15 @@ namespace noava.Mappers.Classrooms
                 Name = entity.Name,
                 Description = entity.Description,
                 JoinCode = entity.JoinCode,
+                CoverImageBlobName = entity.CoverImageBlobName,
                 Permissions = new ClassroomPermissionsDto
                 {
                     CanEdit = isTeacher,
                     CanDelete = isTeacher
                 },
                 CreatedAt = entity.CreatedAt,
-                UpdatedAt = entity.UpdatedAt
+                UpdatedAt = entity.UpdatedAt,
+                SchoolId = entity.SchoolId
             };
 
             return dto;

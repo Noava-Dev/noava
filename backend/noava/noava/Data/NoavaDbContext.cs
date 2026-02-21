@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using noava.Data.Configurations;
 using noava.Models;
+using noava.Models.AggregateStatistics;
 
 namespace noava.Data
 {
@@ -16,8 +17,8 @@ namespace noava.Data
         public DbSet<FAQ> FAQs { get; set;  }
         public DbSet<User> Users { get; set; }
         public DbSet<CardProgress> CardProgress { get; set; }
-        public DbSet<CardInteractions> CardInteractions { get; set; }
-        public DbSet<StudySessions> StudySessions { get; set; }
+        public DbSet<CardInteraction> CardInteractions { get; set; }
+        public DbSet<StudySession> StudySessions { get; set; }
         public DbSet<School> Schools { get; set; }
         public DbSet<SchoolAdmin> SchoolAdmins { get; set; }
         public DbSet<Notification> Notifications { get; set; }
@@ -27,6 +28,9 @@ namespace noava.Data
         public DbSet<ClassroomUser> ClassroomUsers { get; set; }
         public DbSet<DeckUser> DecksUsers { get; set; } 
         public DbSet<DeckInvitation> DeckInvitations { get; set; }
+        public DbSet<DeckUserStatistics> DeckUserStatistics { get; set; }
+        public DbSet<ClassroomUserStatistics> ClassroomUserStatistics { get; set; }
+        public DbSet<ClassroomDeckStatistics> ClassroomDeckStatistics { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

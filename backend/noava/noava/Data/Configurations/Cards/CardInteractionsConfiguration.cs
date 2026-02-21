@@ -4,9 +4,9 @@ using noava.Models;
 
 namespace noava.Data.Configurations.Cards
 {
-    public class CardInteractionsConfiguration : IEntityTypeConfiguration<CardInteractions>
+    public class CardInteractionsConfiguration : IEntityTypeConfiguration<CardInteraction>
     {
-        public void Configure(EntityTypeBuilder<CardInteractions> builder)
+        public void Configure(EntityTypeBuilder<CardInteraction> builder)
         {
             builder.HasKey(d => d.Id);
 
@@ -20,7 +20,7 @@ namespace noava.Data.Configurations.Cards
                 .HasForeignKey(d => d.ClerkId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasOne<StudySessions>()
+            builder.HasOne<Models.StudySession>()
                 .WithMany()
                 .HasForeignKey(d => d.StudySessionId)
                 .OnDelete(DeleteBehavior.Cascade);
@@ -43,9 +43,6 @@ namespace noava.Data.Configurations.Cards
             builder.Property(d => d.StudyMode)
                 .IsRequired();
 
-            builder.Property(d => d.InteractionType)
-                .IsRequired();
-
             builder.Property(d => d.IntervalBefore)
                 .IsRequired();
 
@@ -61,7 +58,6 @@ namespace noava.Data.Configurations.Cards
             builder.ToTable(b =>
             {
                 b.HasCheckConstraint("CK_CardInteractions_ResponseTimeMs_NonNegative", "\"ResponseTimeMs\" >= 0");
-                b.HasCheckConstraint("CK_CardInteractions_DueAtBefore_DueAtAfter", "\"DueAtAfter\" >= \"DueAtBefore\"");
             });
         }
     }

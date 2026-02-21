@@ -57,7 +57,25 @@
     "flipMode": "Mode Retournement",
     "reverseReview": "Mode Inversé",
     "backToClassroom": "Retour à {{name}}",
-    "importFromFile": "Importer depuis un fichier"
+    "importFromFile": "Importer depuis un fichier",
+    "longTermReview": "Révision à Long Terme",
+    "longTermWrite": "Écriture Long Terme",
+    "longTermFlip": "Retournement Long Terme",
+    "longTermReverse": "Inversé Long Terme",
+    "learn": "Apprendre",
+    "uploadFile": "Télécharger un Fichier",
+    "recordAudio": "Enregistrer l'Audio",
+    "audioUploaded": "Audio téléchargé"
+  },
+  "audioRecorder": {
+    "startRecording": "Démarrer l'Enregistrement",
+    "stopRecording": "Arrêter l'Enregistrement",
+    "recordingComplete": "Enregistrement terminé",
+    "play": "Lire",
+    "playing": "Lecture en cours...",
+    "delete": "Supprimer",
+    "maxDuration": "Max. 15 secondes",
+    "permissionDenied": "Accès au microphone refusé. Veuillez activer les autorisations du microphone dans votre navigateur."
   },
    "quickReview": {
     "startReview": "Révision Rapide",
@@ -78,6 +96,7 @@
     "playVoiceAssistant": "Lire avec l'assistant vocal",
     "noCards": "Aucune carte trouvée",
     "error": "Erreur lors du chargement des cartes",
+    "exitConfirm": "Êtes-vous sûr de vouloir quitter ? Votre progression sera sauvegardée.",
     "complete": {
       "title": "Révision Terminée!",
       "message": "Vous avez révisé toutes les cartes",
@@ -95,6 +114,20 @@
     "subtitle": "Importez vos données depuis n'importe quelle source. Nous supportons CSV et Excel. Consultez notre documentation pour plus d'informations sur les formats.",
     "upload": "Téléverser le fichier",
     "supported": "Fichiers pris en charge: "
+  },
+  "longTerm": {
+    "mode": "Révision à Long Terme",
+    "writeMode": "Mode Écriture",
+    "typeAnswer": "Tapez votre réponse ici...",
+    "checkAnswer": "Vérifier la réponse",
+    "correctAnswer": "Réponse correcte",
+    "yourAnswer": "Votre réponse",
+    "markIncorrect": "Marquer comme incorrect",
+    "markCorrect": "Marquer comme correct",
+    "correct": "Correct",
+    "incorrect": "Incorrect",
+    "accuracy": "Précision",
+    "noCardsToReview": "Aucune carte n'est prévue pour révision pour le moment. Continuez à étudier régulièrement !"
   },
   "search": { "label": "Rechercher" }
 }
