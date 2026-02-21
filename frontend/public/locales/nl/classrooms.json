@@ -62,22 +62,22 @@
   },
   "requestCodeModal": {
     "title": "Nieuwe klascode aanvragen",
-    "message": "Weet je zeker dat je een nieuwe toetredingscode wilt aanvragen? De vorige code wordt ongeldig."
+    "message": "Weet je zeker dat je een nieuwe toegangscode wilt aanvragen? De vorige code wordt ongeldig."
   },
   "detail": {
     "description": "Beschrijving",
     "info": "Informatie",
     "membersPlaceholder": "Klasleden en instellingen verschijnen hier.",
-    "joinCode": "Toetredingscode"
+    "joinCode": "toegangscode"
   },
   "joinButton": "Klas volgen",
   "join": {
     "title": "Klas volgen",
     "subtitle": "Voer een code in om een klas te volgen",
     "form": {
-      "label": "Toetredingscode",
+      "label": "toegangscode",
       "placeholder": "bv. ABC123",
-      "empty": "Voer een toetredingscode in",
+      "empty": "Voer een toegangscode in",
       "joining": "Bezig met deelnemen..."
     },
     "success": "Je bent toegevoegd aan de klas",

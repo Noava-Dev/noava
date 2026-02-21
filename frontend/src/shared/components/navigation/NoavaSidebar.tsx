@@ -24,6 +24,7 @@ import { useEffect, useState } from 'react';
 import { notificationService } from '../../../services/NotificationService';
 import { useSchoolService } from '../../../services/SchoolService';
 import type { SchoolDto } from '../../../models/School';
+import { useTranslation } from 'react-i18next';
 
 type NoavaSidebarProps = {
   onNavigate?: () => void;
@@ -31,6 +32,8 @@ type NoavaSidebarProps = {
 };
 
 function NoavaSidebar({ className, onNavigate }: NoavaSidebarProps) {
+  const {t} = useTranslation('sidebar');
+
   const { userRole } = useUserRole();
   const { user } = useUser();
   const { openUserProfile } = useClerk();
@@ -132,7 +135,7 @@ console.log('userRole:', userRole);
               onNavigate?.();
             }}
             className="font-semibold cursor-pointer">
-            Classrooms
+            {t('classrooms')}
           </SidebarItem>
 
           {(userRole === 'ADMIN' || isSchoolAdmin) && (
@@ -144,7 +147,7 @@ console.log('userRole:', userRole);
                 onNavigate?.();
               }}
               className="font-semibold cursor-pointer">
-              Schools
+              {t('schools')}
             </SidebarItem>
           )}
 
@@ -172,7 +175,7 @@ console.log('userRole:', userRole);
               onNavigate?.();
             }}
             className="font-semibold cursor-pointer">
-            Notifications
+            {t('notifications')}
           </SidebarItem>
 
           <SidebarItem
@@ -183,7 +186,7 @@ console.log('userRole:', userRole);
               onNavigate?.();
             }}
             className="font-semibold cursor-pointer">
-            Settings
+            {t('settings')}
           </SidebarItem>
 
           {userRole === 'ADMIN' ? (
@@ -203,7 +206,7 @@ console.log('userRole:', userRole);
             <SidebarItem
               icon={LuLogOut}
               className="font-semibold cursor-pointer">
-              Sign out
+              {t('signOut')}
             </SidebarItem>
           </SignOutButton>
         </SidebarItemGroup>
