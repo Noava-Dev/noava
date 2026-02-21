@@ -1,12 +1,13 @@
-import {themes as prismThemes} from 'prism-react-renderer';
-import type {Config} from '@docusaurus/types';
+import { themes as prismThemes } from 'prism-react-renderer';
+import type { Config } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const config: Config = {
   title: 'Getting started with Noava',
-  tagline: 'Learn how to set up, configure and use Noava, the platform built for teachers to create study materials and for students to learn.',
+  tagline:
+    'Learn how to set up, configure and use Noava, the platform built for teachers to create study materials and for students to learn.',
   favicon: 'img/noava-logo-blue-nobg.png',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
@@ -48,7 +49,7 @@ const config: Config = {
             type: ['rss', 'atom'],
             xslt: true,
           },
-          
+
           onInlineTags: 'warn',
           onInlineAuthors: 'warn',
           onUntruncatedBlogPosts: 'warn',
@@ -79,7 +80,7 @@ const config: Config = {
           position: 'left',
           label: 'Tutorial',
         },
-        {to: '/blog', label: 'Blog', position: 'left'},
+        { to: '/blog', label: 'Blog', position: 'left' },
         {
           to: 'http://localhost:5173',
           label: 'Noava',
