@@ -1,0 +1,7 @@
+fronttext,backtext,memo,hasvoiceassistant
+Dog,Hond,Animal,true
+Cat,Kat,,false
+Door,Deur,Object,
+"Sentence with a, comma","Zin met een, komma",,noava
+
+

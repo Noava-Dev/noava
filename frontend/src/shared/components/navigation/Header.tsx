@@ -43,7 +43,7 @@ function Header() {
         <NavbarCollapse>
           <div className="flex flex-col justify-center gap-2 text-lg sm:flex-row sm:text-base sm:gap-4">
             <NavigationLink
-              href="/docs"
+              href="http://localhost:3000"
               text="Docs"
               className="py-2 border-b border-border dark:border-border-dark hover:border-primary-500 dark:hover:border-primary-300"
             />
