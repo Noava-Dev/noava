@@ -1,3 +1,7 @@
+---
+sidebar_position: 10
+---
+
 # Importing Flashcards
 
 Noava allows you to quickly import flashcards using Excel or CSV files.

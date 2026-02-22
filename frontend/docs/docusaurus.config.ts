@@ -5,9 +5,9 @@ import type * as Preset from '@docusaurus/preset-classic';
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const config: Config = {
-  title: 'Getting started with Noava',
+  title: 'Noava Docs',
   tagline:
-    'Learn how to set up, configure and use Noava, the platform built for teachers to create study materials and for students to learn.',
+    'A complete guide to using Noava, the platform focused on long-term learning, built for schools to easily share and manage study materials with students.',
   favicon: 'img/noava-logo-blue-nobg.png',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future

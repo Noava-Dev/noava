@@ -2,60 +2,41 @@
 sidebar_position: 1
 ---
 
-import { LuBookOpen, LuSchool, LuGraduationCap, LuNewspaper } from "react-icons/lu";
+import {
+  LuBookOpen,
+  LuSchool,
+  LuGraduationCap,
+  LuLayers,
+} from 'react-icons/lu';
 
-# Welcome 👋
+# Noava Docs
 
 Choose where you want to go:
 
 <div className="folderButtons">
 
-  <a className="folderButton" href="/docs/tutorial">
-    <div className="folderIcon">
-      <LuBookOpen size={28} />
+<a className="folderButton" href="/docs/tutorial">
+  <div className="folderIcon">
+    <LuBookOpen size={28} />
+  </div>
+  <div className="folderContent">
+    <div className="folderTitle">Tutorial</div>
+    <div className="folderDescription">
+      Step-by-step guides to get started quickly.
     </div>
-    <div className="folderContent">
-      <div className="folderTitle">Tutorial</div>
-      <div className="folderDescription">
-        Step-by-step guides to get started quickly.
-      </div>
-    </div>
-  </a>
+  </div>
+</a>
 
-  <a className="folderButton" href="/docs/schools">
-    <div className="folderIcon">
-      <LuSchool size={28} />
+<a className="folderButton" href="/docs/decks">
+  <div className="folderIcon">
+    <LuLayers size={28} />
+  </div>
+  <div className="folderContent">
+    <div className="folderTitle">Decks</div>
+    <div className="folderDescription">
+      Learn how to create, manage, and use decks in Noava.
     </div>
-    <div className="folderContent">
-      <div className="folderTitle">School</div>
-      <div className="folderDescription">
-        Documentation for school environments.
-      </div>
-    </div>
-  </a>
-
-  <a className="folderButton" href="/docs/classrooms">
-    <div className="folderIcon">
-      <LuGraduationCap size={28} />
-    </div>
-    <div className="folderContent">
-      <div className="folderTitle">Classroom</div>
-      <div className="folderDescription">
-        Tools and workflows for classroom use.
-      </div>
-    </div>
-  </a>
-
-  <a className="folderButton" href="/docs/blog">
-    <div className="folderIcon">
-      <LuNewspaper size={28} />
-    </div>
-    <div className="folderContent">
-      <div className="folderTitle">Decks</div>
-      <div className="folderDescription">
-        Create your own decks and start learning.
-      </div>
-    </div>
-  </a>
+  </div>
+</a>
 
 </div>
