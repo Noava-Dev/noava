@@ -16,7 +16,6 @@ import { useUser } from '@clerk/clerk-react';
 import { useDeckService } from '../../services/DeckService';
 import { useFlashcardService } from '../../services/FlashcardService';
 import { useToast } from '../../contexts/ToastContext';
-import NoavaFooter from '../../shared/components/navigation/NoavaFooter';
 import FlashcardModal from '../../shared/components/FlashcardModal';
 import type { Deck } from '../../models/Deck';
 import type {
@@ -638,8 +637,6 @@ function FlashcardDetail() {
             onUpdate={fetchDeck}
           />
         )}
-
-        <NoavaFooter />
       </div>
     </div>
   );

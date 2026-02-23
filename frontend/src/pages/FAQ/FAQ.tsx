@@ -258,8 +258,6 @@ function FAQPage() {
           )}
         </div>
       </section>
-
-      <NoavaFooter />
     </>
   );
 }

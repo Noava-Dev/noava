@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import PageHeader from '../../shared/components/PageHeader';
-import NoavaFooter from '../../shared/components/navigation/NoavaFooter';
 import Loading from '../../shared/components/loading/Loading';
 import { HiArrowLeft } from 'react-icons/hi';
 import { Button, Tooltip } from 'flowbite-react';
@@ -230,8 +229,6 @@ export default function MembersPage() {
           onInvite={handleInvite}
           canInvite={classroom.permissions?.canEdit}
         />
-
-        <NoavaFooter />
       </div>
     </div>
   );
