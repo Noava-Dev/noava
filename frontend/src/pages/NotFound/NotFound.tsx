@@ -2,7 +2,6 @@ import { Card } from 'flowbite-react';
 import { HiHome, HiQuestionMarkCircle } from 'react-icons/hi';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import NoavaFooter from '../../shared/components/navigation/NoavaFooter';
 
 function NotFound() {
   const { t } = useTranslation('common');
@@ -70,7 +69,6 @@ function NotFound() {
           </div>
         </div>
       </div>
-      <NoavaFooter />
     </>
   );
 }

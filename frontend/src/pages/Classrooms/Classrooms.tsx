@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { Button, Select, Tooltip } from 'flowbite-react';
 import { HiPlus } from 'react-icons/hi';
 import { useTranslation } from 'react-i18next';
-import NoavaFooter from '../../shared/components/navigation/NoavaFooter';
 import PageHeader from '../../shared/components/PageHeader';
 import ClassroomCard from '../../shared/components/ClassroomCard';
 import ClassroomModal from '../../shared/components/ClassroomModal';
@@ -294,8 +293,6 @@ function ClassroomsPage() {
           onConfirm={confirmRequestNewCode}
           onCancel={() => setRequestCodeId(null)}
         />
-
-        <NoavaFooter />
       </div>
     </div>
   );

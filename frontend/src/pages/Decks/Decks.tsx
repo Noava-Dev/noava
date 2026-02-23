@@ -13,7 +13,6 @@ import { Modal } from 'flowbite-react';
 import { HiPlus, HiPlay, HiPencil, HiRefresh, HiChevronDown } from 'react-icons/hi';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import NoavaFooter from '../../shared/components/navigation/NoavaFooter';
 import PageHeader from '../../shared/components/PageHeader';
 import DeckCard from '../../shared/components/DeckCard';
 import DeckModal from '../../shared/components/DeckModal';
@@ -509,8 +508,6 @@ function DecksPage() {
                   onConfirm={handleConfirmCopy}
                   onCancel={() => setCopyModalOpened(false)}
                 />
-
-        <NoavaFooter />
       </div>
     </div>
   );

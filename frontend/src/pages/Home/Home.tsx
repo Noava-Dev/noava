@@ -1,6 +1,5 @@
 import Header from '../../shared/components/navigation/Header';
 import { Button, Card } from 'flowbite-react';
-import NoavaFooter from '../../shared/components/navigation/NoavaFooter';
 import {
   HiCube,
   HiUserGroup,
@@ -168,8 +167,6 @@ function Home() {
           </div>
         </div>
       </section>
-
-      <NoavaFooter />
     </>
   );
 }

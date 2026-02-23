@@ -1,5 +1,4 @@
 import { ReactNode } from 'react';
-import NoavaFooter from '../../shared/components/navigation/NoavaFooter';
 import Header from '../../shared/components/navigation/Header';
 
 type LegalLayoutProps = {
@@ -21,7 +20,6 @@ function LegalLayout({ title, lastModifiedDate, children }: LegalLayoutProps) {
         </h4>
         {children}
       </div>
-      <NoavaFooter />
     </>
   );
 }

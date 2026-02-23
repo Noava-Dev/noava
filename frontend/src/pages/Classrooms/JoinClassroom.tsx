@@ -3,7 +3,6 @@ import { Button, Label, TextInput, Card, Spinner } from 'flowbite-react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import PageHeader from '../../shared/components/PageHeader';
-import NoavaFooter from '../../shared/components/navigation/NoavaFooter';
 import { useClassroomService } from '../../services/ClassroomService';
 import { useToast } from '../../contexts/ToastContext';
 import FormErrorMessage from '../../shared/components/validation/FormErrorMessage';
@@ -99,8 +98,6 @@ export default function JoinClassroom() {
             </Card>
           </div>
         </section>
-
-        <NoavaFooter />
       </div>
     </div>
   );

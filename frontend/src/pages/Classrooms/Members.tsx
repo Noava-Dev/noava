@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import PageHeader from '../../shared/components/PageHeader';
-import NoavaFooter from '../../shared/components/navigation/NoavaFooter';
 import Loading from '../../shared/components/loading/Loading';
 import { Button, Tooltip } from 'flowbite-react';
 import { useClassroomService } from '../../services/ClassroomService';
@@ -258,8 +257,6 @@ export default function MembersPage() {
           classroomId={id}
           availableDecks={decks}
         />
-
-        <NoavaFooter />
       </div>
     </div>
   );

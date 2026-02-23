@@ -13,7 +13,6 @@ import { SettingsGroup } from './components/SettingsGroup';
 import { useTranslation } from 'react-i18next';
 import { Tooltip, Dropdown, DropdownItem } from 'flowbite-react';
 import { useTheme } from '../../contexts/ThemeContext';
-import NoavaFooter from '../../shared/components/navigation/NoavaFooter';
 import { useUserService } from '../../services/UserService';
 import { useToast } from '../../contexts/ToastContext';
 import Loading from '../../shared/components/loading/Loading';
@@ -203,12 +202,11 @@ function SettingsPage() {
                 active: !emailPreferences,
                 onClick: () => emailPreferences && !updatingPreferences && handleEmailPreferenceChange(),
               },
-            ]}
+]}
           />
         </div>
         )}
       </div>
-      <NoavaFooter />
     </>
   );
 }
