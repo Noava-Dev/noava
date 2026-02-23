@@ -1,22 +1,23 @@
 import { useState, useEffect } from "react";
-import { LuSearch, LuUsers, LuTrash2, LuPlus } from "react-icons/lu";
+import { LuSearch, LuUsers, LuTrash2 } from "react-icons/lu";
+import { useUser } from "@clerk/clerk-react";
 import { userService } from "../../../services/UserService";
-import type { ClerkUserResponse } from "../../../models/User";
+import type { ClerkUserResponse, UserRole } from "../../../models/User";
 import ConfirmModal from "../../../shared/components/ConfirmModal";
 import Loading from "../../../shared/components/loading/Loading";
 
 const roleColors: Record<string, string> = {
-  teacher: "bg-[#E6F8F2] text-[#009966] dark:bg-[#009966] dark:text-[#E6F8F2]",
-  student:
-    "bg-primary-200 text-text-title-light",
+  ADMIN: "bg-[#E6F8F2] text-[#009966] dark:bg-[#009966] dark:text-[#E6F8F2]",
+  USER: "bg-primary-200 text-text-title-light",
 };
 
 export default function UsersTab() {
+  const { user: currentUser } = useUser();
   const [users, setUsers] = useState<ClerkUserResponse[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [roleFilter, setRoleFilter] = useState("all");
-  const { getUsers, deleteUser } = userService();
+  const { getUsers, deleteUser, updateRole } = userService();
 
   //delete a user:
   const [userToDelete, setUserToDelete] = useState<string | null>(null);
@@ -39,18 +40,29 @@ export default function UsersTab() {
   };
 
   const filtered = users.filter((user) => {
-    const fullName = `${user.firstName || ""} ${
-      user.lastName || ""
-    }`.toLowerCase();
+    if (currentUser && user.clerkId === currentUser.id) return false;
+    const fullName = `${user.firstName || ""} ${user.lastName || ""}`.toLowerCase();
     const matchesSearch =
       fullName.includes(searchQuery.toLowerCase()) ||
       user.email.toLowerCase().includes(searchQuery.toLowerCase());
 
-    const role = user.isTeacher ? "teacher" : "student";
-    const matchesRole = roleFilter === "all" || role === roleFilter;
+    const matchesRole = roleFilter === "all" || user.role === roleFilter;
 
     return matchesSearch && matchesRole;
   });
+
+  const handleRoleChange = async (clerkId: string, newRole: UserRole) => {
+    try {
+      setUsers((prev) =>
+        prev.map((u) => (u.clerkId === clerkId ? { ...u, role: newRole } : u))
+      );
+      
+      await updateRole(clerkId, newRole);
+    } catch (error) {
+      alert("Failed to update user role.");
+      fetchUsers(); 
+    }
+  };
 
   const handleDeleteClick = (clerkId: string) => {
     setUserToDelete(clerkId);
@@ -128,8 +140,8 @@ export default function UsersTab() {
                 className="rounded-xl border border-border dark:border-border-dark bg-background-app-light dark:bg-background-app-dark py-2.5 px-4 text-sm text-text-body-light dark:text-text-body-dark focus:ring-2 focus:ring-primary-500 focus:outline-none w-full"
               >
                 <option value="all">All Roles</option>
-                <option value="teacher">Teacher</option>
-                <option value="student">Student</option>
+                <option value="ADMIN">Admin</option>
+                <option value="USER">User</option>
               </select>
             </div>
           </div>
@@ -150,9 +162,10 @@ export default function UsersTab() {
             <table className="w-full text-left text-sm text-text-body-light dark:text-text-body-dark">
               <thead className="bg-background-surface-light dark:bg-background-app-dark text-xs uppercase text-text-muted-light dark:text-text-muted-dark">
                 <tr>
-                  <th className="px-6 py-3 font-medium">User</th>
-                  <th className="px-6 py-3 font-medium">Role</th>
-                  <th className="px-6 py-3 text-right font-medium">Actions</th>
+                  <th className="px-6 py-3 font-bold text-text-title-light dark:text-text-title-dark">User</th>
+                  <th className="px-6 py-3 font-bold text-text-title-light dark:text-text-title-dark">Role</th>
+                  <th className="px-6 py-3 font-bold text-text-title-light dark:text-text-title-dark">Joined</th>
+                  <th className="px-6 py-3 text-right font-bold text-text-title-light dark:text-text-title-dark">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border dark:divide-border-dark">
@@ -181,14 +194,30 @@ export default function UsersTab() {
 
                     {/* Role Badge */}
                     <td className="px-6 py-4">
-                      <span
-                        className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium capitalize ${
-                          user.isTeacher
-                            ? roleColors.teacher
-                            : roleColors.student
+                      <select
+                        value={user.role}
+                        disabled={user.isOwner}
+                        onChange={(e) => handleRoleChange(user.clerkId, e.target.value as UserRole)}
+                        className={`inline-flex items-center rounded-full px-3 py-1 text-xs capitalize border-none focus:ring-2 focus:ring-primary-500 cursor-pointer disabled:cursor-not-allowed ${
+                          roleColors[user.role] || roleColors.USER
                         }`}
                       >
-                        {user.isTeacher ? "Teacher" : "Student"}
+                        <option value="ADMIN" className="bg-background-app-light dark:bg-background-app-dark text-text-title-light dark:text-text-title-dark">
+                          Admin
+                        </option>
+                        <option value="USER" className="bg-background-app-light dark:bg-background-app-dark text-text-title-light dark:text-text-title-dark">
+                          User
+                        </option>
+                      </select>
+                    </td>
+
+                    <td className="px-6 py-4">
+                      <span className="text-text-muted-light dark:text-text-muted-dark">
+                        {new Date(user.joinedAt).toLocaleDateString("en-US", {
+                          month: "short",
+                          day: "numeric",
+                          year: "numeric",
+                        })}
                       </span>
                     </td>
 

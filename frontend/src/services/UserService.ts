@@ -1,5 +1,5 @@
 import { useApi } from "../hooks/useApi"; 
-import type { ClerkUserResponse } from "../models/User"; 
+import type { ClerkUserResponse, UserRole } from "../models/User"; 
 
 export const userService = () => {
   const api = useApi();
@@ -23,5 +23,14 @@ export const userService = () => {
     }
   };
 
-  return { getUsers, deleteUser };
+  const updateRole = async (clerkId: string, role: UserRole): Promise<void> => {
+    try {
+      await api.put(`/users/${clerkId}/role`, { role });
+    } catch (err) {
+      console.error(`Error updating role for user ${clerkId}:`, err);
+      throw new Error("Failed to update user role");
+    }
+  };
+
+  return { getUsers, deleteUser, updateRole };
 };

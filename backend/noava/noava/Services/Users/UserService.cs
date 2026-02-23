@@ -42,7 +42,26 @@ namespace noava.Services.Users
 
         public async Task<IEnumerable<ClerkUserResponseDto>> GetAllUsersAsync()
         {
-            return await _clerkService.GetAllUsersAsync();
+            var localUsers = await _userRepository.GetAllLocalUsersAsync();
+
+            if (!localUsers.Any())
+                return Enumerable.Empty<ClerkUserResponseDto>();
+
+            var clerkIds = localUsers.Select(u => u.ClerkId).ToList();
+
+            // only getting clerk users that are in the local db too
+            // this way the userRoles match up
+            var clerkUsers = await _clerkService.GetUsersAsync(clerkIds);
+            foreach (var clerkUser in clerkUsers)
+            {
+                var matchingLocalUser = localUsers.FirstOrDefault(u => u.ClerkId == clerkUser.ClerkId);
+                if (matchingLocalUser != null)
+                {
+                    clerkUser.Role = matchingLocalUser.Role.ToString();
+                }
+            }
+
+            return clerkUsers;
         }
 
         public async Task<bool> DeleteUserAsync(string clerkUserId)
@@ -52,6 +71,10 @@ namespace noava.Services.Users
             var clerkDeleted = await _clerkService.DeleteUserAsync(clerkUserId);
 
             return clerkDeleted;
+        }
+        public async Task<User?> UpdateUserRoleAsync(string clerkId, UserRole newRole)
+        {
+            return await _userRepository.UpdateRoleAsync(clerkId, newRole);
         }
     }
 }
