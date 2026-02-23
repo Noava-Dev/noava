@@ -138,7 +138,7 @@
     "reverseReview": "Omgekeerde Modus"
   },
   "addDeck": {
-     "title": "Deck Toevoegen aan Classroom",
+    "title": "Deck Toevoegen aan Classroom",
     "description": "Voeg een van je bestaande decks toe aan deze classroom.",
     "searchPlaceholder": "Zoek je decks...",
     "noResults": "Geen decks gevonden die overeenkomen met je zoekopdracht",
@@ -147,6 +147,17 @@
     "cards": "kaarten",
     "addButton": "Toevoegen",
     "done": "Klaar"
+  },
+  "analytics": {
+    "title": "Klasanalyses",
+    "timeSpent": "Bestede tijd",
+    "avgMastery": "Gemiddelde beheersing",
+    "correctCards": "Correcte kaarten",
+    "activeUsers": "Actieve gebruikers",
+    "noData": {
+      "title": "Nog geen statistieken",
+      "description": "Wacht tot je studenten beginnen met het herzien van decks in deze klas om voortgang en statistieken te zien."
+    }
   },
   "notFound": "Klas niet gevonden"
 }

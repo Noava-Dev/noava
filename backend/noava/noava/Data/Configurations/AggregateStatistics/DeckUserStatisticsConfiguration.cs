@@ -10,7 +10,6 @@ namespace noava.Data.Configurations.AggregateStatistics
         {
             builder.HasKey(e => new { e.DeckId, e.ClerkId });
 
-            builder.Property(e => e.AccuracyRate).HasColumnType("decimal(5,2)");
             builder.Property(e => e.AvgMasteryLevel).HasColumnType("decimal(5,2)");
 
             builder.HasOne(e => e.Deck)

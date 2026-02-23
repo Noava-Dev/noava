@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using noava.DTOs.Statistics;
 using noava.DTOs.StudySessions;
 using noava.Exceptions;
+using noava.Services.Statistics.Classrooms;
 using noava.Services.Statistics.Decks;
 using noava.Services.Statistics.General;
 using noava.Services.StudySessions;
@@ -17,12 +18,14 @@ namespace noava.Controllers.Statistics
     public class StatisticsController : ControllerBase
     {
         private readonly IDeckStatsService _deckStatsService;
+        private readonly IClassroomsStatsService _classroomsStatsService;
         private readonly IStatsService _statsService;
         private readonly IUserService _userService;
 
-        public StatisticsController(IDeckStatsService deckStatsService, IStatsService statsService ,IUserService userService)
+        public StatisticsController(IDeckStatsService deckStatsService, IClassroomsStatsService classroomsStatsService, IStatsService statsService ,IUserService userService)
         {
             _deckStatsService = deckStatsService;
+            _classroomsStatsService = classroomsStatsService;
             _statsService = statsService;
             _userService = userService;
         }
@@ -49,6 +52,13 @@ namespace noava.Controllers.Statistics
             return Ok(statisticsResponse);
         }
 
+        [HttpGet("classrooms/{classroomId:int}")]
+        public async Task<ActionResult<DeckStatisticsResponse>> GetClassroomStatistics(int classroomId)
+        {
+            var statisticsResponse = await _classroomsStatsService.GetClassroomStatsAsync(classroomId);
+            return Ok(statisticsResponse);
+        }
+        
         [HttpGet("decks/aggregate")]
         public async Task<ActionResult<DeckStatisticsResponse>> GetDeckStatisticsByUser(
             [FromQuery] IEnumerable<int> deckIds,
