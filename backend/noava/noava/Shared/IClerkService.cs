@@ -7,5 +7,8 @@ namespace noava.Shared
         Task<ClerkUserResponseDto?> GetUserAsync(string clerkUserId);
         Task<IEnumerable<ClerkUserResponseDto>> GetUsersAsync(IEnumerable<string> clerkUserIds);
         Task<ClerkUserResponseDto?> GetUserByEmailAsync(string email);
+
+        Task<IEnumerable<ClerkUserResponseDto>> GetAllUsersAsync();
+        Task<bool> DeleteUserAsync(string clerkUserId);
     }
 }

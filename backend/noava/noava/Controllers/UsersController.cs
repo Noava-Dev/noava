@@ -32,5 +32,32 @@ namespace noava.Controllers
                 Role = user.Role.ToString()
             });
         }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> GetAllUsers()
+        {
+            var users = await _userService.GetAllUsersAsync();
+            return Ok(users);
+        }
+
+        [Authorize(Roles = "ADMIN")]
+        [HttpDelete("{clerkId}")]
+        public async Task<IActionResult> DeleteUser([FromRoute] string clerkId)
+        {
+            if (string.IsNullOrWhiteSpace(clerkId))
+            {
+                return BadRequest(new { message = "User ID cannot be empty." });
+            }
+
+            var success = await _userService.DeleteUserAsync(clerkId);
+
+            if (!success)
+            {
+                return BadRequest(new { message = "Failed to delete user from Clerk." });
+            }
+
+            return NoContent();
+        }
     }
 }

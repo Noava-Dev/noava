@@ -6,5 +6,6 @@ namespace noava.Repositories.Users
     {
         Task<User?> GetByClerkIdAsync(string clerkId);
         Task<User> CreateAsync(User user);
+        Task<User?> DeleteByClerkIdAsync(string clerkId);
     }
 }
