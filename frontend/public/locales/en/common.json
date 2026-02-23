@@ -47,7 +47,9 @@
     "uploading": "Uploading...",
     "done": "Done",
     "copy": "Copy",
-    "copying": "Copying..."
+    "copying": "Copying...",
+    "selectAll": "Select All",
+    "deselectAll": "Deselect All"
   },
   "validation": {
     "required": "This field is required",

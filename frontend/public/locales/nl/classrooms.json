@@ -42,8 +42,22 @@
       "role": "Rol",
       "actions": "Acties"
     },
+    "actions": {
+      "viewStatistics": "Statistieken bekijken"
+    },
     "role": { "teacher": "Leerkracht", "student": "Leerling" },
-    "member": "Lid"
+    "member": "Lid",
+    "statistics": {
+      "title": "Lid Statistieken",
+      "filterDecks": "Filteren op Decks",
+      "noDeckSelected": {
+        "title": "Geen Decks Geselecteerd",
+        "description": "Selecteer ten minste één deck om statistieken te bekijken."
+      },
+      "noData": {
+        "description": "Dit lid heeft nog geen kaarten uit de geselecteerde decks herhaald."
+      }
+    }
   },
   "toast": {
     "loadError": "Laden van klassen mislukt",

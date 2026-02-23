@@ -19,6 +19,19 @@ namespace noava.Repositories.Classrooms
                 .AnyAsync(cd => cd.ClassroomId == classroomId && cd.DeckId == deckId);
         }
 
+        public async Task<bool> ExistsAsync(IEnumerable<int> deckIds, int classroomId)
+        {
+            var ids = deckIds.Distinct().ToList();
+            if (ids.Count == 0)
+                return false;
+
+            var count = await _context.ClassroomDecks
+                .CountAsync(cd => cd.ClassroomId == classroomId
+                               && ids.Contains(cd.DeckId));
+
+            return count == ids.Count;
+        }
+
         public async Task AddAsync(ClassroomDeck classroomDeck)
         {
             _context.ClassroomDecks.Add(classroomDeck);
