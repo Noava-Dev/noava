@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using noava.DTOs.Cards;
 using noava.DTOs.Statistics;
 using noava.DTOs.StudySessions;
 using noava.Exceptions;
+using noava.Services.Cards;
 using noava.Services.Statistics.Classrooms;
 using noava.Services.Statistics.Decks;
 using noava.Services.Statistics.General;
@@ -21,13 +23,15 @@ namespace noava.Controllers.Statistics
         private readonly IClassroomsStatsService _classroomsStatsService;
         private readonly IStatsService _statsService;
         private readonly IUserService _userService;
+        private readonly ICardInteractionService _cardInteractionService;
 
-        public StatisticsController(IDeckStatsService deckStatsService, IClassroomsStatsService classroomsStatsService, IStatsService statsService ,IUserService userService)
+        public StatisticsController(IDeckStatsService deckStatsService, IClassroomsStatsService classroomsStatsService, IStatsService statsService ,IUserService userService, ICardInteractionService cardInteractionService)
         {
             _deckStatsService = deckStatsService;
             _classroomsStatsService = classroomsStatsService;
             _statsService = statsService;
             _userService = userService;
+            _cardInteractionService = cardInteractionService;
         }
 
         [HttpGet]
@@ -83,6 +87,19 @@ namespace noava.Controllers.Statistics
                 return Forbid();
 
             return Ok(statisticsResponse);
+        }
+
+        [HttpGet("interactions/yearly")]
+        public async Task<ActionResult<List<InteractionCount>>> GetInteractionsThisAndLastYear()
+        {
+            var userId = _userService.GetUserId(User);
+            if (userId == null)
+                return Unauthorized();
+
+            var result = await _cardInteractionService
+                .GetInteractionStatsAsync(userId);
+
+            return Ok(result);
         }
     }
 }

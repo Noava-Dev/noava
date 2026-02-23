@@ -1,3 +1,4 @@
+using noava.DTOs.Cards;
 using noava.DTOs.Cards.Interactions;
 using noava.DTOs.Cards.Progress;
 using noava.Mappers.Cards;
@@ -98,6 +99,11 @@ namespace noava.Services.Cards
                 IncorrectCount = progress.IncorrectCount,
                 Streak = progress.Streak
             };
+        }
+
+        public async Task<List<InteractionCount>> GetInteractionStatsAsync(string clerkId)
+        {
+            return await _interactionRepo.GetInteractionsThisAndLastYearAsync(clerkId);
         }
     }
 }
