@@ -49,5 +49,21 @@ export const useStatisticsService = () => {
       const response = await api.get<InteractionCount[]>('/statistics/interactions/yearly');
       return response.data;
     },
+
+    async getInteractionsByDecksForClassroom(
+      clerkId: string,
+      classroomId: number,
+      deckIds: number[]
+    ): Promise<InteractionCount[]> {
+      const params = new URLSearchParams();
+      params.append('clerkId', clerkId);
+      params.append('classroomId', classroomId.toString());
+      deckIds.forEach(id => params.append('deckIds', id.toString()));
+
+      const response = await api.get<InteractionCount[]>(
+        `/statistics/interactions/by-decks/classroom/yearly?${params.toString()}`
+      );
+      return response.data;
+    },
   };
 };
