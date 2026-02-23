@@ -32,6 +32,7 @@ namespace noava.Data
         public DbSet<DeckUserStatistics> DeckUserStatistics { get; set; }
         public DbSet<ClassroomUserStatistics> ClassroomUserStatistics { get; set; }
         public DbSet<ClassroomDeckStatistics> ClassroomDeckStatistics { get; set; }
+        public DbSet<ClassroomStatistics> ClassroomStatistics { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

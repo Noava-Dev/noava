@@ -65,6 +65,16 @@ namespace noava.Repositories.Classrooms
                 .FirstOrDefaultAsync(c => c.JoinCode == joinCode);
         }
 
+        public async Task<List<int>> GetClassroomIdsForDeckAndUser(int deckId, string userId)
+        {
+            return await _context.Classrooms
+                .Where(c =>
+                    c.ClassroomDecks.Any(cd => cd.DeckId == deckId) &&
+                    c.ClassroomUsers.Any(cu => cu.UserId == userId))
+                .Select(c => c.Id)
+                .ToListAsync();
+        }
+
         public async Task<bool> DeleteAsync(Classroom classroom)
         {
             _context.Classrooms.Remove(classroom);

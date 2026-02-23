@@ -27,6 +27,7 @@ using noava.Services.FAQs;
 using noava.Services.Implementations;
 using noava.Services.Notifications;
 using noava.Services.Schools;
+using noava.Services.Statistics.Classrooms;
 using noava.Services.Statistics.Decks;
 using noava.Services.Statistics.General;
 using noava.Services.StudySessions;
@@ -83,6 +84,7 @@ namespace noava
             builder.Services.AddScoped<ICardInteractionService, CardInteractionService>();
             builder.Services.AddScoped<IStatsService, StatsService>();
             builder.Services.AddScoped<IDeckStatsService, DeckStatsService>();
+            builder.Services.AddScoped<IClassroomsStatsService, ClassroomsStatsService>();
 
             // External Service Registrations
             builder.Services.AddHttpClient();

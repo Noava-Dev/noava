@@ -9,6 +9,15 @@ export interface DeckStatistics {
   avgMasteryLevel: number;
 }
 
+export interface ClassroomStatistics {
+  classroomId: number;
+  activeUsersCount: number;
+  cardsReviewed: number;
+  correctCards: number;
+  timeSpentSeconds: number;
+  avgMasteryLevel: number;
+}
+
 export interface DashboardStatistics {
   cardsReviewed: number;
   accuracyRate: number;
