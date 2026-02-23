@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { Button, Dropdown, DropdownItem } from 'flowbite-react';
+import { Badge, Button, Dropdown, DropdownItem, Tooltip } from 'flowbite-react';
 import {
   HiPlus,
   HiPlay,
@@ -16,7 +16,6 @@ import { useUser } from '@clerk/clerk-react';
 import { useDeckService } from '../../services/DeckService';
 import { useFlashcardService } from '../../services/FlashcardService';
 import { useToast } from '../../contexts/ToastContext';
-import NoavaFooter from '../../shared/components/navigation/NoavaFooter';
 import FlashcardModal from '../../shared/components/FlashcardModal';
 import type { Deck } from '../../models/Deck';
 import type {
@@ -32,6 +31,7 @@ import BackButton from '../../shared/components/navigation/BackButton';
 import PageHeader from '../../shared/components/PageHeader';
 import DropdownButton from '../../shared/components/DropdownButton';
 import ImportCardsModal from './components/ImportCardsModal';
+import Skeleton from '../../shared/components/loading/Skeleton';
 
 interface FlashcardWithImages extends Flashcard {
   frontImageUrl?: string | null;
@@ -171,7 +171,7 @@ function FlashcardDetail() {
       if (error.response?.status === 404 || error.response?.status === 403) {
         navigate('/not-found', { replace: true });
       } else {
-        showError(t('flashcardDetail.error'), t('flashcardDetail.error'));
+        showError('Error', 'Failed to load flashcards');
       }
     }
   };
@@ -248,24 +248,7 @@ function FlashcardDetail() {
   };
 
   if (loading) {
-    return (
-      <div className="flex min-h-screen bg-background-app-light dark:bg-background-app-dark">
-        <main className="flex-1 w-full ml-0 md:ml-64">
-          <div className="container max-w-6xl px-4 py-8 mx-auto">
-            <div className="animate-pulse">
-              <div className="h-12 mb-8 rounded bg-background-surface-light dark:bg-background-surface-dark w-96"></div>
-              <div className="space-y-4">
-                {[1, 2, 3].map((i) => (
-                  <div
-                    key={i}
-                    className="h-32 rounded bg-background-surface-light dark:bg-background-surface-dark"></div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </main>
-      </div>
-    );
+    return <Skeleton />;
   }
 
   if (!deck) {
@@ -321,67 +304,118 @@ function FlashcardDetail() {
                 {/* Create/Import cards button - only for owners/creator */}
                 {/* Create/Import cards button */}
                 {canEdit && (
-                <DropdownButton
-                  size="lg"
-                  onClickMain={() => {
-                    setSelectedFlashcard(undefined);
-                    setIsModalOpen(true);
-                  }}
-                  icon={HiPlus}
-                  text={t('flashcardDetail.addCard')}
-                  className="w-full">
-                  <DropdownItem onClick={() => setShowImportModal(true)}>
-                    {t('flashcardDetail.importFromFile')}
-                  </DropdownItem>
-                </DropdownButton>
+                <div className="w-full md:w-fit">
+                  <Tooltip content={t('common:tooltips.createFlashcard')}>
+                    <DropdownButton
+                      size="lg"
+                      onClickMain={() => {
+                        setSelectedFlashcard(undefined);
+                        setIsModalOpen(true);
+                      }}
+                      icon={HiPlus}
+                      text={t('flashcardDetail.addCard')}
+                      className="w-full">
+                      <Tooltip content={t('common:tooltips.importCards')} placement="left">
+                        <DropdownItem onClick={() => setShowImportModal(true)}>
+                          {t('flashcardDetail.importFromFile')}
+                        </DropdownItem>
+                      </Tooltip>
+                    </DropdownButton>
+                  </Tooltip>
+                </div>
                 )}
 
                 {/* Study Now */}
 
-                <Button size="lg" disabled={totalCards === 0}>
-                  <HiPlay className="mr-2 size-5" />
-                  {t('flashcardDetail.studyNow')}
-                </Button>
+              <Dropdown
+                label=""
+                dismissOnClick={true}
+                renderTrigger={() => (
+                  <Button size="lg" disabled={totalCards === 0}>
+                    <HiPlay className="mr-2 size-5" />
+                    {t('flashcardDetail.studyNow')}
+                    <HiChevronDown className="w-4 h-4 ml-1" />
+                  </Button>
+                )}>
 
-                <Dropdown
-                  label=""
-                  dismissOnClick={true}
-                  renderTrigger={() => (
-                    <Button size="lg" className="bg-cyan-500 hover:bg-cyan-600" disabled={totalCards === 0}>
-                      <HiPlay className="w-5 h-5 mr-2" />
-                      {t('flashcardDetail.quickReview')}
-                      <HiChevronDown className="w-4 h-4 ml-1" />
-                    </Button>
-                  )}>
-                  <DropdownItem
-                    icon={HiPlay}
-                    onClick={() => navigate(`/decks/${deckId}/quickReview`)}>
-                    {t('flashcardDetail.flipMode')}
-                  </DropdownItem>
-                  <DropdownItem
-                    icon={HiPencil}
-                    onClick={() => navigate(`/decks/${deckId}/writeReview`)}>
-                    {t('flashcardDetail.writeReview')}
-                  </DropdownItem>
-                  <DropdownItem
-                    icon={HiRefresh}
-                    onClick={() => navigate(`/decks/${deckId}/reverseReview`)}>
-                    {t('flashcardDetail.reverseReview')}
-                  </DropdownItem>
-                </Dropdown>
+                {/* Long-Term Review  */}
+                <DropdownItem
+                  className="flex items-center justify-between"
+                  onClick={() => navigate(`/decks/${deckId}/longTermReview`)}>
+                  <div className="flex items-center">
+                    <HiPencil className="w-4 h-4 mr-2" />
+                    {t('flashcardDetail.longTermWrite')}
+                  </div>
+                </DropdownItem>
+
+                {/* Long-Term Review - Flip Mode */}
+                <DropdownItem
+                  className="flex items-center justify-between"
+                  onClick={() => navigate(`/decks/${deckId}/longTermFlipReview`)}>
+                  <div className="flex items-center">
+                    <HiPlay className="w-4 h-4 mr-2" />
+                    {t('flashcardDetail.longTermFlip')}
+                  </div>
+                </DropdownItem>
+
+                {/* Long-Term Review - Reverse Mode */}
+                <DropdownItem
+                  className="flex items-center justify-between"
+                  onClick={() => navigate(`/decks/${deckId}/longTermReverseReview`)}>
+                  <div className="flex items-center">
+                    <HiRefresh className="w-4 h-4 mr-2" />
+                    {t('flashcardDetail.longTermReverse')}
+                  </div>
+                </DropdownItem>
+              </Dropdown>
+
+                <div className="w-full md:w-fit">
+                  <Tooltip content={t('common:tooltips.reviewModes')}>
+                    <Dropdown
+                      label=""
+                      dismissOnClick={true}
+                      renderTrigger={() => (
+                        <Button size="lg" className="bg-cyan-500 hover:bg-cyan-600" disabled={totalCards === 0}>
+                          <HiPlay className="w-5 h-5 mr-2" />
+                          {t('flashcardDetail.quickReview')}
+                          <HiChevronDown className="w-4 h-4 ml-1" />
+                        </Button>
+                      )}>
+                      <DropdownItem
+                        icon={HiPlay}
+                        onClick={() => navigate(`/decks/${deckId}/quickReview`)}>
+                        {t('flashcardDetail.flipMode')}
+                      </DropdownItem>
+                      <DropdownItem
+                        icon={HiPencil}
+                        onClick={() => navigate(`/decks/${deckId}/writeReview`)}>
+                        {t('flashcardDetail.writeReview')}
+                      </DropdownItem>
+                      <DropdownItem
+                        icon={HiRefresh}
+                        onClick={() => navigate(`/decks/${deckId}/reverseReview`)}>
+                        {t('flashcardDetail.reverseReview')}
+                      </DropdownItem>
+                    </Dropdown>
+                  </Tooltip>
+                </div>
               </div>
 
        
               {/*  Only show Manage Access button for creator */}
               {isCreator && (
                 <div className="grid grid-cols-1 gap-3 md:block">
-                  <Button
-                    size="lg"
-                    className="bg-gradient-to-r from-secondary-600 to-secondary-700 hover:shadow-sm hover:border-border"
-                    onClick={() => setManageOwnersOpened(true)}>
-                    <HiUserGroup className="mr-2 size-5" />
-                    {t('decks:ownership.manageAccess')}
-                  </Button>
+                  <div className="w-full md:w-fit">
+                    <Tooltip content={t('common:tooltips.manageOwners')}>
+                      <Button
+                        size="lg"
+                        className="bg-gradient-to-r from-secondary-600 to-secondary-700 hover:shadow-sm hover:border-border"
+                        onClick={() => setManageOwnersOpened(true)}>
+                        <HiUserGroup className="mr-2 size-5" />
+                        {t('decks:ownership.manageAccess')}
+                      </Button>
+                    </Tooltip>
+                  </div>
                 </div>
               )}
             </div>
@@ -603,8 +637,6 @@ function FlashcardDetail() {
             onUpdate={fetchDeck}
           />
         )}
-
-        <NoavaFooter />
       </div>
     </div>
   );

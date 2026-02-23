@@ -17,8 +17,8 @@ namespace noava.Data
         public DbSet<FAQ> FAQs { get; set;  }
         public DbSet<User> Users { get; set; }
         public DbSet<CardProgress> CardProgress { get; set; }
-        public DbSet<CardInteractions> CardInteractions { get; set; }
-        public DbSet<StudySessions> StudySessions { get; set; }
+        public DbSet<CardInteraction> CardInteractions { get; set; }
+        public DbSet<StudySession> StudySessions { get; set; }
         public DbSet<School> Schools { get; set; }
         public DbSet<SchoolAdmin> SchoolAdmins { get; set; }
         public DbSet<Notification> Notifications { get; set; }
@@ -31,6 +31,7 @@ namespace noava.Data
         public DbSet<DeckUserStatistics> DeckUserStatistics { get; set; }
         public DbSet<ClassroomUserStatistics> ClassroomUserStatistics { get; set; }
         public DbSet<ClassroomDeckStatistics> ClassroomDeckStatistics { get; set; }
+        public DbSet<ClassroomStatistics> ClassroomStatistics { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

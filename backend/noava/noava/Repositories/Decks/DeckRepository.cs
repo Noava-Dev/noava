@@ -158,5 +158,29 @@ namespace noava.Repositories
             _context.DecksUsers.Remove(deckUser);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<List<Deck>> GetUserDecksWithAccessAsync(string userId, int? limit = null)
+        {
+            var query = _context.Decks
+                .Where(d =>
+                    // User created the deck
+                    d.UserId == userId ||
+                    // OR user has access via DeckUsers (owner OR invited)
+                    d.DeckUsers.Any(du => du.ClerkId == userId))
+                .OrderByDescending(d => d.CreatedAt)
+                .AsQueryable();
+
+            if (limit.HasValue)
+            {
+                query = query.Take(limit.Value);
+            }
+
+            return await query.ToListAsync();
+        }
+        public async Task UpdateDeckUserAsync(DeckUser deckUser)
+        {
+            _context.DecksUsers.Update(deckUser);
+            await _context.SaveChangesAsync();
+        }
     }
 }

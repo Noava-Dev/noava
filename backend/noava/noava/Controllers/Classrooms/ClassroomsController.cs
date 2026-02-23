@@ -32,7 +32,8 @@ namespace noava.Controllers.Classrooms
                 return BadRequest(ModelState);
 
             var userId = _userService.GetUserId(User);
-            if (userId == null) return Unauthorized();
+            if (userId == null) 
+                return Unauthorized();
             
             var result = await _classroomService.CreateAsync(request, userId);
             return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);

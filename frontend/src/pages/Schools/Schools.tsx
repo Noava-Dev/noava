@@ -11,6 +11,7 @@ import { useNavigate} from 'react-router-dom';
 import { useUser } from '@clerk/clerk-react';
 import { useUserRole } from '../../hooks/useUserRole';
 import ConfirmModal from '../../shared/components/ConfirmModal';
+import { Tooltip } from 'flowbite-react';
 
 export default function SchoolsPage() {
   const navigate = useNavigate();
@@ -39,7 +40,7 @@ export default function SchoolsPage() {
         setSchools(filteredSchools)
       }
     } catch (error) {
-      showError('Error loading schools', 'Please check your connection.');
+      showError('Error', 'Failed to load schools. Please check your connection.');
     } finally {
       setLoading(false);
     }
@@ -62,7 +63,7 @@ const handleCreateSchool = async (data: {
           schoolAdminEmails: data.adminEmails
         })
 
-        showSuccess( "School updated", `${data.name} was updated successfully.` );
+        showSuccess('Success', `${data.name} was updated successfully.`);
 
       }else{
         await schoolService.create({
@@ -70,13 +71,13 @@ const handleCreateSchool = async (data: {
         schoolAdminEmails: data.adminEmails
       });
 
-      showSuccess('School created', `${data.name} was added successfully.`);
+      showSuccess('Success', `${data.name} was added successfully.`);
     }
       setIsModalOpen(false);
       setEditingSchool(null);
       await fetchSchools();
     } catch (error) {
-      showError('Create failed', 'Could not create school.');
+      showError('Error', 'Failed to create school.');
     }
   };
 
@@ -101,12 +102,12 @@ const confirmDeleteSchool = async () => {
   try {
     await schoolService.delete(deleteSchool.id);
     showSuccess(
-      "School deleted",
-      `${deleteSchool.schoolName} was removed successfully.`
+      'Success',
+      `${deleteSchool.schoolName} was deleted successfully.`
     );
     await fetchSchools();
   } catch {
-    showError("Delete failed", "Could not delete school.");
+    showError('Error', 'Failed to delete school.');
   } finally {
     setDeleteSchool(null);
   }
@@ -120,7 +121,7 @@ const handleCardClick = (id: number) => {
 if (loading) { 
   return ( 
   <div className="flex items-center justify-center min-h-screen bg-background-app-light dark:bg-background-app-dark">
-    <Loading size="lg" center text="Loading schools..." /> 
+    <Loading size="lg"/> 
   </div> 
   ); 
 }
@@ -141,16 +142,20 @@ return (
           </div>
 
           {userRole === 'ADMIN' && (
-            <button
-              onClick={() => {
-                setIsModalOpen(true);
-                setEditingSchool(null);
-              }}
-              className="flex items-center justify-center gap-2 rounded-lg bg-primary-500 px-5 py-2.5 text-sm font-semibold text-white hover:bg-primary-600 shadow-md"
-            >
-              <Plus className="size-5" />
-              Add School
-            </button>
+            <div className="w-full md:w-fit">
+              <Tooltip content="Create a new school for your institution">
+                <button
+                  onClick={() => {
+                    setIsModalOpen(true);
+                    setEditingSchool(null);
+                  }}
+                  className="flex items-center justify-center gap-2 rounded-lg bg-primary-500 px-5 py-2.5 text-sm font-semibold text-white hover:bg-primary-600 shadow-md"
+                >
+                  <Plus className="size-5" />
+                  Add School
+                </button>
+              </Tooltip>
+            </div>
           )}
 
         </div>

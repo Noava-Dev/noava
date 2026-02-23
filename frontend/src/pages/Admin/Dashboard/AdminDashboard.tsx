@@ -51,17 +51,22 @@ function BlogTab() {
     </div>
   )
 }
+import { useTranslation } from 'react-i18next';
 
 function AdminDashboard() {
+  const { t } = useTranslation('adminDashboard');
+
   return (
     <div className="min-h-screen bg-background-app-light dark:bg-background-app-dark">
       {/* Header */}
       <header className="pt-4 mb-6 md:mb-8">
         <PageHeader>
-          <div className="space-y-2">
-            <h1 className="text-3xl font-extrabold tracking-tight md:text-5xl text-text-title-light dark:text-text-title-dark">Admin Dashboard</h1>
-            <p className="text-text-muted-light dark:text-text-muted-dark">
-              Manage schools, content, users and other settings.
+          <div className="flex flex-col gap-2 p-3 text-center">
+            <h1 className="text-4xl font-bold text-text-title-light dark:text-text-title-dark">
+              Admin Dashboard
+            </h1>
+            <p className="text-text-body-light dark:text-text-body-dark">
+              Welcome to the Noava Admin Dashboard.
             </p>
           </div>
         </PageHeader>

@@ -1,0 +1,13 @@
+.menuExternalLink {
+  align-items: center;
+}
+
+.linkLabel {
+  overflow: hidden;
+  display: -webkit-box;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  color: light-dark(var(--color-text-body-light), var(--color-text-body-dark));
+}
+

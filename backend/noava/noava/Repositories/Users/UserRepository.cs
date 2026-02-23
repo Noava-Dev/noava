@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using DocumentFormat.OpenXml.InkML;
+using Microsoft.EntityFrameworkCore;
 using noava.Data;
+using noava.Exceptions;
 using noava.Models;
 using noava.Models.Enums;
 
@@ -58,6 +60,28 @@ namespace noava.Repositories.Users
             await _db.SaveChangesAsync();
 
             return user;
+        public async Task UpdateReceiveNotificationEmailsAsync(string clerkId, bool receive)
+        {
+            var user = await GetByClerkIdAsync(clerkId);
+            if (user == null)
+                throw new NotFoundException("User not found");
+
+            user.ReceiveNotificationEmails = receive;
+
+            _db.Users.Update(user);
+            await _db.SaveChangesAsync();
+        }
+
+        public async Task<bool> GetReceiveNotificationEmailsAsync(string clerkId)
+        {
+            var user = await _db.Users
+                .AsNoTracking()
+                .FirstOrDefaultAsync(u => u.ClerkId == clerkId);
+
+            if (user == null)
+                throw new NotFoundException("User not found");
+
+            return user.ReceiveNotificationEmails;
         }
     }
 }

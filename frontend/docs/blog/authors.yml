@@ -1,0 +1,43 @@
+cedric:
+  name: Cedric Pas
+  title: Developer
+  url: https://github.com/TomeIDK
+  image_url: https://media.licdn.com/dms/image/v2/D4E03AQEvtdjTGcI0UA/profile-displayphoto-shrink_200_200/B4EZX7cNLKGYAc-/0/1743680231118?e=1772668800&v=beta&t=zhTBA7-8NjwZBOe_LbVEB1ZGbDhUK3d2snBg5MjEP9g
+  page: 
+    permalink: 'all-cedic-articles'
+  socials:
+    linkedin: cedric-pas
+    github: TomeIDK
+
+brent:
+  name: Brent
+  title: Developer
+  url: https://github.com/brentvanroelen
+  image_url: https://media.licdn.com/dms/image/v2/D4E03AQEESH3vDiqg5g/profile-displayphoto-shrink_200_200/B4EZXYWqKBHMAY-/0/1743091575415?e=1772668800&v=beta&t=3ArREy5ID03i05BDHbd8CnD9qEXJP6jstt6VRa2YYso
+  page:
+    permalink: '/all-brent-articles'
+  socials:
+    linkedin: brent-vanroelen-98691a294
+    github: brentvanroelen
+    
+youmni:
+  name: Youmni
+  title: Developer
+  url: https://github.com/youmni
+  image_url: https://media.licdn.com/dms/image/v2/D4E03AQEtfmR3H22o3Q/profile-displayphoto-shrink_200_200/B4EZUd3RuyHcAY-/0/1739962785125?e=1772668800&v=beta&t=eXn0qCsot-qbmvqw1nzCwRWxr2rqEsJDzyXZ7SgkbZk
+  page:
+    permalink: '/all-youmni-articles'
+  socials:
+    linkedin: youmni-malha-0a54972a3
+    github: youmni
+
+luna:
+  name: Luna D'Heere
+  title: Developer
+  url: https://github.com/LunaDHeere
+  image_url: https://media.licdn.com/dms/image/v2/D4E35AQGYwpVDiaxqTg/profile-framedphoto-shrink_200_200/profile-framedphoto-shrink_200_200/0/1731415002443?e=1771725600&v=beta&t=3Y5ULM2JcyhIKb2ovnMZLzGH8GNgctuhRN7sAucwpl8
+  page:
+    permalink: '/all-luna-articles'
+  socials:
+    linkedin: luna-dheere
+    github: LunaDHeere

@@ -7,16 +7,17 @@
       "tooltip": "Nombre total de révisions de cartes que vous avez effectuées sur l’ensemble des paquets"
     },
     "accuracyrate": {
-      "title": "Taux de réussite",
+      "title": "Précision",
       "tooltip": "Pourcentage de cartes auxquelles vous avez répondu correctement dès la première tentative"
     },
     "studytime": {
       "title": "Temps d’étude",
       "tooltip": "Temps total consacré à l’étude des cartes cette semaine"
     },
-    "cardsdue": {
-      "title": "Cartes à réviser",
-      "tooltip": "Cartes prévues pour révision aujourd’hui selon l’algorithme de répétition espacée"
+    "lastreview": {
+      "title": "Dernière révision",
+      "tooltip": "La date de votre dernière session de révision de flashcards",
+      "never": "Jamais"
     }
   },
   "decks": {

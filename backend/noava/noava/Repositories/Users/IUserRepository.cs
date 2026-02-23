@@ -10,5 +10,7 @@ namespace noava.Repositories.Users
         Task<User?> DeleteByClerkIdAsync(string clerkId);
         Task<List<User>> GetAllLocalUsersAsync();
         Task<User?> UpdateRoleAsync(string clerkId, UserRole newRole);
+        Task UpdateReceiveNotificationEmailsAsync(string clerkId, bool receive);
+        Task<bool> GetReceiveNotificationEmailsAsync(string clerkId);
     }
 }

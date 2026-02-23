@@ -28,7 +28,8 @@ namespace noava.Services.Users
             var newUser = new User
             {
                 ClerkId = clerkId,
-                Role = UserRole.USER
+                Role = UserRole.USER,
+                ReceiveNotificationEmails = true
             };
 
             return await _userRepository.CreateAsync(newUser);
@@ -75,6 +76,14 @@ namespace noava.Services.Users
         public async Task<User?> UpdateUserRoleAsync(string clerkId, UserRole newRole)
         {
             return await _userRepository.UpdateRoleAsync(clerkId, newRole);
+        public async Task UpdateReceiveNotificationEmails(string clerkId, bool receive)
+        {
+           await _userRepository.UpdateReceiveNotificationEmailsAsync(clerkId, receive);
+        }
+
+        public async Task<bool> GetUserEmailNotificationsPreference(string clerkId)
+        {
+            return await _userRepository.GetReceiveNotificationEmailsAsync(clerkId);
         }
     }
 }

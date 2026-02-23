@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { Modal, Button, Label, TextInput, ModalBody, ModalHeader, Spinner } from "flowbite-react";
 import { LuX as X } from "react-icons/lu";
+import FormErrorMessage from '../../../shared/components/validation/FormErrorMessage';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   open: boolean;
@@ -22,9 +24,12 @@ export default function CreateSchoolModal({
   initialData
 }: Props) {
 
+const { t } = useTranslation('errors');
 const [name, setName] = useState(initialData?.name ?? "");
 const [adminInput, setAdminInput] = useState("");
 const [adminEmails, setAdminEmails] = useState<string[]>(initialData?.adminEmails ?? [])
+const [loading, setLoading] = useState(false);
+const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
 useEffect(() => { 
   if (initialData){ 
@@ -36,22 +41,28 @@ useEffect(() => {
       setAdminEmails([]);
 }}, [initialData, open]);
 
-  const [loading, setLoading] = useState(false);
+
 
   if (!open) return null;
 
 const handleAddAdmin = (e?: React.MouseEvent) => {
   if (e) e.preventDefault();
-
+  
+  const newErrors: { [key: string]: string } = {};
   const email = adminInput.trim();
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  if (!email || !emailRegex.test(email)) {
-    setAdminInput(""); 
-    return;
+  if (!email) {
+    newErrors.adminEmail = t('validation.email.required');
+  } else if (!emailRegex.test(email)) {
+    newErrors.adminEmail = t('validation.email.invalid');
+  } else if (adminEmails.includes(email)) {
+    newErrors.adminEmail = t('validation.email.duplicate');
   }
 
-  if (adminEmails.includes(email)) {
+  setErrors(newErrors);
+
+  if (Object.keys(newErrors).length > 0) {
     setAdminInput("");
     return;
   }
@@ -66,7 +77,22 @@ const handleAddAdmin = (e?: React.MouseEvent) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim() || adminEmails.length === 0) return;
+    
+    const newErrors: { [key: string]: string } = {};
+    
+    if (!name.trim()) {
+      newErrors.name = t('validation.school.name');
+    }
+
+    if (adminEmails.length === 0) {
+      newErrors.admins = t('validation.school.minAdmins');
+    }
+
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length > 0) {
+      return;
+    }
 
     try {
       setLoading(true);
@@ -97,8 +123,7 @@ return (
       </ModalHeader>
       <ModalBody>
         <div className="space-y-6">
-
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} noValidate className="space-y-6">
             
             {/* School Name Input */}
             <div>
@@ -111,6 +136,7 @@ return (
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 />
+                {errors.name && <FormErrorMessage text={errors.name} />}
             </div>
 
             {/* Admin Email Input */}
@@ -128,6 +154,7 @@ return (
                 value={adminInput}
                 onChange={(e) => setAdminInput(e.target.value)}
                 />
+                {errors.adminEmail && <FormErrorMessage text={errors.adminEmail} />}
                 <Button className="rounded-lg h-6 w-12 py-4 bg-primary-500 my-3"
                         type="button" onClick={handleAddAdmin} disabled={!adminInput.trim()}>
                 Add
@@ -146,13 +173,17 @@ return (
                 </div>
               ))}
             </div>
+            {errors.admins && <FormErrorMessage text={errors.admins} />}
 
             {/* Action Buttons */}
-            <div className="flex justify-end gap-3 pt-2">
+            <div className="flex flex-col-reverse gap-3 pt-2 sm:flex-row sm:justify-end">
+                <Button className="bg-primary-500 w-full sm:w-auto" onClick={onClose} disabled={loading}>
+                    Cancel
+                </Button>
               <Button 
                     type="submit" 
                     disabled={loading || !name.trim()}
-                    className="bg-primary-400"
+                    className="bg-primary-400 w-full sm:w-auto"
                 >
                 {loading ? (
                     <>
@@ -166,11 +197,6 @@ return (
                 )
               }
                 </Button>
-                <Button className="bg-primary-500" onClick={onClose} disabled={loading}>
-                    Cancel
-                </Button>
-                
-                
             </div>
             
             </form>

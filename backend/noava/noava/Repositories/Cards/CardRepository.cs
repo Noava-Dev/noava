@@ -36,6 +36,26 @@ namespace noava.Repositories.Cards
             return card;
         }
 
+        public async Task<List<Card>> GetDueCardsByDeckIdAsync(int deckId, string userId, DateOnly today)
+        {
+            return await _context.Cards
+                .Where(c => c.DeckId == deckId)
+                .Where(c =>
+                    !_context.CardProgress.Any(p =>
+                        p.CardId == c.Id &&
+                        p.ClerkId == userId
+                    )
+                    ||
+                    _context.CardProgress.Any(p =>
+                        p.CardId == c.Id &&
+                        p.ClerkId == userId &&
+                        p.NextReviewDate <= today
+                    )
+                )
+                .OrderBy(c => c.CreatedAt)
+                .ToListAsync();
+        }
+
         public async Task<List<Card>> CreateBulkAsync(IEnumerable<Card> cards)
         {
             var now = DateTime.UtcNow;

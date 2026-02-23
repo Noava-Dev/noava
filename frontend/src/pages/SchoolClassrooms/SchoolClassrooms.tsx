@@ -64,7 +64,7 @@ export default function SchoolClassroomsPage() {
             setSchool(schoolData);
             setClassrooms(classroomData);
         } catch (error) {
-            showError(t('common:app.error'), t('classrooms:toast.loadError'));
+            showError(t('classrooms:toast.loadError'), t('common:app.error'));
         } finally {
             setLoading(false);
         }

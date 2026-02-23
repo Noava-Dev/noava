@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Security.Cryptography;
 
 namespace noava.Models
 {
@@ -14,6 +13,7 @@ namespace noava.Models
         [Required(ErrorMessage = "Description is required")]
         [StringLength(500, ErrorMessage = "Description can be maximum 500 characters")]
         public string Description { get; set; } = string.Empty;
+        public string? CoverImageBlobName { get; set; }
         public string JoinCode { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
