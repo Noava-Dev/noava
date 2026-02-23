@@ -279,15 +279,7 @@ function DeckModal({ isOpen, onClose, onSubmit, deck }: DeckModalProps) {
             </div>
 
             {/* Actions */}
-            <div className="flex flex-col-reverse gap-3 pt-4 sm:flex-row">
-              <Button
-                color="gray"
-                onClick={onClose}
-                disabled={uploading}
-                type="button"
-                className="w-full sm:w-auto">
-                {t('common:actions.cancel')}
-              </Button>
+            <div className="flex flex-col gap-3 pt-4 sm:flex-row">
               <Button type="submit" className="w-full sm:flex-1" disabled={uploading}>
                 {uploading ? (
                   <>
@@ -299,6 +291,14 @@ function DeckModal({ isOpen, onClose, onSubmit, deck }: DeckModalProps) {
                 ) : (
                   t('modal.createButton')
                 )}
+              </Button>
+              <Button
+                color="gray"
+                onClick={onClose}
+                disabled={uploading}
+                type="button"
+                className="w-full sm:w-auto">
+                {t('common:actions.cancel')}
               </Button>
             </div>
           </form>

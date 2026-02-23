@@ -81,7 +81,7 @@ export const InviteUserModal = ({
   };
 
   return (
-    <Modal show={isOpen} onClose={handleClose} size="md">
+    <Modal show={isOpen} onClose={handleClose} size="md" dismissible>
       <ModalHeader>{t('decks:invite.title', { deckName: itemName })}</ModalHeader>
       <ModalBody>
         <form onSubmit={handleSubmit} noValidate className="space-y-4">
@@ -116,12 +116,12 @@ export const InviteUserModal = ({
             </p>
           </div>
 
-          <div className="flex flex-col-reverse gap-2 pt-4 sm:flex-row sm:justify-end">
+          <div className="flex flex-col gap-2 pt-4 sm:flex-row">
+            <Button type="submit" disabled={loading} className="w-full sm:flex-1">
+              {loading ? t('decks:invite.inviting') : t('decks:invite.inviteButton')}
+            </Button>
             <Button color="gray" onClick={handleClose} disabled={loading} type="button" className="w-full sm:w-auto">
               {t('common:actions.cancel')}
-            </Button>
-            <Button type="submit" disabled={loading} className="w-full sm:w-auto">
-              {loading ? t('decks:invite.inviting') : t('decks:invite.inviteButton')}
             </Button>
           </div>
         </form>

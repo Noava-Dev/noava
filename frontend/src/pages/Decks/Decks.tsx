@@ -27,7 +27,6 @@ import Skeleton from '../../shared/components/loading/Skeleton';
 import EmptyState from '../../shared/components/EmptyState';
 import { useUser } from '@clerk/clerk-react';
 import ConfirmModal from '../../shared/components/ConfirmModal';
-import { TbDoorEnter } from 'react-icons/tb';
 
 function DecksPage() {
   const { t } = useTranslation('decks');
@@ -137,11 +136,7 @@ function DecksPage() {
       showSuccess('Success', t('toast.deleteSuccess'));
       fetchDecks();
     } catch (error: any) {
-      if (error.response?.status === 404 || error.response?.status === 403) {
-        navigate('/not-found', { replace: true });
-      } else {
-        showError(t('toast.deleteError'), 'Error');
-      }
+      showError(t('toast.deleteError'), 'Error');
     } finally {
       setDeleteDeckId(null);
     }
@@ -370,9 +365,8 @@ function DecksPage() {
                           key={deck.deckId}
                           deck={deck}
                           onCopy={handleCopy}
-                          onEdit={handleEdit}
-                          onDelete={handleDelete}
                           onAnalytics={handleAnalytics}
+                          showEdit={false}
                         />
                       ))}
                     </div>
@@ -397,7 +391,7 @@ function DecksPage() {
         </section>
 
         {/* Join by Code Modal */}
-        <Modal show={joinCodeModalOpen} onClose={() => setJoinCodeModalOpen(false)} size="md">
+        <Modal show={joinCodeModalOpen} onClose={() => setJoinCodeModalOpen(false)} size="md" dismissible>
           <ModalHeader>{t('joinCode.title')}</ModalHeader>
           <ModalBody>
             <div className="space-y-4">
@@ -424,12 +418,12 @@ function DecksPage() {
             </div>
           </ModalBody>
           <ModalFooter>
-            <div className="flex justify-end w-full gap-3">
-              <Button color="gray" onClick={() => setJoinCodeModalOpen(false)}>
-                {t('common:actions.cancel')}
-              </Button>
-              <Button onClick={handleJoinByCode} disabled={joiningDeck}>
+            <div className="flex w-full flex-col gap-3 sm:flex-row">
+              <Button onClick={handleJoinByCode} disabled={joiningDeck} className="w-full sm:flex-1">
                 {joiningDeck ? t('joinCode.joining') : t('joinCode.join')}
+              </Button>
+              <Button color="gray" onClick={() => setJoinCodeModalOpen(false)} className="w-full sm:w-auto">
+                {t('common:actions.cancel')}
               </Button>
             </div>
           </ModalFooter>
@@ -476,27 +470,16 @@ function DecksPage() {
           deck={analyticsDeck}
         />
 
-        {/* Delete Confirmation Modal */}
-        <Modal show={deleteDeckId !== null} onClose={cancelDelete} size="md">
-          <ModalHeader>{t('common:modals.deleteModal.title')}</ModalHeader>
-
-          <ModalBody>
-            <p className="text-text-body-light dark:text-text-muted-dark">
-              {t('common:modals.deleteModal.message')}
-            </p>
-          </ModalBody>
-
-          <ModalFooter>
-            <div className="flex justify-end w-full gap-3">
-              <Button color="gray" onClick={cancelDelete} size="sm">
-                {t('common:actions.cancel')}
-              </Button>
-              <Button color="red" onClick={confirmDelete} size="sm">
-                {t('common:modals.deleteModal.yes')}
-              </Button>
-            </div>
-          </ModalFooter>
-        </Modal>
+        <ConfirmModal
+          show={deleteDeckId !== null}
+          title={t('common:modals.deleteModal.title')}
+          message={t('common:modals.deleteModal.message')}
+          confirmLabel={t('common:modals.deleteModal.yes')}
+          cancelLabel={t('common:actions.cancel')}
+          confirmColor="red"
+          onConfirm={confirmDelete}
+          onCancel={cancelDelete}
+        />
 
                 {/* Confirm Copy Modal */}
                 <ConfirmModal
