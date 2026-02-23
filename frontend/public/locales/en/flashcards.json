@@ -27,12 +27,11 @@
     "updateButton": "Update Card",
     "createButton": "Create Card",
     "uploadError": "Failed to upload media. Please try again.",
-     "enableVoiceAssistant": "Enable voice assistant",
+    "enableVoiceAssistant": "Enable voice assistant",
     "voiceAssistantHelp": "Card text will be read aloud if no audio file is uploaded",
     "uploadFile": "Upload File",
     "recordAudio": "Record Audio",
     "audioUploaded": "Audio uploaded"
-    
   },
   "audioRecorder": {
     "startRecording": "Start Recording",
@@ -129,6 +128,11 @@
     "incorrect": "Incorrect",
     "accuracy": "Accuracy",
     "noCardsToReview": "No cards are due for review at this time. Keep studying regularly!"
+  },
+  "empty": {
+    "title": "No flashcards yet",
+    "message": "Create some flashcards to start reviewing!",
+    "noResults": "No flashcards found"
   },
   "search": { "label": "Search" }
 }

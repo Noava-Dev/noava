@@ -3,8 +3,9 @@
   "createButton": "Créer une classe",
   "results": { "found": "résultats trouvés" },
   "empty": {
+    "title": "Aucune classe pour le moment",
     "noResults": "Aucune classe trouvée",
-    "message": "Vous n’avez pas encore de classes."
+    "message": "Vous n'êtes inscrit(e) dans aucune classe pour le moment."
   },
   "modal": {
     "createTitle": "Créer une classe",

@@ -32,6 +32,7 @@ import PageHeader from '../../shared/components/PageHeader';
 import DropdownButton from '../../shared/components/DropdownButton';
 import ImportCardsModal from './components/ImportCardsModal';
 import Skeleton from '../../shared/components/loading/Skeleton';
+import EmptyState from '../../shared/components/EmptyState';
 
 interface FlashcardWithImages extends Flashcard {
   frontImageUrl?: string | null;
@@ -55,7 +56,9 @@ function FlashcardDetail() {
   const [searchTerm, setSearchTerm] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showImportModal, setShowImportModal] = useState(false);
-  const [selectedFlashcard, setSelectedFlashcard] = useState<Flashcard | undefined>(undefined);
+  const [selectedFlashcard, setSelectedFlashcard] = useState<
+    Flashcard | undefined
+  >(undefined);
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const [cardToDelete, setCardToDelete] = useState<number | null>(null);
   const [manageOwnersOpened, setManageOwnersOpened] = useState(false);
@@ -94,7 +97,7 @@ function FlashcardDetail() {
       try {
         const users = await deckService.getUsersByDeck(deck.deckId, 1, 50);
         setDeckUsers(users);
-        const currentUser = users.find(u => u.clerkId === user.id);
+        const currentUser = users.find((u) => u.clerkId === user.id);
         setCanEdit(currentUser?.isOwner || false);
       } catch (error) {
         console.error('Error checking permissions:', error);
@@ -164,7 +167,10 @@ function FlashcardDetail() {
       );
 
       setFlashcards(
-        cardsWithImages.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
+        cardsWithImages.sort(
+          (a, b) =>
+            new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+        )
       );
     } catch (error: any) {
       console.error(error);
@@ -296,78 +302,83 @@ function FlashcardDetail() {
               )}
             </div>
 
-
-           {/* Action Buttons */}
-             <div className="flex flex-col gap-3 mb-8 md:flex-row md:justify-between md:items-start">
+            {/* Action Buttons */}
+            <div className="flex flex-col gap-3 mb-8 md:flex-row md:justify-between md:items-start">
               {/* Left button group */}
               <div className="grid grid-cols-1 gap-3 md:flex md:flex-wrap">
                 {/* Create/Import cards button - only for owners/creator */}
                 {/* Create/Import cards button */}
                 {canEdit && (
-                <div className="w-full md:w-fit">
-                  <Tooltip content={t('common:tooltips.createFlashcard')}>
-                    <DropdownButton
-                      size="lg"
-                      onClickMain={() => {
-                        setSelectedFlashcard(undefined);
-                        setIsModalOpen(true);
-                      }}
-                      icon={HiPlus}
-                      text={t('flashcardDetail.addCard')}
-                      className="w-full">
-                      <Tooltip content={t('common:tooltips.importCards')} placement="left">
-                        <DropdownItem onClick={() => setShowImportModal(true)}>
-                          {t('flashcardDetail.importFromFile')}
-                        </DropdownItem>
-                      </Tooltip>
-                    </DropdownButton>
-                  </Tooltip>
-                </div>
+                  <div className="w-full md:w-fit">
+                    <Tooltip content={t('common:tooltips.createFlashcard')}>
+                      <DropdownButton
+                        size="lg"
+                        onClickMain={() => {
+                          setSelectedFlashcard(undefined);
+                          setIsModalOpen(true);
+                        }}
+                        icon={HiPlus}
+                        text={t('flashcardDetail.addCard')}
+                        className="w-full">
+                        <Tooltip
+                          content={t('common:tooltips.importCards')}
+                          placement="left">
+                          <DropdownItem
+                            onClick={() => setShowImportModal(true)}>
+                            {t('flashcardDetail.importFromFile')}
+                          </DropdownItem>
+                        </Tooltip>
+                      </DropdownButton>
+                    </Tooltip>
+                  </div>
                 )}
 
                 {/* Study Now */}
 
-              <Dropdown
-                label=""
-                dismissOnClick={true}
-                renderTrigger={() => (
-                  <Button size="lg" disabled={totalCards === 0}>
-                    <HiPlay className="mr-2 size-5" />
-                    {t('flashcardDetail.studyNow')}
-                    <HiChevronDown className="w-4 h-4 ml-1" />
-                  </Button>
-                )}>
+                <Dropdown
+                  label=""
+                  dismissOnClick={true}
+                  renderTrigger={() => (
+                    <Button size="lg" disabled={totalCards === 0}>
+                      <HiPlay className="mr-2 size-5" />
+                      {t('flashcardDetail.studyNow')}
+                      <HiChevronDown className="w-4 h-4 ml-1" />
+                    </Button>
+                  )}>
+                  {/* Long-Term Review  */}
+                  <DropdownItem
+                    className="flex items-center justify-between"
+                    onClick={() => navigate(`/decks/${deckId}/longTermReview`)}>
+                    <div className="flex items-center">
+                      <HiPencil className="w-4 h-4 mr-2" />
+                      {t('flashcardDetail.longTermWrite')}
+                    </div>
+                  </DropdownItem>
 
-                {/* Long-Term Review  */}
-                <DropdownItem
-                  className="flex items-center justify-between"
-                  onClick={() => navigate(`/decks/${deckId}/longTermReview`)}>
-                  <div className="flex items-center">
-                    <HiPencil className="w-4 h-4 mr-2" />
-                    {t('flashcardDetail.longTermWrite')}
-                  </div>
-                </DropdownItem>
+                  {/* Long-Term Review - Flip Mode */}
+                  <DropdownItem
+                    className="flex items-center justify-between"
+                    onClick={() =>
+                      navigate(`/decks/${deckId}/longTermFlipReview`)
+                    }>
+                    <div className="flex items-center">
+                      <HiPlay className="w-4 h-4 mr-2" />
+                      {t('flashcardDetail.longTermFlip')}
+                    </div>
+                  </DropdownItem>
 
-                {/* Long-Term Review - Flip Mode */}
-                <DropdownItem
-                  className="flex items-center justify-between"
-                  onClick={() => navigate(`/decks/${deckId}/longTermFlipReview`)}>
-                  <div className="flex items-center">
-                    <HiPlay className="w-4 h-4 mr-2" />
-                    {t('flashcardDetail.longTermFlip')}
-                  </div>
-                </DropdownItem>
-
-                {/* Long-Term Review - Reverse Mode */}
-                <DropdownItem
-                  className="flex items-center justify-between"
-                  onClick={() => navigate(`/decks/${deckId}/longTermReverseReview`)}>
-                  <div className="flex items-center">
-                    <HiRefresh className="w-4 h-4 mr-2" />
-                    {t('flashcardDetail.longTermReverse')}
-                  </div>
-                </DropdownItem>
-              </Dropdown>
+                  {/* Long-Term Review - Reverse Mode */}
+                  <DropdownItem
+                    className="flex items-center justify-between"
+                    onClick={() =>
+                      navigate(`/decks/${deckId}/longTermReverseReview`)
+                    }>
+                    <div className="flex items-center">
+                      <HiRefresh className="w-4 h-4 mr-2" />
+                      {t('flashcardDetail.longTermReverse')}
+                    </div>
+                  </DropdownItem>
+                </Dropdown>
 
                 <div className="w-full md:w-fit">
                   <Tooltip content={t('common:tooltips.reviewModes')}>
@@ -375,7 +386,10 @@ function FlashcardDetail() {
                       label=""
                       dismissOnClick={true}
                       renderTrigger={() => (
-                        <Button size="lg" className="bg-cyan-500 hover:bg-cyan-600" disabled={totalCards === 0}>
+                        <Button
+                          size="lg"
+                          className="bg-cyan-500 hover:bg-cyan-600"
+                          disabled={totalCards === 0}>
                           <HiPlay className="w-5 h-5 mr-2" />
                           {t('flashcardDetail.quickReview')}
                           <HiChevronDown className="w-4 h-4 ml-1" />
@@ -383,17 +397,23 @@ function FlashcardDetail() {
                       )}>
                       <DropdownItem
                         icon={HiPlay}
-                        onClick={() => navigate(`/decks/${deckId}/quickReview`)}>
+                        onClick={() =>
+                          navigate(`/decks/${deckId}/quickReview`)
+                        }>
                         {t('flashcardDetail.flipMode')}
                       </DropdownItem>
                       <DropdownItem
                         icon={HiPencil}
-                        onClick={() => navigate(`/decks/${deckId}/writeReview`)}>
+                        onClick={() =>
+                          navigate(`/decks/${deckId}/writeReview`)
+                        }>
                         {t('flashcardDetail.writeReview')}
                       </DropdownItem>
                       <DropdownItem
                         icon={HiRefresh}
-                        onClick={() => navigate(`/decks/${deckId}/reverseReview`)}>
+                        onClick={() =>
+                          navigate(`/decks/${deckId}/reverseReview`)
+                        }>
                         {t('flashcardDetail.reverseReview')}
                       </DropdownItem>
                     </Dropdown>
@@ -401,7 +421,6 @@ function FlashcardDetail() {
                 </div>
               </div>
 
-       
               {/*  Only show Manage Access button for creator */}
               {isCreator && (
                 <div className="grid grid-cols-1 gap-3 md:block">
@@ -480,19 +499,21 @@ function FlashcardDetail() {
           {/* Flashcards List or Empty State */}
           {filteredFlashcards.length === 0 ? (
             <div className="py-20 text-center">
-              <div className="mb-6">
-                <HiDocumentText className="mx-auto size-24 text-text-muted-light dark:text-text-muted-dark" />
-              </div>
-              <p className="mb-3 text-xl font-semibold text-text-body-light dark:text-text-body-dark">
-                {searchTerm ? 'No flashcards found' : 'No flashcards yet'}
-              </p>
-              <p className="mb-6 text-text-muted-light dark:text-text-muted-dark">
-                {searchTerm
-                  ? 'Try adjusting your search'
-                  : canEdit
-                  ? 'Start learning by creating your first flashcard!'
-                  : 'No cards have been created yet.'}
-              </p>
+              {searchTerm ? (
+                <EmptyState
+                  title={t('empty.noResults')}
+                  description={t('common:search.otherSearchTerm')}
+                  icon={HiDocumentText}
+                  buttonOnClick={() => setSearchTerm('')}
+                  clearButtonText={t('common:search.clearSearch')}
+                />
+              ) : (
+                <EmptyState
+                  title={t('empty.title')}
+                  description={t('empty.message')}
+                  icon={HiDocumentText}
+                />
+              )}
             </div>
           ) : (
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">

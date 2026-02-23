@@ -5,12 +5,7 @@ import { useStatisticsService } from '../../services/StatisticsService';
 import { formatDateToEuropean } from '../../services/DateService';
 import type { DeckStatistics } from '../../models/Statistics';
 import type { Deck } from '../../models/Deck';
-import {
-  LuBrain,
-  LuTarget,
-  LuClock,
-  LuTrendingUp
-} from 'react-icons/lu';
+import { LuBrain, LuTarget, LuClock, LuTrendingUp } from 'react-icons/lu';
 import { HiChartBar } from 'react-icons/hi';
 import EmptyState from './EmptyState';
 
@@ -20,7 +15,11 @@ interface DeckStatisticsModalProps {
   deck: Deck | null;
 }
 
-function DeckStatisticsModal({ show, onClose, deck }: DeckStatisticsModalProps) {
+function DeckStatisticsModal({
+  show,
+  onClose,
+  deck,
+}: DeckStatisticsModalProps) {
   const { t } = useTranslation(['decks', 'dashboard']);
   const statisticsService = useStatisticsService();
   const [statistics, setStatistics] = useState<DeckStatistics | null>(null);
@@ -68,7 +67,7 @@ function DeckStatisticsModal({ show, onClose, deck }: DeckStatisticsModalProps) 
     icon: Icon,
     label,
     value,
-    color = 'text-primary-500'
+    color = 'text-primary-500',
   }: {
     icon: any;
     label: string;
@@ -77,11 +76,12 @@ function DeckStatisticsModal({ show, onClose, deck }: DeckStatisticsModalProps) 
   }) => (
     <div className="p-4 rounded-lg bg-background-subtle-light dark:bg-background-subtle-dark">
       <div className="flex items-center gap-3">
-        <div className={`p-2 rounded-lg bg-background-surface-light dark:bg-background-surface-dark ${color}`}>
+        <div
+          className={`p-2 rounded-lg bg-background-surface-light dark:bg-background-surface-dark ${color}`}>
           <Icon className="w-5 h-5" />
         </div>
-        <div className="min-w-0 flex-1">
-          <p className="text-sm text-text-muted-light dark:text-text-muted-dark truncate">
+        <div className="flex-1 min-w-0">
+          <p className="text-sm truncate text-text-muted-light dark:text-text-muted-dark">
             {label}
           </p>
           <p className="text-xl font-bold text-text-title-light dark:text-text-title-dark">
@@ -98,9 +98,7 @@ function DeckStatisticsModal({ show, onClose, deck }: DeckStatisticsModalProps) 
         <div className="flex items-center gap-3">
           <HiChartBar className="w-6 h-6 text-primary-500" />
           <div>
-            <h3 className="text-xl font-bold">
-              {t('decks:analytics.title')}
-            </h3>
+            <h3 className="text-xl font-bold">{t('decks:analytics.title')}</h3>
             {deck && (
               <p className="text-sm text-text-muted-light dark:text-text-muted-dark">
                 {deck.title}
@@ -158,7 +156,7 @@ function DeckStatisticsModal({ show, onClose, deck }: DeckStatisticsModalProps) 
             </div>
 
             <div className="p-4 space-y-3 rounded-lg bg-background-subtle-light dark:bg-background-subtle-dark">
-              <div className="flex justify-between items-center">
+              <div className="flex items-center justify-between">
                 <span className="text-sm text-text-muted-light dark:text-text-muted-dark">
                   {t('decks:analytics.correctCards')}
                 </span>
@@ -166,7 +164,7 @@ function DeckStatisticsModal({ show, onClose, deck }: DeckStatisticsModalProps) 
                   {statistics.correctCards}
                 </span>
               </div>
-              <div className="flex justify-between items-center">
+              <div className="flex items-center justify-between">
                 <span className="text-sm text-text-muted-light dark:text-text-muted-dark">
                   {t('decks:analytics.avgResponseTime')}
                 </span>
@@ -174,7 +172,7 @@ function DeckStatisticsModal({ show, onClose, deck }: DeckStatisticsModalProps) 
                   {Math.round(statistics.avgResponseTimeMs)}ms
                 </Badge>
               </div>
-              <div className="flex justify-between items-center">
+              <div className="flex items-center justify-between">
                 <span className="text-sm text-text-muted-light dark:text-text-muted-dark">
                   {t('dashboard:statcard.lastreview.title')}
                 </span>
@@ -184,12 +182,13 @@ function DeckStatisticsModal({ show, onClose, deck }: DeckStatisticsModalProps) 
               </div>
             </div>
           </div>
-        ) : <EmptyState
-          title={t('decks:analytics.noData.title')}
-          description={t('decks:analytics.noData.description')}
-          buttonOnClick={onClose}
-          clearButtonText={t('common:actions.close')}
-        />}
+        ) : (
+          <EmptyState
+            title={t('decks:analytics.noData.title')}
+            description={t('decks:analytics.noData.description')}
+            icon={HiChartBar}
+          />
+        )}
       </ModalBody>
     </Modal>
   );

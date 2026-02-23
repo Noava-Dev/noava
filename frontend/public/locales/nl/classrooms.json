@@ -3,8 +3,9 @@
   "createButton": "Klas aanmaken",
   "results": { "found": "resultaten gevonden" },
   "empty": {
-    "noResults": "Geen klassen gevonden",
-    "message": "Je hebt nog geen klassen."
+    "title": "Nog geen klaslokalen",
+    "noResults": "Geen klaslokalen gevonden",
+    "message": "Je zit momenteel in geen enkele klas."
   },
   "modal": {
     "createTitle": "Klas aanmaken",

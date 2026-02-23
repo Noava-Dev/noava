@@ -15,6 +15,7 @@ import { useToast } from '../../contexts/ToastContext';
 import type { ClassroomResponse } from '../../models/Classroom';
 import { TbDoorEnter } from 'react-icons/tb';
 import EmptyState from '../../shared/components/EmptyState';
+import { LuUsers } from 'react-icons/lu';
 
 function ClassroomsPage() {
   const { t } = useTranslation('classrooms');
@@ -257,15 +258,16 @@ function ClassroomsPage() {
               <EmptyState
                 title={t('empty.noResults')}
                 description={t('common:search.otherSearchTerm')}
+                icon={LuUsers}
                 buttonOnClick={() => setSearchTerm('')}
                 clearButtonText={t('common:search.clearSearch')}
               />
             ) : (
-              <div className="py-12 text-center md:py-20">
-                <p className="mb-6 text-xl text-text-body-light dark:text-text-muted-dark md:text-2xl">
-                  {t('empty.message')}
-                </p>
-              </div>
+              <EmptyState
+                title={t('empty.title')}
+                description={t('empty.message')}
+                icon={LuUsers}
+              />
             )}
           </div>
         </section>

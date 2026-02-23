@@ -3,8 +3,9 @@
   "createButton": "Create Classroom",
   "results": { "found": "results found" },
   "empty": {
+    "title": "No classrooms yet",
     "noResults": "No classrooms found",
-    "message": "You have no classrooms yet."
+    "message": "You aren't in any classrooms yet."
   },
   "modal": {
     "createTitle": "Create Classroom",

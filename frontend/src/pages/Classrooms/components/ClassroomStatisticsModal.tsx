@@ -183,8 +183,7 @@ function ClassroomStatisticsModal({
           <EmptyState
             title={t('classrooms:analytics.noData.title')}
             description={t('classrooms:analytics.noData.description')}
-            buttonOnClick={onClose}
-            clearButtonText={t('common:actions.close')}
+            icon={HiChartBar}
           />
         )}
       </ModalBody>

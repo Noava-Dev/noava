@@ -10,7 +10,13 @@ import {
   Tooltip,
 } from 'flowbite-react';
 import { Modal } from 'flowbite-react';
-import { HiPlus, HiPlay, HiPencil, HiRefresh, HiChevronDown } from 'react-icons/hi';
+import {
+  HiPlus,
+  HiPlay,
+  HiPencil,
+  HiRefresh,
+  HiChevronDown,
+} from 'react-icons/hi';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import PageHeader from '../../shared/components/PageHeader';
@@ -27,6 +33,7 @@ import EmptyState from '../../shared/components/EmptyState';
 import { useUser } from '@clerk/clerk-react';
 import ConfirmModal from '../../shared/components/ConfirmModal';
 import { TbDoorEnter } from 'react-icons/tb';
+import { LuLayers } from 'react-icons/lu';
 
 function DecksPage() {
   const { t } = useTranslation('decks');
@@ -43,8 +50,10 @@ function DecksPage() {
   const { showSuccess, showError } = useToast();
   const [deleteDeckId, setDeleteDeckId] = useState<number | null>(null);
   const [bulkReviewModalOpened, setBulkReviewModalOpened] = useState(false);
-  const [bulkWriteReviewModalOpened, setBulkWriteReviewModalOpened] = useState(false);
-  const [bulkReverseReviewModalOpened, setBulkReverseReviewModalOpened] = useState(false);
+  const [bulkWriteReviewModalOpened, setBulkWriteReviewModalOpened] =
+    useState(false);
+  const [bulkReverseReviewModalOpened, setBulkReverseReviewModalOpened] =
+    useState(false);
   const [joinCodeModalOpen, setJoinCodeModalOpen] = useState(false);
   const [joinCode, setJoinCode] = useState('');
   const [joiningDeck, setJoiningDeck] = useState(false);
@@ -72,8 +81,8 @@ function DecksPage() {
     }
   };
 
-    const handleCopy = (deckId: number) => {
-    setDeckToCopy(deckId)
+  const handleCopy = (deckId: number) => {
+    setDeckToCopy(deckId);
     setCopyModalOpened(true);
   };
 
@@ -204,8 +213,8 @@ function DecksPage() {
   });
 
   // Split decks into owned and shared
-  const ownedDecks = sortedDecks.filter(deck => deck.userId === user?.id);
-  const sharedDecks = sortedDecks.filter(deck => deck.userId !== user?.id);
+  const ownedDecks = sortedDecks.filter((deck) => deck.userId === user?.id);
+  const sharedDecks = sortedDecks.filter((deck) => deck.userId !== user?.id);
 
   if (loading) {
     return <Skeleton />;
@@ -240,29 +249,27 @@ function DecksPage() {
                         label=""
                         dismissOnClick={true}
                         renderTrigger={() => (
-                          <Button size="lg" className="w-full border-none bg-cyan-500 hover:bg-cyan-600 md:w-fit">
+                          <Button
+                            size="lg"
+                            className="w-full border-none bg-cyan-500 hover:bg-cyan-600 md:w-fit">
                             <HiPlay className="w-5 h-5 mr-2" />
                             {t('bulkReview.button')}
                             <HiChevronDown className="w-4 h-4 ml-1" />
                           </Button>
-                        )}
-                      >
+                        )}>
                         <DropdownItem
                           icon={HiPlay}
-                          onClick={() => setBulkReviewModalOpened(true)}
-                        >
+                          onClick={() => setBulkReviewModalOpened(true)}>
                           {t('reviewModes.flipMode')}
                         </DropdownItem>
                         <DropdownItem
                           icon={HiPencil}
-                          onClick={() => setBulkWriteReviewModalOpened(true)}
-                        >
+                          onClick={() => setBulkWriteReviewModalOpened(true)}>
                           {t('reviewModes.writeReview')}
                         </DropdownItem>
                         <DropdownItem
                           icon={HiRefresh}
-                          onClick={() => setBulkReverseReviewModalOpened(true)}
-                        >
+                          onClick={() => setBulkReverseReviewModalOpened(true)}>
                           {t('reviewModes.reverseReview')}
                         </DropdownItem>
                       </Dropdown>
@@ -382,21 +389,25 @@ function DecksPage() {
               <EmptyState
                 title={t('empty.noResults')}
                 description={t('common:search.otherSearchTerm')}
+                icon={LuLayers}
                 buttonOnClick={() => setSearchTerm('')}
                 clearButtonText={t('common:search.clearSearch')}
               />
             ) : (
-              <div className="py-12 text-center md:py-20">
-                <p className="mb-6 text-xl text-text-body-light dark:text-text-muted-dark md:text-2xl">
-                  {t('empty.message')}
-                </p>
-              </div>
+              <EmptyState
+                title={t('empty.title')}
+                description={t('empty.message')}
+                icon={LuLayers}
+              />
             )}
           </div>
         </section>
 
         {/* Join by Code Modal */}
-        <Modal show={joinCodeModalOpen} onClose={() => setJoinCodeModalOpen(false)} size="md">
+        <Modal
+          show={joinCodeModalOpen}
+          onClose={() => setJoinCodeModalOpen(false)}
+          size="md">
           <ModalHeader>{t('joinCode.title')}</ModalHeader>
           <ModalBody>
             <div className="space-y-4">
@@ -497,17 +508,19 @@ function DecksPage() {
           </ModalFooter>
         </Modal>
 
-                {/* Confirm Copy Modal */}
-                <ConfirmModal
-                  show={copyModalOpened}
-                  title={t('copy.title')}
-                  message={t('copy.message')}
-                  confirmLabel={isCopying ? t('common:actions.copying') : t('common:actions.copy')}
-                  cancelLabel={t('common:actions.cancel')}
-                  confirmColor="green"
-                  onConfirm={handleConfirmCopy}
-                  onCancel={() => setCopyModalOpened(false)}
-                />
+        {/* Confirm Copy Modal */}
+        <ConfirmModal
+          show={copyModalOpened}
+          title={t('copy.title')}
+          message={t('copy.message')}
+          confirmLabel={
+            isCopying ? t('common:actions.copying') : t('common:actions.copy')
+          }
+          cancelLabel={t('common:actions.cancel')}
+          confirmColor="green"
+          onConfirm={handleConfirmCopy}
+          onCancel={() => setCopyModalOpened(false)}
+        />
       </div>
     </div>
   );
