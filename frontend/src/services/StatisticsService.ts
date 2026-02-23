@@ -3,6 +3,7 @@ import type {
   ClassroomStatistics,
   DashboardStatistics,
   DeckStatistics,
+  InteractionCount,
 } from '../models/Statistics';
 
 export const useStatisticsService = () => {
@@ -41,6 +42,11 @@ export const useStatisticsService = () => {
       params.append('userId', userId);
 
       const response = await api.get<DeckStatistics>(`/statistics/decks/aggregate?${params.toString()}`);
+      return response.data;
+    },
+
+    async getInteractionsYearly(): Promise<InteractionCount[]> {
+      const response = await api.get<InteractionCount[]>('/statistics/interactions/yearly');
       return response.data;
     },
   };

@@ -1,6 +1,8 @@
 {
   "subtitle": "Your personal Noava dashboard",
   "yourDecks": "Your Decks",
+  "interactionActivity": "Interaction Activity",
+  "interactionSubtitle": "Your learning activity over the past year",
   "statcard": {
     "cardsreviewed": {
       "title": "Cards Reviewed",

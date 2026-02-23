@@ -21,7 +21,7 @@ import { useDeckService } from '../../services/DeckService';
 import { useStatisticsService } from '../../services/StatisticsService';
 import { formatDateToEuropean } from '../../services/DateService';
 import type { DeckRequest, Deck } from '../../models/Deck';
-import type { DashboardStatistics } from '../../models/Statistics';
+import type { DashboardStatistics, InteractionCount } from '../../models/Statistics';
 import { useEffect, useState } from 'react';
 import { useToast } from '../../contexts/ToastContext';
 import DeckCard from '../../shared/components/DeckCard';
@@ -29,6 +29,7 @@ import DeckStatisticsModal from '../../shared/components/DeckStatisticsModal';
 import Loading from '../../shared/components/loading/Loading';
 import DeckModal from '../../shared/components/DeckModal';
 import ConfirmModal from '../../shared/components/ConfirmModal';
+import { InteractionHeatmap } from '../../shared/components/InteractionHeatmap';
 
 function Dashboard() {
   const { t } = useTranslation('dashboard');
@@ -37,7 +38,9 @@ function Dashboard() {
   const statisticsService = useStatisticsService();
   const [decks, setDecks] = useState<Deck[]>([]);
   const [statistics, setStatistics] = useState<DashboardStatistics>({} as DashboardStatistics);
+  const [interactions, setInteractions] = useState<InteractionCount[]>([]);
   const [loading, setLoading] = useState(true);
+  const [interactionsLoading, setInteractionsLoading] = useState(true);
   const { showSuccess, showError } = useToast();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingDeck, setEditingDeck] = useState<Deck | undefined>(undefined);
@@ -50,6 +53,7 @@ function Dashboard() {
 
   useEffect(() => {
     fetchData();
+    fetchInteractions();
   }, []);
 
   const fetchData = async () => {
@@ -65,6 +69,18 @@ function Dashboard() {
       showError(t('toast.loadError'), 'Error');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchInteractions = async () => {
+    try {
+      setInteractionsLoading(true);
+      const interactionsData = await statisticsService.getInteractionsYearly();
+      setInteractions(interactionsData);
+    } catch (error) {
+      console.error('Failed to load interactions:', error);
+    } finally {
+      setInteractionsLoading(false);
     }
   };
 
@@ -197,6 +213,30 @@ function Dashboard() {
                     tooltip={t('statcard.lastreview.tooltip')}
                     icon={LuTrendingUp}
                   />
+                </div>
+
+                <div className="hidden md:block w-full">
+                  <div className="relative overflow-hidden bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-850 rounded-xl shadow-md border border-gray-200 dark:border-gray-700">
+                    <div className="p-6 md:p-8">
+                      <div className="flex items-center justify-between mb-6">
+                        <div>
+                          <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+                            {t('interactionActivity')}
+                          </h3>
+                          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                            {t('interactionSubtitle')}
+                          </p>
+                        </div>
+                      </div>
+                      {interactionsLoading ? (
+                        <div className="flex items-center justify-center h-40">
+                          <div className="w-8 h-8 border-4 border-gray-200 rounded-full animate-spin border-t-emerald-500 dark:border-gray-700 dark:border-t-emerald-400"></div>
+                        </div>
+                      ) : (
+                        <InteractionHeatmap data={interactions} />
+                      )}
+                    </div>
+                  </div>
                 </div>
 
                 {/* Your Decks */}

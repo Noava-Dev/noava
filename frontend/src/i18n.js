@@ -18,6 +18,7 @@ i18n
       'flashcards',
       'dashboard',
       'errors',
+      'heatmap',
     ],
     defaultNS: 'common',
 

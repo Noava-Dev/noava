@@ -21,20 +21,40 @@ namespace noava.Repositories.Cards
             return interaction;
         }
 
-        public async Task<List<InteractionCount>> GetInteractionsThisAndLastYearAsync(string clerkId)
+        public async Task<List<InteractionCount>> GetInteractionsWholeYearAsync(string clerkId)
         {
-            var now = DateTime.UtcNow;
-            var startOfLastYear = new DateTime(now.Year - 1, 1, 1);
-            var endOfThisYear = new DateTime(now.Year, 12, 31, 23, 59, 59);
+            var todayUtc = DateTime.UtcNow.Date;
+            var oneYearAgo = todayUtc.AddYears(-1);
 
             return await _context.CardInteractions
                 .Where(ci => ci.ClerkId == clerkId &&
-                             ci.Timestamp >= startOfLastYear &&
-                             ci.Timestamp <= endOfThisYear)
+                             ci.Timestamp >= oneYearAgo &&
+                             ci.Timestamp <= todayUtc.AddDays(1))
                 .GroupBy(ci => ci.Timestamp.Date)
                 .Select(g => new InteractionCount
                 {
-                    Date = g.Key,
+                    Date = DateTime.SpecifyKind(g.Key, DateTimeKind.Utc),
+                    Count = g.Count()
+                })
+                .OrderBy(x => x.Date)
+                .ToListAsync();
+        }
+
+        public async Task<List<InteractionCount>> GetInteractionsWholeYearByDecksAsync(string clerkId, IEnumerable<int> deckIds)
+        {
+            if (deckIds == null || !deckIds.Any())
+                return new List<InteractionCount>();
+
+            var oneYearAgo = DateTime.UtcNow.AddYears(-1);
+
+            return await _context.CardInteractions
+                .Where(ci => ci.ClerkId == clerkId &&
+                             deckIds.Contains(ci.DeckId) &&
+                             ci.Timestamp >= oneYearAgo)
+                .GroupBy(ci => ci.Timestamp.Date)
+                .Select(g => new InteractionCount
+                {
+                    Date = DateTime.SpecifyKind(g.Key, DateTimeKind.Utc),
                     Count = g.Count()
                 })
                 .OrderBy(x => x.Date)
