@@ -11,7 +11,7 @@ const roleColors: Record<string, string> = {
   USER: "bg-primary-200 text-text-title-light",
 };
 
-export default function UsersTab() {
+export default function usersTab() {
   const { user: currentUser } = useUser();
   const [users, setUsers] = useState<ClerkUserResponse[]>([]);
   const [loading, setLoading] = useState(true);

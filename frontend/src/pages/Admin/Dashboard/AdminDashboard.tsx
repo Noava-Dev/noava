@@ -8,7 +8,7 @@ import { LuPlus,
 import PageHeader from "../../../shared/components/PageHeader"
 import { Tabs, TabItem } from "flowbite-react"
 import SchoolsTab from "../components/schoolsTab"
-import UsersTab from "../components/users-tab"
+import UsersTab from "../components/UsersTab"
 
 function FaqTab() {
   return (

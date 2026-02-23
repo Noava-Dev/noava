@@ -11,10 +11,6 @@ import { useUser } from '@clerk/clerk-react';
 import { useUserRole } from '../../../hooks/useUserRole';
 import ConfirmModal from '../../../shared/components/ConfirmModal';
 
-/* -------------------------------------------------------------------------- */
-/*                               Tab Components                               */
-/* -------------------------------------------------------------------------- */
-
 export default function SchoolsTab() {
   const navigate = useNavigate();
   const schoolService = useSchoolService();
@@ -131,8 +127,8 @@ if (loading) {
       {/* Header row should be replaced with a functioning search bar */}
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
-          <h2 className="text-xl font-semibold">Schools</h2>
-          <p className="text-sm text-gray-500">
+          <h2 className="text-xl font-semibold text-text-title-light dark:text-text-title-dark">Schools</h2>
+          <p className="text-sm text-text-muted-light dark:text-text-muted-dark">
             {userRole === 'ADMIN'
               ? 'Overview of all registered educational institutions.'
               : 'Overview of schools you manage.'}
@@ -156,7 +152,7 @@ if (loading) {
       <div className="space-y-4">
         {schools.length === 0 ? (
           <div className="py-16 text-center">
-            <p className="text-gray-500">
+            <p className="text-text-muted-light dark:text-text-muted-dark">
               {userRole === 'ADMIN'
                 ? 'No schools found. Start by adding a new school.'
                 : 'You are not currently assigned to any schools.'}
