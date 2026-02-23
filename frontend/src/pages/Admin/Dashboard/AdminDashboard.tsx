@@ -12,11 +12,11 @@ import UsersTab from "../components/users-tab"
 
 function FaqTab() {
   return (
-    <div className="rounded-2xl border bg-white p-6 shadow-sm">
+    <div className="rounded-2xl border bg-background-app-light dark:bg-background-app-dark p-6 shadow-sm">
       <div className="flex items-center justify-between">
         <div>
           <h3 className="text-lg font-semibold">FAQ</h3>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-text-muted-light dark:text-text-muted-dark">
             Manage frequently asked questions.
           </p>
         </div>
@@ -26,18 +26,18 @@ function FaqTab() {
         </Button>
       </div>
 
-      <div className="mt-6 text-sm text-gray-500">FAQ list will go here.</div>
+      <div className="mt-6 text-sm text-text-muted-light dark:text-text-muted-dark">FAQ list will go here.</div>
     </div>
   )
 }
 
 function BlogTab() {
   return (
-    <div className="rounded-2xl border bg-white p-6 shadow-sm">
+    <div className="rounded-2xl border bg-background-app-light dark:bg-background-app-dark p-6 shadow-sm">
       <div className="flex items-center justify-between">
         <div>
           <h3 className="text-lg font-semibold">Blog</h3>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-text-muted-light dark:text-text-muted-dark">
             Manage blog posts and content.
           </p>
         </div>
@@ -47,25 +47,20 @@ function BlogTab() {
         </Button>
       </div>
 
-      <div className="mt-6 text-sm text-gray-500">Blog CMS will go here.</div>
+      <div className="mt-6 text-sm text-text-muted-light dark:text-text-muted-dark">Blog CMS will go here.</div>
     </div>
   )
 }
 
-
-/* -------------------------------------------------------------------------- */
-/*                              Main Component                                */
-/* -------------------------------------------------------------------------- */
-
 function AdminDashboard() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background-app-light dark:bg-background-app-dark">
       {/* Header */}
-      <header>
+      <header className="pt-4 mb-6 md:mb-8">
         <PageHeader>
-          <div>
-            <h1 className="text-2xl font-bold">Admin Dashboard</h1>
-            <p className="text-gray-500">
+          <div className="space-y-2">
+            <h1 className="text-3xl font-extrabold tracking-tight md:text-5xl text-text-title-light dark:text-text-title-dark">Admin Dashboard</h1>
+            <p className="text-text-muted-light dark:text-text-muted-dark">
               Manage schools, content, users and other settings.
             </p>
           </div>
@@ -73,7 +68,7 @@ function AdminDashboard() {
       </header>
 
       {/* Content */}
-      <main className="mx-auto max-w-6xl p-6">
+      <main className="mx-auto max-w-6xl px-6 rounded-2xl shadow-sm">
         <Tabs>
           <TabItem
             active
