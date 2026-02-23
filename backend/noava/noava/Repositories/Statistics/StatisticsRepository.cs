@@ -32,5 +32,12 @@ namespace noava.Repositories.Statistics
                 .Where(d => d.ClerkId == userId)
                 .ToListAsync();
         }
+
+        public async Task<ClassroomStatistics?> GetByClassroomIdAsync(int classroomId)
+        {
+            return await _context.ClassroomStatistics
+                .Include(s => s.ActiveUsers)
+                .FirstOrDefaultAsync(s => s.ClassroomId == classroomId);
+        }
     }
 }

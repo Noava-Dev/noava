@@ -12,6 +12,7 @@ namespace noava.Repositories.Classrooms
         Task<Classroom> UpdateAsync(Classroom classroom);
         Task<bool> DeleteAsync(Classroom classroom);
         Task<Classroom?> GetByJoinCodeAsync(string joinCode);
+        Task<List<int>> GetClassroomIdsForDeckAndUser(int deckId, string userId);
         Task SaveChangesAsync();
     }
 }

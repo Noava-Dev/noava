@@ -134,5 +134,16 @@
     "addButton": "Ajouter",
     "done": "Terminé"
   },
+  "analytics": {
+    "title": "Analytique de la classe",
+    "timeSpent": "Temps passé",
+    "avgMastery": "Maîtrise moyenne",
+    "correctCards": "Cartes correctes",
+    "activeUsers": "Utilisateurs actifs",
+    "noData": {
+      "title": "Aucune statistique pour l'instant",
+      "description": "Attendez que vos élèves commencent à réviser les decks de cette classe pour voir les progrès et les statistiques."
+    }
+  },
   "notFound": "Classe introuvable"
 }

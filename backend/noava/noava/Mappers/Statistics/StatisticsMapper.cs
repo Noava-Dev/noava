@@ -25,5 +25,24 @@ namespace noava.Mappers.Statistics
         {
             return entities.Select(e => e.ToResponseDto());
         }
+
+        public static ClassroomStatisticsResponse ToResponseDto(this ClassroomStatistics entity)
+        {
+
+            return new ClassroomStatisticsResponse
+            {
+                ClassroomId = entity.ClassroomId,
+                ActiveUsersCount = entity.ActiveUsers.Count,
+                CardsReviewed = entity.CardsReviewed,
+                CorrectCards = entity.CorrectCards,
+                TimeSpentSeconds = entity.TimeSpentSeconds,
+                AvgMasteryLevel = entity.AvgMasteryLevel
+            };
+        }
+
+        public static IEnumerable<ClassroomStatisticsResponse> ToResponseDtos(this IEnumerable<ClassroomStatistics> entities)
+        {
+            return entities.Select(e => e.ToResponseDto());
+        }
     }
 }
