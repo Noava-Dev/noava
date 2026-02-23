@@ -27,7 +27,6 @@ export default function MembersTable({ items, canEdit, canDelete, onEdit, onDele
     return items.filter(i => (`${i.firstName} ${i.lastName}`.toLowerCase().includes(s) || i.email.toLowerCase().includes(s) || i.clerkId.toLowerCase().includes(s)));
   }, [items, search]);
 
-  const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
   const paged = filtered.slice((page - 1) * pageSize, page * pageSize);
 
   return (
@@ -77,8 +76,8 @@ export default function MembersTable({ items, canEdit, canDelete, onEdit, onDele
         </table>
       </div>
 
-      <div className="flex items-center justify-center">
-        <Pagination currentPage={page} totalPages={totalPages} onPageChange={(p) => setPage(p)} />
+      <div className="flex overflow-x-auto sm:justify-center text-center">
+        <Pagination layout="table" currentPage={page} itemsPerPage={pageSize} totalItems={filtered.length} onPageChange={(p) => setPage(p)} showIcons />
       </div>
     </div>
   );
