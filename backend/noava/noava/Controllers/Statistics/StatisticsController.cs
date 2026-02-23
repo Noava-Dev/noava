@@ -58,5 +58,31 @@ namespace noava.Controllers.Statistics
             var statisticsResponse = await _classroomsStatsService.GetClassroomStatsAsync(classroomId);
             return Ok(statisticsResponse);
         }
+        
+        [HttpGet("decks/aggregate")]
+        public async Task<ActionResult<DeckStatisticsResponse>> GetDeckStatisticsByUser(
+            [FromQuery] IEnumerable<int> deckIds,
+            [FromQuery] int classroomId,
+            [FromQuery] string userId)
+        {
+            var teacherId = _userService.GetUserId(User);
+            if (teacherId == null)
+                return Unauthorized();
+
+            if (deckIds == null || !deckIds.Any())
+                return BadRequest("At least one deckId is required.");
+
+            var statisticsResponse = await _deckStatsService
+                .GetDeckStatsForTeacherAsync(
+                    deckIds,
+                    userId,
+                    teacherId,
+                    classroomId);
+
+            if (statisticsResponse == null)
+                return Forbid();
+
+            return Ok(statisticsResponse);
+        }
     }
 }

@@ -7,7 +7,7 @@ namespace noava.Repositories.Classrooms
         Task<Classroom?> GetByIdAsync(int id);
         Task<IEnumerable<Classroom>> GetAllAsync();
         Task<IEnumerable<Classroom>> GetAllByUserAsync(string userId);
-
+        Task<bool> IsTeacherOfClassroomAsync(int classroomId, string userId);
         Task<Classroom> AddAsync(Classroom classroom);
         Task<Classroom> UpdateAsync(Classroom classroom);
         Task<bool> DeleteAsync(Classroom classroom);

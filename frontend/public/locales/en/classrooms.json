@@ -42,8 +42,22 @@
       "role": "Role",
       "actions": "Actions"
     },
+    "actions": {
+      "viewStatistics": "View Statistics"
+    },
     "role": { "teacher": "Teacher", "student": "Student" },
-    "member": "Member"
+    "member": "Member",
+    "statistics": {
+      "title": "Member Statistics",
+      "filterDecks": "Filter by Decks",
+      "noDeckSelected": {
+        "title": "No Decks Selected",
+        "description": "Select at least one deck to view statistics."
+      },
+      "noData": {
+        "description": "This member has not reviewed any cards from the selected decks yet."
+      }
+    }
   },
   "toast": {
     "loadError": "Failed to load classrooms",

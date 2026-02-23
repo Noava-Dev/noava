@@ -36,6 +36,12 @@ namespace noava.Repositories.Classrooms
                                  .ToListAsync();
         }
 
+        public Task<bool> IsTeacherOfClassroomAsync(int classroomId, string userId)
+        {
+            return _context.ClassroomUsers
+                           .AnyAsync(cu => cu.ClassroomId == classroomId && cu.UserId == userId && cu.IsTeacher);
+        }
+
         public async Task<Classroom?> GetByIdAsync(int classroomId)
         {
             return await _context.Classrooms
@@ -80,6 +86,5 @@ namespace noava.Repositories.Classrooms
         {
             await _context.SaveChangesAsync();
         }
-
     }
 }

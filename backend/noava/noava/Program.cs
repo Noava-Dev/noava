@@ -50,6 +50,7 @@ namespace noava
             builder.Services.AddScoped<IDeckRepository, DeckRepository>();
             builder.Services.AddScoped<ICardRepository, CardRepository>();
             builder.Services.AddScoped<IClassroomRepository, ClassroomRepository>();
+            builder.Services.AddScoped<IClassroomDeckRepository, ClassroomDeckRepository>();
             builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
             builder.Services.AddScoped<IDeckUserRepository, DeckUserRepository>();
             builder.Services.AddScoped<IDeckInvitationRepository, DeckInvitationRepository>();
