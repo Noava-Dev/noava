@@ -317,7 +317,9 @@ function FlashcardDetail() {
                       text={t('flashcardDetail.addCard')}
                       className="w-full">
                       <Tooltip content={t('common:tooltips.importCards')} placement="left">
-                        <DropdownItem onClick={() => setShowImportModal(true)}>
+                        <DropdownItem onClick={() => setShowImportModal(true)}
+                          className="bg-transparent"
+                          >
                           {t('flashcardDetail.importFromFile')}
                         </DropdownItem>
                       </Tooltip>
@@ -341,8 +343,9 @@ function FlashcardDetail() {
 
                 {/* Long-Term Review  */}
                 <DropdownItem
-                  className="flex items-center justify-between"
-                  onClick={() => navigate(`/decks/${deckId}/longTermReview`)}>
+                  className="flex items-center justify-between bg-transparent"
+                  onClick={() => navigate(`/decks/${deckId}/longTermReview`)}
+                  >
                   <div className="flex items-center">
                     <HiPencil className="w-4 h-4 mr-2" />
                     {t('flashcardDetail.longTermWrite')}
@@ -351,7 +354,7 @@ function FlashcardDetail() {
 
                 {/* Long-Term Review - Flip Mode */}
                 <DropdownItem
-                  className="flex items-center justify-between"
+                  className="flex items-center justify-between bg-transparent"
                   onClick={() => navigate(`/decks/${deckId}/longTermFlipReview`)}>
                   <div className="flex items-center">
                     <HiPlay className="w-4 h-4 mr-2" />
@@ -361,7 +364,7 @@ function FlashcardDetail() {
 
                 {/* Long-Term Review - Reverse Mode */}
                 <DropdownItem
-                  className="flex items-center justify-between"
+                  className="flex items-center justify-between bg-transparent"
                   onClick={() => navigate(`/decks/${deckId}/longTermReverseReview`)}>
                   <div className="flex items-center">
                     <HiRefresh className="w-4 h-4 mr-2" />
@@ -384,17 +387,23 @@ function FlashcardDetail() {
                       )}>
                       <DropdownItem
                         icon={HiPlay}
-                        onClick={() => navigate(`/decks/${deckId}/quickReview`)}>
+                        onClick={() => navigate(`/decks/${deckId}/quickReview`)}
+                        className="bg-transparent"
+                        >
                         {t('flashcardDetail.flipMode')}
                       </DropdownItem>
                       <DropdownItem
                         icon={HiPencil}
-                        onClick={() => navigate(`/decks/${deckId}/writeReview`)}>
+                        onClick={() => navigate(`/decks/${deckId}/writeReview`)}
+                        className="bg-transparent"
+                        >
                         {t('flashcardDetail.writeReview')}
                       </DropdownItem>
                       <DropdownItem
                         icon={HiRefresh}
-                        onClick={() => navigate(`/decks/${deckId}/reverseReview`)}>
+                        onClick={() => navigate(`/decks/${deckId}/reverseReview`)}
+                        className="bg-transparent"
+                        >
                         {t('flashcardDetail.reverseReview')}
                       </DropdownItem>
                     </Dropdown>

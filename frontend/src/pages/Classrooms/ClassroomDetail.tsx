@@ -216,18 +216,21 @@ return (
                     <DropdownItem
                       icon={HiPlay}
                       onClick={() => setBulkReviewModalOpened(true)}
+                      className="bg-transparent"
                     >
                       {t('reviewModes.flipMode')}
                     </DropdownItem>
                     <DropdownItem
                       icon={HiPencil}
                       onClick={() => setBulkWriteReviewModalOpened(true)}
+                      className="bg-transparent"
                     >
                       {t('reviewModes.writeReview')}
                     </DropdownItem>
                     <DropdownItem
                       icon={HiRefresh}
                       onClick={() => setBulkReverseReviewModalOpened(true)}
+                      className="bg-transparent"
                     >
                       {t('reviewModes.reverseReview')}
                     </DropdownItem>
