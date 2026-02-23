@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using noava.DTOs.ContactMessages;
 using noava.Exceptions;
 using noava.Models;
@@ -52,6 +53,7 @@ namespace noava.Controllers.ContactMessages
 
         [HttpPost]
         [AllowAnonymous]
+        [EnableRateLimiting("contact-messages")]
         public async Task<IActionResult> Create([FromBody] ContactMessageRequest dto)
         {
             var response = await _contactMessageService.CreateAsync(dto);

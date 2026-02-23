@@ -1,0 +1,48 @@
+{
+  "title": "Contactez-nous",
+  "description": "Vous avez une question ou besoin d'aide? Remplissez le formulaire ci-dessous et nous vous répondrons dès que possible.",
+  "form": {
+    "title": {
+      "label": "Titre",
+      "placeholder": "Sélectionnez votre titre"
+    },
+    "email": {
+      "label": "Adresse e-mail",
+      "placeholder": "votre.email@exemple.com"
+    },
+    "subject": {
+      "label": "Sujet",
+      "placeholder": "Sélectionnez un sujet"
+    },
+    "description": {
+      "label": "Message",
+      "placeholder": "Veuillez décrire votre demande en détail (minimum 20 caractères)..."
+    },
+    "submit": "Envoyer le message",
+    "submitting": "Envoi en cours...",
+    "cancel": "Annuler"
+  },
+  "titles": {
+    "Mr": "M.",
+    "Mrs": "Mme",
+    "Ms": "Mlle",
+    "Dr": "Dr",
+    "Other": "Autre"
+  },
+  "subjects": {
+    "GeneralInquiry": "Question générale",
+    "Support": "Support",
+    "BugReport": "Signaler un bug",
+    "Feedback": "Commentaire",
+    "Complaint": "Réclamation",
+    "Other": "Autre"
+  },
+  "success": {
+    "title": "Message envoyé avec succès",
+    "message": "Merci de nous avoir contactés. Nous vous répondrons dès que possible."
+  },
+  "error": {
+    "title": "Échec de l'envoi du message",
+    "message": "Une erreur s'est produite lors de l'envoi de votre message. Veuillez réessayer."
+  }
+}

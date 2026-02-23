@@ -12,6 +12,7 @@ import Header from '../../shared/components/navigation/Header';
 import PageHeader from '../../shared/components/PageHeader';
 import NoavaFooter from '../../shared/components/navigation/NoavaFooter';
 import Loading from '../../shared/components/loading/Loading';
+import ContactForm from '../../shared/components/ContactForm';
 import { useTranslation } from 'react-i18next';
 
 function FAQPage() {
@@ -20,6 +21,7 @@ function FAQPage() {
   const [allFaqs, setAllFaqs] = useState<FAQ[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showContactForm, setShowContactForm] = useState(false);
   const { getAll } = useFaqService();
 
   useEffect(() => {
@@ -251,13 +253,21 @@ function FAQPage() {
               <p className="mb-6 text-text-body-light dark:text-text-body-dark">
                 {t('contact.description')}
               </p>
-              <button className="bg-primary-500 text-white px-8 py-3 rounded-lg hover:bg-primary-600 transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+              <button 
+                onClick={() => setShowContactForm(true)}
+                className="bg-primary-500 text-white px-8 py-3 rounded-lg hover:bg-primary-600 transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
                 {t('contact.cta')}
               </button>
             </div>
           )}
         </div>
       </section>
+
+      {/* Contact Form Modal */}
+      <ContactForm
+        isOpen={showContactForm}
+        onClose={() => setShowContactForm(false)}
+      />
     </>
   );
 }

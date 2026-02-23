@@ -1,0 +1,48 @@
+{
+  "title": "Contacteer ons",
+  "description": "Heb je een vraag of hulp nodig? Vul het onderstaande formulier in en we nemen zo snel mogelijk contact met je op.",
+  "form": {
+    "title": {
+      "label": "Titel",
+      "placeholder": "Selecteer je titel"
+    },
+    "email": {
+      "label": "E-mailadres",
+      "placeholder": "jouw.email@voorbeeld.com"
+    },
+    "subject": {
+      "label": "Onderwerp",
+      "placeholder": "Selecteer een onderwerp"
+    },
+    "description": {
+      "label": "Bericht",
+      "placeholder": "Beschrijf je vraag in detail (minimaal 20 tekens)..."
+    },
+    "submit": "Verstuur bericht",
+    "submitting": "Bezig met versturen...",
+    "cancel": "Annuleren"
+  },
+  "titles": {
+    "Mr": "Dhr.",
+    "Mrs": "Mevr.",
+    "Ms": "Mw.",
+    "Dr": "Dr.",
+    "Other": "Anders"
+  },
+  "subjects": {
+    "GeneralInquiry": "Algemene vraag",
+    "Support": "Ondersteuning",
+    "BugReport": "Bug melden",
+    "Feedback": "Feedback",
+    "Complaint": "Klacht",
+    "Other": "Anders"
+  },
+  "success": {
+    "title": "Bericht succesvol verzonden",
+    "message": "Bedankt voor je bericht. We nemen zo snel mogelijk contact met je op."
+  },
+  "error": {
+    "title": "Verzenden mislukt",
+    "message": "Er ging iets mis bij het verzenden van je bericht. Probeer het opnieuw."
+  }
+}
