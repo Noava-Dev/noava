@@ -37,6 +37,19 @@ namespace noava.Services.Users
             return string.IsNullOrWhiteSpace(clerkUserId) ? null : clerkUserId;
         }
 
+        public async Task<string> GetUserRoleByClerkIdAsync(string clerkId)
+        {
+            var user =  await _userRepository.GetByClerkIdAsync(clerkId);
+            return user?.Role.ToString() ?? "USER";
+        }
+
+        public async Task<bool> IsAdminAsync(string clerkId)
+        {
+            var user = await _userRepository.GetByClerkIdAsync(clerkId);
+
+            return user != null && user.Role == UserRole.ADMIN;
+        }
+
         public async Task UpdateReceiveNotificationEmails(string clerkId, bool receive)
         {
            await _userRepository.UpdateReceiveNotificationEmailsAsync(clerkId, receive);
