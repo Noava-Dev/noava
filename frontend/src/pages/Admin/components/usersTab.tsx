@@ -5,6 +5,7 @@ import { useUserService } from "../../../services/UserService";
 import type { ClerkUserResponse, UserRole } from "../../../models/User";
 import ConfirmModal from "../../../shared/components/ConfirmModal";
 import Loading from "../../../shared/components/loading/Loading";
+import EmptyState from "../../../shared/components/EmptyState";
 
 const roleColors: Record<string, string> = {
   ADMIN: "bg-[#E6F8F2] text-[#009966] dark:bg-[#009966] dark:text-[#E6F8F2]",
@@ -151,11 +152,20 @@ export default function usersTab() {
         {loading ? (
           <Loading />
         ) : filtered.length === 0 ? (
-          <div className="rounded-lg border bg-background-app-light dark:bg-background-app-dark p-10 text-center">
-            <LuUsers className="mx-auto h-12 w-12 text-text-muted-light dark:text-text-muted-dark" />
-            <p className="mt-3 text-sm text-text-muted-light dark:text-text-muted-dark">
-              No users match your search.
-            </p>
+          <div className="py-20">
+            <EmptyState
+              title="No matching users"
+              description={
+                searchQuery 
+                  ? `No results found for "${searchQuery}" in ${roleFilter} category.`
+                  : `There are currently no users with the role: ${roleFilter}.`
+              }
+              clearButtonText="Clear Search and Filters"
+              buttonOnClick={() => {
+                setSearchQuery('');
+                setRoleFilter('all');
+              }}
+            />
           </div>
         ) : (
           <div className="overflow-x-auto rounded-2xl border border-border dark:border-border-dark bg-background-app-light dark:bg-background-surface-dark shadow-sm">

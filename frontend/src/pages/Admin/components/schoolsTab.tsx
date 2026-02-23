@@ -3,13 +3,14 @@ import { SchoolCard } from '../../Schools/components/SchoolCard';
 import type { SchoolDto } from '../../../models/School';
 import { useToast } from '../../../contexts/ToastContext';
 import { useSchoolService } from '../../../services/SchoolService';
-import { LuPlus, LuPlus as Plus } from 'react-icons/lu';
+import { LuPlus, LuSearch, LuPlus as Plus } from 'react-icons/lu';
 import CreateSchoolModal from '../../Schools/components/CreateSchoolModal';
 import Loading from '../../../shared/components/loading/Loading';
 import { useNavigate} from 'react-router-dom';
 import { useUser } from '@clerk/clerk-react';
 import { useUserRole } from '../../../hooks/useUserRole';
 import ConfirmModal from '../../../shared/components/ConfirmModal';
+import EmptyState from '../../../shared/components/EmptyState';
 
 export default function SchoolsTab() {
   const navigate = useNavigate();
@@ -24,6 +25,7 @@ export default function SchoolsTab() {
   const [schools, setSchools] = useState<SchoolDto[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [deleteSchool, setDeleteSchool] = useState<SchoolDto | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const fetchSchools = async () => {
     try {
@@ -113,11 +115,14 @@ const confirmDeleteSchool = async () => {
 const handleCardClick = (id: number) => {
   navigate(`/schools/${id}/classrooms`);
 };
+const filteredSchools = schools.filter((school) =>
+    school.schoolName.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
 if (loading) {
   return (
     <div className="flex items-center justify-center py-20">
-      <Loading size="lg" center text="Loading schools..." />
+      <Loading/>
     </div>
   );
   }
@@ -148,6 +153,32 @@ if (loading) {
         )}
       </div>
 
+      <div className="p-4 border shadow-sm border-border dark:border-border-dark bg-background-app-light dark:bg-background-surface-dark rounded-2xl md:p-6">
+        <div className="space-y-2">
+          <label className="block text-sm font-semibold tracking-wide uppercase text-text-muted-light dark:text-text-muted-dark">
+            Search
+          </label>
+
+          <div className="relative">
+            <LuSearch className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-text-muted-light dark:text-text-muted-dark" />
+            <input
+              type="text"
+              placeholder="Search schools by name..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full rounded-xl border border-border dark:border-border-dark bg-background-app-light dark:bg-background-app-dark py-2.5 pl-10 pr-4 text-sm text-text-body-light dark:text-text-body-dark focus:ring-2 focus:ring-primary-500 focus:outline-none"
+            />
+          </div>
+
+          {searchQuery && (
+            <p className="flex items-center gap-1 text-xs text-text-body-light dark:text-text-body-dark">
+              <span className="inline-block w-2 h-2 rounded-full bg-primary-500"></span>
+              {filteredSchools.length} found
+            </p>
+          )}
+        </div>
+      </div>
+
       {/* Schools list */}
       <div className="space-y-4">
         {schools.length === 0 ? (
@@ -158,8 +189,17 @@ if (loading) {
                 : 'You are not currently assigned to any schools.'}
             </p>
           </div>
+        ) : filteredSchools.length === 0 ? (
+          <div className="py-12  ">
+            <EmptyState
+              title="No schools found"
+              description={`We couldn't find any results for "${searchQuery}"`}
+              clearButtonText="Clear Search"
+              buttonOnClick={() => setSearchQuery('')} 
+            />
+          </div>
         ) : (
-          schools.map((school) => (
+          filteredSchools.map((school) => (
             <SchoolCard
               key={school.id}
               id={school.id}
