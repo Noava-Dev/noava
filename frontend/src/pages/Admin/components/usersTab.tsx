@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { LuSearch, LuUsers, LuTrash2 } from "react-icons/lu";
 import { useUser } from "@clerk/clerk-react";
-import { userService } from "../../../services/UserService";
+import { useUserService } from "../../../services/UserService";
 import type { ClerkUserResponse, UserRole } from "../../../models/User";
 import ConfirmModal from "../../../shared/components/ConfirmModal";
 import Loading from "../../../shared/components/loading/Loading";
@@ -17,7 +17,7 @@ export default function usersTab() {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [roleFilter, setRoleFilter] = useState("all");
-  const { getUsers, deleteUser, updateRole } = userService();
+  const { getUsers, deleteUser, updateRole } = useUserService();
 
   //delete a user:
   const [userToDelete, setUserToDelete] = useState<string | null>(null);
