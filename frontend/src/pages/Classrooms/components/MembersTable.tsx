@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { Button, Pagination } from 'flowbite-react';
 import { HiPencil, HiTrash } from 'react-icons/hi';
+import { HiChartBar } from 'react-icons/hi';
 import { useTranslation } from 'react-i18next';
 import type { ClerkUserResponse } from '../../../models/User';
 import Searchbar from '../../../shared/components/Searchbar';
@@ -11,9 +12,10 @@ interface MembersTableProps {
   canDelete: boolean;
   onEdit: (member: ClerkUserResponse) => void;
   onDelete: (member: ClerkUserResponse) => void;
+  onViewStatistics?: (member: ClerkUserResponse) => void;
 }
 
-export default function MembersTable({ items, canEdit, canDelete, onEdit, onDelete }: MembersTableProps) {
+export default function MembersTable({ items, canEdit, canDelete, onEdit, onDelete, onViewStatistics }: MembersTableProps) {
   const { t } = useTranslation('classrooms');
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
@@ -55,6 +57,11 @@ export default function MembersTable({ items, canEdit, canDelete, onEdit, onDele
                 <td className="px-4 py-3 text-gray-700 dark:text-gray-200">{m.isTeacher ? t('members.role.teacher') : t('members.role.student')}</td>
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-2">
+                    {onViewStatistics && (
+                      <Button size="sm" color="blue" onClick={() => onViewStatistics(m)} title={t('members.actions.viewStatistics')}>
+                        <HiChartBar />
+                      </Button>
+                    )}
                     <Button size="sm" color="gray" onClick={() => onEdit(m)} disabled={!canEdit} className="text-gray-700 dark:text-gray-200"><HiPencil /></Button>
                     <Button size="sm" color="red" onClick={() => onDelete(m)} disabled={!canDelete}><HiTrash /></Button>
                   </div>

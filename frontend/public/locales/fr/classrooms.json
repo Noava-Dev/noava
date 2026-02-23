@@ -42,8 +42,22 @@
       "role": "Rôle",
       "actions": "Actions"
     },
+    "actions": {
+      "viewStatistics": "Voir les statistiques"
+    },
     "role": { "teacher": "Enseignant", "student": "Élève" },
-    "member": "Membre"
+    "member": "Membre",
+    "statistics": {
+      "title": "Statistiques du membre",
+      "filterDecks": "Filtrer par decks",
+      "noDeckSelected": {
+        "title": "Aucun deck sélectionné",
+        "description": "Sélectionnez au moins un deck pour voir les statistiques."
+      },
+      "noData": {
+        "description": "Ce membre n'a pas encore révisé de cartes des decks sélectionnés."
+      }
+    }
   },
   "toast": {
     "loadError": "Échec du chargement des classes",

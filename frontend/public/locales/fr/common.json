@@ -47,7 +47,9 @@
     "uploading": "Téléchargement en cours...",
     "done": "Terminé",
     "copy": "Copier",
-    "copying": "Copie en cours..."
+    "copying": "Copie en cours...",
+    "selectAll": "Tout sélectionner",
+    "deselectAll": "Tout désélectionner"
   },
   "validation": {
     "required": "Ce champ est requis",

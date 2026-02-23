@@ -1,18 +1,19 @@
 import { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import PageHeader from '../../shared/components/PageHeader';
 import NoavaFooter from '../../shared/components/navigation/NoavaFooter';
 import Loading from '../../shared/components/loading/Loading';
-import { HiArrowLeft } from 'react-icons/hi';
 import { Button, Tooltip } from 'flowbite-react';
 import { useClassroomService } from '../../services/ClassroomService';
 import MembersTable from './components/MembersTable';
 import EditMemberModal from './components/EditMemberModal';
 import ConfirmModal from '../../shared/components/ConfirmModal';
 import InviteMemberModal from './components/InviteMemberModal';
+import MemberStatisticsModal from './components/MemberStatisticsModal';
 import { useToast } from '../../contexts/ToastContext';
 import { useTranslation } from 'react-i18next';
 import type { ClerkUserResponse } from '../../models/User';
+import type { Deck } from '../../models/Deck';
 import BackButton from '../../shared/components/navigation/BackButton';
 
 export default function MembersPage() {
@@ -21,13 +22,14 @@ export default function MembersPage() {
   const svc = useClassroomService();
   const { showSuccess, showError } = useToast();
   const { t } = useTranslation('classrooms');
-  const navigate = useNavigate();
 
   const [classroom, setClassroom] = useState<any | null>(null);
   const [loadingClassroom, setLoadingClassroom] = useState(true);
 
   const [members, setMembers] = useState<ClerkUserResponse[]>([]);
   const [loadingMembers, setLoadingMembers] = useState(true);
+  
+  const [decks, setDecks] = useState<Deck[]>([]);
 
   const [editMember, setEditMember] = useState<ClerkUserResponse | null>(null);
   const [showEdit, setShowEdit] = useState(false);
@@ -35,11 +37,14 @@ export default function MembersPage() {
     null
   );
   const [showInvite, setShowInvite] = useState(false);
+  const [statisticsMember, setStatisticsMember] = useState<ClerkUserResponse | null>(null);
+  const [showStatistics, setShowStatistics] = useState(false);
 
   useEffect(() => {
     if (!id) return;
     fetchClassroom();
     fetchMembers();
+    fetchDecks();
   }, [classroomId]);
 
   const fetchClassroom = async () => {
@@ -63,6 +68,15 @@ export default function MembersPage() {
       showError(t('toast.loadError'), t('app.error'));
     } finally {
       setLoadingMembers(false);
+    }
+  };
+
+  const fetchDecks = async () => {
+    try {
+      const data = await svc.getDecksByClassroom(id);
+      setDecks(data);
+    } catch (err) {
+      showError(t('toast.loadError'), t('app.error'));
     }
   };
 
@@ -114,6 +128,11 @@ export default function MembersPage() {
   };
 
   const handleDelete = (m: ClerkUserResponse) => setDeleteMember(m);
+
+  const handleViewStatistics = (m: ClerkUserResponse) => {
+    setStatisticsMember(m);
+    setShowStatistics(true);
+  };
 
   const confirmDelete = async () => {
     if (!deleteMember) return;
@@ -200,6 +219,7 @@ export default function MembersPage() {
                 canDelete={classroom.permissions.canDelete}
                 onEdit={handleEdit}
                 onDelete={handleDelete}
+                onViewStatistics={handleViewStatistics}
               />
             )}
           </div>
@@ -229,6 +249,14 @@ export default function MembersPage() {
           onClose={() => setShowInvite(false)}
           onInvite={handleInvite}
           canInvite={classroom.permissions?.canEdit}
+        />
+
+        <MemberStatisticsModal
+          show={showStatistics}
+          onClose={() => setShowStatistics(false)}
+          member={statisticsMember}
+          classroomId={id}
+          availableDecks={decks}
         />
 
         <NoavaFooter />

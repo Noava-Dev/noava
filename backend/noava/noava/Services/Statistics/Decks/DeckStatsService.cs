@@ -48,6 +48,10 @@ namespace noava.Services.Statistics.Decks
 
             var totalCardsReviewed = stats.Sum(s => s.CardsReviewed);
             var totalCorrectCards = stats.Sum(s => s.CorrectCards);
+            var accuracyRate = totalCardsReviewed == 0
+                ? 0
+                : (double)totalCorrectCards / totalCardsReviewed;
+            
             var totalTimeSpent = stats.Sum(s => s.TimeSpentSeconds);
 
             var weightedAvgResponseTime = totalCardsReviewed == 0
@@ -62,6 +66,7 @@ namespace noava.Services.Statistics.Decks
             {
                 CardsReviewed = totalCardsReviewed,
                 CorrectCards = totalCorrectCards,
+                AccuracyRate = accuracyRate,
                 TimeSpentSeconds = totalTimeSpent,
                 AvgResponseTimeMs = weightedAvgResponseTime,
                 AvgMasteryLevel = avgMastery,
