@@ -11,7 +11,21 @@ export const useStatisticsService = () => {
     },
 
     async getDeckStatistics(deckId: number): Promise<DeckStatistics> {
-      const response = await api.get<DeckStatistics>(`/statistics/${deckId}`);
+      const response = await api.get<DeckStatistics>(`/statistics/decks/${deckId}`);
+      return response.data;
+    },
+
+    async getDeckStatisticsByUser(
+      deckIds: number[],
+      classroomId: number,
+      userId: string
+    ): Promise<DeckStatistics> {
+      const params = new URLSearchParams();
+      deckIds.forEach(id => params.append('deckIds', id.toString()));
+      params.append('classroomId', classroomId.toString());
+      params.append('userId', userId);
+
+      const response = await api.get<DeckStatistics>(`/statistics/decks/aggregate?${params.toString()}`);
       return response.data;
     },
   };

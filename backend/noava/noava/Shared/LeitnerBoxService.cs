@@ -9,11 +9,16 @@ namespace noava.Services
             { 1, 1 },
             { 2, 3 },
             { 3, 7 },
-            { 4, 14 },
-            { 5, 30 }
+            { 4, 10 },
+            { 5, 16 },
+            { 6, 32 },
+            { 7, 64 },
+            { 8, 128 },
+            { 9, 256 },
+            { 10, 512 }
         };
 
-        private readonly int _maxBoxes = 5;
+        private readonly int _maxBoxes = 10;
 
         // get interval corresponding to box number
         public int GetIntervalForBox(int boxNumber)
