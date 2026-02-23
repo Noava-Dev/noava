@@ -9,6 +9,7 @@ import PageHeader from "../../../shared/components/PageHeader"
 import { Tabs, TabItem } from "flowbite-react"
 import SchoolsTab from "../components/schoolsTab"
 import UsersTab from "../components/usersTab"
+import { useTranslation } from 'react-i18next';
 
 function FaqTab() {
   return (
@@ -31,27 +32,6 @@ function FaqTab() {
   )
 }
 
-function BlogTab() {
-  return (
-    <div className="rounded-2xl border bg-background-app-light dark:bg-background-app-dark p-6 shadow-sm">
-      <div className="flex items-center justify-between">
-        <div>
-          <h3 className="text-lg font-semibold">Blog</h3>
-          <p className="text-sm text-text-muted-light dark:text-text-muted-dark">
-            Manage blog posts and content.
-          </p>
-        </div>
-
-        <Button className="flex items-center gap-2">
-          <LuPlus /> Add Post
-        </Button>
-      </div>
-
-      <div className="mt-6 text-sm text-text-muted-light dark:text-text-muted-dark">Blog CMS will go here.</div>
-    </div>
-  )
-}
-import { useTranslation } from 'react-i18next';
 
 function AdminDashboard() {
   const { t } = useTranslation('adminDashboard');
@@ -95,17 +75,6 @@ function AdminDashboard() {
           >
             <FaqTab />
           </TabItem>
-
-          <TabItem
-            title={
-              <div className="flex items-center gap-2">
-                <FileText className="size-4" /> Blog
-              </div>
-            }
-          >
-            <BlogTab />
-          </TabItem>
-
           <TabItem
             title={
               <div className="flex items-center gap-2">
