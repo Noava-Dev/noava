@@ -60,6 +60,8 @@ namespace noava.Repositories.Users
             await _db.SaveChangesAsync();
 
             return user;
+        }
+
         public async Task UpdateReceiveNotificationEmailsAsync(string clerkId, bool receive)
         {
             var user = await GetByClerkIdAsync(clerkId);

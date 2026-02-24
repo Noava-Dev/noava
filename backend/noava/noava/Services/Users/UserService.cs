@@ -76,6 +76,8 @@ namespace noava.Services.Users
         public async Task<User?> UpdateUserRoleAsync(string clerkId, UserRole newRole)
         {
             return await _userRepository.UpdateRoleAsync(clerkId, newRole);
+        }
+
         public async Task UpdateReceiveNotificationEmails(string clerkId, bool receive)
         {
            await _userRepository.UpdateReceiveNotificationEmailsAsync(clerkId, receive);
