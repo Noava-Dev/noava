@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate} from 'react-router-dom';
-import { Button, Progress, Badge, TextInput } from 'flowbite-react';
+import { Button, Progress, Badge, TextInput, Spinner } from 'flowbite-react';
 import { HiX, HiCheck, HiPlay, HiVolumeUp } from 'react-icons/hi';
 import { useTranslation } from 'react-i18next';
 import { useDeckService } from '../../services/DeckService';
@@ -42,6 +42,7 @@ function LongTermReview() {
   const [loading, setLoading] = useState(true);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [sessionId, setSessionId] = useState<number | null>(null);
+  const [isProcessingNext, setIsProcessingNext] = useState(false);
 
   // Write mode state
   const [userAnswer, setUserAnswer] = useState('');
@@ -178,26 +179,31 @@ function LongTermReview() {
   };
 
   const handleNext = async () => {
-    const finalCorrectness = isCorrectOverride ?? false;
+    setIsProcessingNext(true);
+    try {
+      const finalCorrectness = isCorrectOverride ?? false;
 
-    // Record interaction before moving to next card
-    await recordCardInteraction(finalCorrectness);
+      // Record interaction before moving to next card
+      await recordCardInteraction(finalCorrectness);
 
-    const newCardsReviewed = cardsReviewed + 1;
-    const newCorrectAnswers = finalCorrectness ? correctAnswers + 1 : correctAnswers;
+      const newCardsReviewed = cardsReviewed + 1;
+      const newCorrectAnswers = finalCorrectness ? correctAnswers + 1 : correctAnswers;
 
-    setCardsReviewed(newCardsReviewed);
-    if (finalCorrectness) {
-      setCorrectAnswers(newCorrectAnswers);
-    }
+      setCardsReviewed(newCardsReviewed);
+      if (finalCorrectness) {
+        setCorrectAnswers(newCorrectAnswers);
+      }
 
-    if (currentIndex < cards.length - 1) {
-      setCurrentIndex(currentIndex + 1);
-      setUserAnswer('');
-      setIsAnswerRevealed(false);
-      setIsCorrectOverride(null);
-    } else {
-      handleEndSession(newCardsReviewed, newCorrectAnswers);
+      if (currentIndex < cards.length - 1) {
+        setCurrentIndex(currentIndex + 1);
+        setUserAnswer('');
+        setIsAnswerRevealed(false);
+        setIsCorrectOverride(null);
+      } else {
+        handleEndSession(newCardsReviewed, newCorrectAnswers);
+      }
+    } finally {
+      setIsProcessingNext(false);
     }
   };
 
@@ -445,10 +451,18 @@ function LongTermReview() {
                   {/* Next Button */}
                   <Button
                     className="w-full bg-cyan-500 hover:bg-cyan-600"
-                    onClick={handleNext}>
-                    {currentIndex === cards.length - 1
-                      ? t('common:actions.finish')
-                      : t('quickReview.next')}
+                    onClick={handleNext}
+                    disabled={isProcessingNext}>
+                    {isProcessingNext ? (
+                      <>
+                        <Spinner size="sm" className="mr-2" />
+                        {t('common:app.loading')}...
+                      </>
+                    ) : (
+                      currentIndex === cards.length - 1
+                        ? t('common:actions.finish')
+                        : t('quickReview.next')
+                    )}
                   </Button>
                 </div>
               )}
