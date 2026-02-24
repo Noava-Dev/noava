@@ -5,7 +5,8 @@
   "empty": {
     "title": "No classrooms yet",
     "noResults": "No classrooms found",
-    "message": "You aren't in any classrooms yet."
+    "message": "You aren't in any classrooms yet.",
+    "messageSchools": "This school doesn't have any classrooms yet."
   },
   "modal": {
     "createTitle": "Create Classroom",

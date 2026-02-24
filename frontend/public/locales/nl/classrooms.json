@@ -5,7 +5,8 @@
   "empty": {
     "title": "Nog geen klaslokalen",
     "noResults": "Geen klaslokalen gevonden",
-    "message": "Je zit momenteel in geen enkele klas."
+    "message": "Je zit momenteel in geen enkele klas.",
+    "messageSchools": "Deze school heeft nog geen klaslokalen."
   },
   "modal": {
     "createTitle": "Klas aanmaken",
