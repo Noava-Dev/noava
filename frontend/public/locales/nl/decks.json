@@ -4,19 +4,19 @@
   "bulkReview": {
     "button": "Groepsherhaling",
     "title": "Groepsherhaling",
-    "description": "Selecteer de decks die je samen wilt herhalen.",
+    "description": "Selecteer de Decks die je samen wilt herhalen.",
     "selectAll": "Alles selecteren",
     "deselectAll": "Alles deselecteren",
     "selectedCount": "{{selected}} van {{total}} geselecteerd",
     "cards": "kaarten",
-    "noDecks": "Geen decks beschikbaar",
+    "noDecks": "Geen Decks beschikbaar",
     "shuffleMode": {
       "label": "Shuffle modus",
       "none": "Niet shuffelen - Behoud originele volgorde",
       "perDeck": "Shuffle per deck - Shuffle kaarten binnen elk deck",
       "all": "Alles shuffelen - Shuffle alle kaarten samen"
     },
-    "summaryDecks": "Klaar om {{count}} deck(s) te herhalen",
+    "summaryDecks": "Klaar om {{count}} Deck(s) te herhalen",
     "startReview": "Start herhaling"
   },
   "reviewModes": {
@@ -78,13 +78,13 @@
   "joinCode": {
     "button": "Deelnemen via Code",
     "title": "Deck Toevoegen",
-    "description": "Voer de join code in die je hebt ontvangen om toegang te krijgen tot een gedeeld deck.",
+    "description": "Voer de join code in die je hebt ontvangen om toegang te krijgen tot een gedeeld Deck.",
     "label": "Join Code",
     "placeholder": "Voer join code in...",
     "join": "Toevoegen",
     "joining": "Toevoegen...",
-    "success": "Succesvol toegevoegd aan deck!",
-    "error": "Kon niet toevoegen aan deck. Controleer de code en probeer opnieuw.",
+    "success": "Succesvol toegevoegd aan Deck!",
+    "error": "Kon niet toevoegen aan Deck. Controleer de code en probeer opnieuw.",
     "empty": "Voer een join code in"
   },
   "owners": {
@@ -95,7 +95,7 @@
     "makeOwner": "Eigenaar Maken",
     "removeOwner": "Eigenaarschap Verwijderen",
     "confirmRemove": "Gebruiker Verwijderen",
-    "confirmRemoveMessage": "Weet je zeker dat je {{name}} wilt verwijderen van dit deck? Deze actie kan niet ongedaan worden gemaakt.",
+    "confirmRemoveMessage": "Weet je zeker dat je {{name}} wilt verwijderen van dit Deck? Deze actie kan niet ongedaan worden gemaakt.",
     "lastOwnerError": "Kan de laatste eigenaar niet verwijderen",
     "loadError": "Kon gebruikers niet laden",
     "removeSuccess": "Gebruiker succesvol verwijderd",
@@ -103,14 +103,14 @@
     "updateSuccess": "Gebruikersrol succesvol bijgewerkt",
     "updateError": "Kon gebruikersrol niet bijwerken",
     "joinCodeSection": "Join Code",
-    "joinCodeDescription": "Deel deze code met anderen zodat ze kunnen deelnemen aan dit deck",
+    "joinCodeDescription": "Deel deze code met anderen zodat ze kunnen deelnemen aan dit Deck",
     "copyCode": "Code Kopiëren",
     "regenerateCode": "Code Vernieuwen",
     "codeCopied": "Code gekopieerd!",
     "codeRegenerated": "Code succesvol vernieuwd!",
     "confirmRegenerateCode": "Weet je zeker dat je een nieuwe code wilt genereren? De oude code werkt niet meer.",
     "codeRegenerateError": "Kon code niet vernieuwen",
-    "noUsers": "Er zijn nog geen gebruikers toegevoegd aan dit deck.",
+    "noUsers": "Er zijn nog geen gebruikers toegevoegd aan dit Deck.",
     "owner": "Eigenaar",
     "member": "Lid",
     "you": "(Jij)"
@@ -135,11 +135,11 @@
     "avgResponseTime": "Gem. Reactietijd",
     "noData": {
       "title": "Nog Geen Statistieken",
-      "description": "Begin met het bekijken van dit deck om je voortgang en statistieken te zien."
+      "description": "Begin met het bekijken van dit Deck om je voortgang en statistieken te zien."
     }
   },
   "copy": {
     "title": "Deck kopiëren",
-    "message": "Weet je zeker dat je dit deck wilt kopiëren? Dit kan even duren."
+    "message": "Weet je zeker dat je dit Deck wilt kopiëren? Dit kan even duren."
   }
 }

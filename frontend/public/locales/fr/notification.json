@@ -5,7 +5,8 @@
     "message": "Vous n'avez aucune notification pour le moment."
   },
   "types": {
-    "deckInvite": "Invitation au Deck",
+    "deckInvite": "Invitation à un Deck",
+    "classroomInvite": "Invitation à une Classroom",
     "info": "Information",
     "warning": "Avertissement",
     "error": "Erreur"
@@ -17,8 +18,8 @@
     "dismiss": "Fermer"
   },
   "messages": {
-    "deckInvite": "{{userName}} vous a invité à rejoindre le deck \"{{deckName}}\"",
-    "deckJoined": "Vous avez rejoint le deck \"{{deckName}}\"",
+    "deckInvite": "{{userName}} vous a invité à rejoindre le Deck \"{{deckName}}\"",
+    "deckJoined": "Vous avez rejoint le Deck \"{{deckName}}\"",
     "roleChanged": "Votre rôle dans \"{{deckName}}\" a été changé en {{role}}"
   },
   "errors": {
@@ -34,14 +35,23 @@
     "deleted": "Notification supprimée"
   },
   "joined": {
-    "success": "Vous avez rejoint le deck avec succès!"
+    "success": "Vous avez rejoint le Deck avec succès !"
   },
   "notifications": {
     "genericTitle": "Notification",
     "items": {
       "deck": {
         "invite": {
-          "received": "{{userName}} vous a invité à rejoindre le deck \"{{deckName}}\"",
+          "received": "{{userName}} vous a invité à rejoindre le Deck \"{{deckName}}\"",
+          "actions": {
+            "accept": "Accepter",
+            "decline": "Refuser"
+          }
+        }
+      },
+      "classroom": {
+        "invite": {
+          "received": "{{userName}} vous a invité à rejoindre la Classroom \"{{classroomName}}\"",
           "actions": {
             "accept": "Accepter",
             "decline": "Refuser"

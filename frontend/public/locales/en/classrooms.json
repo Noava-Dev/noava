@@ -12,7 +12,11 @@
     "createTitle": "Create Classroom",
     "editTitle": "Edit Classroom",
     "nameLabel": "Name",
+    "namePlaceholder": "Enter classroom name",
     "descriptionLabel": "Description",
+    "descriptionPlaceholder": "Enter classroom description",
+    "imageLabel": "Cover Image",
+    "imageHelp": "Optional: Upload a cover image for your classroom",
     "createButton": "Create Classroom",
     "updateButton": "Update Classroom",
     "cancelButton": "Cancel"

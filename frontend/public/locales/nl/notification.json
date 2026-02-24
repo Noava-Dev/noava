@@ -5,7 +5,8 @@
     "message": "Je hebt op dit moment geen meldingen."
   },
   "types": {
-    "deckInvite": "Deck Uitnodiging",
+    "deckInvite": "Deck-uitnodiging",
+    "classroomInvite": "Classroom-uitnodiging",
     "info": "Informatie",
     "warning": "Waarschuwing",
     "error": "Fout"
@@ -17,8 +18,8 @@
     "dismiss": "Sluiten"
   },
   "messages": {
-    "deckInvite": "{{userName}} heeft je uitgenodigd voor het deck \"{{deckName}}\"",
-    "deckJoined": "Je bent toegevoegd aan het deck \"{{deckName}}\"",
+    "deckInvite": "{{userName}} heeft je uitgenodigd voor Deck \"{{deckName}}\"",
+    "deckJoined": "Je bent toegevoegd aan Deck \"{{deckName}}\"",
     "roleChanged": "Je rol in \"{{deckName}}\" is gewijzigd naar {{role}}"
   },
   "errors": {
@@ -34,14 +35,23 @@
     "deleted": "Melding verwijderd"
   },
   "joined": {
-    "success": "Succesvol toegevoegd aan het deck!"
+    "success": "Succesvol toegevoegd aan het Deck!"
   },
   "notifications": {
     "genericTitle": "Melding",
     "items": {
       "deck": {
         "invite": {
-          "received": "{{userName}} heeft je uitgenodigd voor het deck \"{{deckName}}\"",
+          "received": "{{userName}} heeft je uitgenodigd voor Deck \"{{deckName}}\"",
+          "actions": {
+            "accept": "Accepteren",
+            "decline": "Afwijzen"
+          }
+        }
+      },
+      "classroom": {
+        "invite": {
+          "received": "{{userName}} heeft je uitgenodigd voor Classroom \"{{classroomName}}\"",
           "actions": {
             "accept": "Accepteren",
             "decline": "Afwijzen"

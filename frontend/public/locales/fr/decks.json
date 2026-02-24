@@ -1,15 +1,15 @@
 {
-  "subtitle": "Organisez vos flashcards en decks par matière",
+  "subtitle": "Organisez vos flashcards en Decks par matière",
   "createButton": "Créer un Deck",
   "bulkReview": {
     "button": "Révision groupée",
     "title": "Révision groupée",
-    "description": "Sélectionnez les decks que vous souhaitez réviser ensemble.",
+    "description": "Sélectionnez les Decks que vous souhaitez réviser ensemble.",
     "selectAll": "Tout sélectionner",
     "deselectAll": "Tout désélectionner",
     "selectedCount": "{{selected}} sur {{total}} sélectionné(s)",
     "cards": "cartes",
-    "noDecks": "Aucun deck disponible",
+    "noDecks": "Aucun Deck disponible",
     "shuffleMode": {
       "label": "Mode aléatoire",
       "none": "Ne pas mélanger - Conserver l'ordre original",
@@ -78,13 +78,13 @@
   "joinCode": {
     "button": "Rejoindre par Code",
     "title": "Rejoindre un Deck",
-    "description": "Entrez le code de participation que vous avez reçu pour accéder à un deck partagé.",
+    "description": "Entrez le code de participation que vous avez reçu pour accéder à un Deck partagé.",
     "label": "Code de participation",
     "placeholder": "Entrez le code...",
     "join": "Rejoindre",
     "joining": "Rejoindre en cours...",
     "success": "Deck rejoint avec succès!",
-    "error": "Échec de rejoindre le deck. Vérifiez le code et réessayez.",
+    "error": "Échec de rejoindre le Deck. Vérifiez le code et réessayez.",
     "empty": "Veuillez entrer un code"
   },
   "owners": {
@@ -95,7 +95,7 @@
     "makeOwner": "Rendre Propriétaire",
     "removeOwner": "Retirer le Statut de Propriétaire",
     "confirmRemove": "Supprimer l'Utilisateur",
-    "confirmRemoveMessage": "Êtes-vous sûr de vouloir supprimer {{name}} de ce deck? Cette action ne peut pas être annulée.",
+    "confirmRemoveMessage": "Êtes-vous sûr de vouloir supprimer {{name}} de ce Deck ? Cette action ne peut pas être annulée.",
     "lastOwnerError": "Impossible de supprimer le dernier propriétaire",
     "loadError": "Échec du chargement des utilisateurs",
     "removeSuccess": "Utilisateur supprimé avec succès",
@@ -103,14 +103,14 @@
     "updateSuccess": "Rôle de l'utilisateur mis à jour avec succès",
     "updateError": "Échec de la mise à jour du rôle de l'utilisateur",
     "joinCodeSection": "Code de Participation",
-    "joinCodeDescription": "Partagez ce code avec d'autres pour qu'ils puissent rejoindre ce deck",
+    "joinCodeDescription": "Partagez ce code avec d'autres pour qu'ils puissent rejoindre ce Deck",
     "copyCode": "Copier le Code",
     "regenerateCode": "Régénérer le Code",
     "codeCopied": "Code copié!",
     "codeRegenerated": "Code régénéré avec succès!",
     "confirmRegenerateCode": "Êtes-vous sûr de vouloir générer un nouveau code? L'ancien code ne fonctionnera plus.",
     "codeRegenerateError": "Échec de la régénération du code",
-    "noUsers": "Aucun utilisateur n'a encore été ajouté à ce deck.",
+    "noUsers": "Aucun utilisateur n'a encore été ajouté à ce Deck.",
     "owner": "Propriétaire",
     "member": "Membre",
     "you": "(Vous)"
@@ -135,11 +135,11 @@
     "avgResponseTime": "Temps de réponse moy.",
     "noData": {
       "title": "Pas Encore de Statistiques",
-      "description": "Commencez à réviser ce deck pour voir vos progrès et statistiques."
+      "description": "Commencez à réviser ce Deck pour voir vos progrès et statistiques."
     }
   },
   "copy": {
-    "title": "Copier le deck",
-    "message": "Êtes-vous sûr de vouloir copier ce deck ? Cela peut prendre un certain temps."
+    "title": "Copier le Deck",
+    "message": "Êtes-vous sûr de vouloir copier ce Deck ? Cela peut prendre un certain temps."
   }
 }

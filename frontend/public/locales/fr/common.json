@@ -18,8 +18,8 @@
     "logout": "Déconnexion",
     "dashboard": "Tableau de bord",
     "notifications": "Notifications",
-    "decks": "Paquets",
-    "classrooms": "Classes"
+    "decks": "Decks",
+    "classrooms": "Classrooms"
   },
   "actions": {
     "save": "Enregistrer",
@@ -97,33 +97,33 @@
     "shared": "Partagé",
     "private": "Privé",
     "visibilityHelp": {
-      "private": "Vous seul pouvez voir ce paquet",
-      "shared": "Toute personne disposant du lien peut voir ce paquet",
-      "public": "Tout le monde peut voir ce paquet"
+      "private": "Vous seul pouvez voir ce Deck",
+      "shared": "Toute personne disposant du lien peut voir ce Deck",
+      "public": "Tout le monde peut voir ce Deck"
     }
   },
   "tooltips": {
-    "createDeck": "Créer un nouveau paquet de cartes mémoire",
-    "editDeck": "Modifier les paramètres du paquet",
-    "deleteDeck": "Supprimer définitivement ce paquet",
-    "joinDeckByCode": "Rejoindre un paquet avec un code d'invitation",
-    "bulkReview": "Commencer à réviser plusieurs paquets à la fois",
-    "createFlashcard": "Ajouter une nouvelle carte mémoire à ce paquet",
+    "createDeck": "Créer un nouveau Deck de cartes mémoire",
+    "editDeck": "Modifier les paramètres du Deck",
+    "deleteDeck": "Supprimer définitivement ce Deck",
+    "joinDeckByCode": "Rejoindre un Deck avec un code d'invitation",
+    "bulkReview": "Commencer à réviser plusieurs Decks à la fois",
+    "createFlashcard": "Ajouter une nouvelle carte mémoire à ce Deck",
     "editFlashcard": "Modifier le contenu de la carte mémoire",
     "deleteFlashcard": "Supprimer cette carte mémoire",
     "importCards": "Importer des cartes mémoire depuis un fichier CSV ou Excel",
-    "manageOwners": "Gérer les propriétaires et les utilisateurs partagés du paquet",
-    "createClassroom": "Créer une nouvelle classe pour vos étudiants",
-    "joinClassroom": "Rejoindre une classe avec un code d'accès",
-    "addDeckToClassroom": "Ajouter un paquet existant à cette classe",
+    "manageOwners": "Gérer les propriétaires et les utilisateurs partagés du Deck",
+    "createClassroom": "Créer une nouvelle Classroom pour vos étudiants",
+    "joinClassroom": "Rejoindre une Classroom avec un code d'accès",
+    "addDeckToClassroom": "Ajouter un Deck existant à cette Classroom",
     "inviteMember": "Inviter des étudiants ou des enseignants par e-mail",
     "themeToggle": "Basculer entre le mode clair et sombre",
     "voiceAssistant": "Activer la synthèse vocale pour cette carte",
     "markAsOwner": "Accorder les autorisations de propriétaire complet à cet utilisateur",
     "notifications": "Voir vos notifications et invitations",
-    "searchDecks": "Rechercher des paquets par titre, description ou langue",
-    "sortDecks": "Modifier l'ordre des paquets",
-    "deckVisibility": "Contrôler qui peut voir et accéder à ce paquet",
+    "searchDecks": "Rechercher des Decks par titre, description ou langue",
+    "sortDecks": "Modifier l'ordre des Decks",
+    "deckVisibility": "Contrôler qui peut voir et accéder à ce Deck",
     "reviewModes": "Choisir comment vous voulez étudier ces cartes",
     "flipCard": "Cliquer pour retourner la carte mémoire"
   }

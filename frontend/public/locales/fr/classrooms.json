@@ -1,27 +1,31 @@
 {
-  "subtitle": "Gérez et rejoignez vos classes.",
-  "createButton": "Créer une classe",
+  "subtitle": "Gérez et rejoignez vos Classrooms.",
+  "createButton": "Créer une Classroom",
   "results": { "found": "résultats trouvés" },
   "empty": {
-    "title": "Aucune classe pour le moment",
-    "noResults": "Aucune classe trouvée",
-    "message": "Vous n'êtes inscrit(e) dans aucune classe pour le moment.",
-    "messageSchools": "Cette école n’a pas encore de salles de classe."
+    "title": "Aucune Classroom pour le moment",
+    "noResults": "Aucune Classroom trouvée",
+    "message": "Vous n'êtes inscrit(e) dans aucune Classroom pour le moment.",
+    "messageSchools": "Cette école n’a pas encore de Classrooms."
   },
   "modal": {
-    "createTitle": "Créer une classe",
-    "editTitle": "Modifier la classe",
+    "createTitle": "Créer une Classroom",
+    "editTitle": "Modifier la Classroom",
     "nameLabel": "Nom",
+    "namePlaceholder": "Saisissez le nom de la Classroom",
     "descriptionLabel": "Description",
-    "createButton": "Créer une classe",
-    "updateButton": "Mettre à jour la classe",
+    "descriptionPlaceholder": "Saisissez la description de la Classroom",
+    "imageLabel": "Image de couverture",
+    "imageHelp": "Optionnel : téléversez une image de couverture pour cette Classroom",
+    "createButton": "Créer une Classroom",
+    "updateButton": "Mettre à jour la Classroom",
     "cancelButton": "Annuler"
   },
   "members": {
     "title": "Membres",
-    "subtitle": "Gérer les membres de la classe",
+    "subtitle": "Gérer les membres de la Classroom",
     "inviteTitle": "Inviter un utilisateur",
-    "inviteHelp": "Entrez l’adresse e-mail de l’utilisateur que vous souhaitez inviter dans cette classe.",
+    "inviteHelp": "Entrez l’adresse e-mail de l’utilisateur que vous souhaitez inviter dans cette Classroom.",
     "invitePlaceholder": "utilisateur@exemple.com",
     "inviteSuccess": "Invitation envoyée",
     "inviteError": "Échec de l’envoi de l’invitation, cet utilisateur n’existe peut-être pas",
@@ -65,13 +69,13 @@
     }
   },
   "toast": {
-    "loadError": "Échec du chargement des classes",
-    "createSuccess": "Classe créée",
-    "createError": "Échec de la création de la classe",
-    "updateSuccess": "Classe mise à jour",
-    "updateError": "Échec de la mise à jour de la classe",
-    "deleteSuccess": "Classe supprimée",
-    "deleteError": "Échec de la suppression de la classe",
+    "loadError": "Échec du chargement des Classrooms",
+    "createSuccess": "Classroom créée",
+    "createError": "Échec de la création de la Classroom",
+    "updateSuccess": "Classroom mise à jour",
+    "updateError": "Échec de la mise à jour de la Classroom",
+    "deleteSuccess": "Classroom supprimée",
+    "deleteError": "Échec de la suppression de la Classroom",
     "nameAndDescriptionRequired": "Le nom et la description sont requis",
     "requestCodeSuccess": "Nouveau code demandé",
     "requestCodeError": "Échec de la demande d’un nouveau code"
@@ -80,26 +84,26 @@
     "regenerateCode": "Demander un nouveau code"
   },
   "requestCodeModal": {
-    "title": "Demander un nouveau code de classe",
+    "title": "Demander un nouveau code de Classroom",
     "message": "Êtes-vous sûr de vouloir demander un nouveau code d’inscription ? Cela invalidera le code précédent."
   },
   "detail": {
     "description": "Description",
     "info": "Informations",
-    "membersPlaceholder": "Les membres et les paramètres de la classe apparaîtront ici.",
+    "membersPlaceholder": "Les membres et les paramètres de la Classroom apparaîtront ici.",
     "joinCode": "Code d’inscription"
   },
-  "joinButton": "Rejoindre la classe",
+  "joinButton": "Rejoindre la Classroom",
   "join": {
-    "title": "Rejoindre une classe",
-    "subtitle": "Entrez un code pour rejoindre une classe",
+    "title": "Rejoindre une Classroom",
+    "subtitle": "Entrez un code pour rejoindre une Classroom",
     "form": {
       "label": "Code d’inscription",
       "placeholder": "ex. ABC123",
       "empty": "Veuillez entrer un code d’inscription",
       "joining": "Connexion..."
     },
-    "success": "Vous avez été ajouté à la classe",
+    "success": "Vous avez été ajouté à la Classroom",
     "error": "Échec de la connexion avec ce code"
   },
   "decks": {
@@ -107,15 +111,15 @@
     "addDeck": "Ajouter un Deck",
     "addFirstDeck": "Ajouter Votre Premier Deck",
     "emptyTitle": "Aucun Deck Pour Le Moment",
-    "emptyDescription": "Cette classe n'a pas encore de decks. Ajoutez votre premier deck pour commencer!",
+    "emptyDescription": "Cette Classroom n'a pas encore de Decks. Ajoutez votre premier Deck pour commencer!",
     "loadError": "Échec du chargement des decks",
-    "removeFromClassroom": "Retirer de la Classe",
-    "confirmRemoveTitle": "Retirer le Deck de la Classe",
-    "confirmRemoveMessage": "Êtes-vous sûr de vouloir retirer ce deck de la classe? Le deck lui-même ne sera pas supprimé, il sera seulement retiré de cette classe.",
-    "confirmRemoveButton": "Retirer de la Classe",
-    "removeSuccess": "Deck retiré de la classe",
+    "removeFromClassroom": "Retirer de la Classroom",
+    "confirmRemoveTitle": "Retirer le Deck de la Classroom",
+    "confirmRemoveMessage": "Êtes-vous sûr de vouloir retirer ce Deck de la Classroom ? Le Deck lui-même ne sera pas supprimé, il sera seulement retiré de cette Classroom.",
+    "confirmRemoveButton": "Retirer de la Classroom",
+    "removeSuccess": "Deck retiré de la Classroom",
     "removeError": "Échec du retrait du deck",
-    "addSuccess": "Deck ajouté à la classe",
+    "addSuccess": "Deck ajouté à la Classroom",
     "addError": "Échec de l'ajout du deck"
   },
   "bulkReview": {
@@ -143,8 +147,8 @@
     "reverseReview": "Mode Inversé"
   },
   "addDeck": {
-    "title": "Ajouter un Deck à la Classe",
-    "description": "Ajoutez un de vos decks existants à cette classe.",
+    "title": "Ajouter un Deck à la Classroom",
+    "description": "Ajoutez un de vos Decks existants à cette Classroom.",
     "searchPlaceholder": "Rechercher vos decks...",
     "noResults": "Aucun deck trouvé correspondant à votre recherche",
     "noDecks": "Vous n'avez pas encore de decks",
@@ -154,15 +158,15 @@
     "done": "Terminé"
   },
   "analytics": {
-    "title": "Analytique de la classe",
+    "title": "Analytique de la Classroom",
     "timeSpent": "Temps passé",
     "avgMastery": "Maîtrise moyenne",
     "correctCards": "Cartes correctes",
     "activeUsers": "Utilisateurs actifs",
     "noData": {
       "title": "Aucune statistique pour l'instant",
-      "description": "Attendez que vos élèves commencent à réviser les decks de cette classe pour voir les progrès et les statistiques."
+      "description": "Attendez que vos élèves commencent à réviser les Decks de cette Classroom pour voir les progrès et les statistiques."
     }
   },
-  "notFound": "Classe introuvable"
+  "notFound": "Classroom introuvable"
 }

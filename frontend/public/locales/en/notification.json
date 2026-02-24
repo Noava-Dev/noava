@@ -6,6 +6,7 @@
   },
   "types": {
     "deckInvite": "Deck Invitation",
+    "classroomInvite": "Classroom Invitation",
     "info": "Information",
     "warning": "Warning",
     "error": "Error"
@@ -17,14 +18,16 @@
     "dismiss": "Dismiss"
   },
   "messages": {
-    "deckInvite": "{userName} invited you to join the deck \"{{deckName}}\"",
-    "deckJoined": "You have joined the deck \"{{deckName}}\"",
+    "deckInvite": "{{userName}} invited you to join the Deck \"{{deckName}}\"",
+    "deckJoined": "You have joined the Deck \"{{deckName}}\"",
     "roleChanged": "Your role in \"{{deckName}}\" has been changed to {{role}}"
   },
   "errors": {
     "action": "Failed to process action",
     "delete": "Failed to delete notification",
-    "load": "Failed to load notifications"
+    "load": "Failed to load notifications",
+    "fetch": "Failed to load notifications",
+    "params": "Invalid notification parameters"
   },
   "toast": {
     "accepted": "Invitation accepted",
@@ -39,7 +42,16 @@
     "items": {
       "deck": {
         "invite": {
-          "received": "{userName} invited you to join the deck \"{{deckName}}\"",
+          "received": "{{userName}} invited you to join the Deck \"{{deckName}}\"",
+          "actions": {
+            "accept": "Accept",
+            "decline": "Decline"
+          }
+        }
+      },
+      "classroom": {
+        "invite": {
+          "received": "{{userName}} invited you to join the Classroom \"{{classroomName}}\"",
           "actions": {
             "accept": "Accept",
             "decline": "Decline"
