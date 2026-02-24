@@ -415,6 +415,7 @@ function DecksPage() {
                             deck={deck}
                             onEdit={handleEdit}
                             onDelete={handleDelete}
+                            onCopy = {handleCopy}
                           />
                         ))}
                       </div>
