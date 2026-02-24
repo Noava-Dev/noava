@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { LuSearch, LuUsers, LuTrash2 } from "react-icons/lu";
+import { LuSearch, LuTrash2, LuChevronDown } from "react-icons/lu";
 import { useUser } from "@clerk/clerk-react";
 import { useUserService } from "../../../services/UserService";
 import type { ClerkUserResponse, UserRole } from "../../../models/User";
@@ -42,7 +42,9 @@ export default function usersTab() {
 
   const filtered = users.filter((user) => {
     if (currentUser && user.clerkId === currentUser.id) return false;
-    const fullName = `${user.firstName || ""} ${user.lastName || ""}`.toLowerCase();
+    const fullName = `${user.firstName || ""} ${
+      user.lastName || ""
+    }`.toLowerCase();
     const matchesSearch =
       fullName.includes(searchQuery.toLowerCase()) ||
       user.email.toLowerCase().includes(searchQuery.toLowerCase());
@@ -57,11 +59,11 @@ export default function usersTab() {
       setUsers((prev) =>
         prev.map((u) => (u.clerkId === clerkId ? { ...u, role: newRole } : u))
       );
-      
+
       await updateRole(clerkId, newRole);
     } catch (error) {
       alert("Failed to update user role.");
-      fetchUsers(); 
+      fetchUsers();
     }
   };
 
@@ -156,14 +158,14 @@ export default function usersTab() {
             <EmptyState
               title="No matching users"
               description={
-                searchQuery 
+                searchQuery
                   ? `No results found for "${searchQuery}" in ${roleFilter} category.`
                   : `There are currently no users with the role: ${roleFilter}.`
               }
               clearButtonText="Clear Search and Filters"
               buttonOnClick={() => {
-                setSearchQuery('');
-                setRoleFilter('all');
+                setSearchQuery("");
+                setRoleFilter("all");
               }}
             />
           </div>
@@ -172,10 +174,18 @@ export default function usersTab() {
             <table className="w-full text-left text-sm text-text-body-light dark:text-text-body-dark">
               <thead className="bg-background-surface-light dark:bg-background-app-dark text-xs uppercase text-text-muted-light dark:text-text-muted-dark">
                 <tr>
-                  <th className="px-6 py-3 font-bold text-text-title-light dark:text-text-title-dark">User</th>
-                  <th className="px-6 py-3 font-bold text-text-title-light dark:text-text-title-dark">Role</th>
-                  <th className="px-6 py-3 font-bold text-text-title-light dark:text-text-title-dark">Joined</th>
-                  <th className="px-6 py-3 text-right font-bold text-text-title-light dark:text-text-title-dark">Actions</th>
+                  <th className="px-6 py-3 font-bold text-text-title-light dark:text-text-title-dark">
+                    User
+                  </th>
+                  <th className="px-6 py-3 font-bold text-text-title-light dark:text-text-title-dark">
+                    Role
+                  </th>
+                  <th className="px-6 py-3 font-bold text-text-title-light dark:text-text-title-dark">
+                    Joined
+                  </th>
+                  <th className="px-6 py-3 text-right font-bold text-text-title-light dark:text-text-title-dark">
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border dark:divide-border-dark">
@@ -204,21 +214,35 @@ export default function usersTab() {
 
                     {/* Role Badge */}
                     <td className="px-6 py-4">
-                      <select
-                        value={user.role}
-                        disabled={user.isOwner}
-                        onChange={(e) => handleRoleChange(user.clerkId, e.target.value as UserRole)}
-                        className={`inline-flex items-center rounded-full px-3 py-1 text-xs capitalize border-none focus:ring-2 focus:ring-primary-500 cursor-pointer disabled:cursor-not-allowed ${
-                          roleColors[user.role] || roleColors.USER
-                        }`}
-                      >
-                        <option value="ADMIN" className="bg-background-app-light dark:bg-background-app-dark text-text-title-light dark:text-text-title-dark">
-                          Admin
-                        </option>
-                        <option value="USER" className="bg-background-app-light dark:bg-background-app-dark text-text-title-light dark:text-text-title-dark">
-                          User
-                        </option>
-                      </select>
+                      <div className="relative inline-block">
+                        <select
+                          value={user.role}
+                          disabled={user.isOwner}
+                          onChange={(e) =>
+                            handleRoleChange(
+                              user.clerkId,
+                              e.target.value as UserRole
+                            )
+                          }
+                          className={`appearance-none inline-flex items-center rounded-full pl-3 pr-8 py-1 text-xs capitalize border-none focus:ring-2 focus:ring-primary-500 cursor-pointer disabled:cursor-not-allowed ${
+                            roleColors[user.role] || roleColors.USER
+                          }`}
+                        >
+                          <option
+                            value="ADMIN"
+                            className="bg-background-app-light dark:bg-background-app-dark text-text-title-light dark:text-text-title-dark"
+                          >
+                            Admin
+                          </option>
+                          <option
+                            value="USER"
+                            className="bg-background-app-light dark:bg-background-app-dark text-text-title-light dark:text-text-title-dark"
+                          >
+                            User
+                          </option>
+                        </select>
+                        <LuChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 h-3 w-3 pointer-events-none opacity-70" />
+                      </div>
                     </td>
 
                     <td className="px-6 py-4">
