@@ -93,12 +93,12 @@ function ContactForm({ isOpen, onClose, onSuccess }: ContactFormProps) {
 
       await contactMessageService.create(contactRequest);
 
-      showSuccess(t('success.message'), t('success.title'));
+      showSuccess(t('success.title'), t('success.message'));
       resetForm();
       onClose();
       onSuccess?.();
     } catch (error) {
-      showError(t('error.message'), t('error.title'));
+      showError(t('error.title'), t('error.message'));
     } finally {
       setIsSubmitting(false);
     }
