@@ -25,13 +25,14 @@ namespace noava.Controllers.ContactMessages
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] ContactMessageFilterDto filter)
         {
             var userId = _userService.GetUserId(User);
-            if (userId == null) 
+            if (userId == null)
                 throw new UnauthorizedException("Not authorized");
 
-            var result = await _contactMessageService.GetAllAsync(userId);
+            var result = await _contactMessageService
+                .GetAllAsync(userId, filter);
 
             return Ok(result);
         }

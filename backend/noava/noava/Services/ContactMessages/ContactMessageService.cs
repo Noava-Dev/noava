@@ -18,12 +18,15 @@ namespace noava.Services.ContactMessages
             _userService = userService;
         }
 
-        public async Task<IEnumerable<ContactMessageResponse>> GetAllAsync(string userId)
+        public async Task<IEnumerable<ContactMessageResponse>> GetAllAsync(
+            string userId,
+            ContactMessageFilterDto filter)
         {
             if (!await _userService.IsAdminAsync(userId))
                 throw new UnauthorizedException();
 
-            var entities = await _contactRepository.GetAllAsync();
+            var entities = await _contactRepository
+                .GetAllAsync(filter);
 
             return entities.ToResponseDtos();
         }

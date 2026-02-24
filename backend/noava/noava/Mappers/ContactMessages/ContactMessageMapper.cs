@@ -26,6 +26,7 @@ namespace noava.Mappers.ContactMessages
                 SenderEmail = entity.SenderEmail,
                 Subject = entity.Subject,
                 Description = entity.Description,
+                Status = entity.Status,
                 CreatedAt = entity.CreatedAt
             };
         }
