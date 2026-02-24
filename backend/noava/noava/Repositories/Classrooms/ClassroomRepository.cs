@@ -27,13 +27,20 @@ namespace noava.Repositories.Classrooms
                                  .ToListAsync();
         }
 
-        public async Task<IEnumerable<Classroom>> GetAllByUserAsync(string userId)
+        public async Task<IEnumerable<Classroom>> GetAllByUserAsync(string userId, int? take)
         {
-            return await _context.Classrooms
-                                 .Include(c => c.ClassroomUsers)
-                                 .Where(c => c.ClassroomUsers.Any(cu => cu.UserId == userId))
-                                 .OrderByDescending(c => c.CreatedAt)
-                                 .ToListAsync();
+            var query = _context.Classrooms
+                .Include(c => c.ClassroomUsers)
+                .Where(c => c.ClassroomUsers.Any(cu => cu.UserId == userId))
+                .OrderByDescending(c => c.CreatedAt)
+                .AsQueryable();
+
+            if (take.HasValue && take.Value > 0)
+            {
+                query = query.Take(take.Value);
+            }
+
+            return await query.ToListAsync();
         }
 
         public Task<bool> IsTeacherOfClassroomAsync(int classroomId, string userId)

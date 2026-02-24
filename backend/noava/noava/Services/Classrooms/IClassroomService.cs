@@ -8,7 +8,7 @@ namespace noava.Services.Classrooms
     public interface IClassroomService
     {
         Task<ClassroomResponseDto> CreateAsync(ClassroomRequestDto classroom, string userId);
-        Task<IEnumerable<ClassroomResponseDto>> GetAllByUserAsync(string userId);
+        Task<IEnumerable<ClassroomResponseDto>> GetAllByUserAsync(string userId, int? take);
         Task<ClassroomResponseDto?> GetByIdAsync(int id, string userId);
         Task<ClassroomResponseDto?> GetByJoinCodeAsync(string joinCode, string userId);
         Task<ClassroomResponseDto?> JoinByClassroomCode(string joinCode, string userId);
