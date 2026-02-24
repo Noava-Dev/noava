@@ -8,6 +8,7 @@ import {
   Dropdown,
   DropdownItem,
   Tooltip,
+  Pagination,
 } from 'flowbite-react';
 import { Modal } from 'flowbite-react';
 import {
@@ -32,7 +33,6 @@ import Skeleton from '../../shared/components/loading/Skeleton';
 import EmptyState from '../../shared/components/EmptyState';
 import { useUser } from '@clerk/clerk-react';
 import ConfirmModal from '../../shared/components/ConfirmModal';
-import { TbDoorEnter } from 'react-icons/tb';
 import { LuLayers } from 'react-icons/lu';
 
 function DecksPage() {
@@ -47,6 +47,8 @@ function DecksPage() {
   const [editingDeck, setEditingDeck] = useState<Deck | undefined>(undefined);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortOrder, setSortOrder] = useState<'newest' | 'oldest'>('newest');
+  const [page, setPage] = useState(1);
+  const pageSize = 16;
   const { showSuccess, showError } = useToast();
   const [deleteDeckId, setDeleteDeckId] = useState<number | null>(null);
   const [bulkReviewModalOpened, setBulkReviewModalOpened] = useState(false);
@@ -208,9 +210,13 @@ function DecksPage() {
     return sortOrder === 'newest' ? dateB - dateA : dateA - dateB;
   });
 
-  // Split decks into owned and shared
-  const ownedDecks = sortedDecks.filter((deck) => deck.userId === user?.id);
-  const sharedDecks = sortedDecks.filter((deck) => deck.userId !== user?.id);
+  // Paginate all sorted decks
+  const totalItems = sortedDecks.length;
+  const totalPages = Math.ceil(totalItems / pageSize) || 1;
+  const safePage = Math.min(page, totalPages);
+  const paginatedDecks = sortedDecks.slice((safePage - 1) * pageSize, safePage * pageSize);
+  const paginatedOwnedDecks = paginatedDecks.filter((deck) => deck.userId === user?.id);
+  const paginatedSharedDecks = paginatedDecks.filter((deck) => deck.userId !== user?.id);
 
   if (loading) {
     return <Skeleton />;
@@ -307,7 +313,10 @@ function DecksPage() {
                 </label>
                 <Searchbar
                   searchTerm={searchTerm}
-                  setSearchTerm={setSearchTerm}
+                  setSearchTerm={(term) => {
+                    setSearchTerm(term);
+                    setPage(1);
+                  }}
                 />
                 {searchTerm && (
                   <p className="flex items-center gap-1 text-xs text-text-muted-light dark:text-text-muted-dark">
@@ -338,48 +347,64 @@ function DecksPage() {
         <section className="min-h-screen py-8 bg-background-app-light dark:bg-background-app-dark md:py-12">
           <div className="container px-4 mx-auto max-w-7xl">
             {sortedDecks.length > 0 ? (
-              <div className="space-y-12">
-                {/* My Decks Section */}
-                {ownedDecks.length > 0 && (
-                  <div>
-                    <h2 className="mb-6 text-2xl font-bold text-text-title-light dark:text-text-title-dark">
-                      {t('sections.myDecks')}
-                    </h2>
-                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:gap-6">
-                      {ownedDecks.map((deck) => (
-                        <DeckCard
-                          key={deck.deckId}
-                          deck={deck}
-                          onCopy={handleCopy}
-                          onEdit={handleEdit}
-                          onDelete={handleDelete}
-                          onAnalytics={handleAnalytics}
-                        />
-                      ))}
+              <>
+                <div className="space-y-12">
+                  {/* My Decks Section */}
+                  {paginatedOwnedDecks.length > 0 && (
+                    <div>
+                      <h2 className="mb-6 text-2xl font-bold text-text-title-light dark:text-text-title-dark">
+                        {t('sections.myDecks')}
+                      </h2>
+                      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:gap-6">
+                        {paginatedOwnedDecks.map((deck) => (
+                          <DeckCard
+                            key={deck.deckId}
+                            deck={deck}
+                            onCopy={handleCopy}
+                            onEdit={handleEdit}
+                            onDelete={handleDelete}
+                            onAnalytics={handleAnalytics}
+                          />
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
 
-                {/* Shared Decks Section */}
-                {sharedDecks.length > 0 && (
-                  <div>
-                    <h2 className="mb-6 text-2xl font-bold text-text-title-light dark:text-text-title-dark">
-                      {t('sections.sharedWithMe')}
-                    </h2>
-                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:gap-6">
-                      {sharedDecks.map((deck) => (
-                        <DeckCard
-                          key={deck.deckId}
-                          deck={deck}
-                          onCopy={handleCopy}
-                          onAnalytics={handleAnalytics}
-                          showEdit={false}
-                        />
-                      ))}
+                  {/* Shared Decks Section */}
+                  {paginatedSharedDecks.length > 0 && (
+                    <div>
+                      <h2 className="mb-6 text-2xl font-bold text-text-title-light dark:text-text-title-dark">
+                        {t('sections.sharedWithMe')}
+                      </h2>
+                      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:gap-6">
+                        {paginatedSharedDecks.map((deck) => (
+                          <DeckCard
+                            key={deck.deckId}
+                            deck={deck}
+                            onCopy={handleCopy}
+                            onAnalytics={handleAnalytics}
+                            showEdit={false}
+                          />
+                        ))}
+                      </div>
                     </div>
+                  )}
+                </div>
+
+                {/* Pagination */}
+                {totalItems > pageSize && (
+                  <div className="flex justify-center mt-8 overflow-x-auto sm:justify-center">
+                    <Pagination
+                      layout="table"
+                      currentPage={page}
+                      itemsPerPage={pageSize}
+                      totalItems={totalItems}
+                      onPageChange={setPage}
+                      showIcons
+                    />
                   </div>
                 )}
-              </div>
+              </>
             ) : searchTerm ? (
               <EmptyState
                 title={t('empty.noResults')}
