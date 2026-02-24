@@ -107,7 +107,6 @@
       "restart": "Opnieuw Starten"
     },
     "reverseMode": "Omgekeerde Modus"
-    
   },
   "importCardsModal": {
     "header": "Flashcards Importeren",
@@ -129,6 +128,11 @@
     "incorrect": "Fout",
     "accuracy": "Nauwkeurigheid",
     "noCardsToReview": "Er zijn op dit moment geen kaarten die moeten worden bekeken. Blijf regelmatig studeren!"
+  },
+  "empty": {
+    "title": "Nog geen flashcards",
+    "message": "Maak enkele flashcards om te beginnen met herhalen!",
+    "noResults": "Geen flashcards gevonden"
   },
   "search": { "label": "Zoeken" }
 }
