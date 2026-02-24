@@ -15,7 +15,6 @@ import { getLanguageCode } from '../../shared/utils/speechHelpers';
 import ConfirmationModal from '../../shared/components/ConfirmModal';
 import type { Deck } from '../../models/Deck';
 import type { Flashcard } from '../../models/Flashcard';
-import { FiRepeat } from 'react-icons/fi';
 import { FaRepeat } from 'react-icons/fa6';
 
 interface CardWithUrls extends Flashcard {
@@ -454,10 +453,7 @@ function LongTermReview() {
                     onClick={handleNext}
                     disabled={isProcessingNext}>
                     {isProcessingNext ? (
-                      <>
-                        <Spinner size="sm" className="mr-2" />
-                        {t('common:app.loading')}...
-                      </>
+                      <Spinner size="sm" color="gray" />
                     ) : (
                       currentIndex === cards.length - 1
                         ? t('common:actions.finish')

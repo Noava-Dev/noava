@@ -424,7 +424,7 @@ function LongTermFlipReview() {
                 onClick={() => handleNext(false)}
                 disabled={isProcessingNext}>
                 {isProcessingNext ? (
-                  <Spinner size="sm" className="mr-2" />
+                  <Spinner size="sm" color="failure" className="mr-2" />
                 ) : (
                   <HiX className="w-5 h-5 mr-2" />
                 )}
@@ -436,7 +436,7 @@ function LongTermFlipReview() {
                 onClick={() => handleNext(true)}
                 disabled={isProcessingNext}>
                 {isProcessingNext ? (
-                  <Spinner size="sm" className="mr-2" />
+                  <Spinner size="sm" color="success" className="mr-2" />
                 ) : (
                   <HiCheck className="w-5 h-5 mr-2" />
                 )}
