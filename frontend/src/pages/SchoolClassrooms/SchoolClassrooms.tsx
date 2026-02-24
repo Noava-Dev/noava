@@ -36,12 +36,12 @@ export default function SchoolClassroomsPage() {
   const [school, setSchool] = useState<SchoolDto | null>(null);
   const [classrooms, setClassrooms] = useState<SchoolClassroomDto[]>([]);
 
-  const totalStudents = classrooms.reduce(
-    (acc, curr) => acc + (curr.studentCount || 0),
+  const totalStudents = (classrooms ?? []).reduce(
+    (acc, curr) => acc + (curr?.studentCount || 0),
     0
   );
-  const totalDecks = classrooms.reduce(
-    (acc, curr) => acc + (curr.deckCount || 0),
+  const totalDecks = (classrooms ?? []).reduce(
+    (acc, curr) => acc + (curr?.deckCount || 0),
     0
   );
 
@@ -150,11 +150,11 @@ export default function SchoolClassroomsPage() {
     setEditingClassroom(undefined);
   };
 
-  const filtered = classrooms.filter(
+  const filtered = classrooms?.filter(
     (c) =>
-      c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      c.description?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+      c?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      c?.description?.toLowerCase().includes(searchTerm.toLowerCase())
+  ) ?? [];
 
   const sorted = [...filtered].sort((a, b) => {
     switch (sortOrder) {
@@ -251,24 +251,32 @@ export default function SchoolClassroomsPage() {
       </PageHeader>
 
       <main className="container px-4 py-8 mx-auto max-w-7xl md:py-12">
-        {classrooms.length === 0 ? (
+        {!classrooms || classrooms.length === 0 ? (
           <EmptyState
             title={t('classrooms:empty.title')}
             description={t('classrooms:empty.messageSchools')}
             icon={LuUsers}
           />
+        ) : sorted.length === 0 ? (
+          <EmptyState
+            title={t('classrooms:empty.noResults')}
+            description={t('common:search.otherSearchTerm')}
+            buttonOnClick={() => setSearchTerm('')}
+            clearButtonText={t('common:search.clearSearch')}
+          />
         ) : (
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {classrooms.map((classroom) => (
+            {sorted.map((classroom) => (
               <ClassroomCard
                 key={classroom.classroomId}
                 classroom={{
                   id: classroom.classroomId,
                   name: classroom.name,
                   description: classroom.description ?? '',
-                  createdAt: new Date().toISOString(),
-                  updatedAt: new Date().toISOString(),
+                  createdAt: classroom.createdAt,
+                  updatedAt: classroom.updatedAt,
                   joinCode: '',
+                  coverImageBlobName: classroom.coverImageBlobName ?? null,
                   permissions: { canEdit: true, canDelete: true },
                 }}
                 onEdit={handleEdit}

@@ -33,6 +33,7 @@ export interface SchoolClassroomDto{
   createdAt: string;
   updatedAt: string;
   description?: string;
+  coverImageBlobName?: string | null;
   deckCount?: number;
   studentCount?: number;
 }
