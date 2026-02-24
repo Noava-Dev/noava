@@ -1,0 +1,48 @@
+{
+  "title": "Contact Us",
+  "description": "Have a question or need assistance? Fill out the form below and we'll get back to you as soon as possible.",
+  "form": {
+    "title": {
+      "label": "Title",
+      "placeholder": "Select your title"
+    },
+    "email": {
+      "label": "Email Address",
+      "placeholder": "your.email@example.com"
+    },
+    "subject": {
+      "label": "Subject",
+      "placeholder": "Select a subject"
+    },
+    "description": {
+      "label": "Message",
+      "placeholder": "Please describe your inquiry in detail (minimum 20 characters)..."
+    },
+    "submit": "Send Message",
+    "submitting": "Sending...",
+    "cancel": "Cancel"
+  },
+  "titles": {
+    "Mr": "Mr.",
+    "Mrs": "Mrs.",
+    "Ms": "Ms.",
+    "Dr": "Dr.",
+    "Other": "Other"
+  },
+  "subjects": {
+    "GeneralInquiry": "General Inquiry",
+    "Support": "Support",
+    "BugReport": "Bug Report",
+    "Feedback": "Feedback",
+    "Complaint": "Complaint",
+    "Other": "Other"
+  },
+  "success": {
+    "title": "Message Sent Successfully",
+    "message": "Thank you for contacting us. We'll get back to you as soon as possible."
+  },
+  "error": {
+    "title": "Failed to Send Message",
+    "message": "Something went wrong while sending your message. Please try again."
+  }
+}

@@ -32,6 +32,16 @@
     "school": {
       "name": "Schoolnaam is verplicht",
       "minAdmins": "Minstens één beheerder e-mailadres is verplicht"
+    },
+    "contact": {
+      "title": "Selecteer een titel",
+      "email": "Voer een geldig e-mailadres in",
+      "subject": "Selecteer een onderwerp",
+      "description": {
+        "required": "Bericht is verplicht",
+        "minLength": "Bericht moet minimaal 20 tekens bevatten",
+        "maxLength": "Bericht mag maximaal 4000 tekens bevatten"
+      }
     }
   }
 }

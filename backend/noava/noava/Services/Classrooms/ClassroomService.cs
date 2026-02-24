@@ -54,9 +54,9 @@ namespace noava.Services.Classrooms
             return classroom.ToResponseDto(userId);
         }
 
-        public async Task<IEnumerable<ClassroomResponseDto>> GetAllByUserAsync(string userId)
+        public async Task<IEnumerable<ClassroomResponseDto>> GetAllByUserAsync(string userId, int? take)
         {
-            var classrooms = await _classroomRepository.GetAllByUserAsync(userId);
+            var classrooms = await _classroomRepository.GetAllByUserAsync(userId, take);
             return classrooms.ToResponseDtos(userId);
         }
 

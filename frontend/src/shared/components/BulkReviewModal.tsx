@@ -202,15 +202,16 @@ export const BulkReviewModal: React.FC<BulkReviewModalProps> = ({
             </div>
           )}
 
-          <div className="flex justify-end gap-3 pt-2">
-            <Button color="gray" onClick={handleClose}>
-              {t('common:actions.cancel')}
-            </Button>
+          <div className="flex flex-col gap-3 pt-2 sm:flex-row">
             <Button
               onClick={handleStartReview}
               disabled={selectedDeckIds.length === 0}
+              className="w-full sm:flex-1"
             >
               {t('bulkReview.startReview')}
+            </Button>
+            <Button color="gray" onClick={handleClose} className="w-full sm:w-auto">
+              {t('common:actions.cancel')}
             </Button>
           </div>
         </div>

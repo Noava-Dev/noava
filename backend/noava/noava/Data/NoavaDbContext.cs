@@ -15,6 +15,7 @@ namespace noava.Data
         public DbSet<Deck> Decks { get; set; }
         public DbSet<Card> Cards { get; set; }
         public DbSet<FAQ> FAQs { get; set;  }
+        public DbSet<ContactMessage> ContactMessages { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<CardProgress> CardProgress { get; set; }
         public DbSet<CardInteraction> CardInteractions { get; set; }

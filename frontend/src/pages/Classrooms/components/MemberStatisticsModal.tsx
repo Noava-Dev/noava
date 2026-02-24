@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useStatisticsService } from '../../../services/StatisticsService';
 import { formatDateToEuropean, formatResponseTime, formatTimeSpent } from '../../../services/DateService';
-import type { DeckStatistics } from '../../../models/Statistics';
+import type { DeckStatistics, InteractionCount } from '../../../models/Statistics';
 import type { ClerkUserResponse } from '../../../models/User';
 import type { Deck } from '../../../models/Deck';
 import {
@@ -13,9 +13,11 @@ import {
   LuTrendingUp,
   LuFilter,
   LuChevronDown,
-  LuChevronUp
+  LuChevronUp,
+  LuCalendar
 } from 'react-icons/lu';
 import { HiChartBar } from 'react-icons/hi';
+import { InteractionHeatmap } from '../../../shared/components/InteractionHeatmap';
 
 interface MemberStatisticsModalProps {
   show: boolean;
@@ -32,17 +34,18 @@ function MemberStatisticsModal({
   classroomId,
   availableDecks
 }: MemberStatisticsModalProps) {
-  const { t } = useTranslation(['classrooms', 'dashboard', 'decks']);
+  const { t } = useTranslation(['classrooms', 'dashboard', 'decks', 'heatmap']);
   const statisticsService = useStatisticsService();
   const [statistics, setStatistics] = useState<DeckStatistics | null>(null);
   const [loading, setLoading] = useState(false);
   const [hasData, setHasData] = useState(true);
   const [selectedDeckIds, setSelectedDeckIds] = useState<number[]>([]);
   const [showFilters, setShowFilters] = useState(true);
+  const [interactions, setInteractions] = useState<InteractionCount[]>([]);
+  const [interactionsLoading, setInteractionsLoading] = useState(false);
 
   useEffect(() => {
     if (show && member && availableDecks.length > 0) {
-      // Select all decks by default
       const allDeckIds = availableDecks.map(d => d.deckId);
       setSelectedDeckIds(allDeckIds);
     }
@@ -51,6 +54,7 @@ function MemberStatisticsModal({
   useEffect(() => {
     if (show && member && selectedDeckIds.length > 0) {
       fetchStatistics();
+      fetchInteractions();
     }
   }, [show, member, selectedDeckIds]);
 
@@ -65,8 +69,6 @@ function MemberStatisticsModal({
         member.clerkId
       );
 
-      console.log('Fetched member statistics:', data);
-
       if (data.cardsReviewed === 0) {
         setHasData(false);
       } else {
@@ -78,6 +80,25 @@ function MemberStatisticsModal({
       setHasData(false);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchInteractions = async () => {
+    if (!member || selectedDeckIds.length === 0) return;
+
+    try {
+      setInteractionsLoading(true);
+      const interactionsData = await statisticsService.getInteractionsByDecksForClassroom(
+        member.clerkId,
+        classroomId,
+        selectedDeckIds
+      );
+      setInteractions(interactionsData);
+    } catch (error) {
+      console.error('Failed to load member interactions:', error);
+      setInteractions([]);
+    } finally {
+      setInteractionsLoading(false);
     }
   };
 
@@ -151,7 +172,6 @@ function MemberStatisticsModal({
 
       <ModalBody>
         <div className="space-y-4">
-          {/* Deck Filter Section */}
           <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
             <div className="bg-gray-100 dark:bg-gray-800 p-4">
               <div className="flex items-center justify-between">
@@ -232,7 +252,6 @@ function MemberStatisticsModal({
             )}
           </div>
 
-          {/* Statistics Section */}
           {noneSelected ? (
             <div className="flex flex-col items-center justify-center py-12 text-center">
               <LuFilter className="w-16 h-16 mb-4 text-text-muted-light dark:text-text-muted-dark" />
@@ -316,6 +335,29 @@ function MemberStatisticsModal({
                     </span>
                   </div>
                 )}
+              </div>
+
+              <div className="hidden md:block">
+                <div className="p-4 space-y-3 rounded-lg bg-background-subtle-light dark:bg-background-subtle-dark">
+                  <div className="flex items-center gap-3 mb-4">
+                    <LuCalendar className="w-5 h-5 text-primary-500" />
+                    <div>
+                      <h3 className="text-base font-bold text-text-title-light dark:text-text-title-dark">
+                        {t('classrooms:members.statistics.interactionActivity')}
+                      </h3>
+                      <p className="mt-1 text-sm text-text-muted-light dark:text-text-muted-dark">
+                        {t('classrooms:members.statistics.interactionSubtitle')}
+                      </p>
+                    </div>
+                  </div>
+                  {interactionsLoading ? (
+                    <div className="flex items-center justify-center h-40">
+                      <div className="w-8 h-8 border-4 border-gray-200 rounded-full animate-spin border-t-emerald-500 dark:border-gray-700 dark:border-t-emerald-400"></div>
+                    </div>
+                  ) : (
+                    <InteractionHeatmap data={interactions} />
+                  )}
+                </div>
               </div>
             </div>
           ) : null}

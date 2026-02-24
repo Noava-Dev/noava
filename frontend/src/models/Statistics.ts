@@ -24,3 +24,8 @@ export interface DashboardStatistics {
   timeSpentHours: number;
   lastRevieweDate: string | null;
 }
+
+export interface InteractionCount {
+  date: string;
+  count: number;
+}

@@ -59,6 +59,9 @@ function ImportCardsModal({
     
     try {
       setUploading(true);
+      if (!file) {
+        return;
+      }
       const count = await flashcardService.createBulk(Number(deckId), file);
       showSuccess('Success', `${count} cards imported successfully`);
       onClose();
@@ -119,15 +122,7 @@ function ImportCardsModal({
               </div>
             </div>
             {/* Actions */}
-            <div className="flex flex-col-reverse gap-3 pt-6 sm:flex-row">
-              <Button
-                color="gray"
-                onClick={onClose}
-                disabled={uploading}
-                type="button"
-                className="w-full sm:w-auto">
-                {t('common:actions.cancel')}
-              </Button>
+            <div className="flex flex-col gap-3 pt-6 sm:flex-row">
               <Button type="submit" className="w-full sm:flex-1" disabled={uploading}>
                 {uploading ? (
                   <>
@@ -137,6 +132,14 @@ function ImportCardsModal({
                 ) : (
                   'Upload'
                 )}
+              </Button>
+              <Button
+                color="gray"
+                onClick={onClose}
+                disabled={uploading}
+                type="button"
+                className="w-full sm:w-auto">
+                {t('common:actions.cancel')}
               </Button>
             </div>
           </form>

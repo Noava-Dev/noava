@@ -24,6 +24,8 @@ import type { ClassroomResponse } from '../../models/Classroom';
 import type { Deck } from '../../models/Deck';
 import { useDeckService } from '../../services/DeckService';
 import ClassroomStatisticsModal from './components/ClassroomStatisticsModal';
+import EmptyState from '../../shared/components/EmptyState';
+import { LuLayers } from 'react-icons/lu';
 
 function ClassroomDetailPage() {
   const { classroomId } = useParams();
@@ -314,37 +316,28 @@ function ClassroomDetailPage() {
                 ))}
               </div>
             ) : (
-              <div className="flex flex-col items-center justify-center py-20 md:py-32">
-                <div className="max-w-md text-center">
-                  {/* Icon */}
-                  <div className="flex justify-center mb-6">
-                    <div className="flex items-center justify-center w-24 h-24 rounded-full bg-background-surface-light dark:bg-background-surface-dark">
-                      <HiPlus className="w-12 h-12 text-primary-600 dark:text-primary-400" />
-                    </div>
-                  </div>
-
-                  {/* Title */}
-                  <h3 className="mb-3 text-2xl font-bold text-text-title-light dark:text-text-title-dark">
-                    {t('decks.emptyTitle')}
-                  </h3>
-
-                  {/* Description */}
-                  <p className="mb-6 text-base text-text-muted-light dark:text-text-muted-dark">
-                    {t('decks.emptyDescription')}
-                  </p>
-
-                  {/* CTA Button */}
-                  {classroom.permissions?.canEdit && (
-                    <Button
-                      size="lg"
-                      className="justify-self-center"
-                      onClick={() => setAddDeckModalOpened(true)}>
-                      <HiPlus className="w-5 h-5 mr-2" />
-                      {t('decks.addFirstDeck')}
-                    </Button>
-                  )}
-                </div>
-              </div>
+              <>
+                {classroom.permissions?.canEdit ? (
+                  <EmptyState
+                    title={t('decks.emptyTitle')}
+                    description={t('decks.emptyDescription')}
+                    icon={LuLayers}
+                    buttonOnClick={() => setAddDeckModalOpened(true)}
+                    clearButtonText={
+                      <>
+                        <HiPlus className="mr-1 size-5" />
+                        {t('decks.addFirstDeck')}
+                      </>
+                    }
+                  />
+                ) : (
+                  <EmptyState
+                    title={t('decks.emptyTitle')}
+                    description={t('decks.emptyDescription')}
+                    icon={LuLayers}
+                  />
+                )}
+              </>
             )}
           </div>
         </section>

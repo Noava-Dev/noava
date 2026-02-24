@@ -3,16 +3,18 @@
   "createButton": "Create Classroom",
   "results": { "found": "results found" },
   "empty": {
+    "title": "No classrooms yet",
     "noResults": "No classrooms found",
-    "message": "You have no classrooms yet."
+    "message": "You aren't in any classrooms yet.",
+    "messageSchools": "This school doesn't have any classrooms yet."
   },
   "modal": {
     "createTitle": "Create Classroom",
     "editTitle": "Edit Classroom",
     "nameLabel": "Name",
     "descriptionLabel": "Description",
-    "createButton": "Create",
-    "updateButton": "Update",
+    "createButton": "Create Classroom",
+    "updateButton": "Update Classroom",
     "cancelButton": "Cancel"
   },
   "members": {
@@ -26,6 +28,7 @@
     "notAuthorized": "Not authorized",
     "onlyTeachers": "Only teachers may access this page",
     "editTitle": "Edit member",
+    "updateButton": "Update Member",
     "isTeacher": "Is teacher",
     "saving": "Saving...",
     "updateSuccess": "Member updated",
@@ -50,6 +53,8 @@
     "statistics": {
       "title": "Member Statistics",
       "filterDecks": "Filter by Decks",
+      "interactionActivity": "Interaction Activity",
+      "interactionSubtitle": "Student learning activity over the past year",
       "noDeckSelected": {
         "title": "No Decks Selected",
         "description": "Select at least one deck to view statistics."

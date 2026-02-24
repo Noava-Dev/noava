@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using noava.Data;
@@ -7,6 +8,7 @@ using noava.Exceptions;
 using noava.Repositories;
 using noava.Repositories.Cards;
 using noava.Repositories.Classrooms;
+using noava.Repositories.ContactMessages;
 using noava.Repositories.Decks;
 using noava.Repositories.FAQs;
 using noava.Repositories.Implementations;
@@ -18,6 +20,7 @@ using noava.Repositories.Users;
 using noava.Services;
 using noava.Services.Cards;
 using noava.Services.Classrooms;
+using noava.Services.ContactMessages;
 using noava.Services.Decks;
 using noava.Services.Emails;
 using noava.Services.FAQs;
@@ -31,6 +34,7 @@ using noava.Services.StudySessions;
 using noava.Services.Users;
 using noava.Shared;
 using System.Security.Claims;
+using System.Threading.RateLimiting;
 
 namespace noava
 {
@@ -46,6 +50,7 @@ namespace noava
 
             // Repository Registrations
             builder.Services.AddScoped<IFaqRepository, FaqRepository>();
+            builder.Services.AddScoped<IContactMessageRepository, ContactMessageRepository>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IDeckRepository, DeckRepository>();
             builder.Services.AddScoped<ICardRepository, CardRepository>();
@@ -62,6 +67,7 @@ namespace noava
 
             // Service Registrations
             builder.Services.AddScoped<IFaqService, FaqService>();
+            builder.Services.AddScoped<IContactMessageService, ContactMessageService>();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IDeckService, DeckService>();
             builder.Services.AddScoped<ICardService, CardService>();
@@ -106,6 +112,17 @@ namespace noava
                     );
                 });
 
+            builder.Services.AddRateLimiter(options =>
+            {
+                options.AddFixedWindowLimiter("contact-messages", opt =>
+                {
+                    opt.PermitLimit = 5;
+                    opt.Window = TimeSpan.FromSeconds(30);
+                    opt.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+                    opt.QueueLimit = 2;
+                });
+            });
+
             builder.WebHost.ConfigureKestrel(options =>
             {
                 options.ListenAnyIP(5000);
@@ -120,8 +137,6 @@ namespace noava
             });
 
             var clerkAuthority = builder.Configuration["Clerk:FrontendApiUrl"];
-
-          
 
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -167,6 +182,7 @@ namespace noava
             app.UseExceptionHandler(_ => { });
 
             app.UseCors("Frontend");
+            app.UseRateLimiter();
 
             app.UseAuthentication();
             app.UseMiddleware<RoleClaimsMiddleware>();

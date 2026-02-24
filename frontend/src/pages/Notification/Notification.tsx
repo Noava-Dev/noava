@@ -14,6 +14,7 @@ import PageHeader from '../../shared/components/PageHeader';
 import Loading from '../../shared/components/loading/Loading';
 import { useDeckService } from '../../services/DeckService';
 import EmptyState from '../../shared/components/EmptyState';
+import { PiBellSimpleZLight } from 'react-icons/pi';
 
 const NotificationPage = () => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
@@ -78,10 +79,9 @@ const NotificationPage = () => {
   ) {
     setProcessingId(notification.id);
     try {
-
       await api.request({
         method: action.method,
-        url: `${import.meta.env.VITE_API_BASE_URL}${action.endpoint}`
+        url: `${import.meta.env.VITE_API_BASE_URL}${action.endpoint}`,
       });
 
       await service.deleteNotification(notification.id);
@@ -104,97 +104,96 @@ const NotificationPage = () => {
   return (
     <div className="flex min-h-screen bg-background-app-light dark:bg-background-app-dark">
       <div className="flex-1 w-full ml-0">
-          <PageHeader>
-            <div className="pt-4 md:pt-8">
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex-1 min-w-0">
-                  <h1 className="text-3xl font-extrabold tracking-tight text-text-title-light md:text-5xl dark:text-text-title-dark">
-                    {t('common:navigation.notifications')}
-                  </h1>
-                </div>
+        <PageHeader>
+          <div className="pt-4 md:pt-8">
+            <div className="flex items-start justify-between gap-4">
+              <div className="flex-1 min-w-0">
+                <h1 className="text-3xl font-extrabold tracking-tight text-text-title-light md:text-5xl dark:text-text-title-dark">
+                  {t('common:navigation.notifications')}
+                </h1>
               </div>
             </div>
-          </PageHeader>
+          </div>
+        </PageHeader>
 
-          <section className="min-h-screen py-8 bg-background-app-light dark:bg-background-app-dark md:py-12">
-            <div className="container px-4 mx-auto max-w-7xl">
-              {notifications.length === 0 ? (
-                <EmptyState 
-                  title={t('empty.title')}
-                  description={t('empty.message')}
-                  buttonOnClick={()=> {}}
-                  clearButtonText={t('common:actions.back')}
-                  />
-              ) : (
-                <div className="space-y-4">
-                  {notifications.map((n) => (
-                    <Card
-                      key={n.id}
-                      className="box-border max-w-full min-w-0 overflow-hidden transition-colors duration-300 bg-background-app-light border border-border-strong rounded-lg shadow-md dark:bg-background-surface-dark dark:border-border-dark">
-                      <div className="flex items-start justify-between gap-4">
-                        <div className="flex-1 min-w-0">
-                          <div>
-                            <div className="text-lg font-semibold text-text-title-light md:text-xl dark:text-text-title-dark">
-                              {t(n.titleKey)}
-                            </div>
-                            <div className="mt-1 text-xs text-text-muted-light md:text-sm dark:text-text-muted-dark">
-                              {formatDateToEuropean(n.createdAt)}
-                            </div>
+        <section className="min-h-screen py-8 bg-background-app-light dark:bg-background-app-dark md:py-12">
+          <div className="container px-4 mx-auto max-w-7xl">
+            {notifications.length === 0 ? (
+              <EmptyState
+                title={t('empty.title')}
+                description={t('empty.message')}
+                icon={PiBellSimpleZLight}
+              />
+            ) : (
+              <div className="space-y-4">
+                {notifications.map((n) => (
+                  <Card
+                    key={n.id}
+                    className="box-border max-w-full min-w-0 overflow-hidden transition-colors duration-300 border rounded-lg shadow-md bg-background-app-light border-border-strong dark:bg-background-surface-dark dark:border-border-dark">
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex-1 min-w-0">
+                        <div>
+                          <div className="text-lg font-semibold text-text-title-light md:text-xl dark:text-text-title-dark">
+                            {t(n.titleKey)}
                           </div>
-
-                          <div className="mt-2 text-base text-text-body-light dark:text-text-body-dark break-words break-all whitespace-normal ">
-                            {String(
-                              t(n.templateKey, parseParams(n.parametersJson))
-                            )}
+                          <div className="mt-1 text-xs text-text-muted-light md:text-sm dark:text-text-muted-dark">
+                            {formatDateToEuropean(n.createdAt)}
                           </div>
                         </div>
 
-                        <div className="flex items-start">
-                          <Tooltip
-                            content={t('common:actions.delete')}
-                            placement="top">
-                            <button
-                              className="inline-flex items-center p-0 text-text-muted-light dark:text-text-muted-dark bg-transparent border-0 rounded-none hover:text-red-500 dark:hover:text-red-500 hover:bg-transparent focus:outline-none focus:ring-0 focus:ring-transparent hover:outline-none"
-                              onClick={() => handleDelete(n.id)}
-                              disabled={processingId === n.id}>
-                              <HiOutlineX size={20} />
-                            </button>
-                          </Tooltip>
+                        <div className="mt-2 text-base break-words break-all whitespace-normal text-text-body-light dark:text-text-body-dark ">
+                          {String(
+                            t(n.templateKey, parseParams(n.parametersJson))
+                          )}
                         </div>
                       </div>
 
-                      {n.link && (
-                        <div className="w-full mt-3">
-                          <a
-                            href={n.link}
-                            className="inline-flex items-center gap-2 px-3 py-1 bg-primary-500 text-white rounded-full text-sm transition duration-200 shadow-sm hover:shadow-md hover:bg-primary-600 hover:text-white transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:hover:text-white dark:focus:ring-primary-700"
-                            target="_blank"
-                            rel="noopener noreferrer">
-                            <span className="font-medium">
-                              {t('common:actions.viewMore')}
-                            </span>
-                          </a>
-                        </div>
-                      )}
-
-                      <div className="flex justify-end w-full gap-2 mt-4 overflow-auto">
-                        {n.actions.map((action) => (
-                          <Button
-                            key={action.labelKey}
-                            size="xs"
-                            className="text-white whitespace-nowrap bg-primary-600 dark:text-white dark:hover:bg-primary-700"
-                            onClick={() => handleAction(n, action)}
+                      <div className="flex items-start">
+                        <Tooltip
+                          content={t('common:actions.delete')}
+                          placement="top">
+                          <button
+                            className="inline-flex items-center p-0 bg-transparent border-0 rounded-none text-text-muted-light dark:text-text-muted-dark hover:text-red-500 dark:hover:text-red-500 hover:bg-transparent focus:outline-none focus:ring-0 focus:ring-transparent hover:outline-none"
+                            onClick={() => handleDelete(n.id)}
                             disabled={processingId === n.id}>
-                            {String(t(action.labelKey))}
-                          </Button>
-                        ))}
+                            <HiOutlineX size={20} />
+                          </button>
+                        </Tooltip>
                       </div>
-                    </Card>
-                  ))}
-                </div>
-              )}
-            </div>
-          </section>
+                    </div>
+
+                    {n.link && (
+                      <div className="w-full mt-3">
+                        <a
+                          href={n.link}
+                          className="inline-flex items-center gap-2 px-3 py-1 bg-primary-500 text-white rounded-full text-sm transition duration-200 shadow-sm hover:shadow-md hover:bg-primary-600 hover:text-white transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:hover:text-white dark:focus:ring-primary-700"
+                          target="_blank"
+                          rel="noopener noreferrer">
+                          <span className="font-medium">
+                            {t('common:actions.viewMore')}
+                          </span>
+                        </a>
+                      </div>
+                    )}
+
+                    <div className="flex justify-end w-full gap-2 mt-4 overflow-auto">
+                      {n.actions.map((action) => (
+                        <Button
+                          key={action.labelKey}
+                          size="xs"
+                          className="text-white whitespace-nowrap bg-primary-600 dark:text-white dark:hover:bg-primary-700"
+                          onClick={() => handleAction(n, action)}
+                          disabled={processingId === n.id}>
+                          {String(t(action.labelKey))}
+                        </Button>
+                      ))}
+                    </div>
+                  </Card>
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
       </div>
     </div>
   );
