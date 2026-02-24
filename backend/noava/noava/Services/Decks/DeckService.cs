@@ -38,6 +38,7 @@ namespace noava.Services
         private readonly IEmailService _emailService;
         private readonly IConfiguration _configuration;
         private readonly IUserRepository _userRepository;
+        private readonly NoavaDbContext _context;
 
         public DeckService(
             IDeckRepository repository,
@@ -48,7 +49,8 @@ namespace noava.Services
             ICardRepository cardRepository,
             IEmailService emailService,
             IConfiguration configuration,
-            IUserRepository userRepository)
+            IUserRepository userRepository,
+            NoavaDbContext context)
         {
             _repository = repository;
             _blobService = blobService;
@@ -59,6 +61,7 @@ namespace noava.Services
             _emailService = emailService;
             _configuration = configuration;
             _userRepository = userRepository;
+            _context = context;
         }
 
         private bool IsValidBlobName(string? blobName)
@@ -132,8 +135,8 @@ namespace noava.Services
                 .ToList();
 
             return classroomGroups;
-            var decks = await _repository.GetUserDecksWithAccessAsync(userId, limit);
-            return decks.Select(d => d.ToResponseDto()).ToList();
+            //var decks = await _repository.GetUserDecksWithAccessAsync(userId, limit);
+            //return decks.Select(d => d.ToResponseDto()).ToList();
         }
 
 

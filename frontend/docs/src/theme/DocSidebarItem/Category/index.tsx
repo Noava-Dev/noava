@@ -12,7 +12,7 @@ import {
   Collapsible,
   useCollapsible,
 } from '@docusaurus/theme-common';
-import {isSamePath} from '@docusaurus/theme-common/internal';
+import { isSamePath } from '@docusaurus/theme-common/internal';
 import {
   isActiveSidebarItem,
   findFirstSidebarItemLink,
@@ -20,12 +20,12 @@ import {
   useVisibleSidebarItems,
 } from '@docusaurus/plugin-content-docs/client';
 import Link from '@docusaurus/Link';
-import {translate} from '@docusaurus/Translate';
+import { translate } from '@docusaurus/Translate';
 import useIsBrowser from '@docusaurus/useIsBrowser';
 import DocSidebarItems from '@theme/DocSidebarItems';
 import DocSidebarItemLink from '@theme/DocSidebarItem/Link';
-import type {Props} from '@theme/DocSidebarItem/Category';
-import { iconMap, defaultIcon } from "../../sidebarIcons";
+import type { Props } from '@theme/DocSidebarItem/Category';
+import { iconMap, defaultIcon } from '../../sidebarIcons';
 import type {
   PropSidebarItemCategory,
   PropSidebarItemLink,
@@ -73,7 +73,7 @@ function useAutoExpandActiveCategory({
  * see https://github.com/facebook/docusaurus/issues/3030
  */
 function useCategoryHrefWithSSRFallback(
-  item: Props['item'],
+  item: Props['item']
 ): string | undefined {
   const isBrowser = useIsBrowser();
   return useMemo(() => {
@@ -108,7 +108,7 @@ function CollapseButton({
                 message: "Expand sidebar category '{label}'",
                 description: 'The ARIA label to expand the sidebar category',
               },
-              {label: categoryLabel},
+              { label: categoryLabel }
             )
           : translate(
               {
@@ -116,7 +116,7 @@ function CollapseButton({
                 message: "Collapse sidebar category '{label}'",
                 description: 'The ARIA label to collapse the sidebar category',
               },
-              {label: categoryLabel},
+              { label: categoryLabel }
             )
       }
       aria-expanded={!collapsed}
@@ -127,7 +127,7 @@ function CollapseButton({
   );
 }
 
-function CategoryLinkLabel({label}: {label: string}) {
+function CategoryLinkLabel({ label }: { label: string }) {
   const Icon = iconMap[label?.toLowerCase()] || defaultIcon;
   return (
     <span title={label} className={styles.categoryLinkLabel}>
@@ -142,7 +142,7 @@ function CategoryLinkLabel({label}: {label: string}) {
 export default function DocSidebarItemCategory(props: Props): ReactNode {
   const visibleChildren = useVisibleSidebarItems(
     props.item.items,
-    props.activePath,
+    props.activePath
   );
   if (visibleChildren.length === 0) {
     return <DocSidebarItemCategoryEmpty {...props} />;
@@ -152,13 +152,13 @@ export default function DocSidebarItemCategory(props: Props): ReactNode {
 }
 
 function isCategoryWithHref(
-  category: PropSidebarItemCategory,
-): category is PropSidebarItemCategory & {href: string} {
+  category: PropSidebarItemCategory
+): category is PropSidebarItemCategory & { href: string } {
   return typeof category.href === 'string';
 }
 
 // If a category doesn't have any visible children, we render it as a link
-function DocSidebarItemCategoryEmpty({item, ...props}: Props): ReactNode {
+function DocSidebarItemCategoryEmpty({ item, ...props }: Props): ReactNode {
   // If the category has no link, we don't render anything
   // It's not super useful to render a category you can't open nor click
   if (!isCategoryWithHref(item)) {
@@ -188,10 +188,10 @@ function DocSidebarItemCategoryCollapsible({
   index,
   ...props
 }: Props): ReactNode {
-  const {items, label, collapsible, className, href} = item;
+  const { items, label, collapsible, className, href } = item;
   const {
     docs: {
-      sidebar: {autoCollapseCategories},
+      sidebar: { autoCollapseCategories },
     },
   } = useThemeConfig();
   const hrefWithSSRFallback = useCategoryHrefWithSSRFallback(item);
@@ -199,7 +199,7 @@ function DocSidebarItemCategoryCollapsible({
   const isActive = isActiveSidebarItem(item, activePath);
   const isCurrentPage = isSamePath(href, activePath);
 
-  const {collapsed, setCollapsed} = useCollapsible({
+  const { collapsed, setCollapsed } = useCollapsible({
     // Active categories are always initialized as expanded. The default
     // (`item.collapsed`) is only used for non-active categories.
     initialState: () => {
@@ -210,7 +210,7 @@ function DocSidebarItemCategoryCollapsible({
     },
   });
 
-  const {expandedItem, setExpandedItem} = useDocSidebarItemsExpandedState();
+  const { expandedItem, setExpandedItem } = useDocSidebarItemsExpandedState();
   // Use this instead of `setCollapsed`, because it is also reactive
   const updateCollapsed = (toCollapsed: boolean = !collapsed) => {
     setExpandedItem(toCollapsed ? null : index);
@@ -265,7 +265,7 @@ function DocSidebarItemCategoryCollapsible({
         {
           'menu__list-item--collapsed': collapsed,
         },
-        className,
+        className
       )}>
       <div
         className={clsx('menu__list-item-collapsible', {
@@ -281,7 +281,9 @@ function DocSidebarItemCategoryCollapsible({
           aria-current={isCurrentPage ? 'page' : undefined}
           role={collapsible && !href ? 'button' : undefined}
           aria-expanded={collapsible && !href ? !collapsed : undefined}
-          href={collapsible ? hrefWithSSRFallback ?? '#' : hrefWithSSRFallback}
+          href={
+            collapsible ? (hrefWithSSRFallback ?? '#') : hrefWithSSRFallback
+          }
           {...props}>
           <CategoryLinkLabel label={label} />
         </Link>
