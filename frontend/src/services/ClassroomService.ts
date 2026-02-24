@@ -25,9 +25,10 @@ export const useClassroomService = () => {
     }
   };
 
-  const getAllForUser = async (): Promise<ClassroomResponse[]> => {
+  const getAllForUser = async (take?: number): Promise<ClassroomResponse[]> => {
     try {
-      const response = await api.get<ClassroomResponse[]>('/classrooms');
+      const params = take ? `?take=${take}` : '';
+      const response = await api.get<ClassroomResponse[]>(`/classrooms${params}`);
       return response.data;
     } catch (err) {
       console.error('Failed to fetch classrooms:', err);

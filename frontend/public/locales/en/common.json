@@ -43,8 +43,13 @@
     "request": "Request",
     "show": "Show",
     "back": "Back",
+    "analytics": "Analytics",
     "uploading": "Uploading...",
-    "done": "Done"
+    "done": "Done",
+    "copy": "Copy",
+    "copying": "Copying...",
+    "selectAll": "Select All",
+    "deselectAll": "Deselect All"
   },
   "validation": {
     "required": "This field is required",
@@ -83,7 +88,8 @@
   },
   "toast": {
     "success": "Success",
-    "error": "Error"
+    "error": "Error",
+    "settingsUpdated": "Settings updated successfully"
   },
   "visibility": {
     "label": "Visibility",
@@ -95,5 +101,30 @@
       "shared": "Anyone with the link can see this deck",
       "public": "Everyone can see this deck"
     }
+  },
+  "tooltips": {
+    "createDeck": "Create a new flashcard deck",
+    "editDeck": "Edit deck settings",
+    "deleteDeck": "Delete this deck permanently",
+    "joinDeckByCode": "Join a deck using an invitation code",
+    "bulkReview": "Start reviewing multiple decks at once",
+    "createFlashcard": "Add a new flashcard to this deck",
+    "editFlashcard": "Edit flashcard content",
+    "deleteFlashcard": "Delete this flashcard",
+    "importCards": "Import flashcards from CSV or Excel file",
+    "manageOwners": "Manage deck owners and shared users",
+    "createClassroom": "Create a new classroom for your students",
+    "joinClassroom": "Join a classroom using an access code",
+    "addDeckToClassroom": "Add an existing deck to this classroom",
+    "inviteMember": "Invite students or teachers by email",
+    "themeToggle": "Switch between light and dark mode",
+    "voiceAssistant": "Enable text-to-speech for this flashcard",
+    "markAsOwner": "Grant full ownership permissions to this user",
+    "notifications": "View your notifications and invitations",
+    "searchDecks": "Search decks by title, description or language",
+    "sortDecks": "Change the order of decks",
+    "deckVisibility": "Control who can see and access this deck",
+    "reviewModes": "Choose how you want to study these cards",
+    "flipCard": "Click to flip the flashcard"
   }
 }

@@ -32,19 +32,20 @@ namespace noava.Controllers.Classrooms
                 return BadRequest(ModelState);
 
             var userId = _userService.GetUserId(User);
-            if (userId == null) return Unauthorized();
+            if (userId == null) 
+                return Unauthorized();
             
             var result = await _classroomService.CreateAsync(request, userId);
             return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ClassroomResponseDto>>> GetAllForUser()
+        public async Task<ActionResult<IEnumerable<ClassroomResponseDto>>> GetAllForUser([FromQuery] int? take)
         {
             var userId = _userService.GetUserId(User);
             if (userId == null) throw new UnauthorizedException("Not authorized");
 
-            var result = await _classroomService.GetAllByUserAsync(userId);
+            var result = await _classroomService.GetAllByUserAsync(userId, take);
             return Ok(result);
         }
 

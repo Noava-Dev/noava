@@ -2,12 +2,13 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { Button, Progress, Badge } from 'flowbite-react';
 import { HiArrowLeft, HiRefresh, HiX, HiVolumeUp, HiPlay } from 'react-icons/hi';
+import { FaRepeat } from 'react-icons/fa6';
 import { useTranslation } from 'react-i18next';
 import { useDeckService } from '../../services/DeckService';
 import { useFlashcardService } from '../../services/FlashcardService';
 import { useToast } from '../../contexts/ToastContext';
 import { useAzureBlobService } from '../../services/AzureBlobService';
-import { BulkReviewMode } from '../../models/Flashcard';
+import { ReviewMode } from '../../models/Flashcard';
 import { getLanguageCode } from '../../shared/utils/speechHelpers';
 import type { Deck } from '../../models/Deck';
 import type { ReviewSession } from '../../models/ReviewSessions';
@@ -39,12 +40,12 @@ function QuickReview() {
 
     if (deckIdsParam) {
       const deckIds = deckIdsParam.split(',').map(Number);
-      const mode = modeParam ? Number(modeParam) : BulkReviewMode.ShuffleAll;
+      const mode = modeParam ? Number(modeParam) : ReviewMode.ShuffleAll;
       setIsBulkReview(true);
       initializeSession(deckIds, mode);
     } else if (deckId) {
       setIsBulkReview(false);
-      initializeSession([Number(deckId)], BulkReviewMode.ShuffleAll);
+      initializeSession([Number(deckId)], ReviewMode.ShuffleAll);
     }
   }, [deckId, classroomId, searchParams]);
 
@@ -102,7 +103,7 @@ function QuickReview() {
     }
   }, [session?.currentIndex]);
 
-  const initializeSession = async (deckIds: number[], mode: BulkReviewMode) => {
+  const initializeSession = async (deckIds: number[], mode: ReviewMode) => {
     try {
       setLoading(true);
 
@@ -112,7 +113,7 @@ function QuickReview() {
       const decksData = await deckService.getByMultipleIds(deckIds);
 
       if (cardsData.length === 0) {
-        showError(t('quickReview.noCards'), t('quickReview.error'));
+        showError(t('quickReview.error'), t('quickReview.noCards'));
         if (isSingleDeck && deckId) {
           navigate(`/decks/${deckId}/cards`);
         } else if (classroomId) {
@@ -144,7 +145,7 @@ function QuickReview() {
       if (error.response?.status === 404 || error.response?.status === 403) {
         navigate('/not-found', { replace: true });
       } else {
-        showError(t('common:toast.error'), t('quickReview.error'));
+        showError(t('quickReview.error'), t('common:toast.error'));
         if (deckIds.length === 1 && deckId) {
           navigate(`/decks/${deckId}/cards`);
         } else if (classroomId) {
@@ -275,7 +276,7 @@ function QuickReview() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900">
+      <div className="flex items-center justify-center min-h-screen bg-background-app-light dark:bg-background-app-dark">
         <div className="text-center">
           <div className="w-12 h-12 mx-auto mb-4 border-b-2 rounded-full animate-spin border-cyan-500"></div>
           <p className="text-gray-600 dark:text-gray-400">
@@ -296,7 +297,6 @@ function QuickReview() {
 
   return (
     <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
-      <main className="flex-1 w-full">
         <div className="container max-w-4xl px-4 py-6 mx-auto md:py-8">
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
@@ -311,11 +311,10 @@ function QuickReview() {
                   {session.deckTitle}
                 </h1>
                 <div className="flex gap-2 mt-1">
-                  <Badge color="info" className="mt-1">
+                  <Badge color="success" icon={FaRepeat}>
                     {isBulkReview ? t('quickReview.bulkMode') : t('quickReview.mode')}
                   </Badge>
-                  <Badge color="cyan">
-                    <HiPlay className="w-3 h-3 mr-1" />
+                  <Badge color="cyan" icon={HiPlay}>
                     {t('quickReview.flipMode')}
                   </Badge>
                 </div>
@@ -403,10 +402,9 @@ function QuickReview() {
                   </div>
 
                   {/* Back*/}
-                  {isFlipped && (
-                    <div 
-                      className="absolute inset-0 backface-hidden rotate-y-180"
-                      style={{ transform: 'rotateY(180deg) translateZ(1px)' }}>
+                  <div 
+                    className="absolute inset-0 backface-hidden rotate-y-180"
+                    style={{ transform: 'rotateY(180deg) translateZ(1px)' }}>
                       <div className="flex flex-col items-center justify-center w-full h-full p-8 antialiased bg-white border-2 border-gray-200 shadow-xl dark:bg-gray-800 rounded-2xl dark:border-gray-700">
                         {shouldShowAudioButton('back') && (
                           <button
@@ -444,9 +442,8 @@ function QuickReview() {
                         </div>
                       </div>
                     </div>
-                  )}
+                  </div>
                 </div>
-              </div>
 
               {/* Actions */}
               <div className="flex justify-center gap-4">
@@ -502,7 +499,6 @@ function QuickReview() {
             </div>
           )}
         </div>
-      </main>
     </div>
   );
 }

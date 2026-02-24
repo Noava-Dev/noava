@@ -27,8 +27,21 @@
     "updateButton": "Update Card",
     "createButton": "Create Card",
     "uploadError": "Failed to upload media. Please try again.",
-     "enableVoiceAssistant": "Enable voice assistant",
-    "voiceAssistantHelp": "Card text will be read aloud if no audio file is uploaded"
+    "enableVoiceAssistant": "Enable voice assistant",
+    "voiceAssistantHelp": "Card text will be read aloud if no audio file is uploaded",
+    "uploadFile": "Upload File",
+    "recordAudio": "Record Audio",
+    "audioUploaded": "Audio uploaded"
+  },
+  "audioRecorder": {
+    "startRecording": "Start Recording",
+    "stopRecording": "Stop Recording",
+    "recordingComplete": "Recording complete",
+    "play": "Play",
+    "playing": "Playing...",
+    "delete": "Delete",
+    "maxDuration": "Max. 15 seconds",
+    "permissionDenied": "Microphone access denied. Please enable microphone permissions in your browser."
   },
   "flashcardDetail": {
     "backToDeck": "Back to Deck",
@@ -57,7 +70,12 @@
     "flipMode": "Flip Mode",
     "reverseReview": "Reverse Mode",
     "backToClassroom": "Back to {{name}}",
-    "importFromFile": "Import from File"
+    "importFromFile": "Import from File",
+    "longTermReview": "Long-Term Review",
+    "longTermWrite": "Long-Term Write",
+    "longTermFlip": "Long-Term Flip",
+    "longTermReverse": "Long-Term Reverse",
+    "learn": "Learn"
   },
   "quickReview": {
     "startReview": "Quick Review",
@@ -78,6 +96,7 @@
     "playVoiceAssistant": "Play with voice assistant",
     "noCards": "No cards found",
     "error": "Error loading cards",
+    "exitConfirm": "Are you sure you want to exit? Your progress will be saved.",
     "complete": {
       "title": "Review Complete!",
       "message": "You've reviewed all cards",
@@ -95,6 +114,25 @@
     "subtitle": "Bring your data from any source. We support CSV and Excel. Read our Docs for more information about formats.",
     "upload": "Upload file",
     "supported": "Supported Files: "
+  },
+  "longTerm": {
+    "mode": "Long-Term Review",
+    "writeMode": "Write Mode",
+    "typeAnswer": "Type your answer here...",
+    "checkAnswer": "Check Answer",
+    "correctAnswer": "Correct Answer",
+    "yourAnswer": "Your Answer",
+    "markIncorrect": "Mark as Incorrect",
+    "markCorrect": "Mark as Correct",
+    "correct": "Correct",
+    "incorrect": "Incorrect",
+    "accuracy": "Accuracy",
+    "noCardsToReview": "No cards are due for review at this time. Keep studying regularly!"
+  },
+  "empty": {
+    "title": "No flashcards yet",
+    "message": "Create some flashcards to start reviewing!",
+    "noResults": "No flashcards found"
   },
   "search": { "label": "Search" }
 }

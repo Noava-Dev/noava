@@ -126,6 +126,21 @@
     "inviting": "Invitation en cours...",
     "success": "Invitation envoyée avec succès",
     "error": "Échec de l'envoi de l'invitation",
-    "invalidEmail": "Veuillez entrer une adresse e-mail valide"
+    "invalidEmail": "Veuillez entrer une adresse e-mail valide"  
+  },
+  "analytics": {
+    "title": "Statistiques du deck",
+    "timeSpent": "Temps passé",
+    "avgMastery": "Maîtrise moy.",
+    "correctCards": "Cartes correctes",
+    "avgResponseTime": "Temps de réponse moy.",
+    "noData": {
+      "title": "Pas Encore de Statistiques",
+      "description": "Commencez à réviser ce deck pour voir vos progrès et statistiques."
+    }
+  },
+  "copy": {
+    "title": "Copier le deck",
+    "message": "Êtes-vous sûr de vouloir copier ce deck ? Cela peut prendre un certain temps."
   }
 }

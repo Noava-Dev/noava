@@ -1,22 +1,24 @@
 {
   "subtitle": "Je persoonlijke Noava-dashboard",
   "yourDecks": "Jouw decks",
-  "statcard": {
+  "yourClassrooms": "Jouw klassen",
+  "interactionActivity": "Interactie Activiteit",  "interactionSubtitle": "Jouw leeractiviteit van het afgelopen jaar",  "statcard": {
     "cardsreviewed": {
       "title": "Kaarten herhaald",
       "tooltip": "Totaal aantal flashcard-herhalingen dat je hebt voltooid over alle decks heen"
     },
     "accuracyrate": {
-      "title": "Nauwkeurigheidspercentage",
+      "title": "Nauwkeurigheid",
       "tooltip": "Percentage kaarten dat je bij de eerste poging correct hebt beantwoord"
     },
     "studytime": {
       "title": "Studietijd",
       "tooltip": "Totale tijd die je deze week aan het studeren van flashcards hebt besteed"
     },
-    "cardsdue": {
-      "title": "Te herhalen kaarten",
-      "tooltip": "Kaarten die vandaag gepland staan voor herhaling op basis van het spaced repetition-algoritme"
+    "lastreview": {
+      "title": "Laatste review",
+      "tooltip": "De datum van je meest recente flashcard review sessie",
+      "never": "Nooit"
     }
   },
   "decks": {

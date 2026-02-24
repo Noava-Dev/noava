@@ -28,7 +28,20 @@
     "createButton": "Kaart aanmaken",
     "uploadError": "Uploaden van media mislukt. Probeer het opnieuw.",
     "enableVoiceAssistant": "Spraakassistent inschakelen",
-    "voiceAssistantHelp": "Kaart tekst wordt voorgelezen als er geen audiobestand is geüpload"
+    "voiceAssistantHelp": "Kaart tekst wordt voorgelezen als er geen audiobestand is geüpload",
+    "uploadFile": "Bestand Uploaden",
+    "recordAudio": "Audio Opnemen",
+    "audioUploaded": "Audio geüpload"
+  },
+  "audioRecorder": {
+    "startRecording": "Start Opname",
+    "stopRecording": "Stop Opname",
+    "recordingComplete": "Opname compleet",
+    "play": "Afspelen",
+    "playing": "Bezig met afspelen...",
+    "delete": "Verwijderen",
+    "maxDuration": "Max. 15 seconden",
+    "permissionDenied": "Microfoon toegang geweigerd. Schakel microfoon rechten in via je browser."
   },
   "flashcardDetail": {
     "backToDeck": "Terug naar Deck",
@@ -57,7 +70,12 @@
     "flipMode": "Draai Modus",
     "reverseReview": "Omgekeerde Modus",
     "backToClassroom": "Terug naar {{name}}",
-    "importFromFile": "Importeren via bestand"
+    "importFromFile": "Importeren via bestand",
+    "longTermReview": "Lange Termijn Review",
+    "longTermWrite": "Lange Termijn Schrijven",
+    "longTermFlip": "Lange Termijn Omdraaien",
+    "longTermReverse": "Lange Termijn Omgekeerd",
+    "learn": "Leren"
   },
   "quickReview": {
     "startReview": "Quick Review",
@@ -78,6 +96,7 @@
     "playVoiceAssistant": "Afspelen met spraakassistent",
     "noCards": "Geen kaarten gevonden",
     "error": "Fout bij het laden van kaarten",
+    "exitConfirm": "Weet je zeker dat je wilt stoppen? Je voortgang wordt opgeslagen.",
     "complete": {
       "title": "Review Voltooid!",
       "message": "Je hebt alle kaarten doorgenomen",
@@ -88,7 +107,6 @@
       "restart": "Opnieuw Starten"
     },
     "reverseMode": "Omgekeerde Modus"
-    
   },
   "importCardsModal": {
     "header": "Flashcards Importeren",
@@ -96,6 +114,25 @@
     "subtitle": "Importeer je gegevens van overal. We ondersteunen CSV en Excel. Lees onze documentatie voor meer informatie over formaten.",
     "upload": "Bestand uploaden",
     "supported": "Ondersteunde bestanden: "
+  },
+  "longTerm": {
+    "mode": "Lange Termijn Review",
+    "writeMode": "Schrijfmodus",
+    "typeAnswer": "Typ hier je antwoord...",
+    "checkAnswer": "Controleer Antwoord",
+    "correctAnswer": "Correct Antwoord",
+    "yourAnswer": "Jouw Antwoord",
+    "markIncorrect": "Markeer als Fout",
+    "markCorrect": "Markeer als Correct",
+    "correct": "Correct",
+    "incorrect": "Fout",
+    "accuracy": "Nauwkeurigheid",
+    "noCardsToReview": "Er zijn op dit moment geen kaarten die moeten worden bekeken. Blijf regelmatig studeren!"
+  },
+  "empty": {
+    "title": "Nog geen flashcards",
+    "message": "Maak enkele flashcards om te beginnen met herhalen!",
+    "noResults": "Geen flashcards gevonden"
   },
   "search": { "label": "Zoeken" }
 }

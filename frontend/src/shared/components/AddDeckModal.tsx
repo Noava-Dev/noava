@@ -58,7 +58,7 @@ export const AddDeckModal: React.FC<AddDeckModalProps> = ({
       setFilteredDecks(data);
     } catch (error) {
       console.error('Error loading decks:', error);
-      showError(t('app.error'), t('addDeck.loadError'));
+      showError(t('addDeck.loadError'), t('app.error'));
     } finally {
       setLoading(false);
     }

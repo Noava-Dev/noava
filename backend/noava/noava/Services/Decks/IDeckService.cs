@@ -22,5 +22,6 @@ namespace noava.Services.Decks
         Task<DeckResponse> RemoveOwnerAsync(int deckId, string targetUserId, string userId);
         Task<DeckResponse> RemoveUserAsync(int deckId, string targetUserId, string userId);
         Task<List<DeckClassroomInfoDto>> GetUserDecksByClassroomsAsync(string userId);
+        Task<DeckResponse> CopyDeckAsync(int deckId, string userId);
     }
 }

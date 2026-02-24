@@ -4,13 +4,15 @@ import PageHeader from '../../shared/components/PageHeader';
 import type { SchoolDto } from '../../models/School';
 import { useToast } from '../../contexts/ToastContext';
 import { useSchoolService } from '../../services/SchoolService';
-import { LuPlus as Plus } from 'react-icons/lu';
+import { LuSchool, LuPlus as Plus } from 'react-icons/lu';
 import CreateSchoolModal from './components/CreateSchoolModal';
 import Loading from '../../shared/components/loading/Loading';
-import { useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useUser } from '@clerk/clerk-react';
 import { useUserRole } from '../../hooks/useUserRole';
 import ConfirmModal from '../../shared/components/ConfirmModal';
+import { Tooltip } from 'flowbite-react';
+import EmptyState from '../../shared/components/EmptyState';
 
 export default function SchoolsPage() {
   const navigate = useNavigate();
@@ -32,100 +34,103 @@ export default function SchoolsPage() {
       setLoading(true);
       const data = await schoolService.getAll();
 
-      if(userRole == 'ADMIN'){
+      if (userRole == 'ADMIN') {
         setSchools(data);
       } else if (user) {
-        const filteredSchools = data.filter(school => school.admins.some(a => a.clerkId === user.id))
-        setSchools(filteredSchools)
+        const filteredSchools = data.filter((school) =>
+          school.admins.some((a) => a.clerkId === user.id)
+        );
+        setSchools(filteredSchools);
       }
     } catch (error) {
-      showError('Error loading schools', 'Please check your connection.');
+      showError(
+        'Error',
+        'Failed to load schools. Please check your connection.'
+      );
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    if(userRole) {
-    fetchSchools();
+    if (userRole) {
+      fetchSchools();
     }
   }, [user, userRole]);
 
-const handleCreateSchool = async (data: {
+  const handleCreateSchool = async (data: {
     name: string;
     adminEmails: string[];
   }) => {
     try {
-      if(editingSchool){
+      if (editingSchool) {
         await schoolService.update(editingSchool.id, {
           schoolName: data.name,
-          schoolAdminEmails: data.adminEmails
-        })
+          schoolAdminEmails: data.adminEmails,
+        });
 
-        showSuccess( "School updated", `${data.name} was updated successfully.` );
-
-      }else{
+        showSuccess('Success', `${data.name} was updated successfully.`);
+      } else {
         await schoolService.create({
-        schoolName: data.name,
-        schoolAdminEmails: data.adminEmails
-      });
+          schoolName: data.name,
+          schoolAdminEmails: data.adminEmails,
+        });
 
-      showSuccess('School created', `${data.name} was added successfully.`);
-    }
+        showSuccess('Success', `${data.name} was added successfully.`);
+      }
       setIsModalOpen(false);
       setEditingSchool(null);
       await fetchSchools();
     } catch (error) {
-      showError('Create failed', 'Could not create school.');
+      showError('Error', 'Failed to create school.');
     }
   };
 
-const handleEditSchool = (id: number) => {
-  const school = schools.find((s) => s.id === id);
-  if (!school) return;
+  const handleEditSchool = (id: number) => {
+    const school = schools.find((s) => s.id === id);
+    if (!school) return;
 
-  setEditingSchool(school);
-  setIsModalOpen(true);
-};
+    setEditingSchool(school);
+    setIsModalOpen(true);
+  };
 
-const handleDeleteSchool = async (id: number) => {
-  const school = schools.find((s) => s.id === id);
-  if(!school) return;
+  const handleDeleteSchool = async (id: number) => {
+    const school = schools.find((s) => s.id === id);
+    if (!school) return;
 
-  setDeleteSchool(school)
-}
+    setDeleteSchool(school);
+  };
 
-const confirmDeleteSchool = async () => {
-  if (!deleteSchool) return;
+  const confirmDeleteSchool = async () => {
+    if (!deleteSchool) return;
 
-  try {
-    await schoolService.delete(deleteSchool.id);
-    showSuccess(
-      "School deleted",
-      `${deleteSchool.schoolName} was removed successfully.`
+    try {
+      await schoolService.delete(deleteSchool.id);
+      showSuccess(
+        'Success',
+        `${deleteSchool.schoolName} was deleted successfully.`
+      );
+      await fetchSchools();
+    } catch {
+      showError('Error', 'Failed to delete school.');
+    } finally {
+      setDeleteSchool(null);
+    }
+  };
+
+  const handleCardClick = (id: number) => {
+    navigate(`/schools/${id}/classrooms`);
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-background-app-light dark:bg-background-app-dark">
+        <Loading size="lg" />
+      </div>
     );
-    await fetchSchools();
-  } catch {
-    showError("Delete failed", "Could not delete school.");
-  } finally {
-    setDeleteSchool(null);
   }
-};
 
-
-const handleCardClick = (id: number) => {
-    navigate(`/schools/${id}/classrooms`)
-}
-
-if (loading) { 
-  return ( 
-  <div className="flex items-center justify-center min-h-screen bg-background-app-light dark:bg-background-app-dark">
-    <Loading size="lg" center text="Loading schools..." /> 
-  </div> 
-  ); 
-}
-
-return (
+  return (
     <div className="min-h-screen bg-background-app-light dark:bg-background-app-dark">
       <PageHeader>
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -134,38 +139,48 @@ return (
               Schools
             </h1>
             <p className="text-text-muted-light dark:text-text-muted-dark">
-              {userRole === 'ADMIN' 
-              ? 'Overview of all registered educational institutions.' 
-              : 'Overview of schools you manage.'}
+              {userRole === 'ADMIN'
+                ? 'Overview of all registered educational institutions.'
+                : 'Overview of schools you manage.'}
             </p>
           </div>
 
           {userRole === 'ADMIN' && (
-            <button
-              onClick={() => {
-                setIsModalOpen(true);
-                setEditingSchool(null);
-              }}
-              className="flex items-center justify-center gap-2 rounded-lg bg-primary-500 px-5 py-2.5 text-sm font-semibold text-white hover:bg-primary-600 shadow-md"
-            >
-              <Plus className="size-5" />
-              Add School
-            </button>
+            <div className="w-full md:w-fit">
+              <Tooltip content="Create a new school for your institution">
+                <button
+                  onClick={() => {
+                    setIsModalOpen(true);
+                    setEditingSchool(null);
+                  }}
+                  className="flex items-center justify-center gap-2 rounded-lg bg-primary-500 px-5 py-2.5 text-sm font-semibold text-white hover:bg-primary-600 shadow-md">
+                  <Plus className="size-5" />
+                  Add School
+                </button>
+              </Tooltip>
+            </div>
           )}
-
         </div>
       </PageHeader>
 
       <main className="px-4 py-12 mx-auto max-w-7xl sm:px-6">
         <div className="max-w-4xl mx-auto space-y-4">
           {schools.length === 0 ? (
-            <div className="py-12 text-center md:py-20">
-              <p className="mb-6 text-xl text-text-body-light dark:text-text-muted-dark md:text-2xl">
-                {userRole === 'ADMIN' 
-                ? 'No schools found. Start by adding a new school.' 
-                : 'You are not currently assigned to any schools.'}
-              </p>
-            </div>
+            <>
+              {userRole === 'ADMIN' ? (
+                <EmptyState
+                  title="No schools yet"
+                  description="Start by adding a new school."
+                  icon={LuSchool}
+                />
+              ) : (
+                <EmptyState
+                  title="No schools yet"
+                  description="You are not currently assigned to any schools."
+                  icon={LuSchool}
+                />
+              )}
+            </>
           ) : (
             schools.map((school) => (
               <SchoolCard
@@ -192,16 +207,15 @@ return (
         onClose={() => {
           setIsModalOpen(false);
           setEditingSchool(null);
-          }
-        }
+        }}
         onCreate={handleCreateSchool}
         initialData={
           editingSchool
-          ? {
-            name: editingSchool.schoolName,
-            adminEmails: editingSchool.admins.map(a => a.email),
-          }
-          : undefined
+            ? {
+                name: editingSchool.schoolName,
+                adminEmails: editingSchool.admins.map((a) => a.email),
+              }
+            : undefined
         }
       />
 
@@ -214,7 +228,6 @@ return (
         onConfirm={confirmDeleteSchool}
         onCancel={() => setDeleteSchool(null)}
       />
-
     </div>
   );
 }

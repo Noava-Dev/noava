@@ -3,16 +3,18 @@
   "createButton": "Créer une classe",
   "results": { "found": "résultats trouvés" },
   "empty": {
+    "title": "Aucune classe pour le moment",
     "noResults": "Aucune classe trouvée",
-    "message": "Vous n’avez pas encore de classes."
+    "message": "Vous n'êtes inscrit(e) dans aucune classe pour le moment.",
+    "messageSchools": "Cette école n’a pas encore de salles de classe."
   },
   "modal": {
     "createTitle": "Créer une classe",
     "editTitle": "Modifier la classe",
     "nameLabel": "Nom",
     "descriptionLabel": "Description",
-    "createButton": "Créer",
-    "updateButton": "Mettre à jour",
+    "createButton": "Créer une classe",
+    "updateButton": "Mettre à jour la classe",
     "cancelButton": "Annuler"
   },
   "members": {
@@ -26,6 +28,7 @@
     "notAuthorized": "Non autorisé",
     "onlyTeachers": "Seuls les enseignants peuvent accéder à cette page",
     "editTitle": "Modifier le membre",
+    "updateButton": "Mettre à jour le membre",
     "isTeacher": "Est enseignant",
     "saving": "Enregistrement...",
     "updateSuccess": "Membre mis à jour",
@@ -42,8 +45,24 @@
       "role": "Rôle",
       "actions": "Actions"
     },
+    "actions": {
+      "viewStatistics": "Voir les statistiques"
+    },
     "role": { "teacher": "Enseignant", "student": "Élève" },
-    "member": "Membre"
+    "member": "Membre",
+    "statistics": {
+      "title": "Statistiques du membre",
+      "filterDecks": "Filtrer par decks",
+      "interactionActivity": "Activité d'interaction",
+      "interactionSubtitle": "Activité d'apprentissage de l'élève au cours de l'année passée",
+      "noDeckSelected": {
+        "title": "Aucun deck sélectionné",
+        "description": "Sélectionnez au moins un deck pour voir les statistiques."
+      },
+      "noData": {
+        "description": "Ce membre n'a pas encore révisé de cartes des decks sélectionnés."
+      }
+    }
   },
   "toast": {
     "loadError": "Échec du chargement des classes",
@@ -133,6 +152,17 @@
     "cards": "cartes",
     "addButton": "Ajouter",
     "done": "Terminé"
+  },
+  "analytics": {
+    "title": "Analytique de la classe",
+    "timeSpent": "Temps passé",
+    "avgMastery": "Maîtrise moyenne",
+    "correctCards": "Cartes correctes",
+    "activeUsers": "Utilisateurs actifs",
+    "noData": {
+      "title": "Aucune statistique pour l'instant",
+      "description": "Attendez que vos élèves commencent à réviser les decks de cette classe pour voir les progrès et les statistiques."
+    }
   },
   "notFound": "Classe introuvable"
 }

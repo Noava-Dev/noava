@@ -11,7 +11,7 @@ import {
   Radio,
 } from 'flowbite-react';
 import type { Deck } from '../../models/Deck';
-import { BulkReviewMode } from '../../models/Flashcard';
+import { ReviewMode } from '../../models/Flashcard';
 
 type ReviewType = 'flip' | 'write' | 'reverse';
 
@@ -34,14 +34,14 @@ export const BulkReviewModal: React.FC<BulkReviewModalProps> = ({
   const navigate = useNavigate();
 
   const [selectedDeckIds, setSelectedDeckIds] = useState<number[]>([]);
-  const [shuffleMode, setShuffleMode] = useState<BulkReviewMode>(
-    BulkReviewMode.ShuffleAll
+  const [shuffleMode, setShuffleMode] = useState<ReviewMode>(
+    ReviewMode.ShuffleAll
   );
 
   useEffect(() => {
     if (opened) {
       setSelectedDeckIds([]);
-      setShuffleMode(BulkReviewMode.ShuffleAll);
+      setShuffleMode(ReviewMode.ShuffleAll);
     }
   }, [opened]);
 
@@ -82,7 +82,7 @@ export const BulkReviewModal: React.FC<BulkReviewModalProps> = ({
 
   const handleClose = () => {
     setSelectedDeckIds([]);
-    setShuffleMode(BulkReviewMode.ShuffleAll);
+    setShuffleMode(ReviewMode.ShuffleAll);
     onClose();
   };
 
@@ -156,9 +156,9 @@ export const BulkReviewModal: React.FC<BulkReviewModalProps> = ({
                   <Radio
                     id="shuffle-none"
                     name="shuffleMode"
-                    value={BulkReviewMode.None}
-                    checked={shuffleMode === BulkReviewMode.None}
-                    onChange={() => setShuffleMode(BulkReviewMode.None)}
+                    value={ReviewMode.None}
+                    checked={shuffleMode === ReviewMode.None}
+                    onChange={() => setShuffleMode(ReviewMode.None)}
                   />
                   <Label htmlFor="shuffle-none" className="font-normal cursor-pointer">
                     {t('bulkReview.shuffleMode.none')}
@@ -168,9 +168,9 @@ export const BulkReviewModal: React.FC<BulkReviewModalProps> = ({
                   <Radio
                     id="shuffle-per-deck"
                     name="shuffleMode"
-                    value={BulkReviewMode.ShufflePerDeck}
-                    checked={shuffleMode === BulkReviewMode.ShufflePerDeck}
-                    onChange={() => setShuffleMode(BulkReviewMode.ShufflePerDeck)}
+                    value={ReviewMode.ShufflePerDeck}
+                    checked={shuffleMode === ReviewMode.ShufflePerDeck}
+                    onChange={() => setShuffleMode(ReviewMode.ShufflePerDeck)}
                   />
                   <Label htmlFor="shuffle-per-deck" className="font-normal cursor-pointer">
                     {t('bulkReview.shuffleMode.perDeck')}
@@ -180,9 +180,9 @@ export const BulkReviewModal: React.FC<BulkReviewModalProps> = ({
                   <Radio
                     id="shuffle-all"
                     name="shuffleMode"
-                    value={BulkReviewMode.ShuffleAll}
-                    checked={shuffleMode === BulkReviewMode.ShuffleAll}
-                    onChange={() => setShuffleMode(BulkReviewMode.ShuffleAll)}
+                    value={ReviewMode.ShuffleAll}
+                    checked={shuffleMode === ReviewMode.ShuffleAll}
+                    onChange={() => setShuffleMode(ReviewMode.ShuffleAll)}
                   />
                   <Label htmlFor="shuffle-all" className="font-normal cursor-pointer">
                     {t('bulkReview.shuffleMode.all')}
@@ -202,15 +202,16 @@ export const BulkReviewModal: React.FC<BulkReviewModalProps> = ({
             </div>
           )}
 
-          <div className="flex justify-end gap-3 pt-2">
-            <Button color="gray" onClick={handleClose}>
-              {t('common:actions.cancel')}
-            </Button>
+          <div className="flex flex-col gap-3 pt-2 sm:flex-row">
             <Button
               onClick={handleStartReview}
               disabled={selectedDeckIds.length === 0}
+              className="w-full sm:flex-1"
             >
               {t('bulkReview.startReview')}
+            </Button>
+            <Button color="gray" onClick={handleClose} className="w-full sm:w-auto">
+              {t('common:actions.cancel')}
             </Button>
           </div>
         </div>

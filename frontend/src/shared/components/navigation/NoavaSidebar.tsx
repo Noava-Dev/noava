@@ -14,7 +14,7 @@ import {
   LuLogOut,
   LuSettings,
   LuUsers,
-  LuSchool
+  LuSchool,
 } from 'react-icons/lu';
 import { RiShieldUserLine } from 'react-icons/ri';
 import { useUserRole } from '../../../hooks/useUserRole';
@@ -24,6 +24,7 @@ import { useEffect, useState } from 'react';
 import { notificationService } from '../../../services/NotificationService';
 import { useSchoolService } from '../../../services/SchoolService';
 import type { SchoolDto } from '../../../models/School';
+import { useTranslation } from 'react-i18next';
 
 type NoavaSidebarProps = {
   onNavigate?: () => void;
@@ -31,6 +32,8 @@ type NoavaSidebarProps = {
 };
 
 function NoavaSidebar({ className, onNavigate }: NoavaSidebarProps) {
+  const { t } = useTranslation('sidebar');
+
   const { userRole } = useUserRole();
   const { user } = useUser();
   const { openUserProfile } = useClerk();
@@ -60,29 +63,29 @@ function NoavaSidebar({ className, onNavigate }: NoavaSidebarProps) {
   }, []);
 
   useEffect(() => {
-console.log('userRole:', userRole);
-  console.log('user?.id:', user?.id);
-  console.log('schools:', schools);
-  async function fetchSchools() {
-    if (!user) return;
-    try {
-      const data = await schoolService.getAll();
-      setSchools(data);
+    console.log('userRole:', userRole);
+    console.log('user?.id:', user?.id);
+    console.log('schools:', schools);
+    async function fetchSchools() {
+      if (!user) return;
+      try {
+        const data = await schoolService.getAll();
+        setSchools(data);
 
-      if (user && userRole !== 'ADMIN') {
-        const adminSchools = data.filter(s =>
-          s.admins?.some(a => a.clerkId === user.id)
-        );
-        setIsSchoolAdmin(adminSchools.length > 0);
+        if (user && userRole !== 'ADMIN') {
+          const adminSchools = data.filter((s) =>
+            s.admins?.some((a) => a.clerkId === user.id)
+          );
+          setIsSchoolAdmin(adminSchools.length > 0);
+        }
+      } catch (error) {
+        console.error('Failed to fetch schools for sidebar', error);
+        setIsSchoolAdmin(false);
       }
-    } catch (error) {
-      console.error("Failed to fetch schools for sidebar", error);
-      setIsSchoolAdmin(false);
     }
-  }
 
-  fetchSchools();
-}, [user, userRole]);
+    fetchSchools();
+  }, [user, userRole]);
 
   return (
     <Sidebar
@@ -132,7 +135,7 @@ console.log('userRole:', userRole);
               onNavigate?.();
             }}
             className="font-semibold cursor-pointer">
-            Classrooms
+            {t('classrooms')}
           </SidebarItem>
 
           {(userRole === 'ADMIN' || isSchoolAdmin) && (
@@ -144,7 +147,7 @@ console.log('userRole:', userRole);
                 onNavigate?.();
               }}
               className="font-semibold cursor-pointer">
-              Schools
+              {t('schools')}
             </SidebarItem>
           )}
 
@@ -172,7 +175,7 @@ console.log('userRole:', userRole);
               onNavigate?.();
             }}
             className="font-semibold cursor-pointer">
-            Notifications
+            {t('notifications')}
           </SidebarItem>
 
           <SidebarItem
@@ -183,7 +186,7 @@ console.log('userRole:', userRole);
               onNavigate?.();
             }}
             className="font-semibold cursor-pointer">
-            Settings
+            {t('settings')}
           </SidebarItem>
 
           {userRole === 'ADMIN' ? (
@@ -203,7 +206,7 @@ console.log('userRole:', userRole);
             <SidebarItem
               icon={LuLogOut}
               className="font-semibold cursor-pointer">
-              Sign out
+              {t('signOut')}
             </SidebarItem>
           </SignOutButton>
         </SidebarItemGroup>
@@ -213,7 +216,7 @@ console.log('userRole:', userRole);
           <div className="flex items-center gap-3">
             <button
               onClick={() => openUserProfile()}
-              className="flex items-center gap-3 pl-0 bg-transparent text-left border-none active:outline-none">
+              className="flex items-center gap-3 pl-0 text-left bg-transparent border-none active:outline-none">
               <Avatar
                 img={user?.imageUrl}
                 className="shrink-0"

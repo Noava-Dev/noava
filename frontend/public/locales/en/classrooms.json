@@ -3,16 +3,18 @@
   "createButton": "Create Classroom",
   "results": { "found": "results found" },
   "empty": {
+    "title": "No classrooms yet",
     "noResults": "No classrooms found",
-    "message": "You have no classrooms yet."
+    "message": "You aren't in any classrooms yet.",
+    "messageSchools": "This school doesn't have any classrooms yet."
   },
   "modal": {
     "createTitle": "Create Classroom",
     "editTitle": "Edit Classroom",
     "nameLabel": "Name",
     "descriptionLabel": "Description",
-    "createButton": "Create",
-    "updateButton": "Update",
+    "createButton": "Create Classroom",
+    "updateButton": "Update Classroom",
     "cancelButton": "Cancel"
   },
   "members": {
@@ -26,6 +28,7 @@
     "notAuthorized": "Not authorized",
     "onlyTeachers": "Only teachers may access this page",
     "editTitle": "Edit member",
+    "updateButton": "Update Member",
     "isTeacher": "Is teacher",
     "saving": "Saving...",
     "updateSuccess": "Member updated",
@@ -42,8 +45,24 @@
       "role": "Role",
       "actions": "Actions"
     },
+    "actions": {
+      "viewStatistics": "View Statistics"
+    },
     "role": { "teacher": "Teacher", "student": "Student" },
-    "member": "Member"
+    "member": "Member",
+    "statistics": {
+      "title": "Member Statistics",
+      "filterDecks": "Filter by Decks",
+      "interactionActivity": "Interaction Activity",
+      "interactionSubtitle": "Student learning activity over the past year",
+      "noDeckSelected": {
+        "title": "No Decks Selected",
+        "description": "Select at least one deck to view statistics."
+      },
+      "noData": {
+        "description": "This member has not reviewed any cards from the selected decks yet."
+      }
+    }
   },
   "toast": {
     "loadError": "Failed to load classrooms",
@@ -124,7 +143,7 @@
     "reverseReview": "Reverse Mode"
   },
   "addDeck": {
-     "title": "Add Deck to Classroom",
+    "title": "Add Deck to Classroom",
     "description": "Add one of your existing decks to this classroom.",
     "searchPlaceholder": "Search your decks...",
     "noResults": "No decks found matching your search",
@@ -133,6 +152,17 @@
     "cards": "cards",
     "addButton": "Add",
     "done": "Done"
+  },
+  "analytics": {
+    "title": "Classroom Analytics",
+    "timeSpent": "Time Spent",
+    "avgMastery": "Avg Mastery",
+    "correctCards": "Correct Cards",
+    "activeUsers": "Active Users",
+    "noData": {
+      "title": "No Statistics Yet",
+      "description": "Wait for your students to start reviewing decks in this classroom to see progress and statistics."
+    }
   },
   "notFound": "Classroom not found"
 }

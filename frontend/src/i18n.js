@@ -17,6 +17,8 @@ i18n
       'decks',
       'flashcards',
       'dashboard',
+      'errors',
+      'heatmap',
     ],
     defaultNS: 'common',
 

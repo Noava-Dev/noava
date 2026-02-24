@@ -39,7 +39,7 @@ const InviteMemberModal: React.FC<InviteMemberModalProps> = ({
   };
 
   return (
-    <Modal show={show} onClose={onClose} size="md">
+    <Modal show={show} onClose={onClose} size="md" dismissible>
       <ModalHeader>{t('members.inviteTitle')}</ModalHeader>
       <ModalBody>
         <div className="space-y-4">
@@ -55,15 +55,16 @@ const InviteMemberModal: React.FC<InviteMemberModalProps> = ({
         </div>
       </ModalBody>
       <ModalFooter>
-        <div className="flex justify-end w-full gap-3">
-          <Button color="gray" onClick={onClose} size="sm">
-            {t('common:actions.cancel')}
-          </Button>
+        <div className="flex w-full flex-col gap-3 sm:flex-row">
           <Button
             onClick={handleInvite}
             disabled={!canInvite || loading || !email.trim()}
-            size="sm">
+            size="sm"
+            className="w-full sm:flex-1">
             {t('common:actions.invite')}
+          </Button>
+          <Button color="gray" onClick={onClose} size="sm" className="w-full sm:w-auto">
+            {t('common:actions.cancel')}
           </Button>
         </div>
       </ModalFooter>

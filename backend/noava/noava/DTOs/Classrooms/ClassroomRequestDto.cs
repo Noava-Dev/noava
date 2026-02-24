@@ -11,7 +11,7 @@ namespace noava.DTOs.Classrooms
         [Required(ErrorMessage = "Description is required")]
         [StringLength(500, ErrorMessage = "Description can be maximum 500 characters")]
         public string Description { get; set; } = string.Empty;
-
+        public string? CoverImageBlobName { get; set; }
         public int? SchoolId { get; set; }
     }
 }

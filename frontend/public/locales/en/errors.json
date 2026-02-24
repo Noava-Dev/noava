@@ -1,0 +1,47 @@
+{
+  "validation": {
+    "required": "This field is required",
+    "email": {
+      "required": "Email address is required",
+      "invalid": "Please enter a valid email address",
+      "duplicate": "This email has already been added"
+    },
+    "name": {
+      "required": "Name is required"
+    },
+    "title": {
+      "required": "Title is required"
+    },
+    "description": {
+      "required": "Description is required"
+    },
+    "language": {
+      "required": "Language selection is required"
+    },
+    "code": {
+      "required": "Code is required",
+      "empty": "Please enter a code"
+    },
+    "file": {
+      "required": "Please select a file to upload"
+    },
+    "flashcard": {
+      "frontText": "Front text is required",
+      "backText": "Back text is required"
+    },
+    "school": {
+      "name": "School name is required",
+      "minAdmins": "At least one admin email is required"
+    },
+    "contact": {
+      "title": "Please select a title",
+      "email": "Please enter a valid email address",
+      "subject": "Please select a subject",
+      "description": {
+        "required": "Message is required",
+        "minLength": "Message must be at least 20 characters",
+        "maxLength": "Message must not exceed 4000 characters"
+      }
+    }
+  }
+}

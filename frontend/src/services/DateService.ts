@@ -12,4 +12,27 @@ export const formatDateToEuropean = (value?: string | number | Date): string => 
   });
 };
 
-export default { formatDateToEuropean };
+export const formatResponseTime = (milliseconds: number): string => {
+  if (milliseconds >= 1000) {
+    const seconds = (milliseconds / 1000).toFixed(1);
+    return `${seconds}s`;
+  }
+  return `${Math.round(milliseconds)}ms`;
+};
+
+export const formatTimeSpent = (seconds: number): string => {
+  const minutes = Math.floor(seconds / 60);
+  
+  if (minutes > 50) {
+    const hours = Math.floor(seconds / 3600);
+    const remainingMinutes = Math.floor((seconds % 3600) / 60);
+    
+    if (hours > 0) {
+      return remainingMinutes > 0 ? `${hours}h ${remainingMinutes}m` : `${hours}h`;
+    }
+  }
+  
+  return `${minutes}m`;
+};
+
+export default { formatDateToEuropean, formatResponseTime, formatTimeSpent };

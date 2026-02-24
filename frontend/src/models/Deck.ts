@@ -1,6 +1,5 @@
 export enum DeckVisibility {
   Public = 'Public',
-  Shared = 'Shared',
   Private = 'Private',
 }
 

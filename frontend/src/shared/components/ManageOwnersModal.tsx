@@ -44,6 +44,7 @@ export const ManageOwnersModal = ({
   const [inviteModalOpen, setInviteModalOpen] = useState(false);
   const [updatingJoinCode, setUpdatingJoinCode] = useState(false);
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
+  const [confirmRegenerateOpen, setConfirmRegenerateOpen] = useState(false);
   const [userToRemove, setUserToRemove] = useState<ClerkUserResponse | null>(null);
   const [removingUser, setRemovingUser] = useState(false);
 
@@ -80,7 +81,7 @@ export const ManageOwnersModal = ({
         }
       }
       
-      showError(t('common:toast.error'), errorMessage);
+      showError(errorMessage, t('common:toast.error'));
       setUsers([]);
     } finally {
       setLoading(false);
@@ -91,7 +92,7 @@ export const ManageOwnersModal = ({
     if (!deck) return;
     try {
       await deckService.inviteByEmail(deck.deckId, email, isOwner);
-      showSuccess(t('common:toast.success'), t('decks:invite.success'));
+      showSuccess(t('decks:invite.success'), t('common:toast.success'));
       await loadUsers();
       onUpdate();
     } catch (error: any) {
@@ -106,7 +107,7 @@ export const ManageOwnersModal = ({
         }
       }
       
-      showError(t('common:toast.error'), errorMessage);
+      showError(errorMessage, t('common:toast.error'));
     }
   };
 
@@ -116,7 +117,7 @@ export const ManageOwnersModal = ({
     try {
       setRemovingUser(true);
       await deckService.removeUser(deck.deckId, userToRemove.clerkId);
-      showSuccess(t('common:toast.success'), t('decks:owners.removeSuccess'));
+      showSuccess(t('decks:owners.removeSuccess'), t('common:toast.success'));
       await loadUsers();
       onUpdate();
     } catch (error: any) {
@@ -131,7 +132,7 @@ export const ManageOwnersModal = ({
         }
       }
       
-      showError(t('common:toast.error'), errorMessage);
+      showError(errorMessage, t('common:toast.error'));
     } finally {
       setRemovingUser(false);
       setConfirmModalOpen(false);
@@ -149,37 +150,36 @@ export const ManageOwnersModal = ({
 
     try {
       await deckService.inviteByEmail(deck.deckId, targetUser.email, !targetUser.isOwner);
-      showSuccess(t('common:toast.success'), t('decks:owners.updateSuccess'));
+      showSuccess(t('decks:owners.updateSuccess'), t('common:toast.success'));
       await loadUsers();
       onUpdate();
     } catch (error: any) {
       console.error('Error updating user role:', error);
-      showError(t('common:toast.error'), t('decks:owners.updateError'));
+      showError(t('decks:owners.updateError'), t('common:toast.error'));
     }
   };
 
   const handleCopyJoinCode = () => {
     if (deck?.joinCode) {
       navigator.clipboard.writeText(deck.joinCode);
-      showSuccess(t('common:toast.success'), t('decks:owners.codeCopied'));
+      showSuccess(t('decks:owners.codeCopied'), t('common:toast.success'));
     }
   };
 
   const handleUpdateJoinCode = async () => {
     if (!deck) return;
-    
-    if (!confirm(t('decks:owners.confirmRegenerateCode'))) return;
 
     try {
       setUpdatingJoinCode(true);
       await deckService.updateJoinCode(deck.deckId);
-      showSuccess(t('common:toast.success'), t('decks:owners.codeRegenerated'));
+      showSuccess(t('decks:owners.codeRegenerated'), t('common:toast.success'));
       onUpdate();
     } catch (error) {
       console.error('Error updating join code:', error);
-      showError(t('common:toast.error'), t('decks:owners.codeRegenerateError'));
+      showError(t('decks:owners.codeRegenerateError'), t('common:toast.error'));
     } finally {
       setUpdatingJoinCode(false);
+      setConfirmRegenerateOpen(false);
     }
   };
 
@@ -220,7 +220,7 @@ export const ManageOwnersModal = ({
                   <Button
                     size="sm"
                     color="gray"
-                    onClick={handleUpdateJoinCode}
+                    onClick={() => setConfirmRegenerateOpen(true)}
                     disabled={updatingJoinCode || !deck.joinCode}
                   >
                     {updatingJoinCode ? (
@@ -368,6 +368,21 @@ export const ManageOwnersModal = ({
         message={t('decks:owners.confirmRemoveMessage', {
           name: userToRemove ? `${userToRemove.firstName} ${userToRemove.lastName}` : ''
         })}
+        confirmDisabled={removingUser}
+        cancelDisabled={removingUser}
+      />
+
+      <ConfirmModal
+        show={confirmRegenerateOpen}
+        title={t('decks:owners.regenerateCode')}
+        message={t('decks:owners.confirmRegenerateCode')}
+        confirmLabel={t('decks:owners.regenerateCode')}
+        cancelLabel={t('common:actions.cancel')}
+        confirmColor="primary"
+        onConfirm={handleUpdateJoinCode}
+        onCancel={() => setConfirmRegenerateOpen(false)}
+        confirmDisabled={updatingJoinCode}
+        cancelDisabled={updatingJoinCode}
       />
     </>
   );

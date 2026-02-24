@@ -6,6 +6,7 @@ namespace noava.DTOs.Notifications
     {
         public string UserId { get; set; } = string.Empty;
         public NotificationType Type { get; set; }
+        public string TitleKey { get; set; } = string.Empty;
         public string TemplateKey { get; set; } = string.Empty;
         public string? ParametersJson { get; set; } 
         public string? Link { get; set; }

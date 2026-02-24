@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Button, Select } from 'flowbite-react';
+import { Button, Select, Tooltip, Modal, ModalHeader, ModalBody, ModalFooter, Pagination } from 'flowbite-react';
 import { HiPlus } from 'react-icons/hi';
 import { useTranslation } from 'react-i18next';
-import NoavaFooter from '../../shared/components/navigation/NoavaFooter';
 import PageHeader from '../../shared/components/PageHeader';
 import ClassroomCard from '../../shared/components/ClassroomCard';
 import ClassroomModal from '../../shared/components/ClassroomModal';
@@ -16,9 +14,10 @@ import { useToast } from '../../contexts/ToastContext';
 import type { ClassroomResponse } from '../../models/Classroom';
 import { TbDoorEnter } from 'react-icons/tb';
 import EmptyState from '../../shared/components/EmptyState';
+import { LuUsers } from 'react-icons/lu';
 
 function ClassroomsPage() {
-  const { t } = useTranslation('classrooms');
+  const { t } = useTranslation(['classrooms', 'decks']);
   const classroomSvc = useClassroomService();
   const [classrooms, setClassrooms] = useState<ClassroomResponse[]>([]);
   const [loading, setLoading] = useState(true);
@@ -30,10 +29,14 @@ function ClassroomsPage() {
   const [sortOrder, setSortOrder] = useState<'newest' | 'oldest' | 'az' | 'za'>(
     'az'
   );
+  const [page, setPage] = useState(1);
+  const pageSize = 16;
   const { showSuccess, showError } = useToast();
   const [deleteId, setDeleteId] = useState<number | null>(null);
   const [requestCodeId, setRequestCodeId] = useState<number | null>(null);
-  const navigate = useNavigate();
+  const [joinCodeModalOpen, setJoinCodeModalOpen] = useState(false);
+  const [joinCode, setJoinCode] = useState('');
+  const [joiningClassroom, setJoiningClassroom] = useState(false);
 
   useEffect(() => {
     fetchClassrooms();
@@ -45,7 +48,7 @@ function ClassroomsPage() {
       const data = await classroomSvc.getAllForUser();
       setClassrooms(data);
     } catch (error) {
-      showError(t('app.error'), t('toast.loadError'));
+      showError(t('toast.loadError'), t('app.error'));
     } finally {
       setLoading(false);
     }
@@ -54,11 +57,11 @@ function ClassroomsPage() {
   const handleCreate = async (payload: any) => {
     try {
       await classroomSvc.create(payload);
-      showSuccess(t('toast.createSuccess'), t('toast.createSuccess'));
+      showSuccess(t('toast.createSuccess'), 'Success');
       setIsModalOpen(false);
       fetchClassrooms();
     } catch (error) {
-      showError(t('app.error'), t('toast.createError'));
+      showError(t('toast.createError'), t('app.error'));
     }
   };
 
@@ -66,12 +69,12 @@ function ClassroomsPage() {
     if (!editingClassroom) return;
     try {
       await classroomSvc.update(editingClassroom.id, payload);
-      showSuccess(t('toast.updateSuccess'), t('toast.updateSuccess'));
+      showSuccess(t('toast.updateSuccess'), 'Success');
       setIsModalOpen(false);
       setEditingClassroom(undefined);
       fetchClassrooms();
     } catch (error) {
-      showError(t('app.error'), t('toast.updateError'));
+      showError(t('toast.updateError'), t('app.error'));
     }
   };
 
@@ -81,10 +84,10 @@ function ClassroomsPage() {
     if (deleteId === null) return;
     try {
       await classroomSvc.delete(deleteId);
-      showSuccess(t('toast.deleteSuccess'), t('toast.deleteSuccess'));
+      showSuccess(t('toast.deleteSuccess'), 'Success');
       fetchClassrooms();
     } catch (error) {
-      showError(t('app.error'), t('toast.deleteError'));
+      showError(t('toast.deleteError'), t('app.error'));
     } finally {
       setDeleteId(null);
     }
@@ -98,10 +101,10 @@ function ClassroomsPage() {
     if (requestCodeId === null) return;
     try {
       await classroomSvc.updateJoinCode(requestCodeId);
-      showSuccess(t('toast.requestCodeSuccess'), t('toast.requestCodeSuccess'));
+      showSuccess(t('toast.requestCodeSuccess'), 'Success');
       fetchClassrooms();
     } catch (error) {
-      showError(t('app.error'), t('toast.requestCodeError'));
+      showError(t('toast.requestCodeError'), t('app.error'));
     } finally {
       setRequestCodeId(null);
     }
@@ -115,6 +118,26 @@ function ClassroomsPage() {
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setEditingClassroom(undefined);
+  };
+
+  const handleJoinByCode = async () => {
+    if (!joinCode.trim()) {
+      showError(t('join.form.empty'), t('common:toast.error'));
+      return;
+    }
+
+    try {
+      setJoiningClassroom(true);
+      await classroomSvc.joinByCode(joinCode.trim());
+      showSuccess(t('join.success'), 'Success');
+      setJoinCodeModalOpen(false);
+      setJoinCode('');
+      fetchClassrooms();
+    } catch (error) {
+      showError(t('join.error'), t('common:toast.error'));
+    } finally {
+      setJoiningClassroom(false);
+    }
   };
 
   const filtered = classrooms.filter(
@@ -142,6 +165,12 @@ function ClassroomsPage() {
     }
   });
 
+  // Paginate classrooms
+  const totalItems = sorted.length;
+  const totalPages = Math.ceil(totalItems / pageSize) || 1;
+  const safePage = Math.min(page, totalPages);
+  const paginatedClassrooms = sorted.slice((safePage - 1) * pageSize, safePage * pageSize);
+
   return (
     <div className="flex min-h-screen bg-background-app-light dark:bg-background-app-dark">
       <div className="flex-1 w-full ml-0">
@@ -167,22 +196,30 @@ function ClassroomsPage() {
                 {/* Action Buttons */}
                 <div className="flex flex-col gap-3 mt-4 mb-8 md:flex-row md:justify-between md:items-start md:mt-6">
                   {/* Create Classroom */}
-                  <Button
-                    onClick={() => setIsModalOpen(true)}
-                    size="lg"
-                    className="w-full md:w-fit bg-gradient-to-r from-primary-600 to-primary-700">
-                    <HiPlus className="mr-2 size-5" />
-                    {t('createButton')}
-                  </Button>
+                  <div className="w-full md:w-fit">
+                    <Tooltip content={t('common:tooltips.createClassroom')}>
+                      <Button
+                        onClick={() => setIsModalOpen(true)}
+                        size="lg"
+                        className="w-full md:w-fit bg-gradient-to-r from-primary-600 to-primary-700">
+                        <HiPlus className="mr-2 size-5" />
+                        {t('createButton')}
+                      </Button>
+                    </Tooltip>
+                  </div>
 
                   {/* Join Classroom */}
-                  <Button
-                    onClick={() => navigate('/classrooms/join')}
-                    size="lg"
-                    className="w-full md:w-fit bg-gradient-to-r from-secondary-600 to-secondary-700 hover:shadow-sm hover:border-border">
-                    <TbDoorEnter className="mr-2 size-5" />
-                    {t('joinButton')}
-                  </Button>
+                  <div className="w-full md:w-fit">
+                    <Tooltip content={t('common:tooltips.joinClassroom')}>
+                      <Button
+                        onClick={() => setJoinCodeModalOpen(true)}
+                        size="lg"
+                        className="w-full md:w-fit bg-gradient-to-r from-secondary-600 to-secondary-700 hover:shadow-sm hover:border-border">
+                        <TbDoorEnter className="mr-2 size-5" />
+                        {t('joinButton')}
+                      </Button>
+                    </Tooltip>
+                  </div>
                 </div>
               </div>
             </div>
@@ -235,30 +272,45 @@ function ClassroomsPage() {
                 <Loading center size="lg" className="mx-auto" />
               </div>
             ) : sorted.length > 0 ? (
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:gap-6">
-                {sorted.map((c) => (
-                  <ClassroomCard
-                    key={c.id}
-                    classroom={c}
-                    onEdit={handleEdit}
-                    onDelete={handleDelete}
-                    onRequestNewCode={handleRequestNewCode}
-                  />
-                ))}
-              </div>
+              <>
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:gap-6">
+                  {paginatedClassrooms.map((c) => (
+                    <ClassroomCard
+                      key={c.id}
+                      classroom={c}
+                      onEdit={handleEdit}
+                      onDelete={handleDelete}
+                      onRequestNewCode={handleRequestNewCode}
+                    />
+                  ))}
+                </div>
+                {totalItems > pageSize && (
+                  <div className="flex justify-center mt-6">
+                    <Pagination
+                      layout="table"
+                      currentPage={page}
+                      totalItems={totalItems}
+                      itemsPerPage={pageSize}
+                      onPageChange={(p) => setPage(p)}
+                      showIcons
+                    />
+                  </div>
+                )}
+              </>
             ) : searchTerm ? (
               <EmptyState
                 title={t('empty.noResults')}
                 description={t('common:search.otherSearchTerm')}
+                icon={LuUsers}
                 buttonOnClick={() => setSearchTerm('')}
                 clearButtonText={t('common:search.clearSearch')}
               />
             ) : (
-              <div className="py-12 text-center md:py-20">
-                <p className="mb-6 text-xl text-text-body-light dark:text-text-muted-dark md:text-2xl">
-                  {t('empty.message')}
-                </p>
-              </div>
+              <EmptyState
+                title={t('empty.title')}
+                description={t('empty.message')}
+                icon={LuUsers}
+              />
             )}
           </div>
         </section>
@@ -269,6 +321,45 @@ function ClassroomsPage() {
           onSubmit={editingClassroom ? handleUpdate : handleCreate}
           classroom={editingClassroom}
         />
+
+        {/* Join by Code Modal */}
+        <Modal show={joinCodeModalOpen} onClose={() => setJoinCodeModalOpen(false)} size="md" dismissible>
+          <ModalHeader>{t('join.title')}</ModalHeader>
+          <ModalBody>
+            <div className="space-y-4">
+              <p className="text-sm text-text-body-light dark:text-text-muted-dark">
+                {t('decks:joinCode.description')}
+              </p>
+              <div>
+                <label className="block mb-2 text-sm font-medium">
+                  {t('join.form.label')}
+                </label>
+                <input
+                  type="text"
+                  value={joinCode}
+                  onChange={(e) => setJoinCode(e.target.value)}
+                  placeholder={t('decks:joinCode.placeholder')}
+                  className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600"
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter') {
+                      handleJoinByCode();
+                    }
+                  }}
+                />
+              </div>
+            </div>
+          </ModalBody>
+          <ModalFooter>
+            <div className="flex w-full flex-col gap-3 sm:flex-row">
+              <Button onClick={handleJoinByCode} disabled={joiningClassroom} className="w-full sm:flex-1">
+                {joiningClassroom ? t('join.form.joining') : t('common:actions.join')}
+              </Button>
+              <Button color="gray" onClick={() => setJoinCodeModalOpen(false)} className="w-full sm:w-auto">
+                {t('common:actions.cancel')}
+              </Button>
+            </div>
+          </ModalFooter>
+        </Modal>
 
         <ConfirmModal
           show={deleteId !== null}
@@ -286,8 +377,6 @@ function ClassroomsPage() {
           onConfirm={confirmRequestNewCode}
           onCancel={() => setRequestCodeId(null)}
         />
-
-        <NoavaFooter />
       </div>
     </div>
   );

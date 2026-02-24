@@ -78,17 +78,17 @@ export default function EditMemberModal({
         ) : null}
       </ModalBody>
       <ModalFooter>
-        <div className="flex flex-1 gap-3">
+        <div className="flex flex-1 flex-col gap-3 sm:flex-row">
           <Button
-            className="flex-1"
+            className="w-full sm:flex-1"
             onClick={handleSave}
             size="sm"
             disabled={!canEdit || saving}>
             {saving
               ? t('members.saving', 'Saving...')
-              : t('common:actions.update', 'Update')}
+              : t('members.updateButton', 'Update Member')}
           </Button>
-          <Button color="gray" onClick={onClose} size="sm">
+          <Button color="gray" onClick={onClose} size="sm" className="w-full sm:w-auto">
             {t('common:actions.cancel')}
           </Button>
         </div>

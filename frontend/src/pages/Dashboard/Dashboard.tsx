@@ -10,47 +10,105 @@ import {
 } from 'react-icons/lu';
 import {
   Button,
-  Modal,
-  ModalBody,
-  ModalFooter,
-  ModalHeader,
 } from 'flowbite-react';
 import { HiChevronRight } from 'react-icons/hi';
 import { useNavigate } from 'react-router-dom';
 import { useDeckService } from '../../services/DeckService';
+import { useClassroomService } from '../../services/ClassroomService';
+import { useStatisticsService } from '../../services/StatisticsService';
+import { formatDateToEuropean } from '../../services/DateService';
 import type { DeckRequest, Deck } from '../../models/Deck';
+import type { ClassroomResponse } from '../../models/Classroom';
+import type { DashboardStatistics, InteractionCount } from '../../models/Statistics';
 import { useEffect, useState } from 'react';
 import { useToast } from '../../contexts/ToastContext';
 import DeckCard from '../../shared/components/DeckCard';
+import ClassroomCard from '../../shared/components/ClassroomCard';
+import DeckStatisticsModal from '../../shared/components/DeckStatisticsModal';
 import Loading from '../../shared/components/loading/Loading';
 import DeckModal from '../../shared/components/DeckModal';
+import ConfirmModal from '../../shared/components/ConfirmModal';
+import { InteractionHeatmap } from '../../shared/components/InteractionHeatmap';
+import EmptyState from '../../shared/components/EmptyState';
 
 function Dashboard() {
   const { t } = useTranslation('dashboard');
   const navigate = useNavigate();
   const deckService = useDeckService();
+  const classroomService = useClassroomService();
+  const statisticsService = useStatisticsService();
   const [decks, setDecks] = useState<Deck[]>([]);
+  const [classrooms, setClassrooms] = useState<ClassroomResponse[]>([]);
+  const [interactions, setInteractions] = useState<InteractionCount[]>([]);
+  const [statistics, setStatistics] = useState<DashboardStatistics>(
+    {} as DashboardStatistics
+  );
   const [loading, setLoading] = useState(true);
+  const [interactionsLoading, setInteractionsLoading] = useState(true);
   const { showSuccess, showError } = useToast();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingDeck, setEditingDeck] = useState<Deck | undefined>(undefined);
   const [deleteDeckId, setDeleteDeckId] = useState<number | null>(null);
+  const [analyticsModalOpen, setAnalyticsModalOpen] = useState(false);
+  const [analyticsDeck, setAnalyticsDeck] = useState<Deck | null>(null);
+  const [copyModalOpened, setCopyModalOpened] = useState(false);
+  const [deckToCopy, setDeckToCopy] = useState<number | null>(null);
+  const [isCopying, setIsCopying] = useState(false);
 
   useEffect(() => {
-    fetchDecks();
+    fetchData();
+    fetchInteractions();
   }, []);
 
-  const fetchDecks = async () => {
+  const fetchData = async () => {
     try {
       setLoading(true);
-
-      const data = await deckService.getMyDecks(4);
-
-      setDecks(data);
+      const [decksData, classroomsData, statsData] = await Promise.all([
+        deckService.getMyDecks(4),
+        classroomService.getAllForUser(2),
+        statisticsService.getGeneralStatistics(),
+      ]);
+      setDecks(decksData);
+      setClassrooms(classroomsData);
+      setStatistics(statsData);
     } catch (error) {
-      showError(t('toast.loadError'), t('toast.loadError'));
+      showError(t('toast.loadError'), 'Error');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchInteractions = async () => {
+    try {
+      setInteractionsLoading(true);
+      const interactionsData = await statisticsService.getInteractionsYearly();
+      setInteractions(interactionsData);
+    } catch (error) {
+      console.error('Failed to load interactions:', error);
+    } finally {
+      setInteractionsLoading(false);
+    }
+  };
+
+  const handleCopy = (deckId: number) => {
+    setDeckToCopy(deckId);
+    setCopyModalOpened(true);
+  };
+
+  const handleConfirmCopy = async () => {
+    if (!deckToCopy) return;
+
+    setIsCopying(true);
+
+    try {
+      await deckService.copy(deckToCopy);
+      showSuccess(t('decks:copySuccess'), t('common:toast.success'));
+    } catch (error) {
+      showError(t('common:toast.error'), t('decks:copyError'));
+    } finally {
+      setIsCopying(false);
+      setCopyModalOpened(false);
+      setDeckToCopy(null);
     }
   };
 
@@ -59,17 +117,27 @@ function Dashboard() {
     setIsModalOpen(true);
   };
 
+  const handleAnalytics = (deck: Deck) => {
+    setAnalyticsDeck(deck);
+    setAnalyticsModalOpen(true);
+  };
+
+  const handleCloseAnalyticsModal = () => {
+    setAnalyticsModalOpen(false);
+    setAnalyticsDeck(null);
+  };
+
   const handleUpdate = async (deckData: DeckRequest) => {
     if (!editingDeck) return;
 
     try {
       await deckService.update(editingDeck.deckId, deckData);
-      showSuccess(t('toast.updateSuccess'), t('toast.updateSuccess'));
+      showSuccess('Success', t('toast.updateSuccess'));
       setIsModalOpen(false);
       setEditingDeck(undefined);
-      fetchDecks();
+      fetchData();
     } catch (error) {
-      showError(t('toast.updateError'), t('toast.updateError'));
+      showError(t('toast.updateError'), 'Error');
     }
   };
 
@@ -82,10 +150,10 @@ function Dashboard() {
 
     try {
       await deckService.delete(deleteDeckId);
-      showSuccess(t('toast.deleteSuccess'), t('toast.deleteSuccess'));
-      fetchDecks();
+      showSuccess('Success', t('toast.deleteSuccess'));
+      fetchData();
     } catch (error) {
-      showError(t('toast.deleteError'), t('toast.deleteError'));
+      showError(t('toast.deleteError'), 'Error');
     } finally {
       setDeleteDeckId(null);
     }
@@ -102,7 +170,7 @@ function Dashboard() {
 
   return (
     <>
-      <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
+      <div className="flex min-h-screen bg-background-app-light dark:bg-background-app-dark">
         <div className="flex-1 w-full ml-0">
           <PageHeader>
             {/* Hero Section */}
@@ -129,66 +197,141 @@ function Dashboard() {
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
                   <DashboardStatCard
                     title={t('statcard.cardsreviewed.title')}
-                    value="1,247"
+                    value={statistics.cardsReviewed.toString()}
                     tooltip={t('statcard.cardsreviewed.tooltip')}
                     icon={LuBrain}
                   />
                   <DashboardStatCard
                     title={t('statcard.accuracyrate.title')}
-                    value="84%"
+                    value={
+                      statistics
+                        ? `${Math.round(statistics.accuracyRate)}%`
+                        : '0%'
+                    }
                     tooltip={t('statcard.accuracyrate.tooltip')}
                     icon={LuTarget}
                   />
                   <DashboardStatCard
                     title={t('statcard.studytime.title')}
-                    value="12,5h"
+                    value={`${statistics.timeSpentHours}h`}
                     tooltip={t('statcard.studytime.tooltip')}
                     icon={LuClock}
                   />
                   <DashboardStatCard
-                    title={t('statcard.cardsdue.title')}
-                    value="45"
-                    tooltip={t('statcard.cardsdue.tooltip')}
+                    title={t('statcard.lastreview.title')}
+                    value={
+                      statistics?.lastRevieweDate
+                        ? formatDateToEuropean(statistics.lastRevieweDate)
+                        : t('statcard.lastreview.never')
+                    }
+                    tooltip={t('statcard.lastreview.tooltip')}
                     icon={LuTrendingUp}
                   />
                 </div>
 
-                {/* Your Decks */}
-                <div className="w-3/5">
-                  <div className="flex flex-row items-center justify-between">
-                    {/* Header */}
-                    <h3 className="text-lg font-semibold">{t('yourDecks')}</h3>
-                    <Button
-                      color="alternative"
-                      className="p-0 text-sm border-0 outline-none text-text-muted-light dark:text-text-muted-dark focus:outline-none active:outline-none focus:ring-0 active:ring-0 hover:text-text-body-light dark:hover:text-text-body-dark"
-                      onClick={() => navigate('/decks')}
-                      outline>
-                      {t('common:actions.viewAll')}
-                      <HiChevronRight className="size-4" />
-                    </Button>
+                <div className="hidden md:block w-full">
+                  <div className="relative overflow-hidden bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-850 rounded-xl shadow-md border border-gray-200 dark:border-gray-700">
+                    <div className="p-6 md:p-8">
+                      <div className="flex items-center justify-between mb-6">
+                        <div>
+                          <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+                            {t('interactionActivity')}
+                          </h3>
+                          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                            {t('interactionSubtitle')}
+                          </p>
+                        </div>
+                      </div>
+                      {interactionsLoading ? (
+                        <div className="flex items-center justify-center h-40">
+                          <div className="w-8 h-8 border-4 border-gray-200 rounded-full animate-spin border-t-emerald-500 dark:border-gray-700 dark:border-t-emerald-400"></div>
+                        </div>
+                      ) : (
+                        <InteractionHeatmap data={interactions} />
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Decks and Classrooms Grid */}
+                <div className="grid grid-cols-1 gap-6 lg:grid-cols-[2fr_auto_1fr]">
+                  {/* Your Decks */}
+                  <div>
+                    <div className="flex flex-row items-center justify-between mb-3">
+                      <h3 className="text-lg font-semibold text-text-title-light dark:text-text-title-dark">
+                        {t('yourDecks')}
+                      </h3>
+                      <Button
+                        color="alternative"
+                        className="p-0 text-sm border-0 outline-none text-text-muted-light bg-transparent dark:text-text-muted-dark focus:outline-none active:outline-none focus:ring-0 active:ring-0 hover:text-text-body-light dark:hover:text-text-body-dark"
+                        onClick={() => navigate('/decks')}
+                        outline>
+                        {t('common:actions.viewAll')}
+                        <HiChevronRight className="size-4" />
+                      </Button>
+                    </div>
+
+                    {/* Decks (Max 4) */}
+                    {decks.length > 0 ? (
+                      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        {decks.map((deck) => (
+                          <DeckCard
+                            key={deck.deckId}
+                            deck={deck}
+                            onCopy={handleCopy}
+                            onEdit={handleEdit}
+                            onDelete={handleDelete}
+                            onAnalytics={handleAnalytics}
+                          />
+                        ))}
+                      </div>
+                    ) : (
+                      <EmptyState
+                        title={t('decks:empty.title')}
+                        description={t('decks:empty.message')}
+                        icon={LuLayers}
+                      />
+                    )}
                   </div>
 
-                  {/* Decks (Max 4) */}
-                  {decks.length > 0 ? (
-                    <div className="grid grid-cols-1 gap-4 py-3 sm:grid-cols-2 md:gap-6">
-                      {decks.map((deck) => (
-                        <DeckCard
-                          key={deck.deckId}
-                          deck={deck}
-                          onEdit={handleEdit}
-                          onDelete={handleDelete}
-                        />
-                      ))}
+                  {/* Divider */}
+                  <div className="hidden lg:flex lg:items-start lg:justify-center lg:px-4">
+                    <div className="w-px h-full min-h-[200px] bg-gray-200 dark:bg-gray-700"></div>
+                  </div>
+
+                  {/* Your Classrooms */}
+                  <div>
+                    <div className="flex flex-row items-center justify-between mb-3">
+                      <h3 className="text-lg font-semibold text-text-title-light dark:text-text-title-dark">
+                        {t('yourClassrooms')}
+                      </h3>
+                      <Button
+                        color="alternative"
+                        className="p-0 text-sm border-0 outline-none text-text-muted-light bg-transparent dark:text-text-muted-dark focus:outline-none active:outline-none focus:ring-0 active:ring-0 hover:text-text-body-light dark:hover:text-text-body-dark"
+                        onClick={() => navigate('/classrooms')}
+                        outline>
+                        {t('common:actions.viewAll')}
+                        <HiChevronRight className="size-4" />
+                      </Button>
                     </div>
-                  ) : (
-                    // No decks yet
-                    <div className="flex flex-col items-center justify-center gap-2 mt-4">
-                      <LuLayers className="w-10 h-10 text-text-muted-light dark:text-text-muted-dark" />
-                      <p className="mb-3 text-xl font-semibold text-text-body-light dark:text-text-body-dark">
-                        {t('decks.empty')}
-                      </p>
-                    </div>
-                  )}
+
+                    {classrooms.length > 0 ? (
+                      <div className="grid grid-cols-1 gap-4">
+                        {classrooms.map((classroom) => (
+                          <ClassroomCard
+                            key={classroom.id}
+                            classroom={classroom}
+                          />
+                        ))}
+                      </div>
+                    ) : (
+                      <EmptyState
+                        title={t('classrooms:empty.title')}
+                        description={t('classrooms:empty.message')}
+                        icon={LuLayers}
+                      />
+                    )}
+                  </div>
                 </div>
               </div>
             )}
@@ -202,27 +345,37 @@ function Dashboard() {
             deck={editingDeck}
           />
 
-          {/* Delete Confirmation Modal */}
-          <Modal show={deleteDeckId !== null} onClose={cancelDelete} size="md">
-            <ModalHeader>{t('common:modals.deleteModal.title')}</ModalHeader>
+          {/* Deck Statistics Modal */}
+          <DeckStatisticsModal
+            show={analyticsModalOpen}
+            onClose={handleCloseAnalyticsModal}
+            deck={analyticsDeck}
+          />
 
-            <ModalBody>
-              <p className="text-text-body-light dark:text-text-body-dark">
-                {t('common:modals.deleteModal.message')}
-              </p>
-            </ModalBody>
+          <ConfirmModal
+            show={deleteDeckId !== null}
+            title={t('common:modals.deleteModal.title')}
+            message={t('common:modals.deleteModal.message')}
+            confirmLabel={t('common:modals.deleteModal.yes')}
+            cancelLabel={t('common:actions.cancel')}
+            confirmColor="red"
+            onConfirm={confirmDelete}
+            onCancel={cancelDelete}
+          />
 
-            <ModalFooter>
-              <div className="flex justify-end w-full gap-3">
-                <Button color="gray" onClick={cancelDelete} size="sm">
-                  {t('common:actions.cancel')}
-                </Button>
-                <Button color="red" onClick={confirmDelete} size="sm">
-                  {t('common:modals.deleteModal.yes')}
-                </Button>
-              </div>
-            </ModalFooter>
-          </Modal>
+          {/* Confirm Copy Modal */}
+          <ConfirmModal
+            show={copyModalOpened}
+            title={t('decks:copy.title')}
+            message={t('decks:copy.message')}
+            confirmLabel={
+              isCopying ? t('common:actions.copying') : t('common:actions.copy')
+            }
+            cancelLabel={t('common:actions.cancel')}
+            confirmColor="green"
+            onConfirm={handleConfirmCopy}
+            onCancel={() => setCopyModalOpened(false)}
+          />
         </div>
       </div>
     </>

@@ -17,6 +17,10 @@ interface ConfirmModalProps {
   size?: 'sm' | 'md' | 'lg';
   confirmColor?: string;
   cancelColor?: string;
+  confirmDisabled?: boolean;
+  cancelDisabled?: boolean;
+  confirmClassName?: string;
+  cancelClassName?: string;
   onConfirm: () => void;
   onCancel: () => void;
 }
@@ -30,6 +34,10 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
   size = 'md',
   confirmColor = 'red',
   cancelColor = 'gray',
+  confirmDisabled = false,
+  cancelDisabled = false,
+  confirmClassName,
+  cancelClassName,
   onConfirm,
   onCancel,
 }) => {
@@ -39,7 +47,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
   const cancelText = cancelLabel ?? t('common:actions.cancel');
 
   return (
-    <Modal show={show} onClose={onCancel} size={size}>
+    <Modal show={show} onClose={onCancel} size={size} dismissible>
       {title && <ModalHeader>{title}</ModalHeader>}
       <ModalBody>
         {message && (
@@ -49,12 +57,22 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
         )}
       </ModalBody>
       <ModalFooter>
-        <div className="flex justify-end w-full gap-3">
-          <Button color={cancelColor as any} onClick={onCancel} size="sm">
-            {cancelText}
-          </Button>
-          <Button color={confirmColor as any} onClick={onConfirm} size="sm">
+        <div className="flex w-full flex-col gap-3 sm:flex-row">
+          <Button
+            color={confirmColor as any}
+            onClick={onConfirm}
+            size="sm"
+            disabled={confirmDisabled}
+            className={`w-full sm:flex-1 ${confirmClassName ?? ''}`}>
             {confirmText}
+          </Button>
+          <Button
+            color={cancelColor as any}
+            onClick={onCancel}
+            size="sm"
+            disabled={cancelDisabled}
+            className={`w-full sm:w-auto ${cancelClassName ?? ''}`}>
+            {cancelText}
           </Button>
         </div>
       </ModalFooter>
