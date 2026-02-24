@@ -19,8 +19,20 @@ interface TooltipData {
   count: number;
 }
 
-const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-                 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const MONTHS = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec',
+];
 const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
 function toLocalDateString(date: Date): string {
@@ -38,7 +50,7 @@ export function InteractionHeatmap({ data }: InteractionHeatmapProps) {
 
   useEffect(() => {
     if (!containerRef.current) return;
-    const observer = new ResizeObserver(entries => {
+    const observer = new ResizeObserver((entries) => {
       setContainerWidth(entries[0].contentRect.width);
     });
     observer.observe(containerRef.current);
@@ -83,9 +95,15 @@ export function InteractionHeatmap({ data }: InteractionHeatmapProps) {
         });
 
         if (cursor.getDate() === 1 && d === 0) {
-          monthLabels.push({ label: MONTHS[cursor.getMonth()], colIndex: weekIndex });
+          monthLabels.push({
+            label: MONTHS[cursor.getMonth()],
+            colIndex: weekIndex,
+          });
         } else if (cursor.getDate() === 1 && d > 0) {
-          monthLabels.push({ label: MONTHS[cursor.getMonth()], colIndex: weekIndex + 1 });
+          monthLabels.push({
+            label: MONTHS[cursor.getMonth()],
+            colIndex: weekIndex + 1,
+          });
         }
 
         cursor.setDate(cursor.getDate() + 1);
@@ -100,19 +118,26 @@ export function InteractionHeatmap({ data }: InteractionHeatmapProps) {
 
   const getColor = (day: DayData): string => {
     if (!day.inRange) return '';
-    if (day.count === 0) return 'bg-gray-200 dark:bg-gray-700 border border-gray-300 dark:border-gray-600';
+    if (day.count === 0)
+      return 'bg-gray-200 dark:bg-gray-700 border border-gray-300 dark:border-gray-600';
     const intensity = maxCount > 0 ? day.count / maxCount : 0;
-    if (intensity <= 0.25) return 'bg-emerald-200 dark:bg-emerald-900 border border-emerald-300 dark:border-emerald-800';
-    if (intensity <= 0.5)  return 'bg-emerald-400 dark:bg-emerald-700 border border-emerald-500 dark:border-emerald-600';
-    if (intensity <= 0.75) return 'bg-emerald-500 dark:bg-emerald-600 border border-emerald-600 dark:border-emerald-500';
-    return 'bg-emerald-600 dark:bg-emerald-500 border border-emerald-700 dark:border-emerald-400';
+    if (intensity <= 0.25)
+      return 'bg-cyan-200 dark:bg-cyan-900 border border-cyan-300 dark:border-cyan-800';
+    if (intensity <= 0.5)
+      return 'bg-cyan-400 dark:bg-cyan-700 border border-cyan-500 dark:border-cyan-600';
+    if (intensity <= 0.75)
+      return 'bg-cyan-500 dark:bg-cyan-600 border border-cyan-600 dark:border-cyan-500';
+    return 'bg-cyan-600 dark:bg-cyan-500 border border-cyan-700 dark:border-cyan-400';
   };
 
   const formatDate = (dateStr: string): string => {
     const [y, m, d] = dateStr.split('-').map(Number);
     const date = new Date(y, m - 1, d);
     return date.toLocaleDateString('en-US', {
-      weekday: 'short', year: 'numeric', month: 'short', day: 'numeric'
+      weekday: 'short',
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
     });
   };
 
@@ -132,92 +157,109 @@ export function InteractionHeatmap({ data }: InteractionHeatmapProps) {
   const GAP = 2;
   const numWeeks = weeks.length;
   const availableWidth = containerWidth - labelOffset;
-  const CELL = numWeeks > 0 && availableWidth > 0
-    ? Math.floor((availableWidth - (numWeeks - 1) * GAP) / numWeeks)
-    : 12;
+  const CELL =
+    numWeeks > 0 && availableWidth > 0
+      ? Math.floor((availableWidth - (numWeeks - 1) * GAP) / numWeeks)
+      : 12;
   const STEP = CELL + GAP;
 
   return (
     <div className="w-full" ref={containerRef}>
       {tooltip && (
         <div
-          className="fixed z-50 px-3 py-2 text-sm rounded-lg shadow-lg pointer-events-none bg-gray-900 border border-gray-700"
+          className="fixed z-50 px-3 py-2 text-sm bg-gray-900 border border-gray-700 rounded-lg shadow-lg pointer-events-none"
           style={{
             left: tooltip.x,
             top: tooltip.y,
             transform: 'translate(-50%, calc(-100% - 8px))',
-          }}
-        >
+          }}>
           <div className="font-semibold text-white">
             {t('interactions', { count: tooltip.count })}
           </div>
           <div className="text-xs text-gray-400">{tooltip.date}</div>
           <div
-            className="absolute w-2 h-2 rotate-45 bg-gray-900 border-r border-b border-gray-700"
+            className="absolute w-2 h-2 rotate-45 bg-gray-900 border-b border-r border-gray-700"
             style={{ bottom: -5, left: '50%', marginLeft: -4 }}
           />
         </div>
       )}
 
       <div className="flex flex-col w-full">
-          <div className="flex mb-1 sm:pl-[36px]">
-            <div style={{ position: 'relative', height: 16, width: '100%' }}>
-              {monthLabels.map((m, i) => (
-                <span
-                  key={i}
-                  className="absolute text-xs text-gray-400 font-medium"
-                  style={{ left: m.colIndex * STEP, top: 0 }}
-                >
-                  {m.label}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          <div className="flex">
-            <div className="hidden sm:flex flex-col mr-1" style={{ width: DAY_LABEL_WIDTH - 4, gap: GAP }}>
-              {DAYS.map((day, i) => (
-                <div
-                  key={day}
-                  className="text-xs text-gray-400 font-medium flex items-center justify-end pr-1"
-                  style={{ height: CELL, lineHeight: `${CELL}px` }}
-                >
-                  {(i === 0 || i === 2 || i === 4) ? day : ''}
-                </div>
-              ))}
-            </div>
-
-            <div className="flex" style={{ gap: GAP }}>
-              {weeks.map((week, wi) => (
-                <div key={wi} className="flex flex-col" style={{ gap: GAP }}>
-                  {week.map((day, di) => (
-                    <div
-                      key={di}
-                      className={`rounded-sm transition-all duration-150 ${
-                        day.inRange
-                          ? `${getColor(day)} cursor-pointer hover:scale-125 hover:ring-1 hover:ring-emerald-400`
-                          : 'opacity-0'
-                      }`}
-                      style={{ width: CELL, height: CELL }}
-                      onMouseEnter={day.inRange ? (e) => handleMouseEnter(day, e) : undefined}
-                      onMouseLeave={() => setTooltip(null)}
-                    />
-                  ))}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="flex items-center justify-end gap-1.5 mt-3 text-xs text-gray-400 font-medium">
-            <span>{t('legend.less')}</span>
-            <div className="rounded-sm bg-gray-200 dark:bg-gray-700 border border-gray-300 dark:border-gray-600" style={{ width: CELL, height: CELL }} />
-            <div className="rounded-sm bg-emerald-200 dark:bg-emerald-900 border border-emerald-300 dark:border-emerald-800" style={{ width: CELL, height: CELL }} />
-            <div className="rounded-sm bg-emerald-400 dark:bg-emerald-700 border border-emerald-500 dark:border-emerald-600" style={{ width: CELL, height: CELL }} />
-            <div className="rounded-sm bg-emerald-500 dark:bg-emerald-600 border border-emerald-600 dark:border-emerald-500" style={{ width: CELL, height: CELL }} />
-            <div className="rounded-sm bg-emerald-600 dark:bg-emerald-500 border border-emerald-700 dark:border-emerald-400" style={{ width: CELL, height: CELL }} />
-            <span>{t('legend.more')}</span>
+        <div className="flex mb-1 sm:pl-[36px]">
+          <div style={{ position: 'relative', height: 16, width: '100%' }}>
+            {monthLabels.map((m, i) => (
+              <span
+                key={i}
+                className="absolute text-xs font-medium text-gray-400"
+                style={{ left: m.colIndex * STEP, top: 0 }}>
+                {m.label}
+              </span>
+            ))}
           </div>
         </div>
+
+        <div className="flex">
+          <div
+            className="flex-col hidden mr-1 sm:flex"
+            style={{ width: DAY_LABEL_WIDTH - 4, gap: GAP }}>
+            {DAYS.map((day, i) => (
+              <div
+                key={day}
+                className="flex items-center justify-end pr-1 text-xs font-medium text-gray-400"
+                style={{ height: CELL, lineHeight: `${CELL}px` }}>
+                {i === 0 || i === 2 || i === 4 ? day : ''}
+              </div>
+            ))}
+          </div>
+
+          <div className="flex" style={{ gap: GAP }}>
+            {weeks.map((week, wi) => (
+              <div key={wi} className="flex flex-col" style={{ gap: GAP }}>
+                {week.map((day, di) => (
+                  <div
+                    key={di}
+                    className={`rounded-sm transition-all duration-150 ${
+                      day.inRange
+                        ? `${getColor(day)} cursor-pointer hover:scale-125 hover:ring-1 hover:ring-cyan-400`
+                        : 'opacity-0'
+                    }`}
+                    style={{ width: CELL, height: CELL }}
+                    onMouseEnter={
+                      day.inRange ? (e) => handleMouseEnter(day, e) : undefined
+                    }
+                    onMouseLeave={() => setTooltip(null)}
+                  />
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="flex items-center justify-end gap-1.5 mt-3 text-xs text-gray-400 font-medium">
+          <span>{t('legend.less')}</span>
+          <div
+            className="bg-gray-200 border border-gray-300 rounded-sm dark:bg-gray-700 dark:border-gray-600"
+            style={{ width: CELL, height: CELL }}
+          />
+          <div
+            className="border rounded-sm bg-cyan-200 dark:bg-cyan-900 border-cyan-300 dark:border-cyan-800"
+            style={{ width: CELL, height: CELL }}
+          />
+          <div
+            className="border rounded-sm bg-cyan-400 dark:bg-cyan-700 border-cyan-500 dark:border-cyan-600"
+            style={{ width: CELL, height: CELL }}
+          />
+          <div
+            className="border rounded-sm bg-cyan-500 dark:bg-cyan-600 border-cyan-600 dark:border-cyan-500"
+            style={{ width: CELL, height: CELL }}
+          />
+          <div
+            className="border rounded-sm bg-cyan-600 dark:bg-cyan-500 border-cyan-700 dark:border-cyan-400"
+            style={{ width: CELL, height: CELL }}
+          />
+          <span>{t('legend.more')}</span>
+        </div>
+      </div>
     </div>
   );
 }

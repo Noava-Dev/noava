@@ -2,12 +2,8 @@
 sidebar_position: 1
 ---
 
-import {
-  LuBookOpen,
-  LuSchool,
-  LuGraduationCap,
-  LuLayers,
-} from 'react-icons/lu';
+import { LuBookOpen, LuLayers } from 'react-icons/lu';
+import { HiOutlineCube } from 'react-icons/hi';
 
 # Noava Docs
 
@@ -15,14 +11,26 @@ Choose where you want to go:
 
 <div className="folderButtons">
 
-<a className="folderButton" href="/docs/tutorial">
+<a className="folderButton" href="/docs/getting-started/create-account">
   <div className="folderIcon">
     <LuBookOpen size={28} />
   </div>
   <div className="folderContent">
-    <div className="folderTitle">Tutorial</div>
+    <div className="folderTitle">Getting Started</div>
     <div className="folderDescription">
       Step-by-step guides to get started quickly.
+    </div>
+  </div>
+</a>
+
+<a className="folderButton" href="/docs/core-concepts/deck">
+  <div className="folderIcon">
+    <HiOutlineCube size={28} />
+  </div>
+  <div className="folderContent">
+    <div className="folderTitle">Core Concepts</div>
+    <div className="folderDescription">
+      Understand the key ideas behind Noava.
     </div>
   </div>
 </a>
