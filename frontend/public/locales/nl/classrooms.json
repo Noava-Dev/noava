@@ -13,8 +13,8 @@
     "editTitle": "Klas bewerken",
     "nameLabel": "Naam",
     "descriptionLabel": "Beschrijving",
-    "createButton": "Aanmaken",
-    "updateButton": "Bijwerken",
+    "createButton": "Klas aanmaken",
+    "updateButton": "Klas bijwerken",
     "cancelButton": "Annuleren"
   },
   "members": {
@@ -28,6 +28,7 @@
     "notAuthorized": "Niet gemachtigd",
     "onlyTeachers": "Alleen leerkrachten hebben toegang tot deze pagina",
     "editTitle": "Lid bewerken",
+    "updateButton": "Lid bijwerken",
     "isTeacher": "Is leerkracht",
     "saving": "Opslaan...",
     "updateSuccess": "Lid bijgewerkt",

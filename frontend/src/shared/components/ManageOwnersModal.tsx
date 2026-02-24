@@ -44,6 +44,7 @@ export const ManageOwnersModal = ({
   const [inviteModalOpen, setInviteModalOpen] = useState(false);
   const [updatingJoinCode, setUpdatingJoinCode] = useState(false);
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
+  const [confirmRegenerateOpen, setConfirmRegenerateOpen] = useState(false);
   const [userToRemove, setUserToRemove] = useState<ClerkUserResponse | null>(null);
   const [removingUser, setRemovingUser] = useState(false);
 
@@ -167,8 +168,6 @@ export const ManageOwnersModal = ({
 
   const handleUpdateJoinCode = async () => {
     if (!deck) return;
-    
-    if (!confirm(t('decks:owners.confirmRegenerateCode'))) return;
 
     try {
       setUpdatingJoinCode(true);
@@ -180,6 +179,7 @@ export const ManageOwnersModal = ({
       showError(t('decks:owners.codeRegenerateError'), t('common:toast.error'));
     } finally {
       setUpdatingJoinCode(false);
+      setConfirmRegenerateOpen(false);
     }
   };
 
@@ -220,7 +220,7 @@ export const ManageOwnersModal = ({
                   <Button
                     size="sm"
                     color="gray"
-                    onClick={handleUpdateJoinCode}
+                    onClick={() => setConfirmRegenerateOpen(true)}
                     disabled={updatingJoinCode || !deck.joinCode}
                   >
                     {updatingJoinCode ? (
@@ -368,6 +368,21 @@ export const ManageOwnersModal = ({
         message={t('decks:owners.confirmRemoveMessage', {
           name: userToRemove ? `${userToRemove.firstName} ${userToRemove.lastName}` : ''
         })}
+        confirmDisabled={removingUser}
+        cancelDisabled={removingUser}
+      />
+
+      <ConfirmModal
+        show={confirmRegenerateOpen}
+        title={t('decks:owners.regenerateCode')}
+        message={t('decks:owners.confirmRegenerateCode')}
+        confirmLabel={t('decks:owners.regenerateCode')}
+        cancelLabel={t('common:actions.cancel')}
+        confirmColor="primary"
+        onConfirm={handleUpdateJoinCode}
+        onCancel={() => setConfirmRegenerateOpen(false)}
+        confirmDisabled={updatingJoinCode}
+        cancelDisabled={updatingJoinCode}
       />
     </>
   );

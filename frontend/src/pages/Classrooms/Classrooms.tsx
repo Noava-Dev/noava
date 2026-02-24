@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Button, Select, Tooltip } from 'flowbite-react';
+import { Button, Select, Tooltip, Modal, ModalHeader, ModalBody, ModalFooter } from 'flowbite-react';
 import { HiPlus } from 'react-icons/hi';
 import { useTranslation } from 'react-i18next';
 import PageHeader from '../../shared/components/PageHeader';
@@ -18,7 +17,7 @@ import EmptyState from '../../shared/components/EmptyState';
 import { LuUsers } from 'react-icons/lu';
 
 function ClassroomsPage() {
-  const { t } = useTranslation('classrooms');
+  const { t } = useTranslation(['classrooms', 'decks']);
   const classroomSvc = useClassroomService();
   const [classrooms, setClassrooms] = useState<ClassroomResponse[]>([]);
   const [loading, setLoading] = useState(true);
@@ -33,7 +32,9 @@ function ClassroomsPage() {
   const { showSuccess, showError } = useToast();
   const [deleteId, setDeleteId] = useState<number | null>(null);
   const [requestCodeId, setRequestCodeId] = useState<number | null>(null);
-  const navigate = useNavigate();
+  const [joinCodeModalOpen, setJoinCodeModalOpen] = useState(false);
+  const [joinCode, setJoinCode] = useState('');
+  const [joiningClassroom, setJoiningClassroom] = useState(false);
 
   useEffect(() => {
     fetchClassrooms();
@@ -117,6 +118,26 @@ function ClassroomsPage() {
     setEditingClassroom(undefined);
   };
 
+  const handleJoinByCode = async () => {
+    if (!joinCode.trim()) {
+      showError(t('join.form.empty'), t('common:toast.error'));
+      return;
+    }
+
+    try {
+      setJoiningClassroom(true);
+      await classroomSvc.joinByCode(joinCode.trim());
+      showSuccess(t('join.success'), 'Success');
+      setJoinCodeModalOpen(false);
+      setJoinCode('');
+      fetchClassrooms();
+    } catch (error) {
+      showError(t('join.error'), t('common:toast.error'));
+    } finally {
+      setJoiningClassroom(false);
+    }
+  };
+
   const filtered = classrooms.filter(
     (c) =>
       c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -183,7 +204,7 @@ function ClassroomsPage() {
                   <div className="w-full md:w-fit">
                     <Tooltip content={t('common:tooltips.joinClassroom')}>
                       <Button
-                        onClick={() => navigate('/classrooms/join')}
+                        onClick={() => setJoinCodeModalOpen(true)}
                         size="lg"
                         className="w-full md:w-fit bg-gradient-to-r from-secondary-600 to-secondary-700 hover:shadow-sm hover:border-border">
                         <TbDoorEnter className="mr-2 size-5" />
@@ -278,6 +299,45 @@ function ClassroomsPage() {
           onSubmit={editingClassroom ? handleUpdate : handleCreate}
           classroom={editingClassroom}
         />
+
+        {/* Join by Code Modal */}
+        <Modal show={joinCodeModalOpen} onClose={() => setJoinCodeModalOpen(false)} size="md" dismissible>
+          <ModalHeader>{t('join.title')}</ModalHeader>
+          <ModalBody>
+            <div className="space-y-4">
+              <p className="text-sm text-text-body-light dark:text-text-muted-dark">
+                {t('decks:joinCode.description')}
+              </p>
+              <div>
+                <label className="block mb-2 text-sm font-medium">
+                  {t('join.form.label')}
+                </label>
+                <input
+                  type="text"
+                  value={joinCode}
+                  onChange={(e) => setJoinCode(e.target.value)}
+                  placeholder={t('decks:joinCode.placeholder')}
+                  className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600"
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter') {
+                      handleJoinByCode();
+                    }
+                  }}
+                />
+              </div>
+            </div>
+          </ModalBody>
+          <ModalFooter>
+            <div className="flex w-full flex-col gap-3 sm:flex-row">
+              <Button onClick={handleJoinByCode} disabled={joiningClassroom} className="w-full sm:flex-1">
+                {joiningClassroom ? t('join.form.joining') : t('common:actions.join')}
+              </Button>
+              <Button color="gray" onClick={() => setJoinCodeModalOpen(false)} className="w-full sm:w-auto">
+                {t('common:actions.cancel')}
+              </Button>
+            </div>
+          </ModalFooter>
+        </Modal>
 
         <ConfirmModal
           show={deleteId !== null}

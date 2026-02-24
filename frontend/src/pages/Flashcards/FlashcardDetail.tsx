@@ -33,6 +33,7 @@ import DropdownButton from '../../shared/components/DropdownButton';
 import ImportCardsModal from './components/ImportCardsModal';
 import Skeleton from '../../shared/components/loading/Skeleton';
 import EmptyState from '../../shared/components/EmptyState';
+import ConfirmModal from '../../shared/components/ConfirmModal';
 
 interface FlashcardWithImages extends Flashcard {
   frontImageUrl?: string | null;
@@ -620,34 +621,16 @@ function FlashcardDetail() {
           />
         )}
 
-        {/* Delete Confirmation Modal */}
-        {deleteConfirmOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            {/* Backdrop */}
-            <div
-              className="absolute inset-0 bg-black bg-opacity-50"
-              onClick={cancelDelete}></div>
-
-            {/* Modal */}
-            <div className="relative w-full max-w-md p-6 rounded-lg shadow-xl bg-background-app-light dark:bg-background-surface-dark">
-              <h2 className="mb-3 text-xl font-bold text-text-title-light dark:text-text-title-dark">
-                {t('common:modals.deleteModal.title')}
-              </h2>
-              <p className="mb-6 text-text-body-light dark:text-text-body-dark">
-                {t('common:modals.deleteModal.message')}
-              </p>
-              {/* Actions */}
-              <div className="flex gap-3">
-                <Button color="red" onClick={confirmDelete} className="flex-1">
-                  {t('common:actions.delete')}
-                </Button>
-                <Button color="gray" onClick={cancelDelete} className="flex-1">
-                  {t('common:actions.cancel')}
-                </Button>
-              </div>
-            </div>
-          </div>
-        )}
+        <ConfirmModal
+          show={deleteConfirmOpen}
+          title={t('common:modals.deleteModal.title')}
+          message={t('common:modals.deleteModal.message')}
+          confirmLabel={t('common:modals.deleteModal.yes')}
+          cancelLabel={t('common:actions.cancel')}
+          confirmColor="red"
+          onConfirm={confirmDelete}
+          onCancel={cancelDelete}
+        />
 
         {/* Manage Owners Modal */}
         {deck && (
