@@ -8,5 +8,7 @@
 
         public List<ClerkEmailAddressRequestDto>? Email_Addresses { get; set; }
         public string? Primary_Email_Address_Id { get; set; }
+
+        public long Created_At { get; set; }
     }
 }

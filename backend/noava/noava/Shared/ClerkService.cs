@@ -103,5 +103,50 @@ namespace noava.Shared
                 .Select(u => u.ToResponse())
                 .FirstOrDefault();
         }
+
+        public async Task<IEnumerable<ClerkUserResponseDto>> GetAllUsersAsync()
+        {
+            // Note: i gotta change the limit at some point
+            var response = await _httpClient.GetAsync("users?limit=100");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                return Enumerable.Empty<ClerkUserResponseDto>();
+            }
+
+            var json = await response.Content.ReadAsStringAsync();
+
+            var requestDtos =
+                JsonSerializer.Deserialize<List<ClerkUserRequestDto>>(
+                    json,
+                    new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    })
+                ?? new List<ClerkUserRequestDto>();
+
+            return requestDtos
+                .Select(u => u.ToResponse())
+                .ToList();
+        }
+
+        public async Task<bool> DeleteUserAsync(string clerkUserId)
+        {
+            if (string.IsNullOrWhiteSpace(clerkUserId))
+                return false;
+
+            var response = await _httpClient.DeleteAsync($"users/{clerkUserId}");
+
+            if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized ||
+                response.StatusCode == System.Net.HttpStatusCode.Forbidden ||
+                response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                return false;
+            }
+
+            response.EnsureSuccessStatusCode();
+
+            return true;
+        }
     }
 }
