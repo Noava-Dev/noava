@@ -28,7 +28,7 @@ import { BulkReviewModal } from '../../shared/components/BulkReviewModal';
 import Searchbar from '../../shared/components/Searchbar';
 import { useDeckService } from '../../services/DeckService';
 import { useToast } from '../../contexts/ToastContext';
-import type { Deck, DeckRequest } from '../../models/Deck';
+import type { ClassroomInfo, Deck, DeckRequest } from '../../models/Deck';
 import Skeleton from '../../shared/components/loading/Skeleton';
 import EmptyState from '../../shared/components/EmptyState';
 import { useUser } from '@clerk/clerk-react';
@@ -42,6 +42,7 @@ function DecksPage() {
 
   const deckService = useDeckService();
   const [decks, setDecks] = useState<Deck[]>([]);
+  const [classroomGroups, setClassroomGroups] = useState<ClassroomInfo[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingDeck, setEditingDeck] = useState<Deck | undefined>(undefined);
@@ -73,9 +74,13 @@ function DecksPage() {
     try {
       setLoading(true);
 
-      const data = await deckService.getMyDecks();
+      const [allDecks, classroomDecks] = await Promise.all([
+        deckService.getMyDecks(),
+        deckService.getMyDecksByClassrooms(),
+      ]);
 
-      setDecks(data);
+      setDecks(allDecks);
+      setClassroomGroups(classroomDecks);
     } catch (error) {
       showError(t('toast.loadError'), 'Error');
     } finally {
@@ -204,6 +209,8 @@ function DecksPage() {
       deck.language?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+
+
   const sortedDecks = [...filteredDecks].sort((a, b) => {
     const dateA = new Date(a.createdAt).getTime();
     const dateB = new Date(b.createdAt).getTime();
@@ -216,7 +223,7 @@ function DecksPage() {
   const safePage = Math.min(page, totalPages);
   const paginatedDecks = sortedDecks.slice((safePage - 1) * pageSize, safePage * pageSize);
   const paginatedOwnedDecks = paginatedDecks.filter((deck) => deck.userId === user?.id);
-  const paginatedSharedDecks = paginatedDecks.filter((deck) => deck.userId !== user?.id);
+  const paginatedSharedDecks = paginatedDecks.filter((deck) => deck.userId !== user?.id && (!deck.classrooms || deck.classrooms.length === 0));
 
   if (loading) {
     return <Skeleton />;
@@ -388,7 +395,34 @@ function DecksPage() {
                         ))}
                       </div>
                     </div>
-                  )}
+                )}
+                              
+              {/* Classroom Decks Section */}
+              {classroomGroups.length > 0 && (
+                <div>
+                  <h2 className="mb-6 text-2xl font-bold text-text-title-light dark:text-text-title-dark">
+                    {t('sections.classroomDecks')}
+                  </h2>
+                  {classroomGroups.map((classroom) => (
+                    <div key={classroom.id} className="mb-12">
+                      <p className="mb-4 text-sm font-medium text-text-muted-light dark:text-text-muted-dark">
+                        {classroom.name}
+                      </p>
+                      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:gap-6">
+                        {classroom.decks.map((deck) => (
+                          <DeckCard
+                            key={deck.deckId}
+                            deck={deck}
+                            onEdit={handleEdit}
+                            onDelete={handleDelete}
+                            onCopy = {handleCopy}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                )}
                 </div>
 
                 {/* Pagination */}

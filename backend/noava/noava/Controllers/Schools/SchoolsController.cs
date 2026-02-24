@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using noava.DTOs.Classrooms;
-﻿using Microsoft.AspNetCore.Mvc;
 using noava.DTOs.Schools;
 using noava.Services.Classrooms;
 using noava.Services.Schools;

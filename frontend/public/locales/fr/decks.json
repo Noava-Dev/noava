@@ -73,7 +73,8 @@
   },
   "sections": {
     "myDecks": "Mes Decks",
-    "sharedWithMe": "Partagés avec Moi"
+    "sharedWithMe": "Partagés avec Moi",
+    "ClassroomDecks": "Decks de classe"
   },
   "joinCode": {
     "button": "Rejoindre par Code",

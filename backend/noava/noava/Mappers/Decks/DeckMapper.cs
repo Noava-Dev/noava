@@ -18,7 +18,7 @@ namespace noava.Mappers.Decks
                 CoverImageBlobName = action.CoverImageBlobName,
                 JoinCode = action.JoinCode,
                 CreatedAt = action.CreatedAt,
-                UpdatedAt = action.UpdatedAt
+                UpdatedAt = action.UpdatedAt,
             };
         }
 
