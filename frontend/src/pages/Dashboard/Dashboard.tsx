@@ -10,10 +10,6 @@ import {
 } from 'react-icons/lu';
 import {
   Button,
-  Modal,
-  ModalBody,
-  ModalFooter,
-  ModalHeader,
 } from 'flowbite-react';
 import { HiChevronRight } from 'react-icons/hi';
 import { useNavigate } from 'react-router-dom';
@@ -257,27 +253,16 @@ function Dashboard() {
             deck={analyticsDeck}
           />
 
-          {/* Delete Confirmation Modal */}
-          <Modal show={deleteDeckId !== null} onClose={cancelDelete} size="md">
-            <ModalHeader>{t('common:modals.deleteModal.title')}</ModalHeader>
-
-            <ModalBody>
-              <p className="text-text-body-light dark:text-text-body-dark">
-                {t('common:modals.deleteModal.message')}
-              </p>
-            </ModalBody>
-
-            <ModalFooter>
-              <div className="flex justify-end w-full gap-3">
-                <Button color="gray" onClick={cancelDelete} size="sm">
-                  {t('common:actions.cancel')}
-                </Button>
-                <Button color="red" onClick={confirmDelete} size="sm">
-                  {t('common:modals.deleteModal.yes')}
-                </Button>
-              </div>
-            </ModalFooter>
-          </Modal>
+          <ConfirmModal
+            show={deleteDeckId !== null}
+            title={t('common:modals.deleteModal.title')}
+            message={t('common:modals.deleteModal.message')}
+            confirmLabel={t('common:modals.deleteModal.yes')}
+            cancelLabel={t('common:actions.cancel')}
+            confirmColor="red"
+            onConfirm={confirmDelete}
+            onCancel={cancelDelete}
+          />
 
                 {/* Confirm Copy Modal */}
                 <ConfirmModal
