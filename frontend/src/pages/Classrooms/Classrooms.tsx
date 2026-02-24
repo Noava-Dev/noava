@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Button, Select, Tooltip, Modal, ModalHeader, ModalBody, ModalFooter } from 'flowbite-react';
+import { Button, Select, Tooltip, Modal, ModalHeader, ModalBody, ModalFooter, Pagination } from 'flowbite-react';
 import { HiPlus } from 'react-icons/hi';
 import { useTranslation } from 'react-i18next';
 import PageHeader from '../../shared/components/PageHeader';
@@ -29,6 +29,8 @@ function ClassroomsPage() {
   const [sortOrder, setSortOrder] = useState<'newest' | 'oldest' | 'az' | 'za'>(
     'az'
   );
+  const [page, setPage] = useState(1);
+  const pageSize = 16;
   const { showSuccess, showError } = useToast();
   const [deleteId, setDeleteId] = useState<number | null>(null);
   const [requestCodeId, setRequestCodeId] = useState<number | null>(null);
@@ -163,6 +165,12 @@ function ClassroomsPage() {
     }
   });
 
+  // Paginate classrooms
+  const totalItems = sorted.length;
+  const totalPages = Math.ceil(totalItems / pageSize) || 1;
+  const safePage = Math.min(page, totalPages);
+  const paginatedClassrooms = sorted.slice((safePage - 1) * pageSize, safePage * pageSize);
+
   return (
     <div className="flex min-h-screen bg-background-app-light dark:bg-background-app-dark">
       <div className="flex-1 w-full ml-0">
@@ -264,17 +272,31 @@ function ClassroomsPage() {
                 <Loading center size="lg" className="mx-auto" />
               </div>
             ) : sorted.length > 0 ? (
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:gap-6">
-                {sorted.map((c) => (
-                  <ClassroomCard
-                    key={c.id}
-                    classroom={c}
-                    onEdit={handleEdit}
-                    onDelete={handleDelete}
-                    onRequestNewCode={handleRequestNewCode}
-                  />
-                ))}
-              </div>
+              <>
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:gap-6">
+                  {paginatedClassrooms.map((c) => (
+                    <ClassroomCard
+                      key={c.id}
+                      classroom={c}
+                      onEdit={handleEdit}
+                      onDelete={handleDelete}
+                      onRequestNewCode={handleRequestNewCode}
+                    />
+                  ))}
+                </div>
+                {totalItems > pageSize && (
+                  <div className="flex justify-center mt-6">
+                    <Pagination
+                      layout="table"
+                      currentPage={page}
+                      totalItems={totalItems}
+                      itemsPerPage={pageSize}
+                      onPageChange={(p) => setPage(p)}
+                      showIcons
+                    />
+                  </div>
+                )}
+              </>
             ) : searchTerm ? (
               <EmptyState
                 title={t('empty.noResults')}

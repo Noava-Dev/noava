@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Button, Select } from 'flowbite-react';
+import { Button, Pagination, Select } from 'flowbite-react';
 import { useUser } from '@clerk/clerk-react';
 import { useUserRole } from '../../hooks/useUserRole';
 import { LuUsers, LuPlus as Plus } from 'react-icons/lu';
@@ -55,6 +55,8 @@ export default function SchoolClassroomsPage() {
   const [sortOrder, setSortOrder] = useState<'newest' | 'oldest' | 'az' | 'za'>(
     'az'
   );
+  const [page, setPage] = useState(1);
+  const pageSize = 12;
 
   const canManageSchool =
     userRole === 'ADMIN' ||
@@ -80,6 +82,11 @@ export default function SchoolClassroomsPage() {
   useEffect(() => {
     fetchData();
   }, [schoolId]);
+
+  // Reset page when search term changes
+  useEffect(() => {
+    setPage(1);
+  }, [searchTerm]);
 
   const handleSubmitClassroom = async (data: {
     name: string;
@@ -175,6 +182,12 @@ export default function SchoolClassroomsPage() {
     }
   });
 
+  // Paginate classrooms
+  const totalItems = sorted.length;
+  const totalPages = Math.ceil(totalItems / pageSize) || 1;
+  const safePage = Math.min(page, totalPages);
+  const paginatedClassrooms = sorted.slice((safePage - 1) * pageSize, safePage * pageSize);
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-background-app-light dark:bg-background-app-dark">
@@ -265,26 +278,40 @@ export default function SchoolClassroomsPage() {
             clearButtonText={t('common:search.clearSearch')}
           />
         ) : (
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {sorted.map((classroom) => (
-              <ClassroomCard
-                key={classroom.classroomId}
-                classroom={{
-                  id: classroom.classroomId,
-                  name: classroom.name,
-                  description: classroom.description ?? '',
-                  createdAt: classroom.createdAt,
-                  updatedAt: classroom.updatedAt,
-                  joinCode: '',
-                  coverImageBlobName: classroom.coverImageBlobName ?? null,
-                  permissions: { canEdit: true, canDelete: true },
-                }}
-                onEdit={handleEdit}
-                onDelete={(id) => setDeleteId(id)}
-                onRequestNewCode={(id) => setRequestCodeId(id)}
-              />
-            ))}
-          </div>
+          <>
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {paginatedClassrooms.map((classroom) => (
+                <ClassroomCard
+                  key={classroom.classroomId}
+                  classroom={{
+                    id: classroom.classroomId,
+                    name: classroom.name,
+                    description: classroom.description ?? '',
+                    createdAt: classroom.createdAt,
+                    updatedAt: classroom.updatedAt,
+                    joinCode: '',
+                    coverImageBlobName: classroom.coverImageBlobName ?? null,
+                    permissions: { canEdit: true, canDelete: true },
+                  }}
+                  onEdit={handleEdit}
+                  onDelete={(id) => setDeleteId(id)}
+                  onRequestNewCode={(id) => setRequestCodeId(id)}
+                />
+              ))}
+            </div>
+            {totalItems > pageSize && (
+              <div className="flex justify-center mt-6">
+                <Pagination
+                  layout="table"
+                  currentPage={page}
+                  totalItems={totalItems}
+                  itemsPerPage={pageSize}
+                  onPageChange={(p) => setPage(p)}
+                  showIcons
+                />
+              </div>
+            )}
+          </>
         )}
       </main>
 

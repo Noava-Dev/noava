@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { Badge, Button, Dropdown, DropdownItem, Tooltip } from 'flowbite-react';
+import { Button, Dropdown, DropdownItem, Pagination, Tooltip } from 'flowbite-react';
 import {
   HiPlus,
   HiPlay,
@@ -23,7 +23,6 @@ import type {
   CreateFlashcardRequest,
   UpdateFlashcardRequest,
 } from '../../models/Flashcard';
-import type { ClerkUserResponse } from '../../models/User';
 import Searchbar from '../../shared/components/Searchbar';
 import { useAzureBlobService } from '../../services/AzureBlobService';
 import { ManageOwnersModal } from '../../shared/components/ManageOwnersModal';
@@ -63,9 +62,10 @@ function FlashcardDetail() {
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const [cardToDelete, setCardToDelete] = useState<number | null>(null);
   const [manageOwnersOpened, setManageOwnersOpened] = useState(false);
-  const [deckUsers, setDeckUsers] = useState<ClerkUserResponse[]>([]);
   const [canEdit, setCanEdit] = useState(false);
   const [isCreator, setIsCreator] = useState(false);
+  const [page, setPage] = useState(1);
+  const pageSize = 16;
 
   // Extract navigation state
   const fromClassroom = location.state?.fromClassroom || false;
@@ -97,7 +97,6 @@ function FlashcardDetail() {
       // Check if user is owner (IsOwner = true)
       try {
         const users = await deckService.getUsersByDeck(deck.deckId, 1, 50);
-        setDeckUsers(users);
         const currentUser = users.find((u) => u.clerkId === user.id);
         setCanEdit(currentUser?.isOwner || false);
       } catch (error) {
@@ -108,6 +107,11 @@ function FlashcardDetail() {
 
     checkPermissions();
   }, [deck, user]);
+
+  // Reset page when search term changes
+  useEffect(() => {
+    setPage(1);
+  }, [searchTerm]);
 
   const fetchDeck = async () => {
     try {
@@ -268,6 +272,15 @@ function FlashcardDetail() {
     (card) =>
       card.frontText.toLowerCase().includes(searchTerm.toLowerCase()) ||
       card.backText.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  // Paginate flashcards
+  const totalItems = filteredFlashcards.length;
+  const totalPages = Math.ceil(totalItems / pageSize) || 1;
+  const safePage = Math.min(page, totalPages);
+  const paginatedFlashcards = filteredFlashcards.slice(
+    (safePage - 1) * pageSize,
+    safePage * pageSize
   );
 
   // Stats
@@ -517,88 +530,102 @@ function FlashcardDetail() {
               )}
             </div>
           ) : (
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {filteredFlashcards.map((card) => (
-                <div
-                  key={card.cardId}
-                  className="relative overflow-hidden transition-shadow border rounded-lg shadow-md bg-background-app-light border-border dark:bg-background-surface-dark hover:shadow-lg dark:border-border-dark">
-                  {/* Action buttons - only for owners/creator */}
-                  {canEdit && (
-                    <div className="absolute z-10 flex gap-2 top-4 right-4">
-                      <button
-                        onClick={() => handleEditFlashcard(card)}
-                        className="p-2 transition-colors rounded-lg text-text-muted-light dark:text-text-muted-dark hover:shadow-md hover:text-cyan-500 dark:hover:text-cyan-400 hover:bg-background-app-light dark:hover:bg-background-surface-dark"
-                        title={t('common:actions.edit')}>
-                        <HiPencil className="w-5 h-5" />
-                      </button>
-                      <button
-                        onClick={() => handleDeleteFlashcard(card.cardId)}
-                        className="p-2 transition-colors rounded-lg text-text-muted-light dark:text-text-muted-dark hover:shadow-md hover:text-red-500 dark:hover:text-red-400 hover:bg-background-app-light dark:hover:bg-background-surface-dark"
-                        title={t('common:actions.delete')}>
-                        <HiTrash className="w-5 h-5" />
-                      </button>
-                    </div>
-                  )}
-
-                  {/* Front Side */}
-                  <div className="p-6 mt-2">
-                    <div className="flex flex-col gap-2 mb-4">
-                      <div className="mb-2 text-xs font-semibold tracking-wide uppercase text-cyan-500 dark:text-cyan-400">
-                        {t('flashcardDetail.frontSide')}
-                      </div>
-
-                      {/* Front Image */}
-                      {card.frontImageUrl && (
-                        <div className="flex justify-center p-2 rounded-lg bg-background-subtle-light dark:bg-background-subtle-dark">
-                          <img
-                            src={card.frontImageUrl}
-                            alt="Front"
-                            className="object-contain max-w-full rounded-lg max-h-40"
-                          />
-                        </div>
-                      )}
-
-                      {/* Front Text */}
-                      <p className="text-lg font-semibold text-text-title-light dark:text-text-title-dark line-clamp-2">
-                        {card.frontText}
-                      </p>
-                    </div>
-
-                    {/* Divider */}
-                    <div className="flex flex-col gap-2 pt-4 border-t border-border dark:border-border-dark">
-                      <div className="mb-2 text-xs font-semibold tracking-wide uppercase text-text-muted-light dark:text-text-muted-dark">
-                        {t('flashcardDetail.backSide')}
-                      </div>
-
-                      {/* Back Image */}
-                      {card.backImageUrl && (
-                        <div className="flex justify-center p-2 rounded-lg bg-background-subtle-light dark:bg-background-subtle-dark">
-                          <img
-                            src={card.backImageUrl}
-                            alt="Back"
-                            className="object-contain max-w-full rounded-lg max-h-40"
-                          />
-                        </div>
-                      )}
-
-                      {/* Back Text */}
-                      <p className="text-text-body-light dark:text-text-body-dark line-clamp-2">
-                        {card.backText}
-                      </p>
-                    </div>
-
-                    {/* Memo */}
-                    {card.memo && (
-                      <div className="mt-4">
-                        <p className="text-xs italic text-text-muted-light dark:text-text-muted-dark line-clamp-2">
-                          {card.memo}
-                        </p>
+            <>
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+                {paginatedFlashcards.map((card) => (
+                  <div
+                    key={card.cardId}
+                    className="relative overflow-hidden transition-shadow border rounded-lg shadow-md bg-background-app-light border-border dark:bg-background-surface-dark hover:shadow-lg dark:border-border-dark">
+                    {/* Action buttons - only for owners/creator */}
+                    {canEdit && (
+                      <div className="absolute z-10 flex gap-2 top-4 right-4">
+                        <button
+                          onClick={() => handleEditFlashcard(card)}
+                          className="p-2 transition-colors rounded-lg text-text-muted-light dark:text-text-muted-dark hover:shadow-md hover:text-cyan-500 dark:hover:text-cyan-400 hover:bg-background-app-light dark:hover:bg-background-surface-dark"
+                          title={t('common:actions.edit')}>
+                          <HiPencil className="w-5 h-5" />
+                        </button>
+                        <button
+                          onClick={() => handleDeleteFlashcard(card.cardId)}
+                          className="p-2 transition-colors rounded-lg text-text-muted-light dark:text-text-muted-dark hover:shadow-md hover:text-red-500 dark:hover:text-red-400 hover:bg-background-app-light dark:hover:bg-background-surface-dark"
+                          title={t('common:actions.delete')}>
+                          <HiTrash className="w-5 h-5" />
+                        </button>
                       </div>
                     )}
+
+                    {/* Front Side */}
+                    <div className="p-6 mt-2">
+                      <div className="flex flex-col gap-2 mb-4">
+                        <div className="mb-2 text-xs font-semibold tracking-wide uppercase text-cyan-500 dark:text-cyan-400">
+                          {t('flashcardDetail.frontSide')}
+                        </div>
+
+                        {/* Front Image */}
+                        {card.frontImageUrl && (
+                          <div className="flex justify-center p-2 rounded-lg bg-background-subtle-light dark:bg-background-subtle-dark">
+                            <img
+                              src={card.frontImageUrl}
+                              alt="Front"
+                              className="object-contain max-w-full rounded-lg max-h-40"
+                            />
+                          </div>
+                        )}
+
+                        {/* Front Text */}
+                        <p className="text-lg font-semibold text-text-title-light dark:text-text-title-dark line-clamp-2">
+                          {card.frontText}
+                        </p>
+                      </div>
+
+                      {/* Divider */}
+                      <div className="flex flex-col gap-2 pt-4 border-t border-border dark:border-border-dark">
+                        <div className="mb-2 text-xs font-semibold tracking-wide uppercase text-text-muted-light dark:text-text-muted-dark">
+                          {t('flashcardDetail.backSide')}
+                        </div>
+
+                        {/* Back Image */}
+                        {card.backImageUrl && (
+                          <div className="flex justify-center p-2 rounded-lg bg-background-subtle-light dark:bg-background-subtle-dark">
+                            <img
+                              src={card.backImageUrl}
+                              alt="Back"
+                              className="object-contain max-w-full rounded-lg max-h-40"
+                            />
+                          </div>
+                        )}
+
+                        {/* Back Text */}
+                        <p className="text-text-body-light dark:text-text-body-dark line-clamp-2">
+                          {card.backText}
+                        </p>
+                      </div>
+
+                      {/* Memo */}
+                      {card.memo && (
+                        <div className="mt-4">
+                          <p className="text-xs italic text-text-muted-light dark:text-text-muted-dark line-clamp-2">
+                            {card.memo}
+                          </p>
+                        </div>
+                      )}
+                    </div>
                   </div>
+                ))}
+              </div>
+              {totalItems > pageSize && (
+                <div className="flex justify-center mt-6">
+                  <Pagination
+                    layout="table"
+                    currentPage={page}
+                    totalItems={totalItems}
+                    itemsPerPage={pageSize}
+                    onPageChange={(p) => setPage(p)}
+                    showIcons
+                  />
                 </div>
-              ))}
-            </div>
+              )}
+            </>
           )}
         </div>
 
