@@ -8,7 +8,7 @@ export type ContactSubject =
   | 'Complaint' 
   | 'Other';
 
-export type ContactMessageStatus = 'Pending' | 'InProgress' | 'Resolved';
+export type ContactMessageStatus = 'Pending' | 'InProgress' | 'Answered' | 'Closed' | 'Rejected';
 
 interface ContactMessage {
   id: number;

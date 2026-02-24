@@ -1,11 +1,13 @@
 import { LuBuilding2 as Building2,
         LuCircleHelp as HelpCircle,
-        LuUsers as Users
+        LuUsers as Users,
+        LuMail
  } from "react-icons/lu"
 import PageHeader from "../../../shared/components/PageHeader"
 import { Tabs, TabItem } from "flowbite-react"
 import SchoolsTab from "../components/schoolsTab"
 import UsersTab from "../components/usersTab"
+import ContactMessagesTab from "../components/contactMessagesTab"
 import { useTranslation } from 'react-i18next';
 
 
@@ -49,6 +51,15 @@ function AdminDashboard() {
             }
           >
             <UsersTab />
+          </TabItem>
+          <TabItem
+            title={
+              <div className="flex items-center gap-2">
+                <LuMail className="size-4" /> Contact Messages
+              </div>
+            }
+          >
+            <ContactMessagesTab />
           </TabItem>
         </Tabs>
       </main>
