@@ -10,10 +10,6 @@ import {
 } from 'react-icons/lu';
 import {
   Button,
-  Modal,
-  ModalBody,
-  ModalFooter,
-  ModalHeader,
 } from 'flowbite-react';
 import { HiChevronRight } from 'react-icons/hi';
 import { useNavigate } from 'react-router-dom';
@@ -30,6 +26,7 @@ import Loading from '../../shared/components/loading/Loading';
 import DeckModal from '../../shared/components/DeckModal';
 import ConfirmModal from '../../shared/components/ConfirmModal';
 import { InteractionHeatmap } from '../../shared/components/InteractionHeatmap';
+import EmptyState from '../../shared/components/EmptyState';
 
 function Dashboard() {
   const { t } = useTranslation('dashboard');
@@ -37,8 +34,10 @@ function Dashboard() {
   const deckService = useDeckService();
   const statisticsService = useStatisticsService();
   const [decks, setDecks] = useState<Deck[]>([]);
-  const [statistics, setStatistics] = useState<DashboardStatistics>({} as DashboardStatistics);
   const [interactions, setInteractions] = useState<InteractionCount[]>([]);
+  const [statistics, setStatistics] = useState<DashboardStatistics>(
+    {} as DashboardStatistics
+  );
   const [loading, setLoading] = useState(true);
   const [interactionsLoading, setInteractionsLoading] = useState(true);
   const { showSuccess, showError } = useToast();
@@ -85,7 +84,7 @@ function Dashboard() {
   };
 
   const handleCopy = (deckId: number) => {
-    setDeckToCopy(deckId)
+    setDeckToCopy(deckId);
     setCopyModalOpened(true);
   };
 
@@ -197,7 +196,11 @@ function Dashboard() {
                   />
                   <DashboardStatCard
                     title={t('statcard.accuracyrate.title')}
-                    value={statistics ? `${Math.round(statistics.accuracyRate)}%` : '0%'}
+                    value={
+                      statistics
+                        ? `${Math.round(statistics.accuracyRate)}%`
+                        : '0%'
+                    }
                     tooltip={t('statcard.accuracyrate.tooltip')}
                     icon={LuTarget}
                   />
@@ -209,7 +212,11 @@ function Dashboard() {
                   />
                   <DashboardStatCard
                     title={t('statcard.lastreview.title')}
-                    value={statistics?.lastRevieweDate ? formatDateToEuropean(statistics.lastRevieweDate) : t('statcard.lastreview.never')}
+                    value={
+                      statistics?.lastRevieweDate
+                        ? formatDateToEuropean(statistics.lastRevieweDate)
+                        : t('statcard.lastreview.never')
+                    }
                     tooltip={t('statcard.lastreview.tooltip')}
                     icon={LuTrendingUp}
                   />
@@ -243,7 +250,9 @@ function Dashboard() {
                 <div className="w-3/5">
                   <div className="flex flex-row items-center justify-between">
                     {/* Header */}
-                    <h3 className="text-lg font-semibold">{t('yourDecks')}</h3>
+                    <h3 className="text-lg font-semibold text-text-title-light dark:text-text-title-dark">
+                      {t('yourDecks')}
+                    </h3>
                     <Button
                       color="alternative"
                       className="p-0 text-sm border-0 outline-none text-text-muted-light dark:text-text-muted-dark focus:outline-none active:outline-none focus:ring-0 active:ring-0 hover:text-text-body-light dark:hover:text-text-body-dark"
@@ -269,13 +278,11 @@ function Dashboard() {
                       ))}
                     </div>
                   ) : (
-                    // No decks yet
-                    <div className="flex flex-col items-center justify-center gap-2 mt-4">
-                      <LuLayers className="w-10 h-10 text-text-muted-light dark:text-text-muted-dark" />
-                      <p className="mb-3 text-xl font-semibold text-text-body-light dark:text-text-body-dark">
-                        {t('decks.empty')}
-                      </p>
-                    </div>
+                    <EmptyState
+                      title={t('decks:empty.title')}
+                      description={t('decks:empty.message')}
+                      icon={LuLayers}
+                    />
                   )}
                 </div>
               </div>
@@ -297,39 +304,30 @@ function Dashboard() {
             deck={analyticsDeck}
           />
 
-          {/* Delete Confirmation Modal */}
-          <Modal show={deleteDeckId !== null} onClose={cancelDelete} size="md">
-            <ModalHeader>{t('common:modals.deleteModal.title')}</ModalHeader>
+          <ConfirmModal
+            show={deleteDeckId !== null}
+            title={t('common:modals.deleteModal.title')}
+            message={t('common:modals.deleteModal.message')}
+            confirmLabel={t('common:modals.deleteModal.yes')}
+            cancelLabel={t('common:actions.cancel')}
+            confirmColor="red"
+            onConfirm={confirmDelete}
+            onCancel={cancelDelete}
+          />
 
-            <ModalBody>
-              <p className="text-text-body-light dark:text-text-body-dark">
-                {t('common:modals.deleteModal.message')}
-              </p>
-            </ModalBody>
-
-            <ModalFooter>
-              <div className="flex justify-end w-full gap-3">
-                <Button color="gray" onClick={cancelDelete} size="sm">
-                  {t('common:actions.cancel')}
-                </Button>
-                <Button color="red" onClick={confirmDelete} size="sm">
-                  {t('common:modals.deleteModal.yes')}
-                </Button>
-              </div>
-            </ModalFooter>
-          </Modal>
-
-                {/* Confirm Copy Modal */}
-                <ConfirmModal
-                  show={copyModalOpened}
-                  title={t('decks:copy.title')}
-                  message={t('decks:copy.message')}
-                  confirmLabel={isCopying ? t('common:actions.copying') : t('common:actions.copy')}
-                  cancelLabel={t('common:actions.cancel')}
-                  confirmColor="green"
-                  onConfirm={handleConfirmCopy}
-                  onCancel={() => setCopyModalOpened(false)}
-                />
+          {/* Confirm Copy Modal */}
+          <ConfirmModal
+            show={copyModalOpened}
+            title={t('decks:copy.title')}
+            message={t('decks:copy.message')}
+            confirmLabel={
+              isCopying ? t('common:actions.copying') : t('common:actions.copy')
+            }
+            cancelLabel={t('common:actions.cancel')}
+            confirmColor="green"
+            onConfirm={handleConfirmCopy}
+            onCancel={() => setCopyModalOpened(false)}
+          />
         </div>
       </div>
     </>

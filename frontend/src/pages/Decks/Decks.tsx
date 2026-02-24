@@ -10,7 +10,13 @@ import {
   Tooltip,
 } from 'flowbite-react';
 import { Modal } from 'flowbite-react';
-import { HiPlus, HiPlay, HiPencil, HiRefresh, HiChevronDown } from 'react-icons/hi';
+import {
+  HiPlus,
+  HiPlay,
+  HiPencil,
+  HiRefresh,
+  HiChevronDown,
+} from 'react-icons/hi';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import PageHeader from '../../shared/components/PageHeader';
@@ -27,6 +33,7 @@ import EmptyState from '../../shared/components/EmptyState';
 import { useUser } from '@clerk/clerk-react';
 import ConfirmModal from '../../shared/components/ConfirmModal';
 import { TbDoorEnter } from 'react-icons/tb';
+import { LuLayers } from 'react-icons/lu';
 
 function DecksPage() {
   const { t } = useTranslation('decks');
@@ -43,8 +50,10 @@ function DecksPage() {
   const { showSuccess, showError } = useToast();
   const [deleteDeckId, setDeleteDeckId] = useState<number | null>(null);
   const [bulkReviewModalOpened, setBulkReviewModalOpened] = useState(false);
-  const [bulkWriteReviewModalOpened, setBulkWriteReviewModalOpened] = useState(false);
-  const [bulkReverseReviewModalOpened, setBulkReverseReviewModalOpened] = useState(false);
+  const [bulkWriteReviewModalOpened, setBulkWriteReviewModalOpened] =
+    useState(false);
+  const [bulkReverseReviewModalOpened, setBulkReverseReviewModalOpened] =
+    useState(false);
   const [joinCodeModalOpen, setJoinCodeModalOpen] = useState(false);
   const [joinCode, setJoinCode] = useState('');
   const [joiningDeck, setJoiningDeck] = useState(false);
@@ -72,8 +81,8 @@ function DecksPage() {
     }
   };
 
-    const handleCopy = (deckId: number) => {
-    setDeckToCopy(deckId)
+  const handleCopy = (deckId: number) => {
+    setDeckToCopy(deckId);
     setCopyModalOpened(true);
   };
 
@@ -136,11 +145,7 @@ function DecksPage() {
       showSuccess('Success', t('toast.deleteSuccess'));
       fetchDecks();
     } catch (error: any) {
-      if (error.response?.status === 404 || error.response?.status === 403) {
-        navigate('/not-found', { replace: true });
-      } else {
-        showError(t('toast.deleteError'), 'Error');
-      }
+      showError(t('toast.deleteError'), 'Error');
     } finally {
       setDeleteDeckId(null);
     }
@@ -204,8 +209,8 @@ function DecksPage() {
   });
 
   // Split decks into owned and shared
-  const ownedDecks = sortedDecks.filter(deck => deck.userId === user?.id);
-  const sharedDecks = sortedDecks.filter(deck => deck.userId !== user?.id);
+  const ownedDecks = sortedDecks.filter((deck) => deck.userId === user?.id);
+  const sharedDecks = sortedDecks.filter((deck) => deck.userId !== user?.id);
 
   if (loading) {
     return <Skeleton />;
@@ -240,29 +245,27 @@ function DecksPage() {
                         label=""
                         dismissOnClick={true}
                         renderTrigger={() => (
-                          <Button size="lg" className="w-full border-none bg-cyan-500 hover:bg-cyan-600 md:w-fit">
+                          <Button
+                            size="lg"
+                            className="w-full border-none bg-cyan-500 hover:bg-cyan-600 md:w-fit">
                             <HiPlay className="w-5 h-5 mr-2" />
                             {t('bulkReview.button')}
                             <HiChevronDown className="w-4 h-4 ml-1" />
                           </Button>
-                        )}
-                      >
+                        )}>
                         <DropdownItem
                           icon={HiPlay}
-                          onClick={() => setBulkReviewModalOpened(true)}
-                        >
+                          onClick={() => setBulkReviewModalOpened(true)}>
                           {t('reviewModes.flipMode')}
                         </DropdownItem>
                         <DropdownItem
                           icon={HiPencil}
-                          onClick={() => setBulkWriteReviewModalOpened(true)}
-                        >
+                          onClick={() => setBulkWriteReviewModalOpened(true)}>
                           {t('reviewModes.writeReview')}
                         </DropdownItem>
                         <DropdownItem
                           icon={HiRefresh}
-                          onClick={() => setBulkReverseReviewModalOpened(true)}
-                        >
+                          onClick={() => setBulkReverseReviewModalOpened(true)}>
                           {t('reviewModes.reverseReview')}
                         </DropdownItem>
                       </Dropdown>
@@ -369,9 +372,8 @@ function DecksPage() {
                           key={deck.deckId}
                           deck={deck}
                           onCopy={handleCopy}
-                          onEdit={handleEdit}
-                          onDelete={handleDelete}
                           onAnalytics={handleAnalytics}
+                          showEdit={false}
                         />
                       ))}
                     </div>
@@ -382,21 +384,22 @@ function DecksPage() {
               <EmptyState
                 title={t('empty.noResults')}
                 description={t('common:search.otherSearchTerm')}
+                icon={LuLayers}
                 buttonOnClick={() => setSearchTerm('')}
                 clearButtonText={t('common:search.clearSearch')}
               />
             ) : (
-              <div className="py-12 text-center md:py-20">
-                <p className="mb-6 text-xl text-text-body-light dark:text-text-muted-dark md:text-2xl">
-                  {t('empty.message')}
-                </p>
-              </div>
+              <EmptyState
+                title={t('empty.title')}
+                description={t('empty.message')}
+                icon={LuLayers}
+              />
             )}
           </div>
         </section>
 
         {/* Join by Code Modal */}
-        <Modal show={joinCodeModalOpen} onClose={() => setJoinCodeModalOpen(false)} size="md">
+        <Modal show={joinCodeModalOpen} onClose={() => setJoinCodeModalOpen(false)} size="md" dismissible>
           <ModalHeader>{t('joinCode.title')}</ModalHeader>
           <ModalBody>
             <div className="space-y-4">
@@ -423,12 +426,12 @@ function DecksPage() {
             </div>
           </ModalBody>
           <ModalFooter>
-            <div className="flex justify-end w-full gap-3">
-              <Button color="gray" onClick={() => setJoinCodeModalOpen(false)}>
-                {t('common:actions.cancel')}
-              </Button>
-              <Button onClick={handleJoinByCode} disabled={joiningDeck}>
+            <div className="flex w-full flex-col gap-3 sm:flex-row">
+              <Button onClick={handleJoinByCode} disabled={joiningDeck} className="w-full sm:flex-1">
                 {joiningDeck ? t('joinCode.joining') : t('joinCode.join')}
+              </Button>
+              <Button color="gray" onClick={() => setJoinCodeModalOpen(false)} className="w-full sm:w-auto">
+                {t('common:actions.cancel')}
               </Button>
             </div>
           </ModalFooter>
@@ -475,39 +478,30 @@ function DecksPage() {
           deck={analyticsDeck}
         />
 
-        {/* Delete Confirmation Modal */}
-        <Modal show={deleteDeckId !== null} onClose={cancelDelete} size="md">
-          <ModalHeader>{t('common:modals.deleteModal.title')}</ModalHeader>
+        <ConfirmModal
+          show={deleteDeckId !== null}
+          title={t('common:modals.deleteModal.title')}
+          message={t('common:modals.deleteModal.message')}
+          confirmLabel={t('common:modals.deleteModal.yes')}
+          cancelLabel={t('common:actions.cancel')}
+          confirmColor="red"
+          onConfirm={confirmDelete}
+          onCancel={cancelDelete}
+        />
 
-          <ModalBody>
-            <p className="text-text-body-light dark:text-text-muted-dark">
-              {t('common:modals.deleteModal.message')}
-            </p>
-          </ModalBody>
-
-          <ModalFooter>
-            <div className="flex justify-end w-full gap-3">
-              <Button color="gray" onClick={cancelDelete} size="sm">
-                {t('common:actions.cancel')}
-              </Button>
-              <Button color="red" onClick={confirmDelete} size="sm">
-                {t('common:modals.deleteModal.yes')}
-              </Button>
-            </div>
-          </ModalFooter>
-        </Modal>
-
-                {/* Confirm Copy Modal */}
-                <ConfirmModal
-                  show={copyModalOpened}
-                  title={t('copy.title')}
-                  message={t('copy.message')}
-                  confirmLabel={isCopying ? t('common:actions.copying') : t('common:actions.copy')}
-                  cancelLabel={t('common:actions.cancel')}
-                  confirmColor="green"
-                  onConfirm={handleConfirmCopy}
-                  onCancel={() => setCopyModalOpened(false)}
-                />
+        {/* Confirm Copy Modal */}
+        <ConfirmModal
+          show={copyModalOpened}
+          title={t('copy.title')}
+          message={t('copy.message')}
+          confirmLabel={
+            isCopying ? t('common:actions.copying') : t('common:actions.copy')
+          }
+          cancelLabel={t('common:actions.cancel')}
+          confirmColor="green"
+          onConfirm={handleConfirmCopy}
+          onCancel={() => setCopyModalOpened(false)}
+        />
       </div>
     </div>
   );

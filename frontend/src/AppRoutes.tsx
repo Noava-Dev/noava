@@ -3,7 +3,6 @@ import Home from './pages/Home/Home';
 import Decks from './pages/Decks/Decks';
 import Classrooms from './pages/Classrooms/Classrooms';
 import ClassroomDetail from './pages/Classrooms/ClassroomDetail';
-import JoinClassroom from './pages/Classrooms/JoinClassroom';
 import MembersPage from './pages/Classrooms/Members';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import NotFound from './pages/NotFound/NotFound';
@@ -85,7 +84,6 @@ export default function AppRoutes() {
 
         {/* Classrooms */}
         <Route path="/classrooms" element={<Classrooms />} />
-        <Route path="/classrooms/join" element={<JoinClassroom />} />
         <Route path="/classrooms/:classroomId" element={<ClassroomDetail />} />
         <Route
           path="/classrooms/:classroomId/members"

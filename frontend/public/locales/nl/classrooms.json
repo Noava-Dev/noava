@@ -3,16 +3,18 @@
   "createButton": "Klas aanmaken",
   "results": { "found": "resultaten gevonden" },
   "empty": {
-    "noResults": "Geen klassen gevonden",
-    "message": "Je hebt nog geen klassen."
+    "title": "Nog geen klaslokalen",
+    "noResults": "Geen klaslokalen gevonden",
+    "message": "Je zit momenteel in geen enkele klas.",
+    "messageSchools": "Deze school heeft nog geen klaslokalen."
   },
   "modal": {
     "createTitle": "Klas aanmaken",
     "editTitle": "Klas bewerken",
     "nameLabel": "Naam",
     "descriptionLabel": "Beschrijving",
-    "createButton": "Aanmaken",
-    "updateButton": "Bijwerken",
+    "createButton": "Klas aanmaken",
+    "updateButton": "Klas bijwerken",
     "cancelButton": "Annuleren"
   },
   "members": {
@@ -26,6 +28,7 @@
     "notAuthorized": "Niet gemachtigd",
     "onlyTeachers": "Alleen leerkrachten hebben toegang tot deze pagina",
     "editTitle": "Lid bewerken",
+    "updateButton": "Lid bijwerken",
     "isTeacher": "Is leerkracht",
     "saving": "Opslaan...",
     "updateSuccess": "Lid bijgewerkt",

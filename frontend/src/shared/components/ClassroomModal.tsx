@@ -195,8 +195,8 @@ function ClassroomModal({
             <div className="flex flex-col gap-3 pt-4 sm:flex-row">
               <Button type="submit" className="w-full sm:flex-1" disabled={uploading}>
                 {uploading ? t('common:actions.uploading', 'Uploading...') : (classroom
-                  ? t('common:actions.update')
-                  : t('common:actions.create'))}
+                  ? t('modal.updateButton')
+                  : t('modal.createButton'))}
               </Button>
               <Button color="gray" onClick={onClose} type="button" className="w-full sm:w-auto" disabled={uploading}>
                 {t('common:actions.cancel')}
