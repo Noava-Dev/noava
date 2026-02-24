@@ -8,6 +8,7 @@ namespace noava.Repositories.ContactMessages
         Task<ContactMessage?> GetByIdAsync(int id);
         Task<IEnumerable<ContactMessage>> GetAllAsync(ContactMessageFilterDto filter);
         Task AddAsync(ContactMessage message);
+        Task UpdateAsync(ContactMessage entity);
         Task DeleteAsync(ContactMessage message);
     }
 }

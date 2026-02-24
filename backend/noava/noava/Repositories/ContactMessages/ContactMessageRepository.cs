@@ -21,6 +21,12 @@ namespace noava.Repositories.ContactMessages
             await _context.SaveChangesAsync();
         }
 
+        public async Task UpdateAsync(ContactMessage entity)
+        {
+            _context.ContactMessages.Update(entity);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task DeleteAsync(ContactMessage entity)
         {
             entity.CreatedAt = DateTime.UtcNow;
