@@ -133,6 +133,8 @@
     "avgMastery": "Maîtrise moy.",
     "correctCards": "Cartes correctes",
     "avgResponseTime": "Temps de réponse moy.",
+    "interactionActivity": "Activité d'interaction",
+    "interactionSubtitle": "Votre activité d'apprentissage avec ce deck au cours de l'année passée",
     "noData": {
       "title": "Pas Encore de Statistiques",
       "description": "Commencez à réviser ce deck pour voir vos progrès et statistiques."
