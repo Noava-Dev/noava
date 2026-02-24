@@ -34,6 +34,7 @@ import EmptyState from '../../shared/components/EmptyState';
 import { useUser } from '@clerk/clerk-react';
 import ConfirmModal from '../../shared/components/ConfirmModal';
 import { LuLayers } from 'react-icons/lu';
+import { TbDoorEnter } from 'react-icons/tb';
 
 function DecksPage() {
   const { t } = useTranslation('decks');
@@ -292,6 +293,7 @@ function DecksPage() {
                       size="lg"
                       color="gray"
                       className="w-full border-none md:w-fit">
+                      <TbDoorEnter className="mr-2 size-5" />
                       {t('joinCode.button')}
                     </Button>
                   </Tooltip>
