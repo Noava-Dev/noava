@@ -36,7 +36,7 @@ function AdminDashboard() {
           <TabItem
             active
             title={
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 text-text-body-light dark:text-text-body-dark">
                 <Building2 className="size-4" /> Schools
               </div>
             }
@@ -45,7 +45,7 @@ function AdminDashboard() {
           </TabItem>
           <TabItem
             title={
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 text-text-body-light dark:text-text-body-dark">
                 <Users className="size-4" /> Users
               </div>
             }
@@ -54,7 +54,7 @@ function AdminDashboard() {
           </TabItem>
           <TabItem
             title={
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 text-text-body-light dark:text-text-body-dark">
                 <LuMail className="size-4" /> Contact Messages
               </div>
             }

@@ -2,12 +2,13 @@ import { useEffect, useState } from 'react';
 import { useContactMessageService } from '../../../services/ContactMessageService';
 import type { ContactMessage, ContactMessageStatus, ContactSubject } from '../../../models/ContactMessage';
 import { useToast } from '../../../contexts/ToastContext';
-import { LuSearch, LuTrash, LuEye } from 'react-icons/lu';
+import { LuSearch, LuTrash, LuEye, LuX } from 'react-icons/lu';
 import Loading from '../../../shared/components/loading/Loading';
 import EmptyState from '../../../shared/components/EmptyState';
 import ConfirmModal from '../../../shared/components/ConfirmModal';
 import { useTranslation } from 'react-i18next';
-import { Modal, ModalHeader, ModalBody } from 'flowbite-react';
+import { Modal, ModalHeader, ModalBody, Pagination } from 'flowbite-react';
+import { formatDateToEuropean } from '../../../services/DateService';
 
 export default function ContactMessagesTab() {
   const { t } = useTranslation(['contact', 'common']);
@@ -21,10 +22,17 @@ export default function ContactMessagesTab() {
   const [statusFilter, setStatusFilter] = useState<ContactMessageStatus | 'all'>('all');
   const [messageToDelete, setMessageToDelete] = useState<ContactMessage | null>(null);
   const [viewingMessage, setViewingMessage] = useState<ContactMessage | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   useEffect(() => {
     fetchMessages();
   }, [subjectFilter, statusFilter]);
+
+  // Reset page when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, subjectFilter, statusFilter]);
 
   const fetchMessages = async () => {
     try {
@@ -78,6 +86,15 @@ export default function ContactMessagesTab() {
     return matchesSearch;
   });
 
+  // Pagination logic
+  const totalItems = filtered.length;
+  const totalPages = Math.ceil(totalItems / itemsPerPage) || 1;
+  const safePage = Math.min(currentPage, totalPages);
+  const paginatedMessages = filtered.slice(
+    (safePage - 1) * itemsPerPage,
+    safePage * itemsPerPage
+  );
+
   const statusColors: Record<ContactMessageStatus, string> = {
     Pending: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300',
     InProgress: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300',
@@ -94,7 +111,12 @@ export default function ContactMessagesTab() {
             Contact Messages
           </h3>
           <p className="text-sm text-text-muted-light dark:text-text-muted-dark">
-            Manage and respond to user inquiries.
+            Manage and respond to user inquiries.{' '}
+            {messages.length > 0 && (
+              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-300 ml-2">
+                {messages.length} total
+              </span>
+            )}
           </p>
         </div>
       </div>
@@ -116,8 +138,16 @@ export default function ContactMessagesTab() {
                   placeholder="Search by email or message..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full rounded-xl border border-border dark:border-border-dark bg-background-app-light dark:bg-background-app-dark py-2.5 pl-10 pr-4 text-sm text-text-body-light dark:text-text-body-dark focus:ring-2 focus:ring-primary-500 focus:outline-none"
+                  className="w-full rounded-xl border border-border dark:border-border-dark bg-background-app-light dark:bg-background-app-dark py-2.5 pl-10 pr-10 text-sm text-text-body-light dark:text-text-body-dark focus:ring-2 focus:ring-primary-500 focus:outline-none"
                 />
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery('')}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted-light dark:text-text-muted-dark hover:text-text-title-light dark:hover:text-text-title-dark"
+                  >
+                    <LuX className="h-4 w-4" />
+                  </button>
+                )}
               </div>
 
               {searchQuery && (
@@ -214,18 +244,18 @@ export default function ContactMessagesTab() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-border dark:divide-border-dark">
-                {filtered.map((message) => (
+                {paginatedMessages.map((message) => (
                   <tr
                     key={message.id}
-                    className="hover:bg-background-surface-light dark:hover:bg-background-app-dark transition-colors"
+                    className="hover:bg-background-surface-light dark:hover:bg-background-app-dark transition-colors cursor-pointer"
                   >
                     {/* Sender */}
                     <td className="px-6 py-4">
-                      <div className="flex flex-col">
+                      <div className="flex flex-col gap-1">
                         <span className="font-medium text-text-title-light dark:text-text-title-dark">
                           {message.senderEmail}
                         </span>
-                        <span className="text-xs text-text-muted-light dark:text-text-muted-dark">
+                        <span className="inline-flex items-center w-fit px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300">
                           {t(`contact:titles.${message.title}`)}
                         </span>
                       </div>
@@ -233,7 +263,7 @@ export default function ContactMessagesTab() {
 
                     {/* Subject */}
                     <td className="px-6 py-4">
-                      <span className="text-text-body-light dark:text-text-body-dark">
+                      <span className="inline-flex items-center px-2.5 py-1 rounded-lg text-sm font-medium bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">
                         {t(`contact:subjects.${message.subject}`)}
                       </span>
                     </td>
@@ -274,8 +304,8 @@ export default function ContactMessagesTab() {
 
                     {/* Date */}
                     <td className="px-6 py-4">
-                      <span className="text-text-body-light dark:text-text-body-dark">
-                        {new Date(message.createdAt).toLocaleDateString()}
+                      <span className="text-text-body-light dark:text-text-body-dark text-sm">
+                        {formatDateToEuropean(message.createdAt)}
                       </span>
                     </td>
 
@@ -284,14 +314,14 @@ export default function ContactMessagesTab() {
                       <div className="flex justify-end gap-2">
                         <button
                           onClick={() => setViewingMessage(message)}
-                          className="rounded-lg p-2 text-blue-600 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-900/20"
+                          className="rounded-lg p-2 bg-transparent text-blue-600 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-900/20 transition-colors"
                           title="View details"
                         >
                           <LuEye className="h-4 w-4" />
                         </button>
                         <button
                           onClick={() => setMessageToDelete(message)}
-                          className="rounded-lg p-2 text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20"
+                          className="rounded-lg p-2 bg-transparent text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20 transition-colors"
                           title="Delete message"
                         >
                           <LuTrash className="h-4 w-4" />
@@ -304,65 +334,95 @@ export default function ContactMessagesTab() {
             </table>
           </div>
         )}
+
+        {/* Pagination */}
+        {!loading && filtered.length > itemsPerPage && (
+          <div className="flex justify-center mt-6">
+            <Pagination
+              layout="table"
+              currentPage={currentPage}
+              totalItems={totalItems}
+              itemsPerPage={itemsPerPage}
+              onPageChange={(page) => setCurrentPage(page)}
+              showIcons
+            />
+          </div>
+        )}
       </div>
 
       {/* View Message Modal */}
       <Modal
         show={viewingMessage !== null}
         onClose={() => setViewingMessage(null)}
-        size="lg"
+        size="2xl"
         dismissible
       >
-        <ModalHeader>Message Details</ModalHeader>
+        <ModalHeader>
+          <div className="flex items-center gap-2">
+            <LuEye className="h-5 w-5 text-primary-500" />
+            <span>Message Details</span>
+          </div>
+        </ModalHeader>
         <ModalBody>
           {viewingMessage && (
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-semibold text-text-muted-light dark:text-text-muted-dark mb-1">
+            <div className="space-y-5">
+              {/* Sender Info */}
+              <div className="p-4 bg-background-surface-light dark:bg-background-app-dark rounded-lg border border-border dark:border-border-dark">
+                <label className="block text-xs font-semibold uppercase tracking-wide text-text-muted-light dark:text-text-muted-dark mb-2">
                   From
                 </label>
-                <p className="text-text-title-light dark:text-text-title-dark">
-                  {t(`contact:titles.${viewingMessage.title}`)} {viewingMessage.senderEmail}
-                </p>
+                <div className="flex items-center gap-2">
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300">
+                    {t(`contact:titles.${viewingMessage.title}`)}
+                  </span>
+                  <p className="text-text-title-light dark:text-text-title-dark font-medium">
+                    {viewingMessage.senderEmail}
+                  </p>
+                </div>
               </div>
 
-              <div>
-                <label className="block text-sm font-semibold text-text-muted-light dark:text-text-muted-dark mb-1">
-                  Subject
-                </label>
-                <p className="text-text-title-light dark:text-text-title-dark">
-                  {t(`contact:subjects.${viewingMessage.subject}`)}
-                </p>
+              {/* Subject and Status Row */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="p-4 bg-background-surface-light dark:bg-background-app-dark rounded-lg border border-border dark:border-border-dark">
+                  <label className="block text-xs font-semibold uppercase tracking-wide text-text-muted-light dark:text-text-muted-dark mb-2">
+                    Subject
+                  </label>
+                  <p className="text-text-title-light dark:text-text-title-dark font-medium">
+                    {t(`contact:subjects.${viewingMessage.subject}`)}
+                  </p>
+                </div>
+
+                <div className="p-4 bg-background-surface-light dark:bg-background-app-dark rounded-lg border border-border dark:border-border-dark">
+                  <label className="block text-xs font-semibold uppercase tracking-wide text-text-muted-light dark:text-text-muted-dark mb-2">
+                    Status
+                  </label>
+                  <span
+                    className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ${
+                      statusColors[viewingMessage.status]
+                    }`}
+                  >
+                    {viewingMessage.status}
+                  </span>
+                </div>
               </div>
 
-              <div>
-                <label className="block text-sm font-semibold text-text-muted-light dark:text-text-muted-dark mb-1">
-                  Status
-                </label>
-                <span
-                  className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ${
-                    statusColors[viewingMessage.status]
-                  }`}
-                >
-                  {viewingMessage.status}
-                </span>
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-text-muted-light dark:text-text-muted-dark mb-1">
+              {/* Date */}
+              <div className="p-4 bg-background-surface-light dark:bg-background-app-dark rounded-lg border border-border dark:border-border-dark">
+                <label className="block text-xs font-semibold uppercase tracking-wide text-text-muted-light dark:text-text-muted-dark mb-2">
                   Received
                 </label>
                 <p className="text-text-body-light dark:text-text-body-dark">
-                  {new Date(viewingMessage.createdAt).toLocaleString()}
+                  {formatDateToEuropean(viewingMessage.createdAt)}
                 </p>
               </div>
 
+              {/* Message */}
               <div>
-                <label className="block text-sm font-semibold text-text-muted-light dark:text-text-muted-dark mb-1">
+                <label className="block text-xs font-semibold uppercase tracking-wide text-text-muted-light dark:text-text-muted-dark mb-2">
                   Message
                 </label>
-                <div className="p-4 bg-background-surface-light dark:bg-background-app-dark rounded-lg">
-                  <p className="text-text-body-light dark:text-text-body-dark whitespace-pre-wrap">
+                <div className="p-4 bg-background-surface-light dark:bg-background-app-dark rounded-lg border border-border dark:border-border-dark max-h-96 overflow-y-auto">
+                  <p className="text-text-body-light dark:text-text-body-dark whitespace-pre-wrap leading-relaxed">
                     {viewingMessage.description}
                   </p>
                 </div>
