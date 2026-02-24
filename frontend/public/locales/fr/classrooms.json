@@ -50,6 +50,8 @@
     "statistics": {
       "title": "Statistiques du membre",
       "filterDecks": "Filtrer par decks",
+      "interactionActivity": "Activité d'interaction",
+      "interactionSubtitle": "Activité d'apprentissage de l'élève au cours de l'année passée",
       "noDeckSelected": {
         "title": "Aucun deck sélectionné",
         "description": "Sélectionnez au moins un deck pour voir les statistiques."

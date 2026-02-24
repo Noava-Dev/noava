@@ -1,10 +1,6 @@
 import { useMemo, useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-
-interface InteractionCount {
-  date: string;
-  count: number;
-}
+import type { InteractionCount } from '../../models/Statistics';
 
 interface InteractionHeatmapProps {
   data: InteractionCount[];
