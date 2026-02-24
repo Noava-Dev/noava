@@ -8,6 +8,5 @@ namespace noava.Repositories.Cards
         Task<CardInteraction> CreateAsync(CardInteraction interaction);
         Task<List<InteractionCount>> GetInteractionsWholeYearAsync(string clerkId);
         Task<List<InteractionCount>> GetInteractionsWholeYearByDecksAsync(string clerkId, IEnumerable<int> deckIds);
-
     }
 }

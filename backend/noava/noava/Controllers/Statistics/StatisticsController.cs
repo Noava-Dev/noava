@@ -102,6 +102,19 @@ namespace noava.Controllers.Statistics
             return Ok(result);
         }
 
+        [HttpGet("interactions/decks/{deckId:int}/yearly")]
+        public async Task<ActionResult<List<InteractionCount>>> GetInteractionStatsByDecks(int deckId)
+        {
+            var userId = _userService.GetUserId(User);
+            if (userId == null)
+                return Unauthorized();
+
+            var result = await _cardInteractionService
+                .GetInteractionStatsByDeckAsync(userId, deckId);
+
+            return Ok(result);
+        }
+
         [HttpGet("interactions/by-decks/classroom/yearly")]
         public async Task<ActionResult<List<InteractionCount>>> GetInteractionStatsByDecksForClassroom(
             [FromQuery] string clerkId,
