@@ -1,8 +1,11 @@
+using noava.DTOs.Cards;
 using noava.DTOs.Cards.Interactions;
 using noava.DTOs.Cards.Progress;
+using noava.Exceptions;
 using noava.Mappers.Cards;
 using noava.Models;
 using noava.Repositories.Cards;
+using noava.Repositories.Classrooms;
 using noava.Repositories.StudySessions;
 using noava.Shared;
 
@@ -15,19 +18,25 @@ namespace noava.Services.Cards
         private readonly ILeitnerBoxService _leitner;
         private readonly IAggregateStatisticsService _aggregateStats;
         private readonly IStudySessionRepository _studySessionRepo;
+        private readonly IClassroomDeckRepository _classroomDeckRepository;
+        private readonly IClassroomRepository _classroomRepository;
 
         public CardInteractionService(
             ICardInteractionRepository interactionRepo,
             ICardProgressRepository progressRepo,
             ILeitnerBoxService leitner,
             IAggregateStatisticsService aggregateStatisticsService,
-            IStudySessionRepository studySessionRepository)
+            IStudySessionRepository studySessionRepository,
+            IClassroomRepository classroomRepository,
+            IClassroomDeckRepository classroomDeckRepository)
         {
             _interactionRepo = interactionRepo;
             _progressRepo = progressRepo;
             _leitner = leitner;
             _aggregateStats = aggregateStatisticsService;
             _studySessionRepo = studySessionRepository;
+            _classroomRepository = classroomRepository;
+            _classroomDeckRepository = classroomDeckRepository;
         }
 
         public async Task<CardProgressResponse> CreateCardInteractionAsync(
@@ -98,6 +107,24 @@ namespace noava.Services.Cards
                 IncorrectCount = progress.IncorrectCount,
                 Streak = progress.Streak
             };
+        }
+
+        public async Task<List<InteractionCount>> GetInteractionStatsAsync(string clerkId)
+        {
+            return await _interactionRepo.GetInteractionsWholeYearAsync(clerkId);
+        }
+
+        public async Task<List<InteractionCount>> GetInteractionStatsByDecksAsync(string clerkId, string ActionTakerId, int classroomId, IEnumerable<int> deckIds)
+        {
+            var isTeachter = await _classroomRepository.IsTeacherOfClassroomAsync(classroomId, ActionTakerId);
+            if (!isTeachter)
+                throw new ForbiddenException();
+
+            var doDecksBelongToClassroom = await _classroomDeckRepository.ExistsAsync(deckIds, classroomId);
+            if (!doDecksBelongToClassroom)
+                return new List<InteractionCount>();
+
+            return await _interactionRepo.GetInteractionsWholeYearByDecksAsync(clerkId, deckIds);
         }
     }
 }

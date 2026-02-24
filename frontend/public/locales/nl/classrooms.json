@@ -53,6 +53,8 @@
     "statistics": {
       "title": "Lid Statistieken",
       "filterDecks": "Filteren op Decks",
+      "interactionActivity": "Interactie-activiteit",
+      "interactionSubtitle": "Leeractiviteit van de leerling van het afgelopen jaar",
       "noDeckSelected": {
         "title": "Geen Decks Geselecteerd",
         "description": "Selecteer ten minste één deck om statistieken te bekijken."

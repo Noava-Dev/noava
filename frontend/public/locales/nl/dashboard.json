@@ -1,7 +1,6 @@
 {
   "subtitle": "Je persoonlijke Noava-dashboard",
-  "yourDecks": "Jouw decks",
-  "statcard": {
+  "yourDecks": "Jouw decks",  "interactionActivity": "Interactie Activiteit",  "interactionSubtitle": "Jouw leeractiviteit van het afgelopen jaar",  "statcard": {
     "cardsreviewed": {
       "title": "Kaarten herhaald",
       "tooltip": "Totaal aantal flashcard-herhalingen dat je hebt voltooid over alle decks heen"
