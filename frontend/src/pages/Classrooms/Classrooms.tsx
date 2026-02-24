@@ -17,7 +17,7 @@ import { TbDoorEnter } from 'react-icons/tb';
 import EmptyState from '../../shared/components/EmptyState';
 
 function ClassroomsPage() {
-  const { t } = useTranslation('classrooms');
+  const { t } = useTranslation(['classrooms', 'decks']);
   const classroomSvc = useClassroomService();
   const [classrooms, setClassrooms] = useState<ClassroomResponse[]>([]);
   const [loading, setLoading] = useState(true);
@@ -305,7 +305,7 @@ function ClassroomsPage() {
           <ModalBody>
             <div className="space-y-4">
               <p className="text-sm text-text-body-light dark:text-text-muted-dark">
-                {t('join.subtitle')}
+                {t('decks:joinCode.description')}
               </p>
               <div>
                 <label className="block mb-2 text-sm font-medium">
@@ -315,7 +315,7 @@ function ClassroomsPage() {
                   type="text"
                   value={joinCode}
                   onChange={(e) => setJoinCode(e.target.value)}
-                  placeholder={t('join.form.placeholder')}
+                  placeholder={t('decks:joinCode.placeholder')}
                   className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600"
                   onKeyPress={(e) => {
                     if (e.key === 'Enter') {
