@@ -34,6 +34,7 @@ import EmptyState from '../../shared/components/EmptyState';
 import { useUser } from '@clerk/clerk-react';
 import ConfirmModal from '../../shared/components/ConfirmModal';
 import { LuLayers } from 'react-icons/lu';
+import { TbDoorEnter } from 'react-icons/tb';
 
 function DecksPage() {
   const { t } = useTranslation('decks');
@@ -251,6 +252,18 @@ function DecksPage() {
               </div>
 
               <div className="flex flex-col gap-3 sm:flex-row">
+                
+                <div className="w-full md:w-fit">
+                  <Tooltip content={t('common:tooltips.createDeck')}>
+                    <Button
+                      onClick={() => setIsModalOpen(true)}
+                      size="lg"
+                      className="w-full border-none md:w-fit bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800">
+                      <HiPlus className="w-5 h-5 mr-2" />
+                      {t('createButton')}
+                    </Button>
+                  </Tooltip>
+                </div>
                 {decks.length > 0 && (
                   <div className="w-full md:w-fit">
                     <Tooltip content={t('common:tooltips.bulkReview')}>
@@ -260,7 +273,7 @@ function DecksPage() {
                         renderTrigger={() => (
                           <Button
                             size="lg"
-                            className="w-full border-none bg-cyan-500 hover:bg-cyan-600 md:w-fit">
+                            className="w-full border-none bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800">
                             <HiPlay className="w-5 h-5 mr-2" />
                             {t('bulkReview.button')}
                             <HiChevronDown className="w-4 h-4 ml-1" />
@@ -291,25 +304,15 @@ function DecksPage() {
                     </Tooltip>
                   </div>
                 )}
-                <div className="w-full md:w-fit">
+                <div className="w-full md:w-fit sm:ml-auto">
                   <Tooltip content={t('common:tooltips.joinDeckByCode')}>
                     <Button
                       onClick={() => setJoinCodeModalOpen(true)}
                       size="lg"
                       color="gray"
                       className="w-full border-none md:w-fit">
+                      <TbDoorEnter className="mr-2 size-5" />
                       {t('joinCode.button')}
-                    </Button>
-                  </Tooltip>
-                </div>
-                <div className="w-full md:w-fit">
-                  <Tooltip content={t('common:tooltips.createDeck')}>
-                    <Button
-                      onClick={() => setIsModalOpen(true)}
-                      size="lg"
-                      className="w-full border-none md:w-fit bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800">
-                      <HiPlus className="w-5 h-5 mr-2" />
-                      {t('createButton')}
                     </Button>
                   </Tooltip>
                 </div>
