@@ -252,6 +252,18 @@ function DecksPage() {
               </div>
 
               <div className="flex flex-col gap-3 sm:flex-row">
+                
+                <div className="w-full md:w-fit">
+                  <Tooltip content={t('common:tooltips.createDeck')}>
+                    <Button
+                      onClick={() => setIsModalOpen(true)}
+                      size="lg"
+                      className="w-full border-none md:w-fit bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800">
+                      <HiPlus className="w-5 h-5 mr-2" />
+                      {t('createButton')}
+                    </Button>
+                  </Tooltip>
+                </div>
                 {decks.length > 0 && (
                   <div className="w-full md:w-fit">
                     <Tooltip content={t('common:tooltips.bulkReview')}>
@@ -286,7 +298,7 @@ function DecksPage() {
                     </Tooltip>
                   </div>
                 )}
-                <div className="w-full md:w-fit">
+                <div className="w-full md:w-fit sm:ml-auto">
                   <Tooltip content={t('common:tooltips.joinDeckByCode')}>
                     <Button
                       onClick={() => setJoinCodeModalOpen(true)}
@@ -295,17 +307,6 @@ function DecksPage() {
                       className="w-full border-none md:w-fit">
                       <TbDoorEnter className="mr-2 size-5" />
                       {t('joinCode.button')}
-                    </Button>
-                  </Tooltip>
-                </div>
-                <div className="w-full md:w-fit">
-                  <Tooltip content={t('common:tooltips.createDeck')}>
-                    <Button
-                      onClick={() => setIsModalOpen(true)}
-                      size="lg"
-                      className="w-full border-none md:w-fit bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800">
-                      <HiPlus className="w-5 h-5 mr-2" />
-                      {t('createButton')}
                     </Button>
                   </Tooltip>
                 </div>
