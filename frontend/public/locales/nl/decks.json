@@ -77,7 +77,7 @@
     "classroomDecks": "Klas Decks"
   },
   "joinCode": {
-    "button": "Deelnemen via Code",
+    "button": "Join Deck",
     "title": "Deck Toevoegen",
     "description": "Voer de join code in die je hebt ontvangen om toegang te krijgen tot een gedeeld deck.",
     "label": "Join Code",
