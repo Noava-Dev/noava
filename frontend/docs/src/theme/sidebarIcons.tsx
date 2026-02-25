@@ -1,14 +1,11 @@
-import {
-  LuBookOpen as OpenBook,
-  LuLayers as Layers,
-  LuSchool as School,
-  LuFolder as Folder,
-} from "react-icons/lu";
+import { LuBookOpen, LuLayers, LuFolder, LuHouse } from 'react-icons/lu';
+import { HiOutlineCube } from 'react-icons/hi';
 
-export const defaultIcon = Folder;
+export const defaultIcon = LuFolder;
 
 export const iconMap: Record<string, any> = {
-  classrooms: School,
-  decks: Layers,
-  schools: OpenBook,
+  'noava docs': LuHouse,
+  'getting started': LuBookOpen,
+  'core concepts': HiOutlineCube,
+  decks: LuLayers,
 };
