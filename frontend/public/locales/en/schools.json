@@ -1,0 +1,49 @@
+{
+  "title": "Schools",
+  "subtitleAdmin": "Overview of all registered educational institutions.",
+  "subtitleManager": "Overview of schools you manage.",
+  "createTooltip": "Create a new school for your institution",
+  "addButton": "Add School",
+  "empty": {
+    "title": "No schools yet",
+    "messageAdmin": "Start by adding a new school.",
+    "messageManager": "You are not currently assigned to any schools."
+  },
+  "toast": {
+    "loadErrorTitle": "Error",
+    "loadErrorDescription": "Failed to load schools. Please check your connection.",
+    "successTitle": "Success",
+    "createSuccess": "{{name}} was added successfully.",
+    "updateSuccess": "{{name}} was updated successfully.",
+    "saveError": "Failed to save school.",
+    "deleteSuccess": "{{name}} was deleted successfully.",
+    "deleteError": "Failed to delete school."
+  },
+  "deleteModal": {
+    "title": "Delete School",
+    "message": "Are you sure you want to delete \"{{name}}\"?",
+    "confirm": "Yes, delete"
+  },
+  "card": {
+    "adminsCount_one": "{{count}} admin",
+    "adminsCount_other": "{{count}} admins",
+    "createdAt": "Created {{date}}"
+  },
+  "modal": {
+    "createTitle": "Create School",
+    "updateTitle": "Update School",
+    "nameLabel": "School Name *",
+    "namePlaceholder": "Enter school name",
+    "adminsLabel": "School Admins *",
+    "adminsHelp": "A school must have at least one school admin. Add one admin at a time. You can remove or add multiple before creating.",
+    "adminEmailPlaceholder": "admin@school.com",
+    "addAdmin": "Add",
+    "adminRole": "School admin",
+    "remove": "Remove",
+    "creating": "Creating...",
+    "updating": "Updating...",
+    "createButton": "Create School",
+    "updateButton": "Update School",
+    "cancelButton": "Cancel"
+  }
+}

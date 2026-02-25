@@ -1,13 +1,13 @@
 {
-  "subtitle": "Votre tableau de bord personnel Noava",
+  "subtitle": "Dashboard personnel Noava",
   "yourDecks": "Vos Decks",
-  "yourClassrooms": "Vos Classes",
+  "yourClassrooms": "Vos Classrooms",
   "interactionActivity": "Activité d'Interaction",
   "interactionSubtitle": "Votre activité d'apprentissage au cours de l'année passée",
   "statcard": {
     "cardsreviewed": {
       "title": "Cartes révisées",
-      "tooltip": "Nombre total de révisions de cartes que vous avez effectuées sur l’ensemble des paquets"
+      "tooltip": "Nombre total de révisions de cartes que vous avez effectuées sur l’ensemble des Decks"
     },
     "accuracyrate": {
       "title": "Précision",
@@ -24,13 +24,13 @@
     }
   },
   "decks": {
-    "empty": "Aucun paquet pour le moment"
+    "empty": "Aucun Deck pour le moment"
   },
   "toast": {
-    "loadError": "Échec du chargement des paquets",
-    "updateSuccess": "Paquet mis à jour avec succès",
-    "updateError": "Échec de la mise à jour du paquet",
-    "deleteSuccess": "Paquet supprimé avec succès",
-    "deleteError": "Échec de la suppression du paquet"
+    "loadError": "Échec du chargement des Decks",
+    "updateSuccess": "Deck mis à jour avec succès",
+    "updateError": "Échec de la mise à jour du Deck",
+    "deleteSuccess": "Deck supprimé avec succès",
+    "deleteError": "Échec de la suppression du Deck"
   }
 }

@@ -4,6 +4,7 @@ import {
   LuPencil as Pencil,
   LuUsers as Admins,
 } from "react-icons/lu";
+import { useTranslation } from 'react-i18next';
 
 type SchoolAdminDto = {
   id: string;
@@ -23,6 +24,8 @@ type SchoolCardProps = {
 };
 
 export function SchoolCard({ id, name, admins, createdAt, onEdit, onDelete, onClick }: SchoolCardProps) {
+  const { t, i18n } = useTranslation('schools');
+
   return (
     <div 
         onClick={() => onClick?.(id)}
@@ -37,11 +40,9 @@ export function SchoolCard({ id, name, admins, createdAt, onEdit, onDelete, onCl
           <div className="mt-3 flex items-center gap-4 text-xs text-text-muted-light dark:text-text-muted-dark">
             <div className="flex items-center gap-1.5">
               <Admins className="size-3.5 text-text-muted-light dark:text-text-muted-dark" />
-              {/* added the logic below to see if it should say admin or adminS so it's
-              gramatically correct  */}
-              <span className="text-text-muted-light dark:text-text-muted-dark">{admins.length} admin{admins.length !== 1 ? "s" : ""}</span>
+              <span className="text-text-muted-light dark:text-text-muted-dark">{t('card.adminsCount', { count: admins.length })}</span>
             </div>
-            <span className="text-text-muted-light dark:text-text-muted-dark">Created {createdAt.toLocaleDateString()}</span>
+            <span className="text-text-muted-light dark:text-text-muted-dark">{t('card.createdAt', { date: createdAt.toLocaleDateString(i18n.language) })}</span>
           </div>
         </div>
       </div>

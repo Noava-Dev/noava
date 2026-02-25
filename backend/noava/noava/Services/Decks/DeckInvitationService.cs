@@ -81,8 +81,8 @@ namespace noava.Services.Decks
             {
                 UserId = invitedUser.ClerkId,
                 Type = NotificationType.DeckInvitationReceived,
-                TitleKey = "deck_invitation_received_title",
-                TemplateKey = "deck_invitation_received",
+                TitleKey = "deck.invitation.title",
+                TemplateKey = "deck.invitation.received",
                 ParametersJson = JsonSerializer.Serialize(new
                 {
                     deckId = deck.DeckId,
@@ -175,8 +175,8 @@ namespace noava.Services.Decks
             {
                 UserId = invitation.InvitedByClerkId,
                 Type = NotificationType.DeckInvitationAccepted, 
-                TitleKey = "deck_invitation_accepted_title",
-                TemplateKey = "deck_invitation_accepted",
+                TitleKey = "deck.invitation.accepted.title",
+                TemplateKey = "deck.invitation.accepted",
                 ParametersJson = JsonSerializer.Serialize(new
                 {
                     deckId = invitation.DeckId,
@@ -230,8 +230,8 @@ namespace noava.Services.Decks
             {
                 UserId = invitation.InvitedByClerkId,
                 Type = NotificationType.DeckInvitationDeclined,
-                TitleKey = "deck_invitation_declined_title",
-                TemplateKey = "deck_invitation_declined",
+                TitleKey = "deck.invitation.declined.title",
+                TemplateKey = "deck.invitation.declined",
                 ParametersJson = JsonSerializer.Serialize(new
                 {
                     deckId = invitation.DeckId,

@@ -103,7 +103,7 @@
       "bulkMessage": "Je hebt {{count}} kaarten uit {{deckCount}} deck(s) doorgenomen",
       "backToDeck": "Terug naar Deck",
       "backToDecks": "Terug naar Decks",
-      "backToClassroom": "Terug naar Klas",
+      "backToClassroom": "Terug naar Classroom",
       "restart": "Opnieuw Starten"
     },
     "reverseMode": "Omgekeerde Modus"

@@ -1,11 +1,11 @@
 {
   "subtitle": "Je persoonlijke Noava-dashboard",
-  "yourDecks": "Jouw decks",
-  "yourClassrooms": "Jouw klassen",
+  "yourDecks": "Jouw Decks",
+  "yourClassrooms": "Jouw Classrooms",
   "interactionActivity": "Interactie Activiteit",  "interactionSubtitle": "Jouw leeractiviteit van het afgelopen jaar",  "statcard": {
     "cardsreviewed": {
       "title": "Kaarten herhaald",
-      "tooltip": "Totaal aantal flashcard-herhalingen dat je hebt voltooid over alle decks heen"
+      "tooltip": "Totaal aantal flashcard-herhalingen dat je hebt voltooid over alle Decks heen"
     },
     "accuracyrate": {
       "title": "Nauwkeurigheid",
@@ -22,13 +22,13 @@
     }
   },
   "decks": {
-    "empty": "Nog geen decks"
+    "empty": "Nog geen Decks"
   },
   "toast": {
-    "loadError": "Laden van decks mislukt",
+    "loadError": "Laden van Decks mislukt",
     "updateSuccess": "Deck succesvol bijgewerkt",
-    "updateError": "Bijwerken van deck mislukt",
+    "updateError": "Bijwerken van Deck mislukt",
     "deleteSuccess": "Deck succesvol verwijderd",
-    "deleteError": "Verwijderen van deck mislukt"
+    "deleteError": "Verwijderen van Deck mislukt"
   }
 }

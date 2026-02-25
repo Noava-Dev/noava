@@ -12,7 +12,6 @@ import { formatDateToEuropean } from '../../services/DateService';
 import { useToast } from '../../contexts/ToastContext';
 import PageHeader from '../../shared/components/PageHeader';
 import Loading from '../../shared/components/loading/Loading';
-import { useDeckService } from '../../services/DeckService';
 import EmptyState from '../../shared/components/EmptyState';
 import { PiBellSimpleZLight } from 'react-icons/pi';
 
@@ -23,7 +22,7 @@ const NotificationPage = () => {
   const service = notificationService();
   const { t } = useTranslation('notification');
   const api = useApi();
-  const { showError, showSuccess } = useToast();
+  const { showError } = useToast();
 
   function parseParams(data?: any): Record<string, unknown> {
     if (!data) return {};
@@ -39,6 +38,190 @@ const NotificationPage = () => {
       showError(t('errors.params'), t('common:app.error'));
     }
     return {};
+  }
+
+
+  function sanitizeLabel(value: string): string {
+    return value.replace(/[^\p{L}\p{N}\s._:-]/gu, '').trim();
+  }
+
+  function collectStringFields(
+    value: unknown,
+    path: string[] = [],
+    output: Array<{ path: string; value: string }> = []
+  ): Array<{ path: string; value: string }> {
+    if (value === null || value === undefined) return output;
+
+    if (typeof value === 'string') {
+      const normalized = value.trim();
+      if (normalized) {
+        output.push({ path: path.join('.').toLowerCase(), value: normalized });
+      }
+      return output;
+    }
+
+    if (Array.isArray(value)) {
+      value.forEach((item, index) =>
+        collectStringFields(item, [...path, String(index)], output)
+      );
+      return output;
+    }
+
+    if (typeof value === 'object') {
+      Object.entries(value as Record<string, unknown>).forEach(([k, v]) =>
+        collectStringFields(v, [...path, k], output)
+      );
+    }
+
+    return output;
+  }
+
+  function interpolateTemplate(
+    template: string,
+    params: Record<string, unknown>
+  ): string {
+    const flattenedEntries: Array<[string, unknown]> = [];
+
+    const flatten = (value: unknown, path: string[] = []) => {
+      if (value === null || value === undefined) return;
+
+      if (Array.isArray(value)) {
+        value.forEach((item, index) => flatten(item, [...path, String(index)]));
+        return;
+      }
+
+      if (typeof value === 'object') {
+        for (const [k, v] of Object.entries(value as Record<string, unknown>)) {
+          flatten(v, [...path, k]);
+        }
+        return;
+      }
+
+      if (path.length > 0) {
+        flattenedEntries.push([path.join('.'), value]);
+        flattenedEntries.push([path[path.length - 1], value]);
+      }
+    };
+
+    flatten(params);
+
+    const valueMap = new Map<string, string>();
+    const compactMap = new Map<string, string>();
+    for (const [rawKey, rawValue] of flattenedEntries) {
+      const key = rawKey.trim();
+      if (!key) continue;
+      const normalized = key.toLowerCase();
+      const safeValue = String(rawValue ?? '');
+      if (!valueMap.has(normalized)) {
+        valueMap.set(normalized, safeValue);
+      }
+      const compactKey = normalized.replace(/[^a-z0-9]/g, '');
+      if (compactKey && !compactMap.has(compactKey)) {
+        compactMap.set(compactKey, safeValue);
+      }
+    }
+
+    return template.replace(
+      /\{\{\s*([^{}]+?)\s*\}\}|\{\s*([^{}]+?)\s*\}/g,
+      (match, doubleKey, singleKey) => {
+        const token = String(doubleKey ?? singleKey ?? '').trim();
+        if (!token) return match;
+
+        const direct = valueMap.get(token.toLowerCase());
+        if (direct !== undefined) return direct;
+
+        const compactToken = token.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+        const compact = compactMap.get(compactToken);
+        if (compact !== undefined) return compact;
+
+        return match;
+      }
+    );
+  }
+
+  function resolveNotificationMessage(notification: Notification): string {
+    const params = parseParams(notification.parametersJson);
+    const deckFromParams = params.deck as { name?: string } | undefined;
+    const classroomFromParams = params.classroom as
+      | { name?: string }
+      | undefined;
+
+    const deckName =
+      (params.deckName as string | undefined) ??
+      (params.deckTitle as string | undefined) ??
+      (params.resourceName as string | undefined) ??
+      deckFromParams?.name ??
+      (params.name as string | undefined) ??
+      'this Deck';
+
+    const classroomName =
+      (params.classroomName as string | undefined) ??
+      (params.className as string | undefined) ??
+      (params.resourceName as string | undefined) ??
+      classroomFromParams?.name ??
+      (params.name as string | undefined) ??
+      'this Classroom';
+
+    const allStrings = collectStringFields(params);
+    const directUserName =
+      (params.userName as string | undefined) ??
+      (params.username as string | undefined) ??
+      (params.senderName as string | undefined) ??
+      (params.inviterName as string | undefined) ??
+      (params.displayName as string | undefined) ??
+      (params.fullName as string | undefined);
+
+    const inferredUserName = allStrings.find(({ path, value }) => {
+      if (!value) return false;
+      if (value === deckName || value === classroomName) return false;
+      const hasUserSignal = /(user|sender|inviter|from|owner|teacher|createdby|author)/i.test(path);
+      const hasNameSignal = /(name|fullname|displayname)/i.test(path);
+      return hasUserSignal || (hasNameSignal && /\./.test(path));
+    })?.value;
+
+    const userName = directUserName ?? inferredUserName ?? 'A user';
+
+    const interpolationParams: Record<string, unknown> = {
+      ...params,
+      userName,
+      username: userName,
+      deckName,
+      classroomName,
+    };
+
+    const translatedTemplate = String(t(notification.templateKey, interpolationParams));
+    const templateOrFallback =
+      translatedTemplate === notification.templateKey
+        ? notification.templateKey.includes('.classroom.')
+          ? t('notifications.items.classroom.invite.received', {
+              ...interpolationParams,
+            })
+          : t('notifications.items.deck.invite.received', {
+              ...interpolationParams,
+            })
+        : translatedTemplate;
+
+    const interpolated = interpolateTemplate(templateOrFallback, interpolationParams);
+
+    return interpolated
+      .replace(/\{\{\s*userName\s*\}\}|\{\s*userName\s*\}/gi, userName)
+      .replace(/\{\{\s*deckName\s*\}\}|\{\s*deckName\s*\}/gi, deckName)
+      .replace(/\{\{\s*classroomName\s*\}\}|\{\s*classroomName\s*\}/gi, classroomName);
+  }
+
+  function resolveActionLabel(labelKey: string): string {
+    const translated = String(t(labelKey));
+    if (translated && translated !== labelKey) {
+      return sanitizeLabel(translated);
+    }
+
+    const lastToken = labelKey.split('.').pop() ?? labelKey;
+    const rootAction = String(t(`actions.${lastToken}`));
+    if (rootAction && rootAction !== `actions.${lastToken}`) {
+      return sanitizeLabel(rootAction);
+    }
+
+    return sanitizeLabel(lastToken.charAt(0).toUpperCase() + lastToken.slice(1));
   }
 
   useEffect(() => {
@@ -142,9 +325,7 @@ const NotificationPage = () => {
                         </div>
 
                         <div className="mt-2 text-base break-words break-all whitespace-normal text-text-body-light dark:text-text-body-dark ">
-                          {String(
-                            t(n.templateKey, parseParams(n.parametersJson))
-                          )}
+                          {resolveNotificationMessage(n)}
                         </div>
                       </div>
 
@@ -184,7 +365,7 @@ const NotificationPage = () => {
                           className="text-white whitespace-nowrap bg-primary-600 dark:text-white dark:hover:bg-primary-700"
                           onClick={() => handleAction(n, action)}
                           disabled={processingId === n.id}>
-                          {String(t(action.labelKey))}
+                          {resolveActionLabel(action.labelKey)}
                         </Button>
                       ))}
                     </div>

@@ -19,7 +19,7 @@
     "dashboard": "Dashboard",
     "notifications": "Meldingen",
     "decks": "Decks",
-    "classrooms": "Klassen"
+    "classrooms": "Classrooms"
   },
   "actions": {
     "save": "Opslaan",
@@ -113,17 +113,17 @@
     "deleteFlashcard": "Verwijder deze flashcard",
     "importCards": "Importeer flashcards vanuit een CSV of Excel bestand",
     "manageOwners": "Beheer deck eigenaren en gedeelde gebruikers",
-    "createClassroom": "Maak een nieuwe klas aan voor je studenten",
-    "joinClassroom": "Sluit je aan bij een klas met een toegangscode",
-    "addDeckToClassroom": "Voeg een bestaand deck toe aan deze klas",
+    "createClassroom": "Maak een nieuwe Classroom aan voor je studenten",
+    "joinClassroom": "Sluit je aan bij een Classroom met een toegangscode",
+    "addDeckToClassroom": "Voeg een bestaand Deck toe aan deze Classroom",
     "inviteMember": "Nodig studenten of docenten uit via e-mail",
     "themeToggle": "Schakel tussen lichte en donkere modus",
     "voiceAssistant": "Schakel tekst-naar-spraak in voor deze flashcard",
     "markAsOwner": "Geef volledige eigenaarrechten aan deze gebruiker",
     "notifications": "Bekijk je meldingen en uitnodigingen",
-    "searchDecks": "Zoek decks op titel, beschrijving of taal",
-    "sortDecks": "Wijzig de volgorde van decks",
-    "deckVisibility": "Bepaal wie dit deck kan zien en gebruiken",
+    "searchDecks": "Zoek Decks op titel, beschrijving of taal",
+    "sortDecks": "Wijzig de volgorde van Decks",
+    "deckVisibility": "Bepaal wie dit Deck kan zien en gebruiken",
     "reviewModes": "Kies hoe je deze kaarten wilt bestuderen",
     "flipCard": "Klik om de flashcard om te draaien"
   }

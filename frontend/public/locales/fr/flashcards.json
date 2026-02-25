@@ -103,7 +103,7 @@
       "bulkMessage": "Vous avez révisé {{count}} cartes de {{deckCount}} deck(s)",
       "backToDeck": "Retour au Deck",
       "backToDecks": "Retour aux Decks",
-      "backToClassroom": "Retour à la Classe",
+      "backToClassroom": "Retour à la Classroom",
       "restart": "Recommencer"
     },
     "reverseMode": "Mode Inversé"

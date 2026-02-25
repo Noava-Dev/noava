@@ -1,27 +1,31 @@
 {
-  "subtitle": "Beheer en word lid van je klassen.",
-  "createButton": "Klas aanmaken",
+  "subtitle": "Beheer en word lid van je Classrooms.",
+  "createButton": "Classroom aanmaken",
   "results": { "found": "resultaten gevonden" },
   "empty": {
-    "title": "Nog geen klaslokalen",
-    "noResults": "Geen klaslokalen gevonden",
-    "message": "Je zit momenteel in geen enkele klas.",
-    "messageSchools": "Deze school heeft nog geen klaslokalen."
+    "title": "Nog geen Classrooms",
+    "noResults": "Geen Classrooms gevonden",
+    "message": "Je zit momenteel in geen enkele Classroom.",
+    "messageSchools": "Deze school heeft nog geen Classrooms."
   },
   "modal": {
-    "createTitle": "Klas aanmaken",
-    "editTitle": "Klas bewerken",
+    "createTitle": "Classroom aanmaken",
+    "editTitle": "Classroom bewerken",
     "nameLabel": "Naam",
+    "namePlaceholder": "Voer de Classroom-naam in",
     "descriptionLabel": "Beschrijving",
-    "createButton": "Klas aanmaken",
-    "updateButton": "Klas bijwerken",
+    "descriptionPlaceholder": "Voer de Classroom-beschrijving in",
+    "imageLabel": "Omslagafbeelding",
+    "imageHelp": "Optioneel: upload een omslagafbeelding voor deze Classroom",
+    "createButton": "Classroom aanmaken",
+    "updateButton": "Classroom bijwerken",
     "cancelButton": "Annuleren"
   },
   "members": {
     "title": "Leden",
-    "subtitle": "Beheer klasleden",
+    "subtitle": "Beheer Classroom-leden",
     "inviteTitle": "Gebruiker uitnodigen",
-    "inviteHelp": "Voer het e-mailadres in van de gebruiker die je wilt uitnodigen voor deze klas.",
+    "inviteHelp": "Voer het e-mailadres in van de gebruiker die je wilt uitnodigen voor deze Classroom.",
     "invitePlaceholder": "gebruiker@voorbeeld.com",
     "inviteSuccess": "Uitnodiging verzonden",
     "inviteError": "Uitnodiging verzenden mislukt, deze gebruiker bestaat mogelijk niet",
@@ -65,13 +69,13 @@
     }
   },
   "toast": {
-    "loadError": "Laden van klassen mislukt",
-    "createSuccess": "Klas aangemaakt",
-    "createError": "Aanmaken van klas mislukt",
-    "updateSuccess": "Klas bijgewerkt",
-    "updateError": "Bijwerken van klas mislukt",
-    "deleteSuccess": "Klas verwijderd",
-    "deleteError": "Verwijderen van klas mislukt",
+    "loadError": "Laden van Classrooms mislukt",
+    "createSuccess": "Classroom aangemaakt",
+    "createError": "Aanmaken van Classroom mislukt",
+    "updateSuccess": "Classroom bijgewerkt",
+    "updateError": "Bijwerken van Classroom mislukt",
+    "deleteSuccess": "Classroom verwijderd",
+    "deleteError": "Verwijderen van Classroom mislukt",
     "nameAndDescriptionRequired": "Naam en beschrijving zijn verplicht",
     "requestCodeSuccess": "Nieuwe code aangevraagd",
     "requestCodeError": "Aanvragen van nieuwe code mislukt"
@@ -80,26 +84,26 @@
     "regenerateCode": "Nieuwe code aanvragen"
   },
   "requestCodeModal": {
-    "title": "Nieuwe klascode aanvragen",
+    "title": "Nieuwe Classroom-code aanvragen",
     "message": "Weet je zeker dat je een nieuwe toegangscode wilt aanvragen? De vorige code wordt ongeldig."
   },
   "detail": {
     "description": "Beschrijving",
     "info": "Informatie",
-    "membersPlaceholder": "Klasleden en instellingen verschijnen hier.",
+    "membersPlaceholder": "Classroom-leden en instellingen verschijnen hier.",
     "joinCode": "toegangscode"
   },
-  "joinButton": "Klas volgen",
+  "joinButton": "Classroom volgen",
   "join": {
-    "title": "Klas volgen",
-    "subtitle": "Voer een code in om een klas te volgen",
+    "title": "Classroom volgen",
+    "subtitle": "Voer een code in om een Classroom te volgen",
     "form": {
       "label": "toegangscode",
       "placeholder": "bv. ABC123",
       "empty": "Voer een toegangscode in",
       "joining": "Bezig met deelnemen..."
     },
-    "success": "Je bent toegevoegd aan de klas",
+    "success": "Je bent toegevoegd aan de Classroom",
     "error": "Deelnemen met deze code is mislukt"
   },
   "decks": {
@@ -108,15 +112,15 @@
     "addFirstDeck": "Voeg Je Eerste Deck Toe",
     "emptyTitle": "Nog Geen Decks",
     "emptyDescription": "Deze classroom heeft nog geen decks. Voeg je eerste deck toe om te beginnen!",
-    "loadError": "Kon decks niet laden",
+    "loadError": "Kon Decks niet laden",
     "removeFromClassroom": "Verwijderen uit Classroom",
     "confirmRemoveTitle": "Deck Verwijderen uit Classroom",
-    "confirmRemoveMessage": "Weet je zeker dat je deze deck uit de classroom wilt verwijderen? De deck zelf wordt niet verwijderd, alleen uit deze classroom gehaald.",
+    "confirmRemoveMessage": "Weet je zeker dat je dit Deck uit de Classroom wilt verwijderen? Het Deck zelf wordt niet verwijderd, alleen uit deze Classroom gehaald.",
     "confirmRemoveButton": "Verwijderen uit Classroom",
-    "removeSuccess": "Deck verwijderd uit classroom",
-    "removeError": "Kon deck niet verwijderen uit classroom",
-    "addSuccess": "Deck toegevoegd aan classroom",
-    "addError": "Kon deck niet toevoegen aan classroom"
+    "removeSuccess": "Deck verwijderd uit Classroom",
+    "removeError": "Kon Deck niet verwijderen uit Classroom",
+    "addSuccess": "Deck toegevoegd aan Classroom",
+    "addError": "Kon Deck niet toevoegen aan Classroom"
   },
   "bulkReview": {
     "button": "Groepsherhaling",
@@ -143,26 +147,26 @@
     "reverseReview": "Omgekeerde Modus"
   },
   "addDeck": {
-    "title": "Deck Toevoegen aan Classroom",
-    "description": "Voeg een van je bestaande decks toe aan deze classroom.",
+    "title": "Deck toevoegen aan Classroom",
+    "description": "Voeg een van je bestaande Decks toe aan deze Classroom.",
     "searchPlaceholder": "Zoek je decks...",
     "noResults": "Geen decks gevonden die overeenkomen met je zoekopdracht",
-    "noDecks": "Je hebt nog geen decks",
-    "loadError": "Kon je decks niet laden",
+    "noDecks": "Je hebt nog geen Decks",
+    "loadError": "Kon je Decks niet laden",
     "cards": "kaarten",
     "addButton": "Toevoegen",
     "done": "Klaar"
   },
   "analytics": {
-    "title": "Klasanalyses",
+    "title": "Classroom-analyses",
     "timeSpent": "Bestede tijd",
     "avgMastery": "Gemiddelde beheersing",
     "correctCards": "Correcte kaarten",
     "activeUsers": "Actieve gebruikers",
     "noData": {
       "title": "Nog geen statistieken",
-      "description": "Wacht tot je studenten beginnen met het herzien van decks in deze klas om voortgang en statistieken te zien."
+      "description": "Wacht tot je studenten beginnen met het herzien van Decks in deze Classroom om voortgang en statistieken te zien."
     }
   },
-  "notFound": "Klas niet gevonden"
+  "notFound": "Classroom niet gevonden"
 }

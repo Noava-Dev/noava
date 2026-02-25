@@ -24,7 +24,7 @@ export default function CreateSchoolModal({
   initialData
 }: Props) {
 
-const { t } = useTranslation('errors');
+const { t } = useTranslation(['schools', 'errors']);
 const [name, setName] = useState(initialData?.name ?? "");
 const [adminInput, setAdminInput] = useState("");
 const [adminEmails, setAdminEmails] = useState<string[]>(initialData?.adminEmails ?? [])
@@ -117,7 +117,7 @@ return (
       <ModalHeader>
       <div className="">
         <h3 className="text-xl font-medium text-text-title-light dark:text-text-title-dark">
-          {initialData ? "Update School" : "Create School"}
+          {initialData ? t('schools:modal.updateTitle') : t('schools:modal.createTitle')}
         </h3>
       </div>
       </ModalHeader>
@@ -128,11 +128,11 @@ return (
             {/* School Name Input */}
             <div>
                 <div className="mb-2 block">
-                <Label htmlFor="schoolName">School Name *</Label>
+              <Label htmlFor="schoolName">{t('schools:modal.nameLabel')}</Label>
                 </div>
                 <TextInput
                 id="schoolName"
-                placeholder="Enter school name"
+              placeholder={t('schools:modal.namePlaceholder')}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 />
@@ -142,22 +142,22 @@ return (
             {/* Admin Email Input */}
             <div>
                 <div className="mb-2 block">
-                <Label htmlFor="adminEmail">School Admins *</Label>
+              <Label htmlFor="adminEmail">{t('schools:modal.adminsLabel')}</Label>
                 </div>
                 <p className="mb-2 text-xs text-text-muted-light dark:text-text-muted-dark">
-                A school must have at least one school admin. Add one admin at a time. You can remove or add multiple before creating.
+              {t('schools:modal.adminsHelp')}
                 </p>
                 <TextInput
                 id="adminEmail"
                 type="email"
-                placeholder="admin@school.com"
+              placeholder={t('schools:modal.adminEmailPlaceholder')}
                 value={adminInput}
                 onChange={(e) => setAdminInput(e.target.value)}
                 />
                 {errors.adminEmail && <FormErrorMessage text={errors.adminEmail} />}
                 <Button className="rounded-lg h-6 w-12 py-4 bg-primary-500 my-3"
                         type="button" onClick={handleAddAdmin} disabled={!adminInput.trim()}>
-                Add
+                {t('schools:modal.addAdmin')}
               </Button>
             </div>
             <div className="space-y-2">
@@ -171,7 +171,7 @@ return (
                       {email}
                     </div>
                     <div className="text-xs text-text-muted-light dark:text-text-muted-dark">
-                      School admin
+                      {t('schools:modal.adminRole')}
                     </div>
                   </div>
                   <Button
@@ -181,7 +181,7 @@ return (
                     onClick={() => handleRemoveAdmin(email)}
                   >
                     <HiTrash className="w-3 h-3 mr-1" />
-                    Remove
+                    {t('schools:modal.remove')}
                   </Button>
                 </div>
               ))}
@@ -198,17 +198,17 @@ return (
                 {loading ? (
                     <>
                         <Spinner size="sm" className="mr-2" />
-                  {initialData ? "Updating..." : "Creating..."}
+                  {initialData ? t('schools:modal.updating') : t('schools:modal.creating')}
                     </>
                 ) : initialData ? (
-                "Update School"
+                t('schools:modal.updateButton')
                 ) : (
-                    "Create School"
+                    t('schools:modal.createButton')
                 )
               }
                 </Button>
               <Button color="gray" type="button" onClick={onClose} disabled={loading} className="w-full sm:w-auto">
-                Cancel
+                {t('schools:modal.cancelButton')}
               </Button>
             </div>
             

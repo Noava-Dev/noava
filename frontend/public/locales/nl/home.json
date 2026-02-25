@@ -1,6 +1,6 @@
 {
   "hero": {
-    "title": "Flashcards ontworpen voor scholen en klaslokalen",
+    "title": "Flashcards ontworpen voor scholen en Classrooms",
     "description": "De eenvoudige en krachtige manier voor leerkrachten om studiemateriaal te maken en voor leerlingen om te leren. Speciaal ontworpen voor onderwijsomgevingen."
   },
   "features": {
@@ -8,19 +8,19 @@
     "description": "Eenvoudige tools die echt het verschil maken in de klas",
     "decks": {
       "title": "Decks",
-      "description": "Organiseer flashcards in vakgerichte Decks. Maak ze aan, deel ze en hergebruik ze in meerdere klassen."
+      "description": "Organiseer flashcards in vakgerichte Decks. Maak ze aan, deel ze en hergebruik ze in meerdere Classrooms."
     },
     "classrooms": {
-      "title": "Klassen",
+      "title": "Classrooms",
       "description": "Nodig leerlingen uit, wijs Decks toe en volg de voortgang. Alles in één samenwerkingsruimte."
     },
     "dashboards": {
       "title": "Dashboards",
-      "description": "Leerkrachten krijgen een overzicht van klasactiviteit, voltooiingspercentages en betrokkenheid van leerlingen."
+      "description": "Leerkrachten krijgen een overzicht van Classroom-activiteit, voltooiingspercentages en betrokkenheid van leerlingen."
     },
     "analytics": {
       "title": "Analyses",
-      "description": "Gedetailleerde inzichten in individuele en klasprestaties. Zie snel wie extra ondersteuning nodig heeft."
+      "description": "Gedetailleerde inzichten in individuele en Classroom-prestaties. Zie snel wie extra ondersteuning nodig heeft."
     }
   },
   "platforms": {
