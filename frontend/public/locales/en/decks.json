@@ -134,6 +134,8 @@
     "avgMastery": "Avg Mastery",
     "correctCards": "Correct Cards",
     "avgResponseTime": "Avg Response Time",
+    "interactionActivity": "Interaction Activity",
+    "interactionSubtitle": "Your learning activity with this deck over the past year",
     "noData": {
       "title": "No Statistics Yet",
       "description": "Start reviewing this deck to see your progress and statistics."

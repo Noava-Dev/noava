@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.RateLimiting;
 using noava.DTOs.ContactMessages;
 using noava.Exceptions;
 using noava.Models;
+using noava.Models.Enums;
 using noava.Services.ContactMessages;
 using noava.Services.Users;
 using System.Security.Claims;
@@ -12,7 +13,7 @@ namespace noava.Controllers.ContactMessages
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize]
+    [Authorize(Roles = "ADMIN")]
     public class ContactMessagesController : ControllerBase
     {
         private readonly IContactMessageService _contactMessageService;
@@ -25,13 +26,14 @@ namespace noava.Controllers.ContactMessages
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] ContactMessageFilterDto filter)
         {
             var userId = _userService.GetUserId(User);
-            if (userId == null) 
+            if (userId == null)
                 throw new UnauthorizedException("Not authorized");
 
-            var result = await _contactMessageService.GetAllAsync(userId);
+            var result = await _contactMessageService
+                .GetAllAsync(userId, filter);
 
             return Ok(result);
         }
@@ -47,6 +49,21 @@ namespace noava.Controllers.ContactMessages
 
             if (result == null)
                 return NotFound();
+
+            return Ok(result);
+        }
+
+        [HttpPatch("{id:int}/status")]
+        public async Task<IActionResult> UpdateStatus(
+            int id,
+            [FromQuery] ContactMessageStatus status)
+        {
+            var userId = _userService.GetUserId(User);
+            if (userId == null)
+                throw new UnauthorizedException("Not authorized");
+
+            var result = await _contactMessageService
+                .UpdateStatusAsync(id, userId, status);
 
             return Ok(result);
         }

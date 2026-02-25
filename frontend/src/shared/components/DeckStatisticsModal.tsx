@@ -2,12 +2,13 @@ import { Modal, ModalHeader, ModalBody, Badge } from 'flowbite-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useStatisticsService } from '../../services/StatisticsService';
-import { formatDateToEuropean } from '../../services/DateService';
-import type { DeckStatistics } from '../../models/Statistics';
+import { formatDateToEuropean, formatResponseTime, formatTimeSpent } from '../../services/DateService';
+import type { DeckStatistics, InteractionCount } from '../../models/Statistics';
 import type { Deck } from '../../models/Deck';
-import { LuBrain, LuTarget, LuClock, LuTrendingUp } from 'react-icons/lu';
+import { LuBrain, LuTarget, LuClock, LuTrendingUp, LuCalendar } from 'react-icons/lu';
 import { HiChartBar } from 'react-icons/hi';
 import EmptyState from './EmptyState';
+import { InteractionHeatmap } from './InteractionHeatmap';
 
 interface DeckStatisticsModalProps {
   show: boolean;
@@ -20,15 +21,18 @@ function DeckStatisticsModal({
   onClose,
   deck,
 }: DeckStatisticsModalProps) {
-  const { t } = useTranslation(['decks', 'dashboard']);
+  const { t } = useTranslation(['decks', 'dashboard', 'heatmap']);
   const statisticsService = useStatisticsService();
   const [statistics, setStatistics] = useState<DeckStatistics | null>(null);
   const [loading, setLoading] = useState(false);
   const [hasData, setHasData] = useState(true);
+  const [interactions, setInteractions] = useState<InteractionCount[]>([]);
+  const [interactionsLoading, setInteractionsLoading] = useState(false);
 
   useEffect(() => {
     if (show && deck) {
       fetchStatistics();
+      fetchInteractions();
     }
   }, [show, deck]);
 
@@ -38,7 +42,6 @@ function DeckStatisticsModal({
     try {
       setLoading(true);
       const data = await statisticsService.getDeckStatistics(deck.deckId);
-
       if (data.cardsReviewed === 0) {
         setHasData(false);
       } else {
@@ -53,21 +56,27 @@ function DeckStatisticsModal({
     }
   };
 
-  const formatTime = (seconds: number): string => {
-    const hours = Math.floor(seconds / 3600);
-    const minutes = Math.floor((seconds % 3600) / 60);
+  const fetchInteractions = async () => {
+    if (!deck) return;
 
-    if (hours > 0) {
-      return `${hours}h ${minutes}m`;
+    try {
+      setInteractionsLoading(true);
+      const interactionsData = await statisticsService.getInteractionsForDeck(deck.deckId);
+      console.log('Fetched interactions data:', interactionsData);
+      setInteractions(interactionsData);
+    } catch (error) {
+      console.error('Failed to load deck interactions:', error);
+      setInteractions([]);
+    } finally {
+      setInteractionsLoading(false);
     }
-    return `${minutes}m`;
   };
 
   const StatCard = ({
     icon: Icon,
     label,
     value,
-    color = 'text-primary-500',
+    color = 'text-primary-500'
   }: {
     icon: any;
     label: string;
@@ -76,12 +85,11 @@ function DeckStatisticsModal({
   }) => (
     <div className="p-4 rounded-lg bg-background-subtle-light dark:bg-background-subtle-dark">
       <div className="flex items-center gap-3">
-        <div
-          className={`p-2 rounded-lg bg-background-surface-light dark:bg-background-surface-dark ${color}`}>
+        <div className={`p-2 rounded-lg bg-background-surface-light dark:bg-background-surface-dark ${color}`}>
           <Icon className="w-5 h-5" />
         </div>
-        <div className="flex-1 min-w-0">
-          <p className="text-sm truncate text-text-muted-light dark:text-text-muted-dark">
+        <div className="min-w-0 flex-1">
+          <p className="text-sm text-text-muted-light dark:text-text-muted-dark truncate">
             {label}
           </p>
           <p className="text-xl font-bold text-text-title-light dark:text-text-title-dark">
@@ -93,7 +101,7 @@ function DeckStatisticsModal({
   );
 
   return (
-    <Modal show={show} onClose={onClose} size="2xl" dismissible>
+    <Modal show={show} onClose={onClose} size="3xl" dismissible>
       <ModalHeader>
         <div className="flex items-center gap-3">
           <HiChartBar className="w-6 h-6 text-primary-500" />
@@ -144,7 +152,7 @@ function DeckStatisticsModal({
               <StatCard
                 icon={LuClock}
                 label={t('decks:analytics.timeSpent')}
-                value={formatTime(statistics.timeSpentSeconds)}
+                value={formatTimeSpent(statistics.timeSpentSeconds)}
                 color="text-purple-500"
               />
               <StatCard
@@ -156,7 +164,7 @@ function DeckStatisticsModal({
             </div>
 
             <div className="p-4 space-y-3 rounded-lg bg-background-subtle-light dark:bg-background-subtle-dark">
-              <div className="flex items-center justify-between">
+              <div className="flex justify-between items-center">
                 <span className="text-sm text-text-muted-light dark:text-text-muted-dark">
                   {t('decks:analytics.correctCards')}
                 </span>
@@ -164,21 +172,46 @@ function DeckStatisticsModal({
                   {statistics.correctCards}
                 </span>
               </div>
-              <div className="flex items-center justify-between">
+              <div className="flex justify-between items-center">
                 <span className="text-sm text-text-muted-light dark:text-text-muted-dark">
                   {t('decks:analytics.avgResponseTime')}
                 </span>
                 <Badge color="info" size="sm">
-                  {Math.round(statistics.avgResponseTimeMs)}ms
+                  {formatResponseTime(statistics.avgResponseTimeMs)}
                 </Badge>
               </div>
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-text-muted-light dark:text-text-muted-dark">
-                  {t('dashboard:statcard.lastreview.title')}
-                </span>
-                <span className="text-sm font-medium text-text-body-light dark:text-text-body-dark">
-                  {formatDateToEuropean(statistics.lastReviewedAt)}
-                </span>
+              {statistics.lastReviewedAt && (
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-text-muted-light dark:text-text-muted-dark">
+                    {t('dashboard:statcard.lastreview.title')}
+                  </span>
+                  <span className="text-sm font-medium text-text-body-light dark:text-text-body-dark">
+                    {formatDateToEuropean(statistics.lastReviewedAt)}
+                  </span>
+                </div>
+              )}
+            </div>
+
+            <div className="hidden md:block">
+              <div className="p-4 space-y-3 rounded-lg bg-background-subtle-light dark:bg-background-subtle-dark">
+                <div className="flex items-center gap-3 mb-4">
+                  <LuCalendar className="w-5 h-5 text-primary-500" />
+                  <div>
+                    <h3 className="text-base font-bold text-text-title-light dark:text-text-title-dark">
+                      {t('decks:analytics.interactionActivity')}
+                    </h3>
+                    <p className="mt-1 text-sm text-text-muted-light dark:text-text-muted-dark">
+                      {t('decks:analytics.interactionSubtitle')}
+                    </p>
+                  </div>
+                </div>
+                {interactionsLoading ? (
+                  <div className="flex items-center justify-center h-40">
+                    <div className="w-8 h-8 border-4 border-gray-200 rounded-full animate-spin border-t-emerald-500 dark:border-gray-700 dark:border-t-emerald-400"></div>
+                  </div>
+                ) : (
+                  <InteractionHeatmap data={interactions} />
+                )}
               </div>
             </div>
           </div>

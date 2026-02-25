@@ -65,5 +65,12 @@ export const useStatisticsService = () => {
       );
       return response.data;
     },
+
+    async getInteractionsForDeck(deckId: number): Promise<InteractionCount[]> {
+      const response = await api.get<InteractionCount[]>(
+        `/statistics/interactions/decks/${deckId}/yearly`
+      );
+      return response.data;
+    },
   };
 };

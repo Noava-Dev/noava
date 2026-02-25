@@ -13,14 +13,16 @@ namespace noava.Models
         [Required]
         [EmailAddress]
         [MaxLength(255)]
-        public string SenderEmail { get; set; } = null!;
+        public string SenderEmail { get; set; } = string.Empty;
 
         [Required]
         public ContactSubject Subject { get; set; }
 
         [Required]
         [MaxLength(4000)]
-        public string Description { get; set; } = null!;
+        public string Description { get; set; } = string.Empty;
+        [Required]
+        public ContactMessageStatus Status { get; set; } = ContactMessageStatus.Pending;
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
