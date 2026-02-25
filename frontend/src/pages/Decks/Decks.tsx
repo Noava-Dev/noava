@@ -273,7 +273,7 @@ function DecksPage() {
                         renderTrigger={() => (
                           <Button
                             size="lg"
-                            className="w-full border-none bg-cyan-500 hover:bg-cyan-600 md:w-fit">
+                            className="w-full border-none from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800">
                             <HiPlay className="w-5 h-5 mr-2" />
                             {t('bulkReview.button')}
                             <HiChevronDown className="w-4 h-4 ml-1" />
