@@ -47,7 +47,9 @@
     "uploading": "Bezig met uploaden...",
     "done": "Klaar",
     "copy": "Kopiëren",
-    "copying": "Bezig met kopiëren..."
+    "copying": "Bezig met kopiëren...",
+    "selectAll": "Alles selecteren",
+    "deselectAll": "Alles deselecteren"
   },
   "validation": {
     "required": "Dit veld is verplicht",

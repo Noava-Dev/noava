@@ -73,7 +73,8 @@
   },
   "sections": {
     "myDecks": "Mijn Decks",
-    "sharedWithMe": "Gedeeld met Mij"
+    "sharedWithMe": "Gedeeld met Mij",
+    "classroomDecks": "Klas Decks"
   },
   "joinCode": {
     "button": "Deelnemen via Code",
@@ -133,6 +134,8 @@
     "avgMastery": "Gem. Beheersing",
     "correctCards": "Correcte Kaarten",
     "avgResponseTime": "Gem. Reactietijd",
+    "interactionActivity": "Interactie-activiteit",
+    "interactionSubtitle": "Je leeractiviteit met dit deck van het afgelopen jaar",
     "noData": {
       "title": "Nog Geen Statistieken",
       "description": "Begin met het bekijken van dit deck om je voortgang en statistieken te zien."

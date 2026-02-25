@@ -26,22 +26,22 @@ export function SchoolCard({ id, name, admins, createdAt, onEdit, onDelete, onCl
   return (
     <div 
         onClick={() => onClick?.(id)}
-        className="rounded-lg border border-border bg-card p-5 shadow-sm hover:shadow-sm flex justify-between cursor-pointer">
+        className="rounded-lg bg-background-app-light border border-primary-100 dark:border-none dark:bg-background-surface-dark p-5 shadow-sm hover:shadow-sm flex justify-between cursor-pointer">
       <div className="flex items-start gap-4">
-        <div className="flex size-12 items-center justify-center rounded-lg bg-background-app-light">
+        <div className="flex size-12 items-center justify-center rounded-lg bg-primary-200 dark:bg-primary-600 dark:text-text-title-dark">
           <SchoolBuilding className="size-6" />
         </div>
 
         <div className="flex flex-col gap-2">
-          <h3 className="text-base font-semibold text-foreground">{name}</h3>
-          <div className="mt-3 flex items-center gap-4 text-xs text-muted-foreground">
+          <h3 className="text-base font-semibold text-text-title-light dark:text-text-title-dark">{name}</h3>
+          <div className="mt-3 flex items-center gap-4 text-xs text-text-muted-light dark:text-text-muted-dark">
             <div className="flex items-center gap-1.5">
-              <Admins className="size-3.5" />
+              <Admins className="size-3.5 text-text-muted-light dark:text-text-muted-dark" />
               {/* added the logic below to see if it should say admin or adminS so it's
               gramatically correct  */}
-              <span>{admins.length} admin{admins.length !== 1 ? "s" : ""}</span>
+              <span className="text-text-muted-light dark:text-text-muted-dark">{admins.length} admin{admins.length !== 1 ? "s" : ""}</span>
             </div>
-            <span>Created {createdAt.toLocaleDateString()}</span>
+            <span className="text-text-muted-light dark:text-text-muted-dark">Created {createdAt.toLocaleDateString()}</span>
           </div>
         </div>
       </div>

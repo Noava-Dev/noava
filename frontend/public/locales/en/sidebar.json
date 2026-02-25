@@ -1,7 +1,7 @@
 {
-    "classrooms": "Classrooms",
-    "schools": "Schools",
-    "Notifications": "Notifications",
-    "Settings": "Settings",
-    "signOut": "Sign Out"
+  "classrooms": "Classrooms",
+  "schools": "Schools",
+  "notifications": "Notifications",
+  "settings": "Settings",
+  "signOut": "Sign Out"
 }

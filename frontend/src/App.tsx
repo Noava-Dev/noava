@@ -6,6 +6,7 @@ import { useLocation } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
 import i18next from 'i18next';
 import NoavaSidebar from './shared/components/navigation/NoavaSidebar';
+import NoavaFooter from './shared/components/navigation/NoavaFooter';
 import { Drawer } from 'flowbite-react';
 import { HiX } from 'react-icons/hi';
 import { RxHamburgerMenu } from 'react-icons/rx';
@@ -25,6 +26,7 @@ function App() {
     '/copyright',
     '/sign-up',
     '/sign-in',
+    '/docs'
   ];
   const showSidebar = !routesWithoutSidebar.includes(location.pathname);
 
@@ -76,6 +78,7 @@ function App() {
 
           <main className="flex-1 overflow-auto">
             <AppRoutes />
+            {!showSidebar && <NoavaFooter />}
           </main>
         </div>
       </I18nextProvider>

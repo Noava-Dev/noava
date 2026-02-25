@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { Button, Progress, Badge } from 'flowbite-react';
 import { HiArrowLeft, HiRefresh, HiX, HiVolumeUp, HiPlay } from 'react-icons/hi';
+import { FaRepeat } from 'react-icons/fa6';
 import { useTranslation } from 'react-i18next';
 import { useDeckService } from '../../services/DeckService';
 import { useFlashcardService } from '../../services/FlashcardService';
@@ -310,11 +311,10 @@ function QuickReview() {
                   {session.deckTitle}
                 </h1>
                 <div className="flex gap-2 mt-1">
-                  <Badge color="info" className="mt-1">
+                  <Badge color="success" icon={FaRepeat}>
                     {isBulkReview ? t('quickReview.bulkMode') : t('quickReview.mode')}
                   </Badge>
-                  <Badge color="cyan">
-                    <HiPlay className="w-3 h-3 mr-1" />
+                  <Badge color="cyan" icon={HiPlay}>
                     {t('quickReview.flipMode')}
                   </Badge>
                 </div>

@@ -1,5 +1,10 @@
 import { useApi } from '../hooks/useApi';
-import type { DashboardStatistics, DeckStatistics } from '../models/Statistics';
+import type {
+  ClassroomStatistics,
+  DashboardStatistics,
+  DeckStatistics,
+  InteractionCount,
+} from '../models/Statistics';
 
 export const useStatisticsService = () => {
   const api = useApi();
@@ -11,7 +16,60 @@ export const useStatisticsService = () => {
     },
 
     async getDeckStatistics(deckId: number): Promise<DeckStatistics> {
-      const response = await api.get<DeckStatistics>(`/statistics/${deckId}`);
+      const response = await api.get<DeckStatistics>(
+        `/statistics/decks/${deckId}`
+      );
+      return response.data;
+    },
+
+    async getClassroomStatistics(
+      classroomId: number
+    ): Promise<ClassroomStatistics> {
+      const response = await api.get<ClassroomStatistics>(
+        `/statistics/classrooms/${classroomId}`
+      );
+      return response.data;
+    },
+
+    async getDeckStatisticsByUser(
+      deckIds: number[],
+      classroomId: number,
+      userId: string
+    ): Promise<DeckStatistics> {
+      const params = new URLSearchParams();
+      deckIds.forEach(id => params.append('deckIds', id.toString()));
+      params.append('classroomId', classroomId.toString());
+      params.append('userId', userId);
+
+      const response = await api.get<DeckStatistics>(`/statistics/decks/aggregate?${params.toString()}`);
+      return response.data;
+    },
+
+    async getInteractionsYearly(): Promise<InteractionCount[]> {
+      const response = await api.get<InteractionCount[]>('/statistics/interactions/yearly');
+      return response.data;
+    },
+
+    async getInteractionsByDecksForClassroom(
+      clerkId: string,
+      classroomId: number,
+      deckIds: number[]
+    ): Promise<InteractionCount[]> {
+      const params = new URLSearchParams();
+      params.append('clerkId', clerkId);
+      params.append('classroomId', classroomId.toString());
+      deckIds.forEach(id => params.append('deckIds', id.toString()));
+
+      const response = await api.get<InteractionCount[]>(
+        `/statistics/interactions/by-decks/classroom/yearly?${params.toString()}`
+      );
+      return response.data;
+    },
+
+    async getInteractionsForDeck(deckId: number): Promise<InteractionCount[]> {
+      const response = await api.get<InteractionCount[]>(
+        `/statistics/interactions/decks/${deckId}/yearly`
+      );
       return response.data;
     },
   };

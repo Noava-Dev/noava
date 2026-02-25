@@ -22,6 +22,21 @@ namespace noava.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("ClassroomStatisticsUser", b =>
+                {
+                    b.Property<string>("ActiveUsersClerkId")
+                        .HasColumnType("text");
+
+                    b.Property<int>("ClassroomStatisticsClassroomId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("ActiveUsersClerkId", "ClassroomStatisticsClassroomId");
+
+                    b.HasIndex("ClassroomStatisticsClassroomId");
+
+                    b.ToTable("ClassroomStatisticsUser");
+                });
+
             modelBuilder.Entity("noava.Models.AggregateStatistics.ClassroomDeckStatistics", b =>
                 {
                     b.Property<int>("ClassroomId")
@@ -56,6 +71,28 @@ namespace noava.Migrations
                     b.HasIndex("DeckId");
 
                     b.ToTable("ClassroomDeckStatistics");
+                });
+
+            modelBuilder.Entity("noava.Models.AggregateStatistics.ClassroomStatistics", b =>
+                {
+                    b.Property<int>("ClassroomId")
+                        .HasColumnType("integer");
+
+                    b.Property<double>("AvgMasteryLevel")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<int>("CardsReviewed")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("CorrectCards")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TimeSpentSeconds")
+                        .HasColumnType("integer");
+
+                    b.HasKey("ClassroomId");
+
+                    b.ToTable("ClassroomStatistics");
                 });
 
             modelBuilder.Entity("noava.Models.AggregateStatistics.ClassroomUserStatistics", b =>
@@ -100,7 +137,7 @@ namespace noava.Migrations
                         .HasColumnType("text");
 
                     b.Property<double>("AccuracyRate")
-                        .HasColumnType("decimal(5,2)");
+                        .HasColumnType("double precision");
 
                     b.Property<double>("AvgMasteryLevel")
                         .HasColumnType("decimal(5,2)");
@@ -379,6 +416,46 @@ namespace noava.Migrations
                     b.ToTable("ClassroomUsers");
                 });
 
+            modelBuilder.Entity("noava.Models.ContactMessage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(4000)
+                        .HasColumnType("character varying(4000)");
+
+                    b.Property<string>("SenderEmail")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text")
+                        .HasDefaultValue("Pending");
+
+                    b.Property<string>("Subject")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ContactMessages");
+                });
+
             modelBuilder.Entity("noava.Models.Deck", b =>
                 {
                     b.Property<int>("DeckId")
@@ -437,36 +514,36 @@ namespace noava.Migrations
                         new
                         {
                             DeckId = 1,
-                            CreatedAt = new DateTime(2026, 2, 20, 11, 18, 8, 393, DateTimeKind.Utc).AddTicks(7562),
+                            CreatedAt = new DateTime(2026, 2, 24, 15, 32, 40, 255, DateTimeKind.Utc).AddTicks(5294),
                             Description = "Franse woorden voor beginners",
                             JoinCode = "",
                             Language = "Frans",
                             Title = "Frans Woordenschat",
-                            UpdatedAt = new DateTime(2026, 2, 20, 11, 18, 8, 393, DateTimeKind.Utc).AddTicks(7563),
+                            UpdatedAt = new DateTime(2026, 2, 24, 15, 32, 40, 255, DateTimeKind.Utc).AddTicks(5294),
                             UserId = "user_38TGbnbcmzK7uZAbaABqTtzQtvz",
                             Visibility = 0
                         },
                         new
                         {
                             DeckId = 2,
-                            CreatedAt = new DateTime(2026, 2, 20, 11, 18, 8, 393, DateTimeKind.Utc).AddTicks(7565),
+                            CreatedAt = new DateTime(2026, 2, 24, 15, 32, 40, 255, DateTimeKind.Utc).AddTicks(5297),
                             Description = "Engelse grammatica oefeningen",
                             JoinCode = "",
                             Language = "Engels",
                             Title = "Engels Grammatica",
-                            UpdatedAt = new DateTime(2026, 2, 20, 11, 18, 8, 393, DateTimeKind.Utc).AddTicks(7566),
+                            UpdatedAt = new DateTime(2026, 2, 24, 15, 32, 40, 255, DateTimeKind.Utc).AddTicks(5297),
                             UserId = "user_38TGbnbcmzK7uZAbaABqTtzQtvz",
                             Visibility = 2
                         },
                         new
                         {
                             DeckId = 3,
-                            CreatedAt = new DateTime(2026, 2, 20, 11, 18, 8, 393, DateTimeKind.Utc).AddTicks(7568),
+                            CreatedAt = new DateTime(2026, 2, 24, 15, 32, 40, 255, DateTimeKind.Utc).AddTicks(5300),
                             Description = "Spaanse zinnen voor dagelijks gebruik",
                             JoinCode = "",
                             Language = "Spaans",
                             Title = "Spaans Conversatie",
-                            UpdatedAt = new DateTime(2026, 2, 20, 11, 18, 8, 393, DateTimeKind.Utc).AddTicks(7568),
+                            UpdatedAt = new DateTime(2026, 2, 24, 15, 32, 40, 255, DateTimeKind.Utc).AddTicks(5300),
                             UserId = "user_38TGbnbcmzK7uZAbaABqTtzQtvz",
                             Visibility = 1
                         });
@@ -748,6 +825,21 @@ namespace noava.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("ClassroomStatisticsUser", b =>
+                {
+                    b.HasOne("noava.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("ActiveUsersClerkId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("noava.Models.AggregateStatistics.ClassroomStatistics", null)
+                        .WithMany()
+                        .HasForeignKey("ClassroomStatisticsClassroomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("noava.Models.AggregateStatistics.ClassroomDeckStatistics", b =>
                 {
                     b.HasOne("noava.Models.Classroom", "Classroom")
@@ -765,6 +857,17 @@ namespace noava.Migrations
                     b.Navigation("Classroom");
 
                     b.Navigation("Deck");
+                });
+
+            modelBuilder.Entity("noava.Models.AggregateStatistics.ClassroomStatistics", b =>
+                {
+                    b.HasOne("noava.Models.Classroom", "Classroom")
+                        .WithOne()
+                        .HasForeignKey("noava.Models.AggregateStatistics.ClassroomStatistics", "ClassroomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Classroom");
                 });
 
             modelBuilder.Entity("noava.Models.AggregateStatistics.ClassroomUserStatistics", b =>

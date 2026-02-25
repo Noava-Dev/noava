@@ -32,6 +32,16 @@
     "school": {
       "name": "School name is required",
       "minAdmins": "At least one admin email is required"
+    },
+    "contact": {
+      "title": "Please select a title",
+      "email": "Please enter a valid email address",
+      "subject": "Please select a subject",
+      "description": {
+        "required": "Message is required",
+        "minLength": "Message must be at least 20 characters",
+        "maxLength": "Message must not exceed 4000 characters"
+      }
     }
   }
 }

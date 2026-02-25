@@ -6,6 +6,8 @@ namespace noava.Repositories.Statistics
     public interface IStatisticsRepository
     {
         Task<DeckUserStatistics?> GetByDeckAndUserAsync(int deckId, string userId);
+        Task<List<DeckUserStatistics>> GetByDecksAndUserAsync(IEnumerable<int> deckIds, string userId);
         Task<List<DeckUserStatistics>> GetGeneralStatsAsync(string userId);
+        Task<ClassroomStatistics?> GetByClassroomIdAsync(int classroomId);
     }
 }

@@ -1,0 +1,171 @@
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+/* You can override the default Infima variables here. */
+:root {
+  --color-primary-100: #E6EEF7;
+  --color-primary-200: #C7D9EE;
+  --color-primary-300: #9DBFE0;
+  --color-primary-400: #6F9CCF;
+  --color-primary-500: #2C5282;
+  --color-primary-600: #24476F;
+  --color-primary-700: #1E3A5A;
+  --color-primary-800: #172E47;
+  --color-primary-900: #0F1F30;
+
+  --color-text-title-light: #111827;
+  --color-text-body-light: #374151;
+  --color-background-app-light: #FDFEFF;
+
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* For readability concerns, you should choose a lighter palette in dark mode. */
+[data-theme='dark'] {
+  --color-text-title-dark: #F3F4F6;
+  --color-text-body-dark: #D1D5DB;
+  --color-background-app-dark: #111827;
+  --color-background-surface-dark: #1F2937;
+}
+.mainPage{
+  background-color: light-dark(var(--color-primary-300), var(--color-background-surface-dark));
+}
+
+.menu {
+  padding: 10px 0;
+  background-color: light-dark(var(--color-background-app-light), var(--color-background-surface-dark));
+}
+
+.navbar-sidebar__brand {
+  background-color: light-dark(var(--color-background-app-light), var(--color-background-surface-dark));
+}
+
+.menu__list-item {
+  margin: 4px 0;
+}
+
+.menu__link {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  border-radius: 10px;
+  margin: 0.2em 0.5em;
+  padding: 0.7em 1em;
+  transition: all 0.2s ease;
+}
+
+.menu__link:hover {
+  background-color: #F5F8FC;
+  color: var(--color-primary-500);
+}
+
+.menu__list-item-collapsible--active{
+  background-color: light-dark(var(--color-primary-200), var(--color-primary-700));
+  border-radius: 2em;
+  color: light-dark(var(--color-primary-600), var(--color-primary-300));
+}
+
+.menu__list-item-collapsible > .menu__link {
+  font-weight: 700;
+  color: light-dark(var(--color-text-title-light), var(--color-text-title-dark));
+}
+
+.menu__caret:before {
+  border-left-color: #9CA3AF;
+}
+
+.menu__list-item--collapsed .menu__caret:before {
+  border-left-color: var(--color-primary-500);
+}
+
+[data-theme='dark'] .menu__link {
+  color: var(--color-text-body-dark);
+}
+
+[data-theme='dark'] .menu__link:hover {
+  background-color: #2A3441;
+}
+
+[data-theme='dark'] .menu__link--active {
+  background-color: var(--color-primary-700);
+}
+
+[data-theme='dark']
+.menu__list-item-collapsible > .menu__link {
+  color: var(--color-text-title-dark);
+}
+
+.theme-doc-sidebar-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.theme-doc-sidebar-container::-webkit-scrollbar-thumb {
+  background: #D1D5DB;
+  border-radius: 10px;
+}
+
+.docs-wrapper {
+  background-color: var(--color-background-app-light);
+}
+
+[data-theme= "dark"] .docMainContainer_TBSr {
+  background-color: var(--color-background-app-dark);
+}
+
+.first-paragraph {
+  margin-top: 1rem;
+}
+
+.folderButtons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.folderButton {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+
+  padding: 1.5rem;
+  border-radius: 18px;
+
+  background: var(--color-primary-100);
+  color: var(--color-text-title-light);
+  text-decoration: none;
+
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.folderButton:hover {
+  background: var(--color-primary-200);
+  border-color: var(--color-primary-400);
+  transform: translateY(-3px);
+}
+
+.folderIcon {
+  font-size: 2.4rem;
+  line-height: 1;
+}
+
+.folderContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.folderTitle {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.folderDescription {
+  font-size: 0.95rem;
+  color: var(--color-text-body-light);
+  line-height: 1.4;
+}

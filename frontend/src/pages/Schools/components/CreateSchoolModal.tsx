@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Modal, Button, Label, TextInput, ModalBody, ModalHeader, Spinner } from "flowbite-react";
-import { LuX as X } from "react-icons/lu";
+import { HiTrash } from "react-icons/hi";
 import FormErrorMessage from '../../../shared/components/validation/FormErrorMessage';
 import { useTranslation } from 'react-i18next';
 
@@ -117,7 +117,7 @@ return (
       <ModalHeader>
       <div className="">
         <h3 className="text-xl font-medium text-text-title-light dark:text-text-title-dark">
-                {initialData ? "Edit School" : "Create School"}
+          {initialData ? "Update School" : "Create School"}
         </h3>
       </div>
       </ModalHeader>
@@ -160,43 +160,56 @@ return (
                 Add
               </Button>
             </div>
-            <div className="flex flex-wrap gap-2">
-              {adminEmails.map(email => (
+            <div className="space-y-2">
+              {adminEmails.map((email) => (
                 <div
                   key={email}
-                  className="flex bg-primary-300 w-full justify-between rounded-3xl px-3 items-center"
+                  className="flex items-center justify-between p-3 rounded-lg bg-gray-50 dark:bg-gray-800"
                 >
-                  <span>{email}</span>
-                  <button type="button" onClick={() => handleRemoveAdmin(email)} className=" flex items-center justify-center my-2 rounded-full">
-                    <X></X>
-                  </button>
+                  <div>
+                    <div className="text-sm font-medium text-text-title-light dark:text-text-title-dark">
+                      {email}
+                    </div>
+                    <div className="text-xs text-text-muted-light dark:text-text-muted-dark">
+                      School admin
+                    </div>
+                  </div>
+                  <Button
+                    type="button"
+                    size="xs"
+                    color="failure"
+                    onClick={() => handleRemoveAdmin(email)}
+                  >
+                    <HiTrash className="w-3 h-3 mr-1" />
+                    Remove
+                  </Button>
                 </div>
               ))}
             </div>
             {errors.admins && <FormErrorMessage text={errors.admins} />}
 
             {/* Action Buttons */}
-            <div className="flex flex-col-reverse gap-3 pt-2 sm:flex-row sm:justify-end">
-                <Button className="w-full sm:w-auto" color="gray" onClick={onClose} disabled={loading}>
-                    Cancel
-                </Button>
+            <div className="flex flex-col gap-3 pt-2 sm:flex-row sm:justify-end">
               <Button 
                     type="submit" 
                     disabled={loading || !name.trim()}
-                    className="bg-primary-400 w-full sm:w-auto"
+                className="bg-primary-400 w-full sm:flex-1"
                 >
                 {loading ? (
                     <>
                         <Spinner size="sm" className="mr-2" />
-                        Creating...
+                  {initialData ? "Updating..." : "Creating..."}
                     </>
                 ) : initialData ? (
-                    "Save Changes"
+                "Update School"
                 ) : (
                     "Create School"
                 )
               }
                 </Button>
+              <Button color="gray" type="button" onClick={onClose} disabled={loading} className="w-full sm:w-auto">
+                Cancel
+              </Button>
             </div>
             
             </form>

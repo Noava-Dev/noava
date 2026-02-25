@@ -73,7 +73,8 @@
   },
   "sections": {
     "myDecks": "My Decks",
-    "sharedWithMe": "Shared with Me"
+    "sharedWithMe": "Shared with Me",
+    "classroomDecks": "Classroom Decks"
   },
   "joinCode": {
     "button": "Join by Code",
@@ -133,6 +134,8 @@
     "avgMastery": "Avg Mastery",
     "correctCards": "Correct Cards",
     "avgResponseTime": "Avg Response Time",
+    "interactionActivity": "Interaction Activity",
+    "interactionSubtitle": "Your learning activity with this deck over the past year",
     "noData": {
       "title": "No Statistics Yet",
       "description": "Start reviewing this deck to see your progress and statistics."

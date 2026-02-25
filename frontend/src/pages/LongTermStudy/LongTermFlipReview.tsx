@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Button, Progress, Badge } from 'flowbite-react';
+import { Button, Progress, Badge, Spinner } from 'flowbite-react';
 import { HiX, HiVolumeUp, HiPlay, HiCheck } from 'react-icons/hi';
 import { useTranslation } from 'react-i18next';
 import { useDeckService } from '../../services/DeckService';
@@ -45,6 +45,7 @@ function LongTermFlipReview() {
   const [correctAnswers, setCorrectAnswers] = useState(0);
   const [showExitModal, setShowExitModal] = useState(false);
   const [cardStartTime, setCardStartTime] = useState<number>(Date.now());
+  const [isProcessingNext, setIsProcessingNext] = useState(false);
   const initialized = useRef(false);
 
   useEffect(() => {
@@ -154,21 +155,26 @@ function LongTermFlipReview() {
   };
 
   const handleNext = async (isCorrect: boolean) => {
-    await recordCardInteraction(isCorrect);
+    setIsProcessingNext(true);
+    try {
+      await recordCardInteraction(isCorrect);
 
-    const newCardsReviewed = cardsReviewed + 1;
-    const newCorrectAnswers = isCorrect ? correctAnswers + 1 : correctAnswers;
+      const newCardsReviewed = cardsReviewed + 1;
+      const newCorrectAnswers = isCorrect ? correctAnswers + 1 : correctAnswers;
 
-    setCardsReviewed(newCardsReviewed);
-    if (isCorrect) {
-      setCorrectAnswers(newCorrectAnswers);
-    }
+      setCardsReviewed(newCardsReviewed);
+      if (isCorrect) {
+        setCorrectAnswers(newCorrectAnswers);
+      }
 
-    if (currentIndex < cards.length - 1) {
-      setCurrentIndex(currentIndex + 1);
-      setIsFlipped(false);
-    } else {
-      handleEndSession(newCardsReviewed, newCorrectAnswers);
+      if (currentIndex < cards.length - 1) {
+        setCurrentIndex(currentIndex + 1);
+        setIsFlipped(false);
+      } else {
+        handleEndSession(newCardsReviewed, newCorrectAnswers);
+      }
+    } finally {
+      setIsProcessingNext(false);
     }
   };
 
@@ -415,15 +421,25 @@ function LongTermFlipReview() {
               <Button
                 size="lg"
                 className="flex-1 !bg-transparent !border-2 !border-red-600 !text-red-600 hover:!bg-red-50 dark:!text-red-400 dark:!border-red-400 dark:hover:!bg-red-950 font-semibold transition-all"
-                onClick={() => handleNext(false)}>
-                <HiX className="w-5 h-5 mr-2" />
+                onClick={() => handleNext(false)}
+                disabled={isProcessingNext}>
+                {isProcessingNext ? (
+                  <Spinner size="sm" color="failure" className="mr-2" />
+                ) : (
+                  <HiX className="w-5 h-5 mr-2" />
+                )}
                 {t('longTerm.markIncorrect')}
               </Button>
               <Button
                 size="lg"
                 className="flex-1 !bg-transparent !border-2 !border-green-600 !text-green-600 hover:!bg-green-50 dark:!text-green-400 dark:!border-green-400 dark:hover:!bg-green-950 font-semibold transition-all"
-                onClick={() => handleNext(true)}>
-                <HiCheck className="w-5 h-5 mr-2" />
+                onClick={() => handleNext(true)}
+                disabled={isProcessingNext}>
+                {isProcessingNext ? (
+                  <Spinner size="sm" color="success" className="mr-2" />
+                ) : (
+                  <HiCheck className="w-5 h-5 mr-2" />
+                )}
                 {t('longTerm.markCorrect')}
               </Button>
             </div>

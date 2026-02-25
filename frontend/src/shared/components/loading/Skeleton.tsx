@@ -1,4 +1,3 @@
-import NoavaFooter from '../navigation/NoavaFooter';
 import PageHeader from '../PageHeader';
 
 function Skeleton() {
@@ -24,7 +23,6 @@ function Skeleton() {
             </div>
           </div>
         </div>
-        <NoavaFooter />
       </div>
     </div>
   );

@@ -1,0 +1,8 @@
+{
+  "interactions_one": "{{count}} interaction",
+  "interactions_other": "{{count}} interactions",
+  "legend": {
+    "less": "Moins",
+    "more": "Plus"
+  }
+}

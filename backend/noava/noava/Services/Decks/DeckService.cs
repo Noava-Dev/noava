@@ -38,6 +38,7 @@ namespace noava.Services
         private readonly IEmailService _emailService;
         private readonly IConfiguration _configuration;
         private readonly IUserRepository _userRepository;
+        private readonly NoavaDbContext _context;
 
         public DeckService(
             IDeckRepository repository,
@@ -48,7 +49,8 @@ namespace noava.Services
             ICardRepository cardRepository,
             IEmailService emailService,
             IConfiguration configuration,
-            IUserRepository userRepository)
+            IUserRepository userRepository,
+            NoavaDbContext context)
         {
             _repository = repository;
             _blobService = blobService;
@@ -59,6 +61,7 @@ namespace noava.Services
             _emailService = emailService;
             _configuration = configuration;
             _userRepository = userRepository;
+            _context = context;
         }
 
         private bool IsValidBlobName(string? blobName)
@@ -83,8 +86,57 @@ namespace noava.Services
 
         public async Task<List<DeckResponse>> GetUserDecksAsync(string userId, int? limit = null)
         {
-            var decks = await _repository.GetUserDecksWithAccessAsync(userId, limit);
+            var query = _context.Decks
+                .Where(d =>
+                    // User created the deck
+                    d.UserId == userId ||
+                    // OR user has access via DeckUsers (owner OR invited)
+                    d.DeckUsers.Any(du => du.ClerkId == userId))
+                .OrderByDescending(d => d.CreatedAt)
+                .AsQueryable();
+
+            if (limit.HasValue)
+            {
+                query = query.Take(limit.Value);
+            }
+            var decks = await query.ToListAsync();
+
             return decks.Select(d => d.ToResponseDto()).ToList();
+            //used to have a query but the query stopped the "shared with me" section from showing up
+            //the above code is much shorter as well.
+        }
+
+        public async Task<List<DeckClassroomInfoDto>> GetUserDecksByClassroomsAsync(string userId)
+        {
+            var decks = await _context.Decks
+                .Include(d => d.ClassroomDecks)
+                    .ThenInclude(cd => cd.Classroom)
+                        .ThenInclude(c => c.ClassroomUsers)
+                .Include(d => d.DeckUsers)
+                .Where(d =>
+                    d.UserId == userId || d.DeckUsers.Any(du => du.ClerkId == userId) ||
+                    d.ClassroomDecks.Any(cd => cd.Classroom.ClassroomUsers.Any(cu => cu.UserId == userId))
+                )
+                .ToListAsync();
+
+
+            var classroomGroups = decks
+                .SelectMany(d => d.ClassroomDecks
+                    .Where(cd => cd.Classroom != null)
+                    .Select(cd => new { cd.Classroom, Deck = d }))
+                .GroupBy(x => x.Classroom.Id)
+                .Select(g => new DeckClassroomInfoDto
+                {
+                    Id = g.Key,
+                    Name = g.First().Classroom?.Name ?? "Unknown Classroom",
+                    //.GroupBy(d => d.DeckId).Select(g2 => g2.First()) makes sure no duplicate classrooms show up in the decks page
+                    Decks = g.Select(x => x.Deck.ToResponseDto()).GroupBy(d => d.DeckId).Select(g2 => g2.First()).ToList()
+                })
+                .ToList();
+
+            return classroomGroups;
+            //var decks = await _repository.GetUserDecksWithAccessAsync(userId, limit);
+            //return decks.Select(d => d.ToResponseDto()).ToList();
         }
 
 

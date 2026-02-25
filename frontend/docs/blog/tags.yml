@@ -1,0 +1,9 @@
+story:
+  label: Story
+  permalink: /story
+  description: Get to know our story!
+
+team:
+  label: Our Team
+  permalink: /team
+  description: Get to know our team!

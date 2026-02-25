@@ -1,0 +1,11 @@
+.readMore {
+    color: var(--color-primary-800);
+}
+
+[data-theme="dark"] .readMore {
+  color: var(--color-primary-400);
+}
+
+.readMore:hover {
+  color: var(--color-primary-400);
+}

@@ -850,15 +850,7 @@ function FlashcardModal({
                 />
                 <Label htmlFor="createMore">Create more</Label>
               </div>
-              <div className="flex flex-col-reverse gap-3 pt-4 sm:flex-row">
-                <Button
-                  color="gray"
-                  onClick={onClose}
-                  disabled={uploading}
-                  type="button"
-                  className="w-full sm:w-auto">
-                  {t('common:actions.cancel')}
-                </Button>
+              <div className="flex flex-col gap-3 pt-4 sm:flex-row">
                 <Button
                   type="submit"
                   className="w-full sm:flex-1"
@@ -873,6 +865,14 @@ function FlashcardModal({
                   ) : (
                     t('flashcardModal.createButton')
                   )}
+                </Button>
+                <Button
+                  color="gray"
+                  onClick={onClose}
+                  disabled={uploading}
+                  type="button"
+                  className="w-full sm:w-auto">
+                  {t('common:actions.cancel')}
                 </Button>
               </div>
             </div>

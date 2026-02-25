@@ -40,12 +40,12 @@ namespace noava.Controllers.Classrooms
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ClassroomResponseDto>>> GetAllForUser()
+        public async Task<ActionResult<IEnumerable<ClassroomResponseDto>>> GetAllForUser([FromQuery] int? take)
         {
             var userId = _userService.GetUserId(User);
             if (userId == null) throw new UnauthorizedException("Not authorized");
 
-            var result = await _classroomService.GetAllByUserAsync(userId);
+            var result = await _classroomService.GetAllByUserAsync(userId, take);
             return Ok(result);
         }
 

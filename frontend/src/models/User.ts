@@ -23,4 +23,6 @@ export interface ClerkUserResponse {
   lastName: string;
   email: string;
   isTeacher: boolean;
+  joinedAt: string;
+  role: UserRole;
 }
