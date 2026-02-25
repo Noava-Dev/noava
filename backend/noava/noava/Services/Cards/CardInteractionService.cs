@@ -114,6 +114,12 @@ namespace noava.Services.Cards
             return await _interactionRepo.GetInteractionsWholeYearAsync(clerkId);
         }
 
+        public async Task<List<InteractionCount>> GetInteractionStatsByDeckAsync(string clerkId, int deckId)
+        {
+            return await _interactionRepo
+                .GetInteractionsWholeYearByDecksAsync(clerkId, [deckId]);
+        }
+
         public async Task<List<InteractionCount>> GetInteractionStatsByDecksAsync(string clerkId, string ActionTakerId, int classroomId, IEnumerable<int> deckIds)
         {
             var isTeachter = await _classroomRepository.IsTeacherOfClassroomAsync(classroomId, ActionTakerId);

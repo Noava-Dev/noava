@@ -1,13 +1,15 @@
-import {
-  LuBuilding2 as Building2,
-  LuCircleHelp as HelpCircle,
-  LuUsers as Users,
-} from "react-icons/lu";
-import PageHeader from "../../../shared/components/PageHeader";
-import { Tabs, TabItem } from "flowbite-react";
-import SchoolsTab from "../components/schoolsTab";
-import UsersTab from "../components/usersTab";
-import { useTranslation } from "react-i18next";
+import { LuBuilding2 as Building2,
+        LuCircleHelp as HelpCircle,
+        LuUsers as Users,
+        LuMail
+ } from "react-icons/lu"
+import PageHeader from "../../../shared/components/PageHeader"
+import { Tabs, TabItem } from "flowbite-react"
+import SchoolsTab from "../components/schoolsTab"
+import UsersTab from "../components/usersTab"
+import ContactMessagesTab from "../components/contactMessagesTab"
+import { useTranslation } from 'react-i18next';
+
 
 function AdminDashboard() {
   const { t } = useTranslation("adminDashboard");
@@ -40,7 +42,7 @@ function AdminDashboard() {
           <TabItem
             active
             title={
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 text-text-body-light dark:text-text-body-dark">
                 <Building2 className="size-4" /> Schools
               </div>
             }
@@ -49,12 +51,21 @@ function AdminDashboard() {
           </TabItem>
           <TabItem
             title={
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 text-text-body-light dark:text-text-body-dark">
                 <Users className="size-4" /> Users
               </div>
             }
           >
             <UsersTab />
+          </TabItem>
+          <TabItem
+            title={
+              <div className="flex items-center gap-2 text-text-body-light dark:text-text-body-dark">
+                <LuMail className="size-4" /> Contact Messages
+              </div>
+            }
+          >
+            <ContactMessagesTab />
           </TabItem>
         </Tabs>
       </main>

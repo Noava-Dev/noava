@@ -1,6 +1,7 @@
 ﻿using noava.DTOs.ContactMessages;
 using noava.Exceptions;
 using noava.Mappers.ContactMessages;
+using noava.Models.Enums;
 using noava.Repositories.ContactMessages;
 using noava.Services.Users;
 using System.Security.Claims;
@@ -18,12 +19,15 @@ namespace noava.Services.ContactMessages
             _userService = userService;
         }
 
-        public async Task<IEnumerable<ContactMessageResponse>> GetAllAsync(string userId)
+        public async Task<IEnumerable<ContactMessageResponse>> GetAllAsync(
+            string userId,
+            ContactMessageFilterDto filter)
         {
             if (!await _userService.IsAdminAsync(userId))
                 throw new UnauthorizedException();
 
-            var entities = await _contactRepository.GetAllAsync();
+            var entities = await _contactRepository
+                .GetAllAsync(filter);
 
             return entities.ToResponseDtos();
         }
@@ -43,6 +47,24 @@ namespace noava.Services.ContactMessages
             var entity = dto.ToEntity();
 
             await _contactRepository.AddAsync(entity);
+
+            return entity.ToResponseDto();
+        }
+
+        public async Task<ContactMessageResponse> UpdateStatusAsync(
+            int id,
+            string userId,
+            ContactMessageStatus status)
+        {
+            if (!await _userService.IsAdminAsync(userId))
+                throw new UnauthorizedAccessException();
+
+            var entity = await _contactRepository.GetByIdAsync(id)
+                ?? throw new NotFoundException("Contact message not found.");
+
+            entity.Status = status;
+
+            await _contactRepository.UpdateAsync(entity);
 
             return entity.ToResponseDto();
         }
