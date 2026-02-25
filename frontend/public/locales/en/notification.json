@@ -43,6 +43,7 @@
       "deck": {
         "invite": {
           "received": "{{userName}} invited you to join the Deck \"{{deckName}}\"",
+          "title": "Deck Invitation",
           "actions": {
             "accept": "Accept",
             "decline": "Decline"
@@ -52,6 +53,7 @@
       "classroom": {
         "invite": {
           "received": "{{userName}} invited you to join the Classroom \"{{classroomName}}\"",
+          "title": "Classroom Invitation",
           "actions": {
             "accept": "Accept",
             "decline": "Decline"

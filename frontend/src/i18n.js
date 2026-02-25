@@ -14,6 +14,7 @@ i18n
       'faq',
       'home',
       'settings',
+      'schools',
       'decks',
       'flashcards',
       'dashboard',

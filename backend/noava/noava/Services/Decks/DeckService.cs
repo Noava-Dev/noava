@@ -346,7 +346,7 @@ namespace noava.Services
             var notification = new NotificationRequestDto
             {
                 Type = NotificationType.DeckInvitationReceived,
-                TitleKey = "notifications.items.deck.invite.received.title",
+                TitleKey = "notifications.items.deck.invite.title",
                 TemplateKey = "notifications.items.deck.invite.received",
                 UserId = invitedUser.ClerkId,
                 ParametersJson = parametersJson,

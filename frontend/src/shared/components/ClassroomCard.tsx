@@ -58,7 +58,7 @@ function ClassroomCard({
       <div className="relative w-full h-64 sm:h-72 md:h-80">
         {loadingImage ? (
           <div className="flex items-center justify-center w-full h-full bg-gray-200 dark:bg-gray-700 animate-pulse">
-            <span className="text-sm text-gray-400">Loading...</span>
+            <span className="text-sm text-gray-400">{t('common:app.loading')}</span>
           </div>
         ) : imageUrl ? (
           <img

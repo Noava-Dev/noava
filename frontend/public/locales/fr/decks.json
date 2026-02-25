@@ -2,8 +2,8 @@
   "subtitle": "Organisez vos flashcards en Decks par matière",
   "createButton": "Créer un Deck",
   "bulkReview": {
-    "button": "Révision groupée",
-    "title": "Révision groupée",
+    "button": "Bulk Review ",
+    "title": "Bulk Review",
     "description": "Sélectionnez les Decks que vous souhaitez réviser ensemble.",
     "selectAll": "Tout sélectionner",
     "deselectAll": "Tout désélectionner",
@@ -74,7 +74,7 @@
   "sections": {
     "myDecks": "Mes Decks",
     "sharedWithMe": "Partagés avec Moi",
-    "ClassroomDecks": "Decks de classe"
+    "ClassroomDecks": "Classroom Decks"
   },
   "joinCode": {
     "button": "Rejoindre par Code",

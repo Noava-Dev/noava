@@ -1,0 +1,49 @@
+{
+  "title": "Scholen",
+  "subtitleAdmin": "Overzicht van alle geregistreerde onderwijsinstellingen.",
+  "subtitleManager": "Overzicht van scholen die jij beheert.",
+  "createTooltip": "Maak een nieuwe school aan voor je instelling",
+  "addButton": "School toevoegen",
+  "empty": {
+    "title": "Nog geen scholen",
+    "messageAdmin": "Begin met een nieuwe school toe te voegen.",
+    "messageManager": "Je bent momenteel aan geen enkele school gekoppeld."
+  },
+  "toast": {
+    "loadErrorTitle": "Fout",
+    "loadErrorDescription": "Scholen laden is mislukt. Controleer je verbinding.",
+    "successTitle": "Succes",
+    "createSuccess": "{{name}} werd succesvol toegevoegd.",
+    "updateSuccess": "{{name}} werd succesvol bijgewerkt.",
+    "saveError": "School opslaan is mislukt.",
+    "deleteSuccess": "{{name}} werd succesvol verwijderd.",
+    "deleteError": "School verwijderen is mislukt."
+  },
+  "deleteModal": {
+    "title": "School verwijderen",
+    "message": "Weet je zeker dat je \"{{name}}\" wilt verwijderen?",
+    "confirm": "Ja, verwijderen"
+  },
+  "card": {
+    "adminsCount_one": "{{count}} beheerder",
+    "adminsCount_other": "{{count}} beheerders",
+    "createdAt": "Aangemaakt op {{date}}"
+  },
+  "modal": {
+    "createTitle": "School aanmaken",
+    "updateTitle": "School bijwerken",
+    "nameLabel": "Schoolnaam *",
+    "namePlaceholder": "Voer schoolnaam in",
+    "adminsLabel": "Schoolbeheerders *",
+    "adminsHelp": "Een school moet minstens één schoolbeheerder hebben. Voeg één beheerder tegelijk toe. Je kan meerdere beheerders toevoegen of verwijderen vóór het aanmaken.",
+    "adminEmailPlaceholder": "admin@school.be",
+    "addAdmin": "Toevoegen",
+    "adminRole": "Schoolbeheerder",
+    "remove": "Verwijderen",
+    "creating": "Aanmaken...",
+    "updating": "Bijwerken...",
+    "createButton": "School aanmaken",
+    "updateButton": "School bijwerken",
+    "cancelButton": "Annuleren"
+  }
+}

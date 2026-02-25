@@ -1,0 +1,49 @@
+{
+  "title": "Écoles",
+  "subtitleAdmin": "Aperçu de tous les établissements scolaires enregistrés.",
+  "subtitleManager": "Aperçu des écoles que vous gérez.",
+  "createTooltip": "Créer une nouvelle école pour votre établissement",
+  "addButton": "Ajouter une école",
+  "empty": {
+    "title": "Aucune école pour le moment",
+    "messageAdmin": "Commencez par ajouter une nouvelle école.",
+    "messageManager": "Vous n’êtes actuellement attribué à aucune école."
+  },
+  "toast": {
+    "loadErrorTitle": "Erreur",
+    "loadErrorDescription": "Échec du chargement des écoles. Veuillez vérifier votre connexion.",
+    "successTitle": "Succès",
+    "createSuccess": "{{name}} a été ajoutée avec succès.",
+    "updateSuccess": "{{name}} a été mise à jour avec succès.",
+    "saveError": "Échec de l’enregistrement de l’école.",
+    "deleteSuccess": "{{name}} a été supprimée avec succès.",
+    "deleteError": "Échec de la suppression de l’école."
+  },
+  "deleteModal": {
+    "title": "Supprimer l’école",
+    "message": "Voulez-vous vraiment supprimer \"{{name}}\" ?",
+    "confirm": "Oui, supprimer"
+  },
+  "card": {
+    "adminsCount_one": "{{count}} administrateur",
+    "adminsCount_other": "{{count}} administrateurs",
+    "createdAt": "Créée le {{date}}"
+  },
+  "modal": {
+    "createTitle": "Créer une école",
+    "updateTitle": "Mettre à jour l’école",
+    "nameLabel": "Nom de l’école *",
+    "namePlaceholder": "Saisissez le nom de l’école",
+    "adminsLabel": "Administrateurs de l’école *",
+    "adminsHelp": "Une école doit avoir au moins un administrateur. Ajoutez un administrateur à la fois. Vous pouvez en ajouter ou en retirer plusieurs avant de créer.",
+    "adminEmailPlaceholder": "admin@ecole.com",
+    "addAdmin": "Ajouter",
+    "adminRole": "Administrateur d’école",
+    "remove": "Retirer",
+    "creating": "Création...",
+    "updating": "Mise à jour...",
+    "createButton": "Créer l’école",
+    "updateButton": "Mettre à jour l’école",
+    "cancelButton": "Annuler"
+  }
+}

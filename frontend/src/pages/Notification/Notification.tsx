@@ -40,19 +40,6 @@ const NotificationPage = () => {
     return {};
   }
 
-  function resolveNotificationTitle(notification: Notification): string {
-    const translatedTitle = t(notification.titleKey);
-    if (translatedTitle && translatedTitle !== notification.titleKey) {
-      return translatedTitle;
-    }
-
-    const translatedType = t(`types.${notification.type}`);
-    if (translatedType && translatedType !== `types.${notification.type}`) {
-      return translatedType;
-    }
-
-    return t('notifications.genericTitle');
-  }
 
   function sanitizeLabel(value: string): string {
     return value.replace(/[^\p{L}\p{N}\s._:-]/gu, '').trim();
@@ -330,7 +317,7 @@ const NotificationPage = () => {
                       <div className="flex-1 min-w-0">
                         <div>
                           <div className="text-lg font-semibold text-text-title-light md:text-xl dark:text-text-title-dark">
-                            {resolveNotificationTitle(n)}
+                            {t(n.titleKey)}
                           </div>
                           <div className="mt-1 text-xs text-text-muted-light md:text-sm dark:text-text-muted-dark">
                             {formatDateToEuropean(n.createdAt)}

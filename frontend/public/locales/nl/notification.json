@@ -43,6 +43,7 @@
       "deck": {
         "invite": {
           "received": "{{userName}} heeft je uitgenodigd voor Deck \"{{deckName}}\"",
+          "title": "Deck Uitnodiging",
           "actions": {
             "accept": "Accepteren",
             "decline": "Afwijzen"
@@ -52,6 +53,7 @@
       "classroom": {
         "invite": {
           "received": "{{userName}} heeft je uitgenodigd voor Classroom \"{{classroomName}}\"",
+          "title": "Classroom Uitnodiging",
           "actions": {
             "accept": "Accepteren",
             "decline": "Afwijzen"

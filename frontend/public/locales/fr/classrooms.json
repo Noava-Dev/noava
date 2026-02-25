@@ -123,8 +123,8 @@
     "addError": "Échec de l'ajout du deck"
   },
   "bulkReview": {
-    "button": "Révision groupée",
-    "title": "Révision groupée",
+    "button": "Bulk Review",
+    "title": "Bulk Review",
     "description": "Sélectionnez les decks que vous souhaitez réviser ensemble.",
     "selectAll": "Tout sélectionner",
     "deselectAll": "Tout désélectionner",

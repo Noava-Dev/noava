@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { SchoolCard } from './components/SchoolCard';
 import PageHeader from '../../shared/components/PageHeader';
 import type { SchoolDto } from '../../models/School';
@@ -16,6 +17,7 @@ import EmptyState from '../../shared/components/EmptyState';
 
 export default function SchoolsPage() {
   const navigate = useNavigate();
+  const { t } = useTranslation('schools');
   const schoolService = useSchoolService();
   const { showError, showSuccess } = useToast();
 
@@ -43,10 +45,7 @@ export default function SchoolsPage() {
         setSchools(filteredSchools);
       }
     } catch (error) {
-      showError(
-        'Error',
-        'Failed to load schools. Please check your connection.'
-      );
+      showError(t('toast.loadErrorTitle'), t('toast.loadErrorDescription'));
     } finally {
       setLoading(false);
     }
@@ -69,20 +68,26 @@ export default function SchoolsPage() {
           schoolAdminEmails: data.adminEmails,
         });
 
-        showSuccess('Success', `${data.name} was updated successfully.`);
+        showSuccess(
+          t('toast.successTitle'),
+          t('toast.updateSuccess', { name: data.name })
+        );
       } else {
         await schoolService.create({
           schoolName: data.name,
           schoolAdminEmails: data.adminEmails,
         });
 
-        showSuccess('Success', `${data.name} was added successfully.`);
+        showSuccess(
+          t('toast.successTitle'),
+          t('toast.createSuccess', { name: data.name })
+        );
       }
       setIsModalOpen(false);
       setEditingSchool(null);
       await fetchSchools();
     } catch (error) {
-      showError('Error', 'Failed to create school.');
+      showError(t('toast.loadErrorTitle'), t('toast.saveError'));
     }
   };
 
@@ -106,13 +111,10 @@ export default function SchoolsPage() {
 
     try {
       await schoolService.delete(deleteSchool.id);
-      showSuccess(
-        'Success',
-        `${deleteSchool.schoolName} was deleted successfully.`
-      );
+      showSuccess(t('toast.successTitle'), t('toast.deleteSuccess', { name: deleteSchool.schoolName }));
       await fetchSchools();
     } catch {
-      showError('Error', 'Failed to delete school.');
+      showError(t('toast.loadErrorTitle'), t('toast.deleteError'));
     } finally {
       setDeleteSchool(null);
     }
@@ -136,18 +138,18 @@ export default function SchoolsPage() {
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
             <h1 className="text-3xl font-bold text-text-title-light dark:text-text-title-dark">
-              Schools
+              {t('title')}
             </h1>
             <p className="text-text-muted-light dark:text-text-muted-dark">
               {userRole === 'ADMIN'
-                ? 'Overview of all registered educational institutions.'
-                : 'Overview of schools you manage.'}
+                ? t('subtitleAdmin')
+                : t('subtitleManager')}
             </p>
           </div>
 
           {userRole === 'ADMIN' && (
             <div className="w-full md:w-fit">
-              <Tooltip content="Create a new school for your institution">
+              <Tooltip content={t('createTooltip')}>
                 <button
                   onClick={() => {
                     setIsModalOpen(true);
@@ -155,7 +157,7 @@ export default function SchoolsPage() {
                   }}
                   className="flex items-center justify-center gap-2 rounded-lg bg-primary-500 px-5 py-2.5 text-sm font-semibold text-white hover:bg-primary-600 shadow-md">
                   <Plus className="size-5" />
-                  Add School
+                  {t('addButton')}
                 </button>
               </Tooltip>
             </div>
@@ -169,14 +171,14 @@ export default function SchoolsPage() {
             <>
               {userRole === 'ADMIN' ? (
                 <EmptyState
-                  title="No schools yet"
-                  description="Start by adding a new school."
+                  title={t('empty.title')}
+                  description={t('empty.messageAdmin')}
                   icon={LuSchool}
                 />
               ) : (
                 <EmptyState
-                  title="No schools yet"
-                  description="You are not currently assigned to any schools."
+                  title={t('empty.title')}
+                  description={t('empty.messageManager')}
                   icon={LuSchool}
                 />
               )}
@@ -221,10 +223,10 @@ export default function SchoolsPage() {
 
       <ConfirmModal
         show={deleteSchool !== null}
-        title="Delete School"
-        message={`Are you sure you want to delete "${deleteSchool?.schoolName}"?`}
-        confirmLabel="Yes, delete"
-        cancelLabel="Cancel"
+        title={t('deleteModal.title')}
+        message={t('deleteModal.message', { name: deleteSchool?.schoolName ?? '' })}
+        confirmLabel={t('deleteModal.confirm')}
+        cancelLabel={t('modal.cancelButton')}
         onConfirm={confirmDeleteSchool}
         onCancel={() => setDeleteSchool(null)}
       />
