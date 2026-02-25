@@ -326,6 +326,7 @@ function FlashcardDetail() {
                 <div className="w-full md:w-fit">
                   <Tooltip content={t('common:tooltips.createFlashcard')}>
                     <DropdownButton
+                    color="bg-primary-700 text-white dark:bg-primary-600 dark:text-white hover:bg-primary-800 dark:hover:bg-primary-700"
                       size="lg"
                       onClickMain={() => {
                         setSelectedFlashcard(undefined);
