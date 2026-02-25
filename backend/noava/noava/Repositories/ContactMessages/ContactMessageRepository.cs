@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using noava.Data;
+using noava.DTOs.ContactMessages;
 using noava.Models;
 using System;
 
@@ -20,6 +21,12 @@ namespace noava.Repositories.ContactMessages
             await _context.SaveChangesAsync();
         }
 
+        public async Task UpdateAsync(ContactMessage entity)
+        {
+            _context.ContactMessages.Update(entity);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task DeleteAsync(ContactMessage entity)
         {
             entity.CreatedAt = DateTime.UtcNow;
@@ -28,10 +35,24 @@ namespace noava.Repositories.ContactMessages
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<ContactMessage>> GetAllAsync()
+        public async Task<IEnumerable<ContactMessage>> GetAllAsync(ContactMessageFilterDto filter)
         {
-            return await _context.ContactMessages
+            var query = _context.ContactMessages
                 .AsNoTracking()
+                .AsQueryable();
+
+            if (filter.Status.HasValue)
+            {
+                query = query.Where(x => x.Status == filter.Status.Value);
+            }
+
+            if (filter.Subject.HasValue)
+            {
+                query = query.Where(x => x.Subject == filter.Subject.Value);
+            }
+
+            return await query
+                .OrderByDescending(x => x.CreatedAt)
                 .ToListAsync();
         }
 

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using noava.Models;
+using noava.Models.Enums;
 
 namespace noava.Data.Configurations.ContactMessages
 {
@@ -21,6 +22,10 @@ namespace noava.Data.Configurations.ContactMessages
             builder.Property(x => x.Description)
                 .IsRequired()
                 .HasMaxLength(4000);
+            builder.Property(e => e.Status)
+                .IsRequired()
+                .HasConversion<string>()
+                .HasDefaultValue(ContactMessageStatus.Pending); 
             builder.Property(x => x.CreatedAt)
                 .IsRequired();
         }
