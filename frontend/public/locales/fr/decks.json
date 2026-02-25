@@ -77,7 +77,7 @@
     "ClassroomDecks": "Classroom Decks"
   },
   "joinCode": {
-    "button": "Rejoindre par Code",
+    "button": "Rejoindre un Deck",
     "title": "Rejoindre un Deck",
     "description": "Entrez le code de participation que vous avez reçu pour accéder à un Deck partagé.",
     "label": "Code de participation",
