@@ -12,20 +12,26 @@ import { useTranslation } from 'react-i18next';
 
 
 function AdminDashboard() {
-  const { t } = useTranslation('adminDashboard');
+  const { t } = useTranslation("adminDashboard");
 
   return (
     <div className="min-h-screen bg-background-app-light dark:bg-background-app-dark">
       {/* Header */}
-      <header className="mb-6 md:mb-8">
+      <header>
         <PageHeader>
-          <div className="flex flex-col gap-2 p-3 text-center">
-            <h1 className="text-4xl font-bold text-text-title-light dark:text-text-title-dark">
-              Admin Dashboard
-            </h1>
-            <p className="text-text-body-light dark:text-text-body-dark">
-              Welcome to the Noava Admin Dashboard.
-            </p>
+          <div className="pt-4 mb-6 md:mb-8 md:pt-8">
+            <div className="flex items-start justify-between gap-4">
+              <div className="flex-1 min-w-0">
+                <div className="space-y-2">
+                  <h1 className="text-3xl font-extrabold tracking-tight text-text-title-light md:text-5xl dark:text-text-title-dark">
+                    Admin Dashboard
+                  </h1>
+                  <p className="text-base text-text-body-light md:text-xl dark:text-text-body-dark">
+                    Welcome to the Noava Admin Dashboard.
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </PageHeader>
       </header>
@@ -64,7 +70,7 @@ function AdminDashboard() {
         </Tabs>
       </main>
     </div>
-  )
+  );
 }
 
-export default AdminDashboard
+export default AdminDashboard;
