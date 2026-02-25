@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { LuSearch, LuTrash2, LuChevronDown } from "react-icons/lu";
+import { LuSearch, LuTrash2, LuChevronDown, LuUsers } from "react-icons/lu";
 import { useUser } from "@clerk/clerk-react";
 import { useUserService } from "../../../services/UserService";
 import type { ClerkUserResponse, UserRole } from "../../../models/User";
@@ -153,6 +153,14 @@ export default function usersTab() {
         {/* User Table */}
         {loading ? (
           <Loading />
+        ) : users.filter(u => u.clerkId !== currentUser?.id).length === 0 ? (
+          <div className="py-20">
+            <EmptyState
+              title="No users yet"
+              description="There are currently no other users registered on the platform."
+              icon={LuUsers}
+            />
+          </div>
         ) : filtered.length === 0 ? (
           <div className="py-20">
             <EmptyState
@@ -167,6 +175,7 @@ export default function usersTab() {
                 setSearchQuery("");
                 setRoleFilter("all");
               }}
+              icon={LuUsers}
             />
           </div>
         ) : (

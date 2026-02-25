@@ -467,9 +467,9 @@ function FlashcardModal({
               <button
                 type="button"
                 className={`px-6 py-3 font-semibold select-none focus:outline-none focus:ring-0 hover:border-cyan-400 transition-colors bg-transparent ${
-                  activeTab === "front"
-                    ? "text-cyan-400 border-b-2 border-cyan-400"
-                    : "text-text-muted-light dark:text-text-muted-dark"
+                  activeTab === 'front'
+                    ? 'text-cyan-400 border-b-2 border-cyan-400'
+                    : 'text-text-muted-light dark:text-text-muted-dark'
                 }`}
                 onClick={() => {
                   setActiveTab("front");
@@ -481,9 +481,9 @@ function FlashcardModal({
               <button
                 type="button"
                 className={`px-6 py-3 font-semibold select-none focus:outline-none focus:ring-0 hover:border-cyan-400 transition-colors bg-transparent ${
-                  activeTab === "back"
-                    ? "text-cyan-400 border-b-2 border-cyan-400"
-                    : "text-text-muted-light dark:text-text-muted-dark"
+                  activeTab === 'back'
+                    ? 'text-cyan-400 border-b-2 border-cyan-400'
+                    : 'text-text-muted-light dark:text-text-muted-dark'
                 }`}
                 onClick={() => {
                   setActiveTab("back");

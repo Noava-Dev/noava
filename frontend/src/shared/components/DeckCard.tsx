@@ -100,13 +100,13 @@ function DeckCard({
               </button>
             )}>
                 {/* Copy deck */}
-                <DropdownItem icon={HiClipboardCopy} onClick={() => onCopy(deck.deckId)}>
+                <DropdownItem icon={HiClipboardCopy} onClick={() => onCopy(deck.deckId)} className="bg-transparent">
                   {t('common:actions.copy')}
                 </DropdownItem>
             {/* Only show edit if showEdit is true */}
             {showEdit && onEdit && (
               <>
-                <DropdownItem icon={HiPencil} onClick={() => onEdit(deck)}>
+                <DropdownItem icon={HiPencil} onClick={() => onEdit(deck)} className="bg-transparent">
                   {t('common:actions.edit')}
                 </DropdownItem>
                 <DropdownDivider />
@@ -116,7 +116,7 @@ function DeckCard({
             {/* Always show analytics if onAnalytics is provided */}
             {onAnalytics && (
               <>
-                <DropdownItem icon={HiChartBar} onClick={() => onAnalytics(deck)}>
+                <DropdownItem icon={HiChartBar} onClick={() => onAnalytics(deck)} className="bg-transparent">
                   {t('common:actions.analytics')}
                 </DropdownItem>
                 <DropdownDivider />
@@ -128,7 +128,7 @@ function DeckCard({
               <DropdownItem
                 icon={HiTrash}
                 onClick={() => onDelete(deck.deckId)}
-                className="text-red-600 dark:text-red-400">
+                className="text-red-600 dark:text-red-400 bg-transparent ">
                 {t('common:actions.delete')}
               </DropdownItem>
             )}

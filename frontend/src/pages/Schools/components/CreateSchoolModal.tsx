@@ -189,7 +189,7 @@ return (
             {errors.admins && <FormErrorMessage text={errors.admins} />}
 
             {/* Action Buttons */}
-            <div className="flex flex-col gap-3 pt-2 sm:flex-row">
+            <div className="flex flex-col gap-3 pt-2 sm:flex-row sm:justify-end">
               <Button 
                     type="submit" 
                     disabled={loading || !name.trim()}

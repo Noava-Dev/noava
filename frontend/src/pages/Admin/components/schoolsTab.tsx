@@ -3,7 +3,7 @@ import { SchoolCard } from '../../Schools/components/SchoolCard';
 import type { SchoolDto } from '../../../models/School';
 import { useToast } from '../../../contexts/ToastContext';
 import { useSchoolService } from '../../../services/SchoolService';
-import { LuPlus, LuSearch, LuPlus as Plus } from 'react-icons/lu';
+import { LuPlus, LuSchool, LuSearch, LuPlus as Plus } from 'react-icons/lu';
 import CreateSchoolModal from '../../Schools/components/CreateSchoolModal';
 import Loading from '../../../shared/components/loading/Loading';
 import { useNavigate} from 'react-router-dom';
@@ -182,12 +182,13 @@ if (loading) {
       {/* Schools list */}
       <div className="space-y-4">
         {schools.length === 0 ? (
-          <div className="py-16 text-center">
-            <p className="text-text-muted-light dark:text-text-muted-dark">
-              {userRole === 'ADMIN'
-                ? 'No schools found. Start by adding a new school.'
-                : 'You are not currently assigned to any schools.'}
-            </p>
+          <div className="py-12  ">
+            <EmptyState
+              title="No schools found"
+              description={`Add a school to get started.`}
+              buttonOnClick={() => setSearchQuery('')} 
+              icon={LuSchool}
+            />
           </div>
         ) : filteredSchools.length === 0 ? (
           <div className="py-12  ">
@@ -196,6 +197,7 @@ if (loading) {
               description={`We couldn't find any results for "${searchQuery}"`}
               clearButtonText="Clear Search"
               buttonOnClick={() => setSearchQuery('')} 
+              icon={LuSchool}
             />
           </div>
         ) : (

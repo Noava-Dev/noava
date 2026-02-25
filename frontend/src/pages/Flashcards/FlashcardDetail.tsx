@@ -323,28 +323,27 @@ function FlashcardDetail() {
                 {/* Create/Import cards button - only for owners/creator */}
                 {/* Create/Import cards button */}
                 {canEdit && (
-                  <div className="w-full md:w-fit">
-                    <Tooltip content={t('common:tooltips.createFlashcard')}>
-                      <DropdownButton
-                        size="lg"
-                        onClickMain={() => {
-                          setSelectedFlashcard(undefined);
-                          setIsModalOpen(true);
-                        }}
-                        icon={HiPlus}
-                        text={t('flashcardDetail.addCard')}
-                        className="w-full">
-                        <Tooltip
-                          content={t('common:tooltips.importCards')}
-                          placement="left">
-                          <DropdownItem
-                            onClick={() => setShowImportModal(true)}>
-                            {t('flashcardDetail.importFromFile')}
-                          </DropdownItem>
-                        </Tooltip>
-                      </DropdownButton>
-                    </Tooltip>
-                  </div>
+                <div className="w-full md:w-fit">
+                  <Tooltip content={t('common:tooltips.createFlashcard')}>
+                    <DropdownButton
+                      size="lg"
+                      onClickMain={() => {
+                        setSelectedFlashcard(undefined);
+                        setIsModalOpen(true);
+                      }}
+                      icon={HiPlus}
+                      text={t('flashcardDetail.addCard')}
+                      className="w-full">
+                      <Tooltip content={t('common:tooltips.importCards')} placement="left">
+                        <DropdownItem onClick={() => setShowImportModal(true)}
+                          className="bg-transparent"
+                          >
+                          {t('flashcardDetail.importFromFile')}
+                        </DropdownItem>
+                      </Tooltip>
+                    </DropdownButton>
+                  </Tooltip>
+                </div>
                 )}
 
                 {/* Study Now */}
@@ -411,23 +410,23 @@ function FlashcardDetail() {
                       )}>
                       <DropdownItem
                         icon={HiPlay}
-                        onClick={() =>
-                          navigate(`/decks/${deckId}/quickReview`)
-                        }>
+                        onClick={() => navigate(`/decks/${deckId}/quickReview`)}
+                        className="bg-transparent"
+                        >
                         {t('flashcardDetail.flipMode')}
                       </DropdownItem>
                       <DropdownItem
                         icon={HiPencil}
-                        onClick={() =>
-                          navigate(`/decks/${deckId}/writeReview`)
-                        }>
+                        onClick={() => navigate(`/decks/${deckId}/writeReview`)}
+                        className="bg-transparent"
+                        >
                         {t('flashcardDetail.writeReview')}
                       </DropdownItem>
                       <DropdownItem
                         icon={HiRefresh}
-                        onClick={() =>
-                          navigate(`/decks/${deckId}/reverseReview`)
-                        }>
+                        onClick={() => navigate(`/decks/${deckId}/reverseReview`)}
+                        className="bg-transparent"
+                        >
                         {t('flashcardDetail.reverseReview')}
                       </DropdownItem>
                     </Dropdown>
