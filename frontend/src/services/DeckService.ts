@@ -1,5 +1,5 @@
 import { useApi } from '../hooks/useApi';
-import type { Deck, DeckRequest } from '../models/Deck';
+import type { ClassroomInfo, Deck, DeckRequest } from '../models/Deck';
 import type { ClerkUserResponse } from '../models/User';
 
 export const useDeckService = () => {
@@ -15,6 +15,11 @@ export const useDeckService = () => {
       const response = await api.get<Deck[]>('/deck/user/all', {
         params: limit ? { limit } : undefined,
       });
+      return response.data;
+    },
+
+    async getMyDecksByClassrooms(): Promise<ClassroomInfo[]> {
+      const response = await api.get<ClassroomInfo[]>('/deck/user/all/classrooms');
       return response.data;
     },
 

@@ -8,5 +8,7 @@
         public string Email { get; init; } = string.Empty;
         public bool IsTeacher { get; set; }
         public bool IsOwner { get; set; }
+        public DateTime JoinedAt { get; init; }
+        public string Role { get; set; }
     }
 }

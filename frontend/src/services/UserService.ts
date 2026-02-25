@@ -1,7 +1,36 @@
 import { useApi } from '../hooks/useApi';
+import type { ClerkUserResponse, UserRole } from "../models/User"; 
 
 export const useUserService = () => {
   const api = useApi();
+
+  const getUsers = async (): Promise<ClerkUserResponse[]> => {
+    try {
+      const response = await api.get<ClerkUserResponse[]>("/users");
+      return response.data;
+    } catch (err) {
+      console.error("Error fetching users:", err);
+      throw new Error("Failed to fetch users list");
+    }
+  };
+
+  const deleteUser = async (clerkId: string): Promise<void> => {
+    try {
+      await api.delete(`/users/${clerkId}`);
+    } catch (err) {
+      console.error(`Error deleting user ${clerkId}:`, err);
+      throw new Error("Failed to delete user");
+    }
+  };
+
+  const updateRole = async (clerkId: string, role: UserRole): Promise<void> => {
+    try {
+      await api.put(`/users/${clerkId}/role`, { role });
+    } catch (err) {
+      console.error(`Error updating role for user ${clerkId}:`, err);
+      throw new Error("Failed to update user role");
+    }
+  };
 
   return {
     async getEmailPreferences(): Promise<boolean> {
@@ -12,5 +41,9 @@ export const useUserService = () => {
     async updateEmailPreferences(receive: boolean): Promise<void> {
       await api.put('/users/email-preferences', receive);
     },
+
+    getUsers,
+    deleteUser,
+    updateRole,
   };
 };

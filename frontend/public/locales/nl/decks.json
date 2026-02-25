@@ -73,7 +73,8 @@
   },
   "sections": {
     "myDecks": "Mijn Decks",
-    "sharedWithMe": "Gedeeld met Mij"
+    "sharedWithMe": "Gedeeld met Mij",
+    "classroomDecks": "Klas Decks"
   },
   "joinCode": {
     "button": "Deelnemen via Code",
