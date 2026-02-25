@@ -435,7 +435,7 @@ function FlashcardModal({
             <div className="flex border-b border-border dark:border-border-dark">
               <button
                 type="button"
-                className={`px-6 py-3 font-semibold select-none focus:outline-none focus:ring-0 hover:border-cyan-400 transition-colors ${
+                className={`px-6 py-3 font-semibold select-none focus:outline-none focus:ring-0 hover:border-cyan-400 transition-colors bg-transparent ${
                   activeTab === 'front'
                     ? 'text-cyan-400 border-b-2 border-cyan-400'
                     : 'text-text-muted-light dark:text-text-muted-dark'
@@ -448,7 +448,7 @@ function FlashcardModal({
               </button>
               <button
                 type="button"
-                className={`px-6 py-3 font-semibold select-none focus:outline-none focus:ring-0 hover:border-cyan-400 transition-colors ${
+                className={`px-6 py-3 font-semibold select-none focus:outline-none focus:ring-0 hover:border-cyan-400 transition-colors bg-transparent ${
                   activeTab === 'back'
                     ? 'text-cyan-400 border-b-2 border-cyan-400'
                     : 'text-text-muted-light dark:text-text-muted-dark'

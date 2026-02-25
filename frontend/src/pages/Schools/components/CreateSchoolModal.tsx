@@ -177,7 +177,7 @@ return (
 
             {/* Action Buttons */}
             <div className="flex flex-col-reverse gap-3 pt-2 sm:flex-row sm:justify-end">
-                <Button className="bg-primary-500 w-full sm:w-auto" onClick={onClose} disabled={loading}>
+                <Button className="w-full sm:w-auto" color="gray" onClick={onClose} disabled={loading}>
                     Cancel
                 </Button>
               <Button 

@@ -94,7 +94,7 @@ function ClassroomCard({
                 <DropdownItem
                   icon={HiPencil}
                   onClick={() => onEdit?.(classroom)}
-                  className="whitespace-nowrap">
+                  className="whitespace-nowrap bg-transparent">
                   {t('common:actions.edit')}
                 </DropdownItem>
               )}
@@ -102,7 +102,7 @@ function ClassroomCard({
                 <DropdownItem
                   icon={HiRefresh}
                   onClick={() => onRequestNewCode?.(classroom.id)}
-                  className="whitespace-nowrap">
+                  className="whitespace-nowrap bg-transparent">
                   {t('card.regenerateCode')}
                 </DropdownItem>
               )}
@@ -111,7 +111,7 @@ function ClassroomCard({
                 <DropdownItem
                   icon={HiTrash}
                   onClick={() => onDelete?.(classroom.id)}
-                  className="text-red-600 dark:text-red-400">
+                  className="text-red-600 dark:text-red-400 bg-transparent">
                   {t('common:actions.delete')}
                 </DropdownItem>
               )}

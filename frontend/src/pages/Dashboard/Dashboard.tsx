@@ -203,10 +203,10 @@ function Dashboard() {
                 <div className="w-3/5">
                   <div className="flex flex-row items-center justify-between">
                     {/* Header */}
-                    <h3 className="text-lg font-semibold">{t('yourDecks')}</h3>
+                    <h3 className="text-lg font-semibold text-text-title-light dark:text-text-title-dark">{t('yourDecks')}</h3>
                     <Button
                       color="alternative"
-                      className="p-0 text-sm border-0 outline-none text-text-muted-light dark:text-text-muted-dark focus:outline-none active:outline-none focus:ring-0 active:ring-0 hover:text-text-body-light dark:hover:text-text-body-dark"
+                      className="p-0 text-sm border-0 outline-none text-text-muted-light dark:text-text-muted-dark focus:outline-none active:outline-none focus:ring-0 active:ring-0 hover:text-text-body-light dark:hover:text-text-body-dark bg-transparent"
                       onClick={() => navigate('/decks')}
                       outline>
                       {t('common:actions.viewAll')}

@@ -196,7 +196,7 @@ export const ManageOwnersModal = ({
             <div className="space-y-6">
               {/* Join Code Section */}
               <div className="p-4 rounded-lg bg-gray-50 dark:bg-gray-800">
-                <h3 className="mb-2 text-sm font-semibold">
+                <h3 className="mb-2 text-sm font-semibold text-text-title-light dark:text-text-title-dark">
                   {t('decks:owners.joinCodeSection')}
                 </h3>
                 <p className="mb-3 text-xs text-gray-600 dark:text-gray-400">
@@ -238,7 +238,7 @@ export const ManageOwnersModal = ({
               {/* Users List */}
               <div>
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-sm font-semibold">
+                  <h3 className="text-sm font-semibold text-text-title-light dark:text-text-title-dark">
                     {t('decks:owners.title')}
                   </h3>
                   {canManageUsers && (
@@ -276,7 +276,7 @@ export const ManageOwnersModal = ({
                           <div className="flex items-center gap-3">
                             <div>
                               <div className="flex items-center gap-2">
-                                <span className="text-sm font-medium">
+                                <span className="text-sm font-medium text-text-body-light dark:text-text-body-dark">
                                   {userData.firstName} {userData.lastName}
                                 </span>
                                 {isCurrentUser && (
