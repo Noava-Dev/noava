@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { SchoolCard } from "./components/SchoolCard";
 import PageHeader from "../../shared/components/PageHeader";
 import type { SchoolDto } from "../../models/School";
@@ -266,6 +267,8 @@ export default function SchoolsPage() {
               </Select>
             </div>
           </div>
+          )}
+        </div>
         </div>
       </PageHeader>
 
