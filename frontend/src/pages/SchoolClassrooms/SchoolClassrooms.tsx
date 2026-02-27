@@ -157,11 +157,12 @@ export default function SchoolClassroomsPage() {
     setEditingClassroom(undefined);
   };
 
-  const filtered = classrooms?.filter(
-    (c) =>
-      c?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      c?.description?.toLowerCase().includes(searchTerm.toLowerCase())
-  ) ?? [];
+  const filtered =
+    classrooms?.filter(
+      (c) =>
+        c?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        c?.description?.toLowerCase().includes(searchTerm.toLowerCase())
+    ) ?? [];
 
   const sorted = [...filtered].sort((a, b) => {
     switch (sortOrder) {
@@ -186,7 +187,10 @@ export default function SchoolClassroomsPage() {
   const totalItems = sorted.length;
   const totalPages = Math.ceil(totalItems / pageSize) || 1;
   const safePage = Math.min(page, totalPages);
-  const paginatedClassrooms = sorted.slice((safePage - 1) * pageSize, safePage * pageSize);
+  const paginatedClassrooms = sorted.slice(
+    (safePage - 1) * pageSize,
+    safePage * pageSize
+  );
 
   if (loading) {
     return (

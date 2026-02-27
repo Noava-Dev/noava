@@ -7,10 +7,9 @@ import {
   LuLayers,
   LuTarget,
   LuTrendingUp,
+  LuUsers,
 } from 'react-icons/lu';
-import {
-  Button,
-} from 'flowbite-react';
+import { Button } from 'flowbite-react';
 import { HiChevronRight } from 'react-icons/hi';
 import { useNavigate } from 'react-router-dom';
 import { useDeckService } from '../../services/DeckService';
@@ -19,7 +18,10 @@ import { useStatisticsService } from '../../services/StatisticsService';
 import { formatDateToEuropean } from '../../services/DateService';
 import type { DeckRequest, Deck } from '../../models/Deck';
 import type { ClassroomResponse } from '../../models/Classroom';
-import type { DashboardStatistics, InteractionCount } from '../../models/Statistics';
+import type {
+  DashboardStatistics,
+  InteractionCount,
+} from '../../models/Statistics';
 import { useEffect, useState } from 'react';
 import { useToast } from '../../contexts/ToastContext';
 import DeckCard from '../../shared/components/DeckCard';
@@ -229,8 +231,8 @@ function Dashboard() {
                   />
                 </div>
 
-                <div className="hidden md:block w-full">
-                  <div className="relative overflow-hidden bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-850 rounded-xl shadow-md border border-gray-200 dark:border-gray-700">
+                <div className="hidden w-full md:block">
+                  <div className="relative overflow-hidden border border-gray-200 shadow-md bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-850 rounded-xl dark:border-gray-700">
                     <div className="p-6 md:p-8">
                       <div className="flex items-center justify-between mb-6">
                         <div>
@@ -263,7 +265,7 @@ function Dashboard() {
                       </h3>
                       <Button
                         color="alternative"
-                        className="p-0 text-sm border-0 outline-none text-text-muted-light bg-transparent dark:text-text-muted-dark focus:outline-none active:outline-none focus:ring-0 active:ring-0 hover:text-text-body-light dark:hover:text-text-body-dark"
+                        className="p-0 text-sm bg-transparent border-0 outline-none text-text-muted-light dark:text-text-muted-dark focus:outline-none active:outline-none focus:ring-0 active:ring-0 hover:text-text-body-light dark:hover:text-text-body-dark"
                         onClick={() => navigate('/decks')}
                         outline>
                         {t('common:actions.viewAll')}
@@ -307,7 +309,7 @@ function Dashboard() {
                       </h3>
                       <Button
                         color="alternative"
-                        className="p-0 text-sm border-0 outline-none text-text-muted-light bg-transparent dark:text-text-muted-dark focus:outline-none active:outline-none focus:ring-0 active:ring-0 hover:text-text-body-light dark:hover:text-text-body-dark"
+                        className="p-0 text-sm bg-transparent border-0 outline-none text-text-muted-light dark:text-text-muted-dark focus:outline-none active:outline-none focus:ring-0 active:ring-0 hover:text-text-body-light dark:hover:text-text-body-dark"
                         onClick={() => navigate('/classrooms')}
                         outline>
                         {t('common:actions.viewAll')}
@@ -328,7 +330,7 @@ function Dashboard() {
                       <EmptyState
                         title={t('classrooms:empty.title')}
                         description={t('classrooms:empty.message')}
-                        icon={LuLayers}
+                        icon={LuUsers}
                       />
                     )}
                   </div>

@@ -215,22 +215,17 @@ function ClassroomDetailPage() {
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex flex-col items-center justify-between mt-6 sm:flex-row">
-                  <div className="flex flex-col items-center gap-3 sm:flex-row">
+                <div className="flex flex-col items-center justify-between w-full gap-3 mt-6 sm:flex-row">
+                  <div className="flex flex-col items-center w-full gap-3 sm:flex-row">
                     {/* Add Deck */}
                     {classroom.permissions?.canEdit && (
-                      <div className="w-full md:w-fit">
-                        <Tooltip
-                          content={t('common:tooltips.addDeckToClassroom')}>
-                          <Button
-                            size="lg"
-                            className="w-full md:w-fit"
-                            onClick={() => setAddDeckModalOpened(true)}>
-                            <HiPlus className="w-5 h-5 mr-2" />
-                            {t('decks.addDeck')}
-                          </Button>
-                        </Tooltip>
-                      </div>
+                      <Button
+                        size="lg"
+                        className="w-full md:w-fit"
+                        onClick={() => setAddDeckModalOpened(true)}>
+                        <HiPlus className="w-5 h-5 mr-2" />
+                        {t('decks.addDeck')}
+                      </Button>
                     )}
                     {/* Bulk Review */}
                     {decks.length > 0 && (
@@ -264,7 +259,7 @@ function ClassroomDetailPage() {
                       </Dropdown>
                     )}
                   </div>
-                  <div className="flex flex-col items-center gap-3 sm:flex-row">
+                  <div className="flex flex-col w-full gap-3 sm:justify-end sm:flex-row">
                     {/* Analytics */}
                     <Button
                       size="lg"

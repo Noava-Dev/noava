@@ -1,8 +1,4 @@
-import {
-  Dropdown,
-  DropdownItem,
-  DropdownDivider,
-} from 'flowbite-react';
+import { Dropdown, DropdownItem, DropdownDivider } from 'flowbite-react';
 import { HiDotsVertical, HiPencil, HiTrash, HiRefresh } from 'react-icons/hi';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -58,7 +54,9 @@ function ClassroomCard({
       <div className="relative w-full h-64 sm:h-72 md:h-80">
         {loadingImage ? (
           <div className="flex items-center justify-center w-full h-full bg-gray-200 dark:bg-gray-700 animate-pulse">
-            <span className="text-sm text-gray-400">{t('common:app.loading')}</span>
+            <span className="text-sm text-gray-400">
+              {t('common:app.loading')}
+            </span>
           </div>
         ) : imageUrl ? (
           <img
@@ -94,7 +92,7 @@ function ClassroomCard({
                 <DropdownItem
                   icon={HiPencil}
                   onClick={() => onEdit?.(classroom)}
-                  className="whitespace-nowrap bg-transparent">
+                  className="bg-transparent whitespace-nowrap">
                   {t('common:actions.edit')}
                 </DropdownItem>
               )}
@@ -102,7 +100,7 @@ function ClassroomCard({
                 <DropdownItem
                   icon={HiRefresh}
                   onClick={() => onRequestNewCode?.(classroom.id)}
-                  className="whitespace-nowrap bg-transparent">
+                  className="bg-transparent whitespace-nowrap">
                   {t('card.regenerateCode')}
                 </DropdownItem>
               )}
@@ -111,7 +109,7 @@ function ClassroomCard({
                 <DropdownItem
                   icon={HiTrash}
                   onClick={() => onDelete?.(classroom.id)}
-                  className="text-red-600 dark:text-red-400 bg-transparent">
+                  className="text-red-600 bg-transparent dark:text-red-400">
                   {t('common:actions.delete')}
                 </DropdownItem>
               )}

@@ -43,18 +43,43 @@ export default function AppRoutes() {
 
       {/* Authentication */}
       <Route
-        path="/sign-in"
+        path="/sign-in/*"
         element={
           <div className="flex items-center justify-center min-h-screen py-8">
-            <SignInClerk fallback={<Loading />} />
+            <SignInClerk
+              path="/sign-in"
+              routing="path"
+              signUpUrl="/sign-up"
+              // forceRedirectUrl={
+              //   new URLSearchParams(window.location.search).get(
+              //     'redirect_url'
+              //   ) || '/dashboard'
+              // }
+              afterSignInUrl={
+                new URLSearchParams(window.location.search).get(
+                  'redirect_url'
+                ) || '/dashboard'
+              }
+              fallback={<Loading />}
+            />
           </div>
         }
       />
       <Route
-        path="/sign-up"
+        path="/sign-up/*"
         element={
           <div className="flex items-center justify-center min-h-screen py-8">
-            <SignUpClerk fallback={<Loading />} />
+            <SignUpClerk
+              path="/sign-up"
+              routing="path"
+              signInUrl="/sign-in"
+              forceRedirectUrl={
+                new URLSearchParams(window.location.search).get(
+                  'redirect_url'
+                ) || '/dashboard'
+              }
+              fallback={<Loading />}
+            />
           </div>
         }
       />
@@ -78,9 +103,18 @@ export default function AppRoutes() {
         <Route path="/decks/review" element={<QuickReview />} />
         <Route path="/decks/writeReview" element={<WriteReview />} />
         <Route path="/decks/reverseReview" element={<ReverseReview />} />
-        <Route path="/decks/:deckId/longTermReview" element={<LongTermReview />} />
-        <Route path="/decks/:deckId/longTermFlipReview" element={<LongTermFlipReview />} />
-        <Route path="/decks/:deckId/longTermReverseReview" element={<LongTermReverseReview />} />
+        <Route
+          path="/decks/:deckId/longTermReview"
+          element={<LongTermReview />}
+        />
+        <Route
+          path="/decks/:deckId/longTermFlipReview"
+          element={<LongTermFlipReview />}
+        />
+        <Route
+          path="/decks/:deckId/longTermReverseReview"
+          element={<LongTermReverseReview />}
+        />
 
         {/* Classrooms */}
         <Route path="/classrooms" element={<Classrooms />} />

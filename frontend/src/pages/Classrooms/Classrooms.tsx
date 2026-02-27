@@ -1,5 +1,13 @@
 import { useState, useEffect } from 'react';
-import { Button, Select, Tooltip, Modal, ModalHeader, ModalBody, ModalFooter, Pagination } from 'flowbite-react';
+import {
+  Button,
+  Select,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Pagination,
+} from 'flowbite-react';
 import { HiPlus } from 'react-icons/hi';
 import { useTranslation } from 'react-i18next';
 import PageHeader from '../../shared/components/PageHeader';
@@ -169,7 +177,10 @@ function ClassroomsPage() {
   const totalItems = sorted.length;
   const totalPages = Math.ceil(totalItems / pageSize) || 1;
   const safePage = Math.min(page, totalPages);
-  const paginatedClassrooms = sorted.slice((safePage - 1) * pageSize, safePage * pageSize);
+  const paginatedClassrooms = sorted.slice(
+    (safePage - 1) * pageSize,
+    safePage * pageSize
+  );
 
   return (
     <div className="flex min-h-screen bg-background-app-light dark:bg-background-app-dark">
@@ -194,32 +205,24 @@ function ClassroomsPage() {
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex flex-col gap-3 mt-4 mb-8 md:flex-row md:justify-between md:items-start md:mt-6">
+                <div className="flex flex-col gap-3 mt-4 md:flex-row md:justify-between md:items-start">
                   {/* Create Classroom */}
-                  <div className="w-full md:w-fit">
-                    <Tooltip content={t('common:tooltips.createClassroom')}>
-                      <Button
-                        onClick={() => setIsModalOpen(true)}
-                        size="lg"
-                        className="w-full md:w-fit bg-gradient-to-r from-primary-600 to-primary-700">
-                        <HiPlus className="mr-2 size-5" />
-                        {t('createButton')}
-                      </Button>
-                    </Tooltip>
-                  </div>
+                  <Button
+                    onClick={() => setIsModalOpen(true)}
+                    size="lg"
+                    className="w-full md:w-fit bg-gradient-to-r from-primary-600 to-primary-700">
+                    <HiPlus className="mr-2 size-5" />
+                    {t('createButton')}
+                  </Button>
 
                   {/* Join Classroom */}
-                  <div className="w-full md:w-fit">
-                    <Tooltip content={t('common:tooltips.joinClassroom')}>
-                      <Button
-                        onClick={() => setJoinCodeModalOpen(true)}
-                        size="lg"
-                        className="w-full md:w-fit bg-gradient-to-r from-secondary-600 to-secondary-700 hover:shadow-sm hover:border-border">
-                        <TbDoorEnter className="mr-2 size-5" />
-                        {t('joinButton')}
-                      </Button>
-                    </Tooltip>
-                  </div>
+                  <Button
+                    onClick={() => setJoinCodeModalOpen(true)}
+                    size="lg"
+                    className="w-full md:w-fit bg-gradient-to-r from-secondary-600 to-secondary-700 hover:shadow-sm hover:border-border">
+                    <TbDoorEnter className="mr-2 size-5" />
+                    {t('joinButton')}
+                  </Button>
                 </div>
               </div>
             </div>
@@ -323,7 +326,11 @@ function ClassroomsPage() {
         />
 
         {/* Join by Code Modal */}
-        <Modal show={joinCodeModalOpen} onClose={() => setJoinCodeModalOpen(false)} size="md" dismissible>
+        <Modal
+          show={joinCodeModalOpen}
+          onClose={() => setJoinCodeModalOpen(false)}
+          size="md"
+          dismissible>
           <ModalHeader>{t('join.title')}</ModalHeader>
           <ModalBody>
             <div className="space-y-4">
@@ -350,11 +357,19 @@ function ClassroomsPage() {
             </div>
           </ModalBody>
           <ModalFooter>
-            <div className="flex w-full flex-col gap-3 sm:flex-row">
-              <Button onClick={handleJoinByCode} disabled={joiningClassroom} className="w-full sm:flex-1">
-                {joiningClassroom ? t('join.form.joining') : t('common:actions.join')}
+            <div className="flex flex-col w-full gap-3 sm:flex-row">
+              <Button
+                onClick={handleJoinByCode}
+                disabled={joiningClassroom}
+                className="w-full sm:flex-1">
+                {joiningClassroom
+                  ? t('join.form.joining')
+                  : t('common:actions.join')}
               </Button>
-              <Button color="gray" onClick={() => setJoinCodeModalOpen(false)} className="w-full sm:w-auto">
+              <Button
+                color="gray"
+                onClick={() => setJoinCodeModalOpen(false)}
+                className="w-full sm:w-auto">
                 {t('common:actions.cancel')}
               </Button>
             </div>

@@ -1,6 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useContactMessageService } from '../../../services/ContactMessageService';
-import type { ContactMessage, ContactMessageStatus, ContactSubject } from '../../../models/ContactMessage';
+import type {
+  ContactMessage,
+  ContactMessageStatus,
+  ContactSubject,
+} from '../../../models/ContactMessage';
 import { useToast } from '../../../contexts/ToastContext';
 import { LuSearch, LuTrash, LuEye, LuX } from 'react-icons/lu';
 import Loading from '../../../shared/components/loading/Loading';
@@ -18,10 +22,18 @@ export default function ContactMessagesTab() {
   const [messages, setMessages] = useState<ContactMessage[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
-  const [subjectFilter, setSubjectFilter] = useState<ContactSubject | 'all'>('all');
-  const [statusFilter, setStatusFilter] = useState<ContactMessageStatus | 'all'>('all');
-  const [messageToDelete, setMessageToDelete] = useState<ContactMessage | null>(null);
-  const [viewingMessage, setViewingMessage] = useState<ContactMessage | null>(null);
+  const [subjectFilter, setSubjectFilter] = useState<ContactSubject | 'all'>(
+    'all'
+  );
+  const [statusFilter, setStatusFilter] = useState<
+    ContactMessageStatus | 'all'
+  >('all');
+  const [messageToDelete, setMessageToDelete] = useState<ContactMessage | null>(
+    null
+  );
+  const [viewingMessage, setViewingMessage] = useState<ContactMessage | null>(
+    null
+  );
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
@@ -40,7 +52,7 @@ export default function ContactMessagesTab() {
       const filter: any = {};
       if (subjectFilter !== 'all') filter.subject = subjectFilter;
       if (statusFilter !== 'all') filter.status = statusFilter;
-      
+
       const data = await contactMessageService.getAll(filter);
       setMessages(data);
     } catch (error) {
@@ -51,13 +63,19 @@ export default function ContactMessagesTab() {
     }
   };
 
-  const handleStatusChange = async (id: number, newStatus: ContactMessageStatus) => {
+  const handleStatusChange = async (
+    id: number,
+    newStatus: ContactMessageStatus
+  ) => {
     try {
       await contactMessageService.updateStatus(id, newStatus);
       setMessages((prev) =>
         prev.map((msg) => (msg.id === id ? { ...msg, status: newStatus } : msg))
       );
-      showSuccess('Status Updated', 'Message status has been updated successfully.');
+      showSuccess(
+        'Status Updated',
+        'Message status has been updated successfully.'
+      );
     } catch (error) {
       showError('Error', 'Failed to update status.');
       console.error('Failed to update status:', error);
@@ -69,8 +87,13 @@ export default function ContactMessagesTab() {
 
     try {
       await contactMessageService.delete(messageToDelete.id);
-      setMessages((prev) => prev.filter((msg) => msg.id !== messageToDelete.id));
-      showSuccess('Message Deleted', 'Contact message was deleted successfully.');
+      setMessages((prev) =>
+        prev.filter((msg) => msg.id !== messageToDelete.id)
+      );
+      showSuccess(
+        'Message Deleted',
+        'Contact message was deleted successfully.'
+      );
     } catch (error) {
       showError('Error', 'Failed to delete message.');
       console.error('Failed to delete message:', error);
@@ -96,16 +119,18 @@ export default function ContactMessagesTab() {
   );
 
   const statusColors: Record<ContactMessageStatus, string> = {
-    Pending: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300',
+    Pending:
+      'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300',
     InProgress: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300',
-    Answered: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
+    Answered:
+      'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
     Closed: 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300',
     Rejected: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300',
   };
 
   return (
     <div>
-      <div className="mb-6 flex items-center justify-between">
+      <div className="flex items-center justify-between mb-6">
         <div>
           <h3 className="text-lg font-semibold text-text-title-light dark:text-text-title-dark">
             Contact Messages
@@ -132,7 +157,7 @@ export default function ContactMessagesTab() {
               </label>
 
               <div className="relative">
-                <LuSearch className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-text-muted-light dark:text-text-muted-dark" />
+                <LuSearch className="absolute w-4 h-4 -translate-y-1/2 left-3 top-1/2 text-text-muted-light dark:text-text-muted-dark" />
                 <input
                   type="text"
                   placeholder="Search by email or message..."
@@ -143,9 +168,8 @@ export default function ContactMessagesTab() {
                 {searchQuery && (
                   <button
                     onClick={() => setSearchQuery('')}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted-light dark:text-text-muted-dark hover:text-text-title-light dark:hover:text-text-title-dark"
-                  >
-                    <LuX className="h-4 w-4" />
+                    className="absolute -translate-y-1/2 right-3 top-1/2 text-text-muted-light dark:text-text-muted-dark hover:text-text-title-light dark:hover:text-text-title-dark">
+                    <LuX className="w-4 h-4" />
                   </button>
                 )}
               </div>
@@ -166,15 +190,24 @@ export default function ContactMessagesTab() {
 
               <select
                 value={subjectFilter}
-                onChange={(e) => setSubjectFilter(e.target.value as ContactSubject | 'all')}
-                className="rounded-xl border border-border dark:border-border-dark bg-background-app-light dark:bg-background-app-dark py-2.5 px-4 text-sm text-text-body-light dark:text-text-body-dark focus:ring-2 focus:ring-primary-500 focus:outline-none w-full"
-              >
+                onChange={(e) =>
+                  setSubjectFilter(e.target.value as ContactSubject | 'all')
+                }
+                className="rounded-xl border border-border dark:border-border-dark bg-background-app-light dark:bg-background-app-dark py-2.5 px-4 text-sm text-text-body-light dark:text-text-body-dark focus:ring-2 focus:ring-primary-500 focus:outline-none w-full">
                 <option value="all">All Subjects</option>
-                <option value="GeneralInquiry">{t('contact:subjects.GeneralInquiry')}</option>
+                <option value="GeneralInquiry">
+                  {t('contact:subjects.GeneralInquiry')}
+                </option>
                 <option value="Support">{t('contact:subjects.Support')}</option>
-                <option value="BugReport">{t('contact:subjects.BugReport')}</option>
-                <option value="Feedback">{t('contact:subjects.Feedback')}</option>
-                <option value="Complaint">{t('contact:subjects.Complaint')}</option>
+                <option value="BugReport">
+                  {t('contact:subjects.BugReport')}
+                </option>
+                <option value="Feedback">
+                  {t('contact:subjects.Feedback')}
+                </option>
+                <option value="Complaint">
+                  {t('contact:subjects.Complaint')}
+                </option>
                 <option value="Other">{t('contact:subjects.Other')}</option>
               </select>
             </div>
@@ -187,9 +220,12 @@ export default function ContactMessagesTab() {
 
               <select
                 value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value as ContactMessageStatus | 'all')}
-                className="rounded-xl border border-border dark:border-border-dark bg-background-app-light dark:bg-background-app-dark py-2.5 px-4 text-sm text-text-body-light dark:text-text-body-dark focus:ring-2 focus:ring-primary-500 focus:outline-none w-full"
-              >
+                onChange={(e) =>
+                  setStatusFilter(
+                    e.target.value as ContactMessageStatus | 'all'
+                  )
+                }
+                className="rounded-xl border border-border dark:border-border-dark bg-background-app-light dark:bg-background-app-dark py-2.5 px-4 text-sm text-text-body-light dark:text-text-body-dark focus:ring-2 focus:ring-primary-500 focus:outline-none w-full">
                 <option value="all">All Statuses</option>
                 <option value="Pending">Pending</option>
                 <option value="InProgress">In Progress</option>
@@ -222,9 +258,9 @@ export default function ContactMessagesTab() {
             />
           </div>
         ) : (
-          <div className="overflow-x-auto rounded-2xl border border-border dark:border-border-dark bg-background-app-light dark:bg-background-surface-dark shadow-sm">
-            <table className="w-full text-left text-sm text-text-body-light dark:text-text-body-dark">
-              <thead className="bg-background-surface-light dark:bg-background-app-dark text-xs uppercase text-text-muted-light dark:text-text-muted-dark">
+          <div className="overflow-x-auto border shadow-sm rounded-2xl border-border dark:border-border-dark bg-background-app-light dark:bg-background-surface-dark">
+            <table className="w-full text-sm text-left text-text-body-light dark:text-text-body-dark">
+              <thead className="text-xs uppercase bg-background-surface-light dark:bg-background-app-dark text-text-muted-light dark:text-text-muted-dark">
                 <tr>
                   <th className="px-6 py-3 font-bold text-text-title-light dark:text-text-title-dark">
                     Sender
@@ -238,7 +274,7 @@ export default function ContactMessagesTab() {
                   <th className="px-6 py-3 font-bold text-text-title-light dark:text-text-title-dark">
                     Date
                   </th>
-                  <th className="px-6 py-3 text-right font-bold text-text-title-light dark:text-text-title-dark">
+                  <th className="px-6 py-3 font-bold text-right text-text-title-light dark:text-text-title-dark">
                     Actions
                   </th>
                 </tr>
@@ -247,8 +283,7 @@ export default function ContactMessagesTab() {
                 {paginatedMessages.map((message) => (
                   <tr
                     key={message.id}
-                    className="hover:bg-background-surface-light dark:hover:bg-background-app-dark transition-colors cursor-pointer"
-                  >
+                    className="transition-colors cursor-pointer hover:bg-background-surface-light dark:hover:bg-background-app-dark">
                     {/* Sender */}
                     <td className="px-6 py-4">
                       <div className="flex flex-col gap-1">
@@ -274,24 +309,25 @@ export default function ContactMessagesTab() {
                         <select
                           value={message.status}
                           onChange={(e) =>
-                            handleStatusChange(message.id, e.target.value as ContactMessageStatus)
+                            handleStatusChange(
+                              message.id,
+                              e.target.value as ContactMessageStatus
+                            )
                           }
                           className={`appearance-none inline-flex items-center rounded-full pl-3 pr-8 py-1 text-xs capitalize border-none focus:ring-2 focus:ring-primary-500 cursor-pointer ${
                             statusColors[message.status]
-                          }`}
-                        >
+                          }`}>
                           <option value="Pending">Pending</option>
                           <option value="InProgress">In Progress</option>
                           <option value="Answered">Answered</option>
                           <option value="Closed">Closed</option>
                           <option value="Rejected">Rejected</option>
                         </select>
-                        <div className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2">
+                        <div className="absolute -translate-y-1/2 pointer-events-none right-2 top-1/2">
                           <svg
-                            className="h-4 w-4"
+                            className="w-4 h-4"
                             fill="currentColor"
-                            viewBox="0 0 20 20"
-                          >
+                            viewBox="0 0 20 20">
                             <path
                               fillRule="evenodd"
                               d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
@@ -304,7 +340,7 @@ export default function ContactMessagesTab() {
 
                     {/* Date */}
                     <td className="px-6 py-4">
-                      <span className="text-text-body-light dark:text-text-body-dark text-sm">
+                      <span className="text-sm text-text-body-light dark:text-text-body-dark">
                         {formatDateToEuropean(message.createdAt)}
                       </span>
                     </td>
@@ -314,17 +350,15 @@ export default function ContactMessagesTab() {
                       <div className="flex justify-end gap-2">
                         <button
                           onClick={() => setViewingMessage(message)}
-                          className="rounded-lg p-2 bg-transparent text-blue-600 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-900/20 transition-colors"
-                          title="View details"
-                        >
-                          <LuEye className="h-4 w-4" />
+                          className="p-2 text-blue-600 transition-colors bg-transparent rounded-lg hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-900/20"
+                          title="View details">
+                          <LuEye className="w-4 h-4" />
                         </button>
                         <button
                           onClick={() => setMessageToDelete(message)}
-                          className="rounded-lg p-2 bg-transparent text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20 transition-colors"
-                          title="Delete message"
-                        >
-                          <LuTrash className="h-4 w-4" />
+                          className="p-2 text-red-600 transition-colors bg-transparent rounded-lg hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20"
+                          title="Delete message">
+                          <LuTrash className="w-4 h-4" />
                         </button>
                       </div>
                     </td>
@@ -355,11 +389,10 @@ export default function ContactMessagesTab() {
         show={viewingMessage !== null}
         onClose={() => setViewingMessage(null)}
         size="2xl"
-        dismissible
-      >
+        dismissible>
         <ModalHeader>
           <div className="flex items-center gap-2">
-            <LuEye className="h-5 w-5 text-primary-500" />
+            <LuEye className="w-5 h-5 text-primary-500" />
             <span>Message Details</span>
           </div>
         </ModalHeader>
@@ -367,15 +400,15 @@ export default function ContactMessagesTab() {
           {viewingMessage && (
             <div className="space-y-5">
               {/* Sender Info */}
-              <div className="p-4 bg-background-surface-light dark:bg-background-app-dark rounded-lg border border-border dark:border-border-dark">
-                <label className="block text-xs font-semibold uppercase tracking-wide text-text-muted-light dark:text-text-muted-dark mb-2">
+              <div className="p-4 border rounded-lg bg-background-surface-light dark:bg-background-app-dark border-border dark:border-border-dark">
+                <label className="block mb-2 text-xs font-semibold tracking-wide uppercase text-text-muted-light dark:text-text-muted-dark">
                   From
                 </label>
                 <div className="flex items-center gap-2">
                   <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300">
                     {t(`contact:titles.${viewingMessage.title}`)}
                   </span>
-                  <p className="text-text-title-light dark:text-text-title-dark font-medium">
+                  <p className="font-medium text-text-title-light dark:text-text-title-dark">
                     {viewingMessage.senderEmail}
                   </p>
                 </div>
@@ -383,32 +416,31 @@ export default function ContactMessagesTab() {
 
               {/* Subject and Status Row */}
               <div className="grid grid-cols-2 gap-4">
-                <div className="p-4 bg-background-surface-light dark:bg-background-app-dark rounded-lg border border-border dark:border-border-dark">
-                  <label className="block text-xs font-semibold uppercase tracking-wide text-text-muted-light dark:text-text-muted-dark mb-2">
+                <div className="p-4 border rounded-lg bg-background-surface-light dark:bg-background-app-dark border-border dark:border-border-dark">
+                  <label className="block mb-2 text-xs font-semibold tracking-wide uppercase text-text-muted-light dark:text-text-muted-dark">
                     Subject
                   </label>
-                  <p className="text-text-title-light dark:text-text-title-dark font-medium">
+                  <p className="font-medium text-text-title-light dark:text-text-title-dark">
                     {t(`contact:subjects.${viewingMessage.subject}`)}
                   </p>
                 </div>
 
-                <div className="p-4 bg-background-surface-light dark:bg-background-app-dark rounded-lg border border-border dark:border-border-dark">
-                  <label className="block text-xs font-semibold uppercase tracking-wide text-text-muted-light dark:text-text-muted-dark mb-2">
+                <div className="p-4 border rounded-lg bg-background-surface-light dark:bg-background-app-dark border-border dark:border-border-dark">
+                  <label className="block mb-2 text-xs font-semibold tracking-wide uppercase text-text-muted-light dark:text-text-muted-dark">
                     Status
                   </label>
                   <span
                     className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ${
                       statusColors[viewingMessage.status]
-                    }`}
-                  >
+                    }`}>
                     {viewingMessage.status}
                   </span>
                 </div>
               </div>
 
               {/* Date */}
-              <div className="p-4 bg-background-surface-light dark:bg-background-app-dark rounded-lg border border-border dark:border-border-dark">
-                <label className="block text-xs font-semibold uppercase tracking-wide text-text-muted-light dark:text-text-muted-dark mb-2">
+              <div className="p-4 border rounded-lg bg-background-surface-light dark:bg-background-app-dark border-border dark:border-border-dark">
+                <label className="block mb-2 text-xs font-semibold tracking-wide uppercase text-text-muted-light dark:text-text-muted-dark">
                   Received
                 </label>
                 <p className="text-text-body-light dark:text-text-body-dark">
@@ -418,11 +450,11 @@ export default function ContactMessagesTab() {
 
               {/* Message */}
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wide text-text-muted-light dark:text-text-muted-dark mb-2">
+                <label className="block mb-2 text-xs font-semibold tracking-wide uppercase text-text-muted-light dark:text-text-muted-dark">
                   Message
                 </label>
-                <div className="p-4 bg-background-surface-light dark:bg-background-app-dark rounded-lg border border-border dark:border-border-dark max-h-96 overflow-y-auto">
-                  <p className="text-text-body-light dark:text-text-body-dark whitespace-pre-wrap leading-relaxed">
+                <div className="p-4 overflow-y-auto border rounded-lg bg-background-surface-light dark:bg-background-app-dark border-border dark:border-border-dark max-h-96">
+                  <p className="leading-relaxed whitespace-pre-wrap text-text-body-light dark:text-text-body-dark">
                     {viewingMessage.description}
                   </p>
                 </div>

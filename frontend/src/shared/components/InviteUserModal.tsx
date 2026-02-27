@@ -11,7 +11,6 @@ import {
 } from 'flowbite-react';
 import { useTranslation } from 'react-i18next';
 
-import { useDeckInvitationService } from '../../services/DeckInvitationService';
 import FormErrorMessage from './validation/FormErrorMessage';
 
 interface InviteUserModalProps {
@@ -34,17 +33,14 @@ export const InviteUserModal = ({
   const [email, setEmail] = useState('');
   const [isOwner, setIsOwner] = useState(false);
 
-
-  const deckInvitationService = useDeckInvitationService();
-  const [userId, setUserId] = useState('');
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     const newErrors: { [key: string]: string } = {};
-    
+
     if (!email.trim()) {
       newErrors.email = t('errors:validation.email.required');
     } else {
@@ -82,7 +78,9 @@ export const InviteUserModal = ({
 
   return (
     <Modal show={isOpen} onClose={handleClose} size="md" dismissible>
-      <ModalHeader>{t('decks:invite.title', { deckName: itemName })}</ModalHeader>
+      <ModalHeader>
+        {t('decks:invite.title', { deckName: itemName })}
+      </ModalHeader>
       <ModalBody>
         <form onSubmit={handleSubmit} noValidate className="space-y-4">
           <div>
@@ -111,16 +109,26 @@ export const InviteUserModal = ({
                 </Label>
               </div>
             </Tooltip>
-            <p className="text-xs text-gray-500 dark:text-gray-400 ml-6">
+            <p className="ml-6 text-xs text-gray-500 dark:text-gray-400">
               {t('decks:invite.ownerHelp')}
             </p>
           </div>
 
           <div className="flex flex-col gap-2 pt-4 sm:flex-row">
-            <Button type="submit" disabled={loading} className="w-full sm:flex-1">
-              {loading ? t('decks:invite.inviting') : t('decks:invite.inviteButton')}
+            <Button
+              type="submit"
+              disabled={loading}
+              className="w-full sm:flex-1">
+              {loading
+                ? t('decks:invite.inviting')
+                : t('decks:invite.inviteButton')}
             </Button>
-            <Button color="gray" onClick={handleClose} disabled={loading} type="button" className="w-full sm:w-auto">
+            <Button
+              color="gray"
+              onClick={handleClose}
+              disabled={loading}
+              type="button"
+              className="w-full sm:w-auto">
               {t('common:actions.cancel')}
             </Button>
           </div>

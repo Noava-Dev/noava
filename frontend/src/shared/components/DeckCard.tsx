@@ -1,5 +1,11 @@
 import { Dropdown, DropdownItem, DropdownDivider, Badge } from 'flowbite-react';
-import { HiDotsVertical, HiPencil, HiTrash, HiChartBar, HiClipboardCopy } from 'react-icons/hi';
+import {
+  HiDotsVertical,
+  HiPencil,
+  HiTrash,
+  HiChartBar,
+  HiClipboardCopy,
+} from 'react-icons/hi';
 import { useTranslation } from 'react-i18next';
 import { useState, useEffect } from 'react';
 import { useAzureBlobService } from '../../services/AzureBlobService';
@@ -15,19 +21,19 @@ interface DeckCardProps {
   onCopy: (deckId: number) => void;
   onEdit?: (deck: Deck) => void;
   onDelete?: (deckId: number) => void;
-  onView?: (deckId: number) => void;  
+  onView?: (deckId: number) => void;
   onAnalytics?: (deck: Deck) => void;
-  showEdit?: boolean;  
+  showEdit?: boolean;
 }
 
-function DeckCard({ 
-  deck, 
+function DeckCard({
+  deck,
   onCopy,
-  onEdit, 
-  onDelete, 
-  onView,  
+  onEdit,
+  onDelete,
+  onView,
   onAnalytics,
-  showEdit = true  
+  showEdit = true,
 }: DeckCardProps) {
   const { t } = useTranslation('decks');
   const navigate = useNavigate();
@@ -56,7 +62,6 @@ function DeckCard({
       navigate(`/decks/${deck.deckId}/cards`);
     }
   };
-
 
   const handleStopPropagation = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -99,36 +104,46 @@ function DeckCard({
                 <HiDotsVertical className="w-4 h-4 text-white sm:h-5 sm:w-5" />
               </button>
             )}>
-                {/* Copy deck */}
-                <DropdownItem icon={HiClipboardCopy} onClick={() => onCopy(deck.deckId)} className="bg-transparent">
-                  {t('common:actions.copy')}
-                </DropdownItem>
-            {/* Only show edit if showEdit is true */}
-            {showEdit && onEdit && (
-              <>
-                <DropdownItem icon={HiPencil} onClick={() => onEdit(deck)} className="bg-transparent">
-                  {t('common:actions.edit')}
-                </DropdownItem>
-                <DropdownDivider />
-              </>
-            )}
-            
+            {/* Copy deck */}
+            <DropdownItem
+              icon={HiClipboardCopy}
+              onClick={() => onCopy(deck.deckId)}
+              className="bg-transparent">
+              {t('common:actions.copy')}
+            </DropdownItem>
+
             {/* Always show analytics if onAnalytics is provided */}
             {onAnalytics && (
               <>
-                <DropdownItem icon={HiChartBar} onClick={() => onAnalytics(deck)} className="bg-transparent">
+                <DropdownItem
+                  icon={HiChartBar}
+                  onClick={() => onAnalytics(deck)}
+                  className="bg-transparent">
                   {t('common:actions.analytics')}
                 </DropdownItem>
                 <DropdownDivider />
               </>
             )}
-            
+
+            {/* Only show edit if showEdit is true */}
+            {showEdit && onEdit && (
+              <>
+                <DropdownItem
+                  icon={HiPencil}
+                  onClick={() => onEdit(deck)}
+                  className="bg-transparent">
+                  {t('common:actions.edit')}
+                </DropdownItem>
+                <DropdownDivider />
+              </>
+            )}
+
             {/* Always show delete if onDelete is provided */}
             {onDelete && (
               <DropdownItem
                 icon={HiTrash}
                 onClick={() => onDelete(deck.deckId)}
-                className="text-red-600 dark:text-red-400 bg-transparent ">
+                className="text-red-600 bg-transparent dark:text-red-400 ">
                 {t('common:actions.delete')}
               </DropdownItem>
             )}
@@ -141,7 +156,10 @@ function DeckCard({
             <span className="px-2 py-1 text-xs font-medium tracking-wide text-white uppercase border rounded-full bg-white/20 backdrop-blur-md sm:px-3 border-white/30">
               {deck.language}
             </span>
-            <Badge color={getVisibilityBadgeColor(deck.visibility as DeckVisibility)}>
+            <Badge
+              color={getVisibilityBadgeColor(
+                deck.visibility as DeckVisibility
+              )}>
               {getVisibilityLabel(deck.visibility as DeckVisibility, t)}
             </Badge>
           </div>

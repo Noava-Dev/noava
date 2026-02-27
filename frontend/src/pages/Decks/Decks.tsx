@@ -210,8 +210,6 @@ function DecksPage() {
       deck.language?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-
-
   const sortedDecks = [...filteredDecks].sort((a, b) => {
     const dateA = new Date(a.createdAt).getTime();
     const dateB = new Date(b.createdAt).getTime();
@@ -222,9 +220,18 @@ function DecksPage() {
   const totalItems = sortedDecks.length;
   const totalPages = Math.ceil(totalItems / pageSize) || 1;
   const safePage = Math.min(page, totalPages);
-  const paginatedDecks = sortedDecks.slice((safePage - 1) * pageSize, safePage * pageSize);
-  const paginatedOwnedDecks = paginatedDecks.filter((deck) => deck.userId === user?.id);
-  const paginatedSharedDecks = paginatedDecks.filter((deck) => deck.userId !== user?.id && (!deck.classrooms || deck.classrooms.length === 0));
+  const paginatedDecks = sortedDecks.slice(
+    (safePage - 1) * pageSize,
+    safePage * pageSize
+  );
+  const paginatedOwnedDecks = paginatedDecks.filter(
+    (deck) => deck.userId === user?.id
+  );
+  const paginatedSharedDecks = paginatedDecks.filter(
+    (deck) =>
+      deck.userId !== user?.id &&
+      (!deck.classrooms || deck.classrooms.length === 0)
+  );
 
   if (loading) {
     return <Skeleton />;
@@ -251,70 +258,63 @@ function DecksPage() {
                 )}
               </div>
 
-              <div className="flex flex-col gap-3 sm:flex-row">
-                
-                <div className="w-full md:w-fit">
-                  <Tooltip content={t('common:tooltips.createDeck')}>
-                    <Button
-                      onClick={() => setIsModalOpen(true)}
-                      size="lg"
-                      className="w-full border-none md:w-fit bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800">
-                      <HiPlus className="w-5 h-5 mr-2" />
-                      {t('createButton')}
-                    </Button>
-                  </Tooltip>
-                </div>
+              {/* Action Buttons */}
+              <div className="flex flex-col w-full gap-3 sm:flex-row">
+                {/* Create Deck */}
+                <Button
+                  onClick={() => setIsModalOpen(true)}
+                  size="lg"
+                  className="w-full border-none md:w-auto bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800">
+                  <HiPlus className="w-5 h-5 mr-2" />
+                  {t('createButton')}
+                </Button>
+
+                {/* Bulk Review */}
                 {decks.length > 0 && (
-                  <div className="w-full md:w-fit">
-                    <Tooltip content={t('common:tooltips.bulkReview')}>
-                      <Dropdown
-                        label=""
-                        dismissOnClick={true}
-                        renderTrigger={() => (
-                          <Button
-                            size="lg"
-                            className="w-full border-none bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800">
-                            <HiPlay className="w-5 h-5 mr-2" />
-                            {t('bulkReview.button')}
-                            <HiChevronDown className="w-4 h-4 ml-1" />
-                          </Button>
-                        )}>
-                        <DropdownItem
-                          icon={HiPlay}
-                          onClick={() => setBulkReviewModalOpened(true)}
-                          className="bg-transparent"
-                        >
-                          {t('reviewModes.flipMode')}
-                        </DropdownItem>
-                        <DropdownItem
-                          icon={HiPencil}
-                          onClick={() => setBulkWriteReviewModalOpened(true)}
-                          className="bg-transparent"
-                        >
-                          {t('reviewModes.writeReview')}
-                        </DropdownItem>
-                        <DropdownItem
-                          icon={HiRefresh}
-                          onClick={() => setBulkReverseReviewModalOpened(true)}
-                          className="bg-transparent"
-                        >
-                          {t('reviewModes.reverseReview')}
-                        </DropdownItem>
-                      </Dropdown>
-                    </Tooltip>
+                  <div className="w-auto">
+                    <Dropdown
+                      label=""
+                      dismissOnClick={true}
+                      renderTrigger={() => (
+                        <Button
+                          size="lg"
+                          className="w-full border-none bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800">
+                          <HiPlay className="w-5 h-5 mr-2" />
+                          {t('bulkReview.button')}
+                          <HiChevronDown className="w-4 h-4 ml-1" />
+                        </Button>
+                      )}>
+                      <DropdownItem
+                        icon={HiPlay}
+                        onClick={() => setBulkReviewModalOpened(true)}
+                        className="bg-transparent">
+                        {t('reviewModes.flipMode')}
+                      </DropdownItem>
+                      <DropdownItem
+                        icon={HiPencil}
+                        onClick={() => setBulkWriteReviewModalOpened(true)}
+                        className="bg-transparent">
+                        {t('reviewModes.writeReview')}
+                      </DropdownItem>
+                      <DropdownItem
+                        icon={HiRefresh}
+                        onClick={() => setBulkReverseReviewModalOpened(true)}
+                        className="bg-transparent">
+                        {t('reviewModes.reverseReview')}
+                      </DropdownItem>
+                    </Dropdown>
                   </div>
                 )}
-                <div className="w-full md:w-fit sm:ml-auto">
-                  <Tooltip content={t('common:tooltips.joinDeckByCode')}>
-                    <Button
-                      onClick={() => setJoinCodeModalOpen(true)}
-                      size="lg"
-                      color="gray"
-                      className="w-full border-none md:w-fit">
-                      <TbDoorEnter className="mr-2 size-5" />
-                      {t('joinCode.button')}
-                    </Button>
-                  </Tooltip>
+                {/* Join Deck */}
+                <div className="sm:ml-auto">
+                  <Button
+                    onClick={() => setJoinCodeModalOpen(true)}
+                    size="lg"
+                    color="gray"
+                    className="w-full border-none md:w-fit">
+                    <TbDoorEnter className="mr-2 size-5" />
+                    {t('joinCode.button')}
+                  </Button>
                 </div>
               </div>
             </div>
@@ -404,34 +404,34 @@ function DecksPage() {
                         ))}
                       </div>
                     </div>
-                )}
-                              
-              {/* Classroom Decks Section */}
-              {classroomGroups.length > 0 && (
-                <div>
-                  <h2 className="mb-6 text-2xl font-bold text-text-title-light dark:text-text-title-dark">
-                    {t('sections.classroomDecks')}
-                  </h2>
-                  {classroomGroups.map((classroom) => (
-                    <div key={classroom.id} className="mb-12">
-                      <p className="mb-4 text-sm font-medium text-text-muted-light dark:text-text-muted-dark">
-                        {classroom.name}
-                      </p>
-                      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:gap-6">
-                        {classroom.decks.map((deck) => (
-                          <DeckCard
-                            key={deck.deckId}
-                            deck={deck}
-                            onEdit={handleEdit}
-                            onDelete={handleDelete}
-                            onCopy = {handleCopy}
-                          />
-                        ))}
-                      </div>
+                  )}
+
+                  {/* Classroom Decks Section */}
+                  {classroomGroups.length > 0 && (
+                    <div>
+                      <h2 className="mb-6 text-2xl font-bold text-text-title-light dark:text-text-title-dark">
+                        {t('sections.classroomDecks')}
+                      </h2>
+                      {classroomGroups.map((classroom) => (
+                        <div key={classroom.id} className="mb-12">
+                          <p className="mb-4 text-sm font-medium text-text-muted-light dark:text-text-muted-dark">
+                            {classroom.name}
+                          </p>
+                          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:gap-6">
+                            {classroom.decks.map((deck) => (
+                              <DeckCard
+                                key={deck.deckId}
+                                deck={deck}
+                                onEdit={handleEdit}
+                                onDelete={handleDelete}
+                                onCopy={handleCopy}
+                              />
+                            ))}
+                          </div>
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
-                )}
+                  )}
                 </div>
 
                 {/* Pagination */}
@@ -467,7 +467,11 @@ function DecksPage() {
         </section>
 
         {/* Join by Code Modal */}
-        <Modal show={joinCodeModalOpen} onClose={() => setJoinCodeModalOpen(false)} size="md" dismissible>
+        <Modal
+          show={joinCodeModalOpen}
+          onClose={() => setJoinCodeModalOpen(false)}
+          size="md"
+          dismissible>
           <ModalHeader>{t('joinCode.title')}</ModalHeader>
           <ModalBody>
             <div className="space-y-4">
@@ -494,11 +498,17 @@ function DecksPage() {
             </div>
           </ModalBody>
           <ModalFooter>
-            <div className="flex w-full flex-col gap-3 sm:flex-row">
-              <Button onClick={handleJoinByCode} disabled={joiningDeck} className="w-full sm:flex-1">
+            <div className="flex flex-col w-full gap-3 sm:flex-row">
+              <Button
+                onClick={handleJoinByCode}
+                disabled={joiningDeck}
+                className="w-full sm:flex-1">
                 {joiningDeck ? t('joinCode.joining') : t('joinCode.join')}
               </Button>
-              <Button color="gray" onClick={() => setJoinCodeModalOpen(false)} className="w-full sm:w-auto">
+              <Button
+                color="gray"
+                onClick={() => setJoinCodeModalOpen(false)}
+                className="w-full sm:w-auto">
                 {t('common:actions.cancel')}
               </Button>
             </div>

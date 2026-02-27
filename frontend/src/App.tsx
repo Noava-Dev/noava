@@ -26,9 +26,13 @@ function App() {
     '/copyright',
     '/sign-up',
     '/sign-in',
-    '/docs'
+    '/docs',
   ];
-  const showSidebar = !routesWithoutSidebar.includes(location.pathname);
+  // const showSidebar = !routesWithoutSidebar.includes(location.pathname);
+  const showSidebar = !routesWithoutSidebar.some(
+    (route) =>
+      location.pathname === route || location.pathname.startsWith(route + '/')
+  );
 
   //-------------- language ---------------------
   useEffect(() => {
