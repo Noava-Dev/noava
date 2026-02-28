@@ -354,6 +354,7 @@ function ClassroomDetailPage() {
             fetchDecks();
           }}
           onAddDeck={handleAddDeckToClassroom}
+          existingDeckIds={decks.map(deck => deck.deckId)}
         />
 
         {/* Bulk Review Modal */}
