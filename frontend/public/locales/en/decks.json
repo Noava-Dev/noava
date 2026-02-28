@@ -28,7 +28,9 @@
     "title": "No decks yet",
     "message": "Create your first deck to get started!",
     "button": "Create Your First Deck",
-    "noResults": "No decks found"
+    "noResults": "No decks found",
+    "noClassroomDecks": "No classroom decks yet",
+    "noClassroomDecksMessage": "You don't have any decks shared through classrooms yet."
   },
   "modal": {
     "createTitle": "Create New Deck",

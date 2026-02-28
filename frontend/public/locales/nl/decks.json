@@ -28,7 +28,9 @@
     "title": "Nog geen Decks",
     "message": "Maak je eerste Deck aan om te beginnen!",
     "button": "Maak je eerste Deck aan",
-    "noResults": "Geen Decks gevonden"
+    "noResults": "Geen Decks gevonden",
+    "noClassroomDecks": "Nog geen classroom decks",
+    "noClassroomDecksMessage": "Je hebt nog geen decks die via classrooms gedeeld zijn."
   },
   "modal": {
     "createTitle": "Nieuw Deck aanmaken",
