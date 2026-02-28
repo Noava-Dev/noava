@@ -7,8 +7,6 @@ import {
   Select,
   Dropdown,
   DropdownItem,
-  Tooltip,
-  Pagination,
 } from 'flowbite-react';
 import { Modal } from 'flowbite-react';
 import {
@@ -21,7 +19,6 @@ import {
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import PageHeader from '../../shared/components/PageHeader';
-import DeckCard from '../../shared/components/DeckCard';
 import DeckModal from '../../shared/components/DeckModal';
 import DeckStatisticsModal from '../../shared/components/DeckStatisticsModal';
 import { BulkReviewModal } from '../../shared/components/BulkReviewModal';
@@ -30,11 +27,12 @@ import { useDeckService } from '../../services/DeckService';
 import { useToast } from '../../contexts/ToastContext';
 import type { ClassroomInfo, Deck, DeckRequest } from '../../models/Deck';
 import Skeleton from '../../shared/components/loading/Skeleton';
-import EmptyState from '../../shared/components/EmptyState';
 import { useUser } from '@clerk/clerk-react';
 import ConfirmModal from '../../shared/components/ConfirmModal';
 import { LuLayers } from 'react-icons/lu';
 import { TbDoorEnter } from 'react-icons/tb';
+import MyDecksList from './components/MyDecksList';
+import ClassroomDecksList from './components/ClassroomDecksList';
 
 function DecksPage() {
   const { t } = useTranslation('decks');
@@ -49,7 +47,9 @@ function DecksPage() {
   const [editingDeck, setEditingDeck] = useState<Deck | undefined>(undefined);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortOrder, setSortOrder] = useState<'newest' | 'oldest'>('newest');
+  const [activeTab, setActiveTab] = useState<'my-decks' | 'classroom-decks'>('my-decks');
   const [page, setPage] = useState(1);
+  const [classroomPage, setClassroomPage] = useState(1);
   const pageSize = 16;
   const { showSuccess, showError } = useToast();
   const [deleteDeckId, setDeleteDeckId] = useState<number | null>(null);
@@ -216,7 +216,7 @@ function DecksPage() {
     return sortOrder === 'newest' ? dateB - dateA : dateA - dateB;
   });
 
-  // Paginate all sorted decks
+  // Paginate all sorted decks (for My Decks tab)
   const totalItems = sortedDecks.length;
   const totalPages = Math.ceil(totalItems / pageSize) || 1;
   const safePage = Math.min(page, totalPages);
@@ -231,6 +231,18 @@ function DecksPage() {
     (deck) =>
       deck.userId !== user?.id &&
       (!deck.classrooms || deck.classrooms.length === 0)
+  );
+
+  // Flatten classroom decks for pagination
+  const allClassroomDecks = classroomGroups.flatMap((group) => 
+    group.decks.map((deck) => ({ ...deck, classroomName: group.name, classroomId: group.id }))
+  );
+  const totalClassroomItems = allClassroomDecks.length;
+  const totalClassroomPages = Math.ceil(totalClassroomItems / pageSize) || 1;
+  const safeClassroomPage = Math.min(classroomPage, totalClassroomPages);
+  const paginatedClassroomDecks = allClassroomDecks.slice(
+    (safeClassroomPage - 1) * pageSize,
+    safeClassroomPage * pageSize
   );
 
   if (loading) {
@@ -251,11 +263,6 @@ function DecksPage() {
                 <p className="text-base text-text-body-light md:text-xl dark:text-text-body-dark">
                   {t('subtitle')}
                 </p>
-                {decks.length > 0 && !searchTerm && (
-                  <p className="text-sm text-text-muted-light dark:text-text-muted-dark">
-                    {decks.length} {decks.length === 1 ? 'deck' : 'decks'}
-                  </p>
-                )}
               </div>
 
               {/* Action Buttons */}
@@ -358,109 +365,73 @@ function DecksPage() {
               </div>
             </div>
           </div>
+
+          {/* Tab Navigation */}
+          <div className="flex w-full mt-6 border-b border-border dark:border-border-dark">
+            <button
+              type="button"
+              className={`flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 font-semibold select-none focus:outline-none focus:ring-0 hover:border-cyan-400 transition-colors bg-transparent ${
+                activeTab === 'my-decks'
+                  ? 'text-cyan-400 border-b-2 border-cyan-400'
+                  : 'text-text-muted-light dark:text-text-muted-dark'
+              }`}
+              onClick={() => {
+                setActiveTab('my-decks');
+                setPage(1);
+              }}>
+              <LuLayers className="size-4" />
+              {t('sections.myDecks')}
+            </button>
+
+            <button
+              type="button"
+              className={`flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 font-semibold select-none focus:outline-none focus:ring-0 hover:border-cyan-400 transition-colors bg-transparent ${
+                activeTab === 'classroom-decks'
+                  ? 'text-cyan-400 border-b-2 border-cyan-400'
+                  : 'text-text-muted-light dark:text-text-muted-dark'
+              }`}
+              onClick={() => {
+                setActiveTab('classroom-decks');
+                setClassroomPage(1);
+              }}>
+              <HiPlay className="size-4" />
+              {t('sections.classroomDecks')}
+            </button>
+          </div>
         </PageHeader>
 
         <section className="min-h-screen py-8 bg-background-app-light dark:bg-background-app-dark md:py-12">
           <div className="container px-4 mx-auto max-w-7xl">
-            {sortedDecks.length > 0 ? (
-              <>
-                <div className="space-y-12">
-                  {/* My Decks Section */}
-                  {paginatedOwnedDecks.length > 0 && (
-                    <div>
-                      <h2 className="mb-6 text-2xl font-bold text-text-title-light dark:text-text-title-dark">
-                        {t('sections.myDecks')}
-                      </h2>
-                      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:gap-6">
-                        {paginatedOwnedDecks.map((deck) => (
-                          <DeckCard
-                            key={deck.deckId}
-                            deck={deck}
-                            onCopy={handleCopy}
-                            onEdit={handleEdit}
-                            onDelete={handleDelete}
-                            onAnalytics={handleAnalytics}
-                          />
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Shared Decks Section */}
-                  {paginatedSharedDecks.length > 0 && (
-                    <div>
-                      <h2 className="mb-6 text-2xl font-bold text-text-title-light dark:text-text-title-dark">
-                        {t('sections.sharedWithMe')}
-                      </h2>
-                      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:gap-6">
-                        {paginatedSharedDecks.map((deck) => (
-                          <DeckCard
-                            key={deck.deckId}
-                            deck={deck}
-                            onCopy={handleCopy}
-                            onAnalytics={handleAnalytics}
-                            showEdit={false}
-                          />
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Classroom Decks Section */}
-                  {classroomGroups.length > 0 && (
-                    <div>
-                      <h2 className="mb-6 text-2xl font-bold text-text-title-light dark:text-text-title-dark">
-                        {t('sections.classroomDecks')}
-                      </h2>
-                      {classroomGroups.map((classroom) => (
-                        <div key={classroom.id} className="mb-12">
-                          <p className="mb-4 text-sm font-medium text-text-muted-light dark:text-text-muted-dark">
-                            {classroom.name}
-                          </p>
-                          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:gap-6">
-                            {classroom.decks.map((deck) => (
-                              <DeckCard
-                                key={deck.deckId}
-                                deck={deck}
-                                onEdit={handleEdit}
-                                onDelete={handleDelete}
-                                onCopy={handleCopy}
-                              />
-                            ))}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                {/* Pagination */}
-                {totalItems > pageSize && (
-                  <div className="flex justify-center mt-8 overflow-x-auto sm:justify-center">
-                    <Pagination
-                      layout="table"
-                      currentPage={page}
-                      itemsPerPage={pageSize}
-                      totalItems={totalItems}
-                      onPageChange={setPage}
-                      showIcons
-                    />
-                  </div>
-                )}
-              </>
-            ) : searchTerm ? (
-              <EmptyState
-                title={t('empty.noResults')}
-                description={t('common:search.otherSearchTerm')}
-                icon={LuLayers}
-                buttonOnClick={() => setSearchTerm('')}
-                clearButtonText={t('common:search.clearSearch')}
+            {/* My Decks Tab */}
+            {activeTab === 'my-decks' && (
+              <MyDecksList
+                paginatedOwnedDecks={paginatedOwnedDecks}
+                paginatedSharedDecks={paginatedSharedDecks}
+                totalItems={totalItems}
+                page={page}
+                pageSize={pageSize}
+                searchTerm={searchTerm}
+                onPageChange={setPage}
+                onCopy={handleCopy}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+                onAnalytics={handleAnalytics}
+                setSearchTerm={setSearchTerm}
               />
-            ) : (
-              <EmptyState
-                title={t('empty.title')}
-                description={t('empty.message')}
-                icon={LuLayers}
+            )}
+
+            {/* Classroom Decks Tab */}
+            {activeTab === 'classroom-decks' && (
+              <ClassroomDecksList
+                paginatedClassroomDecks={paginatedClassroomDecks}
+                totalClassroomItems={totalClassroomItems}
+                classroomPage={classroomPage}
+                pageSize={pageSize}
+                onPageChange={setClassroomPage}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+                onCopy={handleCopy}
+                onAnalytics={handleAnalytics}
               />
             )}
           </div>

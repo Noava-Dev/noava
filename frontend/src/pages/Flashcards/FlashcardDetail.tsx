@@ -283,10 +283,7 @@ function FlashcardDetail() {
     safePage * pageSize
   );
 
-  // Stats
   const totalCards = flashcards.length;
-  const masteredCards = 0;
-  const learningCards = 0;
   const newCards = totalCards;
 
   return (
@@ -460,45 +457,6 @@ function FlashcardDetail() {
         </PageHeader>
 
         <div className="container max-w-6xl px-4 py-6 mx-auto md:py-8">
-          {/* Header */}
-          <div className="mb-8">
-            {/* Stats */}
-            <div className="grid grid-cols-4 gap-4 mb-8">
-              <div className="text-center">
-                <div className="mb-1 text-3xl font-bold text-text-title-light md:text-4xl dark:text-text-title-dark">
-                  {totalCards}
-                </div>
-                <div className="text-sm text-text-muted-light dark:text-text-muted-dark">
-                  {t('flashcardDetail.totalReviews')}
-                </div>
-              </div>
-              <div className="text-center">
-                <div className="mb-1 text-3xl font-bold md:text-4xl text-cyan-500 dark:text-cyan-400">
-                  {masteredCards}
-                </div>
-                <div className="text-sm text-text-muted-light dark:text-text-muted-dark">
-                  {t('flashcardDetail.mastered')}
-                </div>
-              </div>
-              <div className="text-center">
-                <div className="mb-1 text-3xl font-bold text-yellow-500 md:text-4xl dark:text-yellow-400">
-                  {learningCards}
-                </div>
-                <div className="text-sm text-text-muted-light dark:text-text-muted-dark">
-                  {t('flashcardDetail.learning')}
-                </div>
-              </div>
-              <div className="text-center">
-                <div className="mb-1 text-3xl font-bold text-blue-500 md:text-4xl dark:text-blue-400">
-                  {newCards}
-                </div>
-                <div className="text-sm text-text-muted-light dark:text-text-muted-dark">
-                  {t('flashcardDetail.new')}
-                </div>
-              </div>
-            </div>
-          </div>
-
           {/* Flashcards List or Empty State */}
           {filteredFlashcards.length === 0 ? (
             <div className="py-20 text-center">
