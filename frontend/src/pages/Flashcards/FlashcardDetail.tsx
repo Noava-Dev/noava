@@ -10,6 +10,7 @@ import {
   HiPencil,
   HiTrash,
   HiChevronDown,
+  HiChartBar,
 } from 'react-icons/hi';
 import { useTranslation } from 'react-i18next';
 import { useUser } from '@clerk/clerk-react';
@@ -33,6 +34,7 @@ import ImportCardsModal from './components/ImportCardsModal';
 import Skeleton from '../../shared/components/loading/Skeleton';
 import EmptyState from '../../shared/components/EmptyState';
 import ConfirmModal from '../../shared/components/ConfirmModal';
+import DeckStatisticsModal from '../../shared/components/DeckStatisticsModal';
 
 interface FlashcardWithImages extends Flashcard {
   frontImageUrl?: string | null;
@@ -62,6 +64,7 @@ function FlashcardDetail() {
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const [cardToDelete, setCardToDelete] = useState<number | null>(null);
   const [manageOwnersOpened, setManageOwnersOpened] = useState(false);
+  const [analyticsModalOpen, setAnalyticsModalOpen] = useState(false);
   const [canEdit, setCanEdit] = useState(false);
   const [isCreator, setIsCreator] = useState(false);
   const [page, setPage] = useState(1);
@@ -427,16 +430,28 @@ function FlashcardDetail() {
                 </Dropdown>
               </div>
 
-              {/*  Manage Ownership */}
-              {isCreator && (
+              {/* Right button group */}
+              <div className="flex flex-col w-full gap-3 md:w-auto md:flex-row">
+                {/*  Manage Ownership */}
+                {isCreator && (
+                  <Button
+                    size="lg"
+                    className="bg-gradient-to-r from-secondary-600 to-secondary-700 hover:shadow-sm hover:border-border"
+                    onClick={() => setManageOwnersOpened(true)}>
+                    <HiUserGroup className="mr-2 size-5" />
+                    {t('decks:ownership.manageAccess')}
+                  </Button>
+                )}
+                
+                {/* Analytics */}
                 <Button
                   size="lg"
                   className="bg-gradient-to-r from-secondary-600 to-secondary-700 hover:shadow-sm hover:border-border"
-                  onClick={() => setManageOwnersOpened(true)}>
-                  <HiUserGroup className="mr-2 size-5" />
-                  {t('decks:ownership.manageAccess')}
+                  onClick={() => setAnalyticsModalOpen(true)}>
+                  <HiChartBar className="size-5" />
+                  <span className="ml-2 md:hidden">{t('decks:analytics.title')}</span>
                 </Button>
-              )}
+              </div>
             </div>
 
             {/* Search */}
@@ -615,6 +630,13 @@ function FlashcardDetail() {
             onUpdate={fetchDeck}
           />
         )}
+
+        {/* Deck Statistics Modal */}
+        <DeckStatisticsModal
+          show={analyticsModalOpen}
+          onClose={() => setAnalyticsModalOpen(false)}
+          deck={deck}
+        />
       </div>
     </div>
   );
