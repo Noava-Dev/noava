@@ -88,11 +88,12 @@ function NoavaSidebar({ className, onNavigate }: NoavaSidebarProps) {
   }, [user, userRole]);
 
   return (
-    <Sidebar
-      aria-label="Noava Sidebar"
-      className={`h-full border-r dark:border-border-dark border-border ${className ?? ''}`}>
-      {/* Logo */}
-      <SidebarItemGroup className="mb-14 w-fit">
+    <div className={`h-full flex flex-col border-r dark:border-border-dark border-border bg-gray-50 dark:bg-gray-800 ${className ?? ''}`}>
+      <Sidebar
+        aria-label="Noava Sidebar"
+        className="flex-1 overflow-y-auto border-none bg-gray-50 dark:bg-gray-800">
+        {/* Logo */}
+        <SidebarItemGroup className="mb-14 w-fit flex-shrink-0">
         <SidebarLogo
           href="#"
           img="/src/assets/noava-logo-blue-nobg.png"
@@ -210,30 +211,29 @@ function NoavaSidebar({ className, onNavigate }: NoavaSidebarProps) {
             </SidebarItem>
           </SignOutButton>
         </SidebarItemGroup>
-
-        {/* User Info */}
-        <SidebarItemGroup>
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => openUserProfile()}
-              className="flex items-center gap-3 pl-0 text-left bg-transparent border-none active:outline-none">
-              <Avatar
-                img={user?.imageUrl}
-                className="shrink-0"
-                size="md"
-                rounded>
-                <div className="space-y-1 font-medium text-text-body-light dark:text-text-body-dark">
-                  <div className="truncate">{user?.username}</div>
-                  <div className="max-w-[22ch] text-sm text-gray-500 truncate dark:text-gray-400">
-                    {user?.primaryEmailAddress?.emailAddress}
-                  </div>
-                </div>
-              </Avatar>
-            </button>
-          </div>
-        </SidebarItemGroup>
       </SidebarItems>
     </Sidebar>
+
+    {/* User Info - Fixed at bottom outside Sidebar */}
+    <div className="flex-shrink-0 p-4 border-t dark:border-border-dark border-border bg-gray-50 dark:bg-gray-800">
+      <button
+        onClick={() => openUserProfile()}
+        className="flex items-center gap-3 w-full text-left bg-transparent border-none active:outline-none cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-2 -m-2 transition-colors">
+        <Avatar
+          img={user?.imageUrl}
+          className="shrink-0"
+          size="md"
+          rounded>
+          <div className="space-y-1 font-medium text-text-body-light dark:text-text-body-dark">
+            <div className="truncate">{user?.username}</div>
+            <div className="max-w-[22ch] text-sm text-gray-500 truncate dark:text-gray-400">
+              {user?.primaryEmailAddress?.emailAddress}
+            </div>
+          </div>
+        </Avatar>
+      </button>
+    </div>
+    </div>
   );
 }
 

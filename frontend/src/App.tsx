@@ -59,17 +59,19 @@ function App() {
                   open={isSidebarOpen}
                   onClose={handleClose}
                   position="left"
-                  className="w-full bg-gray-50">
-                  <div className="flex justify-end p-4 pb-0">
+                  className="w-full bg-gray-50 h-screen flex flex-col">
+                  <div className="flex justify-end p-4 pb-0 flex-shrink-0">
                     <HiX
                       className="size-5 text-text-muted-light dark:text-text-muted-dark"
                       onClick={() => handleClose()}
                     />
                   </div>
-                  <NoavaSidebar
-                    className="w-full border-none"
-                    onNavigate={handleClose}
-                  />
+                  <div className="flex-1 overflow-hidden">
+                    <NoavaSidebar
+                      className="w-full border-none h-full"
+                      onNavigate={handleClose}
+                    />
+                  </div>
                 </Drawer>
               </div>
 
