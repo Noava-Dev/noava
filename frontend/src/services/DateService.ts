@@ -35,4 +35,17 @@ export const formatTimeSpent = (seconds: number): string => {
   return `${minutes}m`;
 };
 
-export default { formatDateToEuropean, formatResponseTime, formatTimeSpent };
+export const formatHoursToTime = (hours: number): string => {
+  const wholeHours = Math.floor(hours);
+  const minutes = Math.round((hours - wholeHours) * 60);
+  
+  if (wholeHours === 0) {
+    return `${minutes}m`;
+  } else if (minutes === 0) {
+    return `${wholeHours}h`;
+  } else {
+    return `${wholeHours}h ${minutes}m`;
+  }
+};
+
+export default { formatDateToEuropean, formatResponseTime, formatTimeSpent, formatHoursToTime };
