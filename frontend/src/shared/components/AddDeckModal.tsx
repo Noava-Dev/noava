@@ -13,13 +13,15 @@ interface AddDeckModalProps {
   classroomId: number;
   onDeckAdded: () => void;
   onAddDeck: (deckId: number) => Promise<void>;
+  existingDeckIds?: number[];
 }
 
 export const AddDeckModal: React.FC<AddDeckModalProps> = ({
   opened,
   onClose,
   onDeckAdded,
-  onAddDeck
+  onAddDeck,
+  existingDeckIds = []
 }) => {
   const { t } = useTranslation('classrooms');
   const deckService = useDeckService();
@@ -54,8 +56,11 @@ export const AddDeckModal: React.FC<AddDeckModalProps> = ({
     setLoading(true);
     try {
       const data = await deckService.getMyDecks();
-      setDecks(data);
-      setFilteredDecks(data);
+      const availableDecks = data.filter(
+        deck => !existingDeckIds.includes(deck.deckId)
+      );
+      setDecks(availableDecks);
+      setFilteredDecks(availableDecks);
     } catch (error) {
       console.error('Error loading decks:', error);
       showError(t('addDeck.loadError'), t('app.error'));
