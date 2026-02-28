@@ -15,7 +15,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDeckService } from '../../services/DeckService';
 import { useClassroomService } from '../../services/ClassroomService';
 import { useStatisticsService } from '../../services/StatisticsService';
-import { formatDateToEuropean } from '../../services/DateService';
+import { formatDateToEuropean, formatHoursToTime } from '../../services/DateService';
 import type { DeckRequest, Deck } from '../../models/Deck';
 import type { ClassroomResponse } from '../../models/Classroom';
 import type {
@@ -70,6 +70,7 @@ function Dashboard() {
         classroomService.getAllForUser(2),
         statisticsService.getGeneralStatistics(),
       ]);
+      console.log(statsData)
       setDecks(decksData);
       setClassrooms(classroomsData);
       setStatistics(statsData);
@@ -215,7 +216,7 @@ function Dashboard() {
                   />
                   <DashboardStatCard
                     title={t('statcard.studytime.title')}
-                    value={`${statistics.timeSpentHours}h`}
+                    value={formatHoursToTime(statistics.timeSpentHours || 0)}
                     tooltip={t('statcard.studytime.tooltip')}
                     icon={LuClock}
                   />

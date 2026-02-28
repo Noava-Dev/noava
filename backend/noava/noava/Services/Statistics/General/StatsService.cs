@@ -41,7 +41,7 @@ namespace noava.Services.Statistics.General
                 CardsReviewed = totalCardsReviewed,
                 AccuracyRate = accuracyRate,
                 LastRevieweDate = lastReviewedAt,
-                TimeSpentHours = (int) totalTimeHours
+                TimeSpentHours = Math.Round(totalTimeHours, 2)
             };
         }
     }
