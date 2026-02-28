@@ -54,9 +54,6 @@ function ClassroomDecksList({
         {Object.entries(grouped).map(([classroomName, decks]) => (
           <div key={classroomName}>
             <div className="flex items-center gap-3 mb-4">
-              <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-cyan-100 dark:bg-cyan-900/30">
-                <HiPlay className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
-              </div>
               <h2 className="text-xl font-bold text-text-title-light dark:text-text-title-dark">
                 {classroomName}
               </h2>
