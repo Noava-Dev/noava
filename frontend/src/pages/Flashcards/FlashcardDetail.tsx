@@ -357,7 +357,7 @@ function FlashcardDetail() {
                   )}>
                   {/* Long-Term Review  */}
                   <DropdownItem
-                    className="flex items-center justify-between"
+                    className="flex items-center justify-between bg-transparent"
                     onClick={() => navigate(`/decks/${deckId}/longTermReview`)}>
                     <div className="flex items-center">
                       <HiPencil className="w-4 h-4 mr-2" />
@@ -367,7 +367,7 @@ function FlashcardDetail() {
 
                   {/* Long-Term Review - Flip Mode */}
                   <DropdownItem
-                    className="flex items-center justify-between"
+                    className="flex items-center justify-between bg-transparent"
                     onClick={() =>
                       navigate(`/decks/${deckId}/longTermFlipReview`)
                     }>
@@ -379,7 +379,7 @@ function FlashcardDetail() {
 
                   {/* Long-Term Review - Reverse Mode */}
                   <DropdownItem
-                    className="flex items-center justify-between"
+                    className="flex items-center justify-between bg-transparent"
                     onClick={() =>
                       navigate(`/decks/${deckId}/longTermReverseReview`)
                     }>
