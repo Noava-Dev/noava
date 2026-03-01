@@ -14,6 +14,7 @@ import PageHeader from '../../shared/components/PageHeader';
 import Loading from '../../shared/components/loading/Loading';
 import EmptyState from '../../shared/components/EmptyState';
 import { PiBellSimpleZLight } from 'react-icons/pi';
+import { useNotification } from '../../contexts/NotificationContext';
 
 const NotificationPage = () => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
@@ -23,6 +24,7 @@ const NotificationPage = () => {
   const { t } = useTranslation('notification');
   const api = useApi();
   const { showError } = useToast();
+  const { setNotificationCount } = useNotification();
 
   function parseParams(data?: any): Record<string, unknown> {
     if (!data) return {};
@@ -39,7 +41,6 @@ const NotificationPage = () => {
     }
     return {};
   }
-
 
   function sanitizeLabel(value: string): string {
     return value.replace(/[^\p{L}\p{N}\s._:-]/gu, '').trim();
@@ -174,7 +175,8 @@ const NotificationPage = () => {
     const inferredUserName = allStrings.find(({ path, value }) => {
       if (!value) return false;
       if (value === deckName || value === classroomName) return false;
-      const hasUserSignal = /(user|sender|inviter|from|owner|teacher|createdby|author)/i.test(path);
+      const hasUserSignal =
+        /(user|sender|inviter|from|owner|teacher|createdby|author)/i.test(path);
       const hasNameSignal = /(name|fullname|displayname)/i.test(path);
       return hasUserSignal || (hasNameSignal && /\./.test(path));
     })?.value;
@@ -189,7 +191,9 @@ const NotificationPage = () => {
       classroomName,
     };
 
-    const translatedTemplate = String(t(notification.templateKey, interpolationParams));
+    const translatedTemplate = String(
+      t(notification.templateKey, interpolationParams)
+    );
     const templateOrFallback =
       translatedTemplate === notification.templateKey
         ? notification.templateKey.includes('.classroom.')
@@ -201,12 +205,18 @@ const NotificationPage = () => {
             })
         : translatedTemplate;
 
-    const interpolated = interpolateTemplate(templateOrFallback, interpolationParams);
+    const interpolated = interpolateTemplate(
+      templateOrFallback,
+      interpolationParams
+    );
 
     return interpolated
       .replace(/\{\{\s*userName\s*\}\}|\{\s*userName\s*\}/gi, userName)
       .replace(/\{\{\s*deckName\s*\}\}|\{\s*deckName\s*\}/gi, deckName)
-      .replace(/\{\{\s*classroomName\s*\}\}|\{\s*classroomName\s*\}/gi, classroomName);
+      .replace(
+        /\{\{\s*classroomName\s*\}\}|\{\s*classroomName\s*\}/gi,
+        classroomName
+      );
   }
 
   function resolveActionLabel(labelKey: string): string {
@@ -221,7 +231,9 @@ const NotificationPage = () => {
       return sanitizeLabel(rootAction);
     }
 
-    return sanitizeLabel(lastToken.charAt(0).toUpperCase() + lastToken.slice(1));
+    return sanitizeLabel(
+      lastToken.charAt(0).toUpperCase() + lastToken.slice(1)
+    );
   }
 
   useEffect(() => {
@@ -248,6 +260,8 @@ const NotificationPage = () => {
 
     try {
       await service.deleteNotification(id);
+
+      setNotificationCount((prev) => Math.max(prev - 1, 0));
     } catch (error) {
       setNotifications(previous);
       showError(t('errors.delete'), t('common:app.error'));
@@ -269,6 +283,8 @@ const NotificationPage = () => {
 
       await service.deleteNotification(notification.id);
       setNotifications((prev) => prev.filter((n) => n.id !== notification.id));
+
+      setNotificationCount((prev) => Math.max(prev - 1, 0));
     } catch (error) {
       showError(t('errors.action'), t('common:app.error'));
     } finally {

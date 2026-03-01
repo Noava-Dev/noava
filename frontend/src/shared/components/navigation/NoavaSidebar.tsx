@@ -21,10 +21,10 @@ import { useUserRole } from '../../../hooks/useUserRole';
 import { SignOutButton, useClerk, useUser } from '@clerk/clerk-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { notificationService } from '../../../services/NotificationService';
 import { useSchoolService } from '../../../services/SchoolService';
 import type { SchoolDto } from '../../../models/School';
 import { useTranslation } from 'react-i18next';
+import { useNotification } from '../../../contexts/NotificationContext';
 
 type NoavaSidebarProps = {
   onNavigate?: () => void;
@@ -39,33 +39,12 @@ function NoavaSidebar({ className, onNavigate }: NoavaSidebarProps) {
   const { openUserProfile } = useClerk();
   const navigate = useNavigate();
   const location = useLocation();
-  const { getCount } = notificationService();
   const [schools, setSchools] = useState<SchoolDto[]>([]);
   const [isSchoolAdmin, setIsSchoolAdmin] = useState(false);
   const schoolService = useSchoolService();
-
-  const [notificationCount, setNotificationCount] = useState<number>(0);
-
-  useEffect(() => {
-    async function fetchNotificationCount() {
-      try {
-        const data = await getCount();
-        if (data && typeof data.count === 'number') {
-          setNotificationCount(data.count);
-        } else {
-          setNotificationCount(0);
-        }
-      } catch {
-        setNotificationCount(0);
-      }
-    }
-    fetchNotificationCount();
-  }, []);
+  const { notificationCount } = useNotification();
 
   useEffect(() => {
-    console.log('userRole:', userRole);
-    console.log('user?.id:', user?.id);
-    console.log('schools:', schools);
     async function fetchSchools() {
       if (!user) return;
       try {
