@@ -357,7 +357,7 @@ function FlashcardDetail() {
                   )}>
                   {/* Long-Term Review  */}
                   <DropdownItem
-                    className="flex items-center justify-between"
+                    className="flex items-center justify-between bg-transparent"
                     onClick={() => navigate(`/decks/${deckId}/longTermReview`)}>
                     <div className="flex items-center">
                       <HiPencil className="w-4 h-4 mr-2" />
@@ -367,7 +367,7 @@ function FlashcardDetail() {
 
                   {/* Long-Term Review - Flip Mode */}
                   <DropdownItem
-                    className="flex items-center justify-between"
+                    className="flex items-center justify-between bg-transparent"
                     onClick={() =>
                       navigate(`/decks/${deckId}/longTermFlipReview`)
                     }>
@@ -379,7 +379,7 @@ function FlashcardDetail() {
 
                   {/* Long-Term Review - Reverse Mode */}
                   <DropdownItem
-                    className="flex items-center justify-between"
+                    className="flex items-center justify-between bg-transparent"
                     onClick={() =>
                       navigate(`/decks/${deckId}/longTermReverseReview`)
                     }>
@@ -503,13 +503,13 @@ function FlashcardDetail() {
                       <div className="absolute z-10 flex gap-2 top-4 right-4">
                         <button
                           onClick={() => handleEditFlashcard(card)}
-                          className="p-2 transition-colors rounded-lg text-text-muted-light dark:text-text-muted-dark hover:shadow-md hover:text-cyan-500 dark:hover:text-cyan-400 hover:bg-background-app-light dark:hover:bg-background-surface-dark"
+                          className="p-2 transition-colors bg-transparent rounded-lg text-text-muted-light dark:text-text-muted-dark hover:shadow-md hover:text-cyan-500 dark:hover:text-cyan-400 hover:bg-background-app-light dark:hover:bg-background-surface-dark"
                           title={t('common:actions.edit')}>
                           <HiPencil className="w-5 h-5" />
                         </button>
                         <button
                           onClick={() => handleDeleteFlashcard(card.cardId)}
-                          className="p-2 transition-colors rounded-lg text-text-muted-light dark:text-text-muted-dark hover:shadow-md hover:text-red-500 dark:hover:text-red-400 hover:bg-background-app-light dark:hover:bg-background-surface-dark"
+                          className="p-2 transition-colors bg-transparent rounded-lg text-text-muted-light dark:text-text-muted-dark hover:shadow-md hover:text-red-500 dark:hover:text-red-400 hover:bg-background-app-light dark:hover:bg-background-surface-dark"
                           title={t('common:actions.delete')}>
                           <HiTrash className="w-5 h-5" />
                         </button>
