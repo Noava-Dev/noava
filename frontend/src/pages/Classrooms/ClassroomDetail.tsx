@@ -235,7 +235,7 @@ function ClassroomDetailPage() {
                         renderTrigger={() => (
                           <Button
                             size="lg"
-                            className="w-full border-none bg-cyan-500 hover:bg-cyan-600 md:w-fit">
+                            className="w-full border-none bg-cyan-500 hover:bg-cyan-600 md:w-fit bg-transparent">
                             <HiPlay className="w-5 h-5 mr-2" />
                             {t('bulkReview.button')}
                             <HiChevronDown className="w-4 h-4 ml-1" />
@@ -243,17 +243,20 @@ function ClassroomDetailPage() {
                         )}>
                         <DropdownItem
                           icon={HiPlay}
-                          onClick={() => setBulkReviewModalOpened(true)}>
+                          onClick={() => setBulkReviewModalOpened(true)}
+                          className="bg-transparent">
                           {t('reviewModes.flipMode')}
                         </DropdownItem>
                         <DropdownItem
                           icon={HiPencil}
-                          onClick={() => setBulkWriteReviewModalOpened(true)}>
+                          onClick={() => setBulkWriteReviewModalOpened(true)}
+                          className="bg-transparent">
                           {t('reviewModes.writeReview')}
                         </DropdownItem>
                         <DropdownItem
                           icon={HiRefresh}
-                          onClick={() => setBulkReverseReviewModalOpened(true)}>
+                          onClick={() => setBulkReverseReviewModalOpened(true)}
+                          className="bg-transparent">
                           {t('reviewModes.reverseReview')}
                         </DropdownItem>
                       </Dropdown>

@@ -443,14 +443,14 @@ function DecksPage() {
           onClose={() => setJoinCodeModalOpen(false)}
           size="md"
           dismissible>
-          <ModalHeader>{t('joinCode.title')}</ModalHeader>
+          <ModalHeader >{t('joinCode.title')}</ModalHeader>
           <ModalBody>
             <div className="space-y-4">
               <p className="text-sm text-text-body-light dark:text-text-muted-dark">
                 {t('joinCode.description')}
               </p>
               <div>
-                <label className="block mb-2 text-sm font-medium">
+                <label className="block mb-2 text-sm font-medium text-text-title-light dark:text-text-title-dark">
                   {t('joinCode.label')}
                 </label>
                 <input
