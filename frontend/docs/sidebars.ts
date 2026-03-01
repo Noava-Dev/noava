@@ -49,7 +49,7 @@ const sidebars: SidebarsConfig = {
       type: 'category',
       label: 'Decks',
       customProps: { icon: 'decks' },
-      items: ['decks/importing-cards', 'decks/reviews'],
+      items: ['decks/importing-cards'],
     },
   ],
 };
