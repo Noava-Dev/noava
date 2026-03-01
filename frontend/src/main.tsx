@@ -9,6 +9,7 @@ import { ToastProvider } from './contexts/ToastContext.tsx';
 import './i18n';
 import { ThemeProvider } from './contexts/ThemeContext.tsx';
 import { ThemeInit } from '../.flowbite-react/init.tsx';
+import { NotificationProvider } from './contexts/NotificationContext.tsx';
 
 // import Clerk publishable key
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
@@ -27,7 +28,9 @@ createRoot(document.getElementById('root')!).render(
         <ThemeInit />
         <ThemeProvider>
           <ToastProvider>
-            <App />
+            <NotificationProvider>
+              <App />
+            </NotificationProvider>
           </ToastProvider>
         </ThemeProvider>
       </BrowserRouter>
