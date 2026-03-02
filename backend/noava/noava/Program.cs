@@ -170,6 +170,8 @@ namespace noava
                     dbContext.Database.Migrate();
 
                 FAQSeeder.SeedOrUpdateFAQs(dbContext);
+
+                AdminSeeder.BootstrapAdmins(dbContext, builder.Configuration["Bootstrap:AdminId"]);
             }
 
             // Configure the HTTP request pipeline.

@@ -1,4 +1,4 @@
-# Build stage
+# Build the docs
 FROM node:20-alpine AS build
 
 WORKDIR /app
@@ -7,14 +7,15 @@ COPY package*.json ./
 RUN npm install
 
 COPY . .
-
+WORKDIR /app/docs
+RUN npm install
 RUN npm run build
 
-# Serve with Nginx
+# Serve static files
 FROM nginx:alpine
 
-COPY --from=build /app/build /usr/share/nginx/html
+COPY --from=build /app/docs/build /usr/share/nginx/html
 
-EXPOSE 80
+EXPOSE 8080
 
 CMD ["nginx", "-g", "daemon off;"]

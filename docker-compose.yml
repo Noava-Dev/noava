@@ -9,16 +9,14 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
     volumes:
       - db_data:/var/lib/postgresql
-      - ~/noava-db-scripts:/docker-entrypoint-initdb.d:ro
-    ports:
-      - '5432:5432'
+      - /home/student/noava-db-scripts:/docker-entrypoint-initdb.d:ro
     healthcheck:
       test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER}']
       interval: 5s
       timeout: 5s
       retries: 10
 
-  migrate:
+  migrator:
     build:
       context: ./backend
       dockerfile: Dockerfile.migrate
@@ -35,7 +33,8 @@ services:
     env_file:
       - ./.env
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
   backend:
     build:
@@ -44,7 +43,8 @@ services:
     container_name: noava_backend
     restart: always
     depends_on:
-      - db
+      migrator:
+        condition: service_completed_successfully
     env_file:
       - ./.env
     environment:
@@ -63,6 +63,14 @@ services:
       - backend
     ports:
       - '80:80'
+
+  docs:
+    build:
+      context: ./frontend/docs
+    container_name: noava_docs
+    restart: always
+    ports:
+      - '8080:80'
 
 volumes:
   db_data:
