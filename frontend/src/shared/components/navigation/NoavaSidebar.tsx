@@ -25,6 +25,7 @@ import { useSchoolService } from '../../../services/SchoolService';
 import type { SchoolDto } from '../../../models/School';
 import { useTranslation } from 'react-i18next';
 import { useNotification } from '../../../contexts/NotificationContext';
+import Logo from '../../../assets/noava-logo-blue-nobg.png';
 
 type NoavaSidebarProps = {
   onNavigate?: () => void;
@@ -74,7 +75,7 @@ function NoavaSidebar({ className, onNavigate }: NoavaSidebarProps) {
       <SidebarItemGroup className="mb-14 w-fit">
         <SidebarLogo
           href="#"
-          img="/src/assets/noava-logo-blue-nobg.png"
+          img={Logo}
           onClick={() => navigate('/')}
           imgAlt="Noava Logo">
           <h3 className="text-2xl">Noava</h3>
