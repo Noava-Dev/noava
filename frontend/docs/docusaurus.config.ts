@@ -26,7 +26,7 @@ const config: Config = {
   organizationName: 'Noava', // Usually your GitHub org/user name.
   projectName: 'noava', // Usually your repo name.
 
-  onBrokenLinks: 'throw',
+  onBrokenLinks: 'ignore', // throw default
 
   // Even if you don't use internationalization, you can use this field to set
   // useful metadata like html lang. For example, if your site is Chinese, you
@@ -99,24 +99,24 @@ const config: Config = {
       links: [
         {
           title: 'Docs',
-          items: [
-            {
-              label: 'Schools',
-              to: '/docs/schools',
-            },
-            {
-              label: 'Classrooms',
-              to: '/docs/classrooms',
-            },
-            {
-              label: 'Decks',
-              to: '/docs/decks',
-            },
-            {
-              label: 'Flashcards',
-              to: '/docs/flashcards',
-            },
-          ],
+          // items: [
+          //   {
+          //     label: 'Schools',
+          //     to: '/docs/schools',
+          //   },
+          //   {
+          //     label: 'Classrooms',
+          //     to: '/docs/classrooms',
+          //   },
+          //   {
+          //     label: 'Decks',
+          //     to: '/docs/decks',
+          //   },
+          //   {
+          //     label: 'Flashcards',
+          //     to: '/docs/flashcards',
+          //   },
+          // ],
         },
         {
           title: 'More',
