@@ -6,6 +6,11 @@ A comprehensive flashcard platform designed for students and teachers to make le
 
 Noava is a modern web-based learning platform that facilitates knowledge retention through flashcard-based studying and spaced repetition techniques. The platform provides a complete ecosystem for both individual learners and educational institutions, featuring deck creation and management, classroom collaboration, school administration, and detailed analytics to track learning progress. Built with a separate frontend and backend architecture, Noava offers a scalable and maintainable solution for digital learning.
 
+## IMPORTANT FOR PROFESSORS
+For our professors who want to privately test and evaluate our final work: The project credentials and instructions are provided to Robin Bervoets. Please use the account we provided respectfully for future evaluators.  
+
+**WARNING:** If you want to perform more thorough testing, **please create your own account**.
+
 ## Key Features
 
 - **Flashcard Management**: Create, edit, and organize flashcards into decks with support for rich content including images stored in Azure Blob Storage
